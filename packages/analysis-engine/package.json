@@ -1,0 +1,23 @@
+{
+  "name": "analysis-engine",
+  "version": "0.0.1",
+  "description": "analysis-engine module for githru",
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^4.7.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/githru/githru-vscode-ext.git"
+  },
+  "author": "githru team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/githru/githru-vscode-ext/issues"
+  },
+  "homepage": "https://github.com/githru/githru-vscode-ext#readme"
+}

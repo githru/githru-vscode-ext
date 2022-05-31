@@ -1,0 +1,22 @@
+{
+    "name": "@githru/githru-vscode-ext",
+    "version": "0.0.1",
+    "description": "githru-vscode-ext root package.json",
+    "scripts": {
+        "build:all": "npm run build --workspaces",
+        "deploy:all": "npm run deploy --workspaces",
+        "lint": "eslint '**/*.{js,ts,tsx}'",
+        "lint:fix": "npm run lint -- --fix",
+        "prettier": "prettier '**/*.{json,yaml,md}' --check",
+        "prettier:fix": "prettier '**/*.{json,yaml,md}' --write"
+    },
+    "author": "githru team",
+    "license": "MIT",
+    "workspaces": [
+        "./packages/*"
+    ],
+    "dependencies": {
+        "generator-code": "^1.6.10",
+        "yo": "^4.3.0"
+    }
+}
