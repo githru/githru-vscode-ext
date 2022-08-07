@@ -10,14 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode.helloWorld"
+    "*"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode.helloWorld",
-        "title": "Hello World"
+        "command": "githru.command.open.webview",
+        "title": "Open Githru View"
       }
     ]
   },

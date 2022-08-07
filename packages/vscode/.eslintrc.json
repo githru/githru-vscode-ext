@@ -16,7 +16,8 @@
         }],
         "quotes": "off",
         "semi": "off",
-        "eqeqeq": "warn"
+        "eqeqeq": "warn",
+		"@typescript-eslint/no-empty-function": "off"
         // "@typescript-eslint/naming-convention": "warn",
         // "@typescript-eslint/semi": "warn",
         // "curly": "warn",

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-   "build": "npm run build:react && npm run build:bundle",
+    "build": "npm run build:react && npm run build:bundle",
     "build:react": "react-scripts build",
     "build:bundle": "webpack --config webpack.config.js",
     "test": "react-scripts test",
@@ -37,6 +37,8 @@
     ]
   },
   "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "clean-webpack-plugin": "^4.0.0",
     "yarn": "^1.22.19"
   }
 }
