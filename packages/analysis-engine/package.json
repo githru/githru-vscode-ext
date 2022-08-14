@@ -7,8 +7,8 @@
   "types": "dist/index.d.ts",
   "jsnext:main": "dist/index.es.js",
   "engines": {
-    "node": ">=8",
-    "npm": ">=5"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "scripts": {
     "build": "rollup -c && tsc -d --emitDeclarationOnly --noEmit false --declarationDir dist",
