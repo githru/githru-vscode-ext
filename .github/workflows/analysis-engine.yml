@@ -1,0 +1,39 @@
+name: analysis-engine PR checker
+
+on: 
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  temp:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./packages/analysis-engine
+    
+    strategy:
+      matrix:
+        node-version: [16.x]
+    
+    steps:
+    - name: download codes
+      uses: actions/checkout@v3
+
+    - name: install node
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: clear node_modules and install all according to package-lock.json
+      run: npm ci
+
+    - name: check lint and prettier
+      run: npm run check:eslint
+
+    - name: check version vulnerabilities
+      run: npm run check:vulnerabilities
+
+    - name: test analysis-engine module
+      run: npm run test

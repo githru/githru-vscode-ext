@@ -28,4 +28,4 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build:all --if-present
-    - run: npm test
+    - run: npm run test:all --if-present
