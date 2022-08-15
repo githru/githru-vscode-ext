@@ -1,8 +1,46 @@
 // TODO: Entire types will be imported from analysis-engine
 
 // Holds just commit log raw data
+export type CommitRaw = {
+    id: string,
+    parents: string[],
+    message: string,
+    author: string,
+    authorDate: string,
+    committer: string,
+    date: string,
+    tags: string[],
+    branches: string[],
+
+    // fill necessary properties...
+};
+
+export type DiffStatistics = {
+    changedFileCount: number,
+    insertions: number,
+    deletions: number,
+    files: {[id:string]: {
+        insertions: number,
+        deletions: number,
+    }},
+};
+
+export type GitHubUser = {
+    id: string,
+    names: string[],
+    emails: string[],
+}
+
 export type Commit = {
     id: string,
+    parents: Commit[],
+    author: GitHubUser,
+    committer: GitHubUser,
+    authorDate: Date,
+    commitDate: Date,
+    diffStatistics: DiffStatistics,
+    
+    // fill necessary properties...
 }
 
 export const NODE_TYPE_NAME = [
