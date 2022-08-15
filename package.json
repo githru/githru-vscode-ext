@@ -5,6 +5,7 @@
     "scripts": {
         "build:all": "npm run build --workspaces",
         "deploy:all": "npm run deploy --workspaces",
+        "test:all": "npm run test --workspaces",
         "lint": "eslint '**/*.{js,ts,tsx}'",
         "lint:fix": "npm run lint -- --fix",
         "prettier": "prettier '**/*.{json,yaml,md}' --check",
