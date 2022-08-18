@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+
+*.test.js
+*.config.js
+
+test.*
+
+*.css
+*.scss
+*.d.ts
