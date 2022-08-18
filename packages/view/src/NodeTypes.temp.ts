@@ -33,7 +33,7 @@ export type GitHubUser = {
 
 export type Commit = {
     id: string,
-    parents: Commit[],
+    parentIds: string[],
     author: GitHubUser,
     committer: GitHubUser,
     authorDate: Date,
@@ -63,7 +63,7 @@ export type NodeType = CommitNode | ClusterNode;
 export type CommitNode = NodeBase & {
     nodeTypeName: 'COMMIT',
     commit: Commit,
-    seq: string,
+    seq: number,
 
     hasMajorTag: boolean,
     hasMinorTag: boolean,
@@ -71,7 +71,7 @@ export type CommitNode = NodeBase & {
 }
 
 export type ClusterNode = NodeBase & {
-    nodeTypeName: 'CLUSTR',
+    nodeTypeName: 'CLUSTER',
     commitNodeList: CommitNode[],
 }
 

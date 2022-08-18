@@ -31,7 +31,7 @@ for (const commitTask of commitTaskList) {
 
     const commit = {
         id: commitRaw.id,
-        parents: [],
+        parentIds: commitRaw.parents,
         author: {
             names: [authorName],
             emails: [authorEmail],
@@ -54,12 +54,12 @@ for (const commitTask of commitTaskList) {
 }
 
 for (const commitTask of commitTaskList) {
-    const commitRaw = commitRawMap[commitTask.commit.id];
+    // const commitRaw = commitRawMap[commitTask.commit.id];
     const commit = commitMap[commitTask.commit.id];
 
-    commitRaw.parents.forEach( id => {
-        commit.parents.push(commitMap[id]);
-    });
+    // commitRaw.parents.forEach( id => {
+    //     commit.parents.push(commitMap[id]);
+    // });
 
     const commitNode = {
         nodeTypeName: 'COMMIT',
@@ -91,11 +91,7 @@ for (const taskId of taskIds) {
     }
 
     if (clusterNode.commitNodeList.slice(-1)[0].implicitBranchNo === 0)
-    if (clusterNode.commitNodeList)
-    
-    
-
-    clusterNodeList.push(clusterNode);
+        clusterNodeList.push(clusterNode);
 }
 
 
@@ -106,4 +102,4 @@ for (const taskId of taskIds) {
 
 
 
-console.log(clusterNodeList.slice(-10));
+console.log(JSON.stringify(clusterNodeList.slice(-100), null, 2));
