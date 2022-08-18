@@ -1,7 +1,7 @@
-import React from 'react';
-import * as ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 
 declare global {
   interface Window {
@@ -9,9 +9,10 @@ declare global {
   }
 }
 
-ReactDOM.render(
+const container = document.getElementById("root") as HTMLElement;
+
+ReactDOM.createRoot(container).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
