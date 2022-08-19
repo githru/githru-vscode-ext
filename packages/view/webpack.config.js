@@ -44,7 +44,7 @@ const config = {
         ],
       },
       {
-        test: /.(sass|scsss)$/,
+        test: /.(sass|scss)$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" },

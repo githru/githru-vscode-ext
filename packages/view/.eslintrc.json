@@ -18,23 +18,25 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/consistent-type-imports": ["error"],
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-var-requires": "off",
+    "arrow-body-style": ["error", "always"],
+    "class-methods-use-this": "off",
+    "func-names": "off",
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "no-process-exit": "off",
+    "no-use-before-define": "off",
+    "object-shorthand": "off",
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
       }
     ],
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/ban-types": "off",
-    "no-console": "off",
-    "func-names": "off",
-    "no-process-exit": "off",
-    "object-shorthand": "off",
-    "class-methods-use-this": "off",
-    "@typescript-eslint/consistent-type-imports": ["error"],
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "arrow-body-style": ["error", "always"],
     "react/jsx-filename-extension": [
       "error",
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
@@ -49,19 +51,6 @@
         "tsx": "never"
       }
     ],
-    "react/function-component-definition": [
-      "error",
-      {
-        "namedComponents": ["arrow-function"],
-        "unnamedComponents": ["arrow-function", "function-expression"]
-      }
-    ],
-    "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/require-default-props": "off",
-    "import/prefer-default-export": "off",
-    "no-use-before-define": "off",
     "import/no-useless-path-segments": [
       "error",
       {
@@ -82,7 +71,19 @@
           "object"
         ]
       }
-    ]
+    ],
+    "import/prefer-default-export": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": ["arrow-function"],
+        "unnamedComponents": ["arrow-function", "function-expression"]
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {
