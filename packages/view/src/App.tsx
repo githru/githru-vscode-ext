@@ -1,7 +1,5 @@
-import React from "react";
-
-function App() {
+const App = () => {
   return <div>Welcome to githru.</div>;
-}
+};
 
 export default App;
