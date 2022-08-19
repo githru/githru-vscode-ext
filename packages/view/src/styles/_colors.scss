@@ -1,0 +1,22 @@
+@import "pallete";
+
+$color--dark: $white;
+$color--light: $black;
+
+$danger-color--dark: #ff4444;
+$danger-color--light: #cc0000;
+
+$warning-color--dark: #ffbb33;
+$warning-color--light: #ff8800;
+
+$success-color--dark: #00c851;
+$success-color--light: #007e33;
+
+$info-color--dark: #33b5e5;
+$info-color--light: #0099cc;
+
+$brand--primary--dark: $blue-light-A200;
+$brand--primary--light: $blue-light-A700;
+
+$highlight-color--dark: transparentize($brand--primary--light, 0.1);
+$highlight-color--light: transparentize($brand--primary--light, 0.1);
