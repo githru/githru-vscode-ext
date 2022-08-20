@@ -15,7 +15,7 @@
     "start": "cd dist && node index.js",
     "lint": "eslint --ignore-path .gitignore --fix --max-warnings 0 \"**/*.{js,ts}\"",
     "check:eslint": "eslint --ignore-path .gitignore --max-warnings 0 \"**/*.{js,ts}\"",
-    "check:vulnerabilities": "npm audit -production",
+    "check:vulnerabilities": "npm audit --omit=dev",
     "test": "jest",
     "test:log": "echo \"jest --verbose --coverage ./src/log\"",
     "test:DAG": "echo \"jest --verbose --coverage ./src/DAG\"",
