@@ -30,11 +30,7 @@
         "no-process-exit": "off",
         "object-shorthand": "off",
         "class-methods-use-this": "off",
-        "import/extensions": "off"
-    },
-    "settings": {
-        "import/resolver": {
-            "typescript": "./tsconfig.json"
-        }
+        "import/extensions": "off",
+        "import/no-unresolved": "off"
     }
 }
