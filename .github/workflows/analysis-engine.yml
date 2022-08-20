@@ -26,8 +26,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     
-    - name: clear node_modules and install all according to package-lock.json
-      run: npm ci
+    - name: install node_modules from package.json
+      run: npm install
 
     - name: check lint and prettier
       run: npm run check:eslint
@@ -37,3 +37,15 @@ jobs:
 
     - name: test analysis-engine module
       run: npm run test
+
+    - name: test analysis-engine log and return its coverage
+      run: npm run test:log
+
+    - name: test analysis-engine DAG and return its coverage
+      run: npm run test:DAG
+
+    - name: test analysis-engine stem and return its coverage
+      run: npm run test:stem
+
+    - name: test analysis-engine CSM and return its coverage
+      run: npm run test:CSM
