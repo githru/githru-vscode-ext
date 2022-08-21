@@ -1,17 +1,19 @@
-import React from 'react';
-import * as ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+import App from "./App";
+import "./assets/styles/app.scss";
 
 declare global {
   interface Window {
-    acquireVsCodeApi(): any;
+    acquireVsCodeApi(): unknown;
   }
 }
 
-ReactDOM.render(
+const container = document.getElementById("root") as HTMLElement;
+
+ReactDOM.createRoot(container).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
