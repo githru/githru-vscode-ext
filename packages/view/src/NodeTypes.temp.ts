@@ -34,15 +34,15 @@ export type GitHubUser = {
 };
 
 export type Commit = {
-    id: string,
-    parentIds: string[],
-    author: GitHubUser,
-    committer: GitHubUser,
-    authorDate: Date,
-    commitDate: Date,
-    diffStatistics: DiffStatistics,
-    
-    // fill necessary properties...
+  id: string;
+  parentIds: string[];
+  author: GitHubUser;
+  committer: GitHubUser;
+  authorDate: Date;
+  commitDate: Date;
+  diffStatistics: DiffStatistics;
+
+  // fill necessary properties...
 };
 
 export const NODE_TYPE_NAME = ["COMMIT", "CLUSTER"] as const;
@@ -60,9 +60,9 @@ export type NodeType = CommitNode | ClusterNode;
 
 // Node = Commit + analyzed Data as node
 export type CommitNode = NodeBase & {
-    nodeTypeName: 'COMMIT',
-    commit: Commit,
-    seq: number,
+  nodeTypeName: "COMMIT";
+  commit: Commit;
+  seq: number;
 
   hasMajorTag: boolean;
   hasMinorTag: boolean;
