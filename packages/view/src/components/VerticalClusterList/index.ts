@@ -1,1 +1,1 @@
-export * from "./VerticalClusterList";
+export { default as VerticalClusterList } from "./VerticalClusterList";

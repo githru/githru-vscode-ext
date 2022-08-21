@@ -1,1 +1,1 @@
-export * from './TemporalFilter';
+export { default as TemporalFilter } from "./TemporalFilter";
