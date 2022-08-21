@@ -1,6 +1,4 @@
-import { Statistics } from "components/Statistics";
-import { TemporalFilter } from "components/TemporalFilter";
-import { VerticalClusterList } from "components/VerticalClusterList";
+import { VerticalClusterList, TemporalFilter, Statistics } from "components";
 
 const App = () => {
   return (
