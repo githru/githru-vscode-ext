@@ -1,0 +1,73 @@
+commit 6b8bd11644b5ea065deab70c2852d77c2fd4f5ad e20bf875b0fdafb8ebf7d9d83ef100ce0ad955de
+Author:     snowy <chocoheim@gusty.local>
+AuthorDate: Tue May 31 22:19:16 2022 +0900
+Commit:     snowy <chocoheim@gusty.local>
+CommitDate: Tue May 31 22:19:16 2022 +0900
+
+    feat: initialize modules
+
+1       1       .github/workflows/{node.js.yml => ci.yml}
+1       0       .gitignore
+43763   0       package-lock.json
+22      0       package.json
+3       0       packages/analysis-engine/index.ts
+1       0       packages/analysis-engine/lib/index.d.ts
+6       0       packages/analysis-engine/lib/index.js
+23      0       packages/analysis-engine/package.json
+103     0       packages/analysis-engine/tsconfig.json
+23      0       packages/view/.gitignore
+70      0       packages/view/README.md
+38      0       packages/view/package.json
+-       -       packages/view/public/favicon.ico
+43      0       packages/view/public/index.html
+-       -       packages/view/public/logo192.png
+-       -       packages/view/public/logo512.png
+25      0       packages/view/public/manifest.json
+3       0       packages/view/public/robots.txt
+38      0       packages/view/src/App.css
+25      0       packages/view/src/App.js
+8       0       packages/view/src/App.test.js
+13      0       packages/view/src/index.css
+17      0       packages/view/src/index.js
+1       0       packages/view/src/logo.svg
+13      0       packages/view/src/reportWebVitals.js
+5       0       packages/view/src/setupTests.js
+24      0       packages/vscode/.eslintrc.json
+5       0       packages/vscode/.vscode/extensions.json
+35      0       packages/vscode/.vscode/launch.json
+13      0       packages/vscode/.vscode/settings.json
+43      0       packages/vscode/.vscode/tasks.json
+13      0       packages/vscode/.vscodeignore
+9       0       packages/vscode/CHANGELOG.md
+70      0       packages/vscode/README.md
+74      0       packages/vscode/dist/extension.js
+1       0       packages/vscode/dist/extension.js.map
+52      0       packages/vscode/package.json
+26      0       packages/vscode/src/extension.ts
+23      0       packages/vscode/src/test/runTest.ts
+15      0       packages/vscode/src/test/suite/extension.test.ts
+38      0       packages/vscode/src/test/suite/index.ts
+16      0       packages/vscode/tsconfig.json
+47      0       packages/vscode/vsc-extension-quickstart.md
+48      0       packages/vscode/webpack.config.js
+
+commit e20bf875b0fdafb8ebf7d9d83ef100ce0ad955de 71627b0568035fcf923e18a36b4f3f09fc1632c5
+Author:     ytaek <ytaek.kim@hcil.snu.ac.kr>
+AuthorDate: Fri May 27 23:30:52 2022 +0900
+Commit:     GitHub <noreply@github.com>
+CommitDate: Fri May 27 23:30:52 2022 +0900
+
+    Added node.js.yml
+
+31      0       .github/workflows/node.js.yml
+
+commit 71627b0568035fcf923e18a36b4f3f09fc1632c5
+Author:     ytaek <ytaek.kim@hcil.snu.ac.kr>
+AuthorDate: Thu Apr 28 01:19:50 2022 +0900
+Commit:     GitHub <noreply@github.com>
+CommitDate: Thu Apr 28 01:19:50 2022 +0900
+
+    Initial commit
+
+201     0       LICENSE
+2       0       README.md
