@@ -24,6 +24,11 @@ const config = {
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx", ".json"],
+    alias: {
+      components: path.resolve(__dirname, "src/components/"),
+      assets: path.resolve(__dirname, "src/assets/"),
+      types: path.resolve(__dirname, "src/types/"),
+    },
   },
   module: {
     rules: [
