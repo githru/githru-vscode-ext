@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  temp:
+  pull_request_test:
     runs-on: ubuntu-latest
     
     defaults:
