@@ -1,19 +1,19 @@
-import type { CommitRaw } from "./NodeTypes.temp"
+import type { CommitRaw } from "./NodeTypes.temp";
 
 export default class GitLog {
-	collect(repoPath: string): string {
-		// ...
+  collect(repoPath: string): string {
+    // ...
 
-		console.log(repoPath)
+    console.log(repoPath);
 
-		return ""
-	}
+    return "";
+  }
 
-	parse(gitLogOutput: string): CommitRaw[] {
-		// ...
+  parse(gitLogOutput: string): CommitRaw[] {
+    // ...
 
-		console.log(gitLogOutput)
+    console.log(gitLogOutput);
 
-		return []
-	}
+    return [];
+  }
 }
