@@ -1,42 +1,27 @@
 // TODO: git log parsing을 통해 생성되는 Commit 타입으로 대체
-interface Commit {
+import CommitDagNode from "./dagNode";
+
+export interface Commit {
   id: string;
   parents: string[];
   branches: string[];
 }
 
-export class CommitDagNode {
-  private commit: Commit;
+export class CommitDag {
+  private nodeMap: Map<string, CommitDagNode> = new Map<
+    string,
+    CommitDagNode
+  >();
 
-  constructor(commit: Commit) {
-    this.commit = commit;
+  constructor(commitList: Commit[]) {
+    commitList
+      .map((commit) => new CommitDagNode(commit))
+      .forEach((node) => this.nodeMap.set(node.id, node));
   }
 
-  get id(): string {
-    return this.commit.id;
+  getLeafNodes(): CommitDagNode[] {
+    const leafNodes: CommitDagNode[] = [];
+    this.nodeMap.forEach((node) => node.isLeafNode() && leafNodes.push(node));
+    return leafNodes;
   }
-
-  get parents(): string[] {
-    return this.commit.parents;
-  }
-
-  isLeafNode(): boolean {
-    return this.commit.branches?.length > 0;
-  }
-
-  isRootNode(): boolean {
-    return this.commit.parents.length === 0;
-  }
-}
-
-export type CommitDag = Map<string, CommitDagNode>;
-
-export function buildDag(commitList: Commit[]): CommitDag {
-  const dag: CommitDag = new Map<string, CommitDagNode>();
-
-  commitList
-    .map((commit) => new CommitDagNode(commit))
-    .forEach((node) => dag.set(node.id, node));
-
-  return dag;
 }
