@@ -1,6 +1,6 @@
-// TODO: git log parsing을 통해 생성되는 Commit 타입으로 대체
 import CommitDagNode from "./dagNode";
 
+// TODO: git log parsing을 통해 생성되는 Commit 타입으로 대체
 export interface Commit {
   id: string;
   parents: string[];
