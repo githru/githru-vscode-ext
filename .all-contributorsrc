@@ -12,5 +12,15 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": false,
-  "contributors": []
+  "contributors": [
+    {
+      "login": "ansrlm",
+      "name": "key",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28749913?v=4",
+      "profile": "https://github.com/ansrlm",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
 }
