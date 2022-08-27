@@ -14,6 +14,7 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
 <table>
   <tr>
     <td align="center"><a href="https://github.com/ansrlm"><img src="https://avatars.githubusercontent.com/u/28749913?v=4" width="100px;" alt=""/><br /><sub><b>key</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kmin-jeong"><img src="https://avatars.githubusercontent.com/u/53456037?v=4" width="100px;" alt=""/><br /><sub><b>kmin-jeong</b></sub></a></td>
   </tr>
 </table>
 
