@@ -7,6 +7,7 @@ interface Commit {
 
 export interface CommitDagNode {
   id: string;
+  parents: string[];
   commit: Commit;
 }
 
