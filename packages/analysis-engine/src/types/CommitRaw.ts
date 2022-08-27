@@ -1,4 +1,4 @@
-export interface fileChanged {
+export interface FileChanged {
   [path: string]: {
     insertionCount: number;
     deletionCount: number;
@@ -8,7 +8,7 @@ export interface fileChanged {
 export interface DifferenceStatistic {
   totalInsertionCount: number;
   totalDeletionCount: number;
-  files: fileChanged;
+  fileDictionary: FileChanged;
 }
 
 export interface Author {
@@ -24,10 +24,10 @@ export interface Committer {
 }
 
 export interface CommitRaw {
-  branches: string[];
-  tags: string[];
   id: string;
   parents: string[];
+  branches: string[];
+  tags: string[];
   author: Author;
   committer: Committer;
   message: string;
