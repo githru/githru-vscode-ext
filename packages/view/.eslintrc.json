@@ -23,24 +23,9 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/no-var-requires": "off",
-    "arrow-body-style": ["error", "always"],
+    "arrow-body-style": "off",
     "class-methods-use-this": "off",
     "func-names": "off",
-    "no-console": "off",
-    "no-unused-vars": "off",
-    "no-process-exit": "off",
-    "no-use-before-define": "off",
-    "object-shorthand": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
-    "react/jsx-filename-extension": [
-      "error",
-      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -73,12 +58,27 @@
       }
     ],
     "import/prefer-default-export": "off",
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "no-process-exit": "off",
+    "no-use-before-define": "off",
+    "object-shorthand": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "react/function-component-definition": [
       "error",
       {
         "namedComponents": ["arrow-function"],
         "unnamedComponents": ["arrow-function", "function-expression"]
       }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
     "react/jsx-props-no-spreading": "off",
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
