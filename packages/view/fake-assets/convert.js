@@ -48,6 +48,7 @@ for (const commitTask of commitTaskList) {
             deletions: totals[1],
             files: commitRaw.diffStat.files,
         },
+        message: commitRaw.message
     }
 
     commitMap[commit.id] = commit;
