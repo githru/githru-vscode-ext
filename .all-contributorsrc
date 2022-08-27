@@ -45,11 +45,11 @@
       "name": "Paul An",
       "avatar_url": "https://avatars.githubusercontent.com/u/8488507?v=4",
       "profile": "https://github.com/anpaul0615",
-       "contributions": [
-              "code"
-            ]
-     },
-     {
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "hanseul-lee",
       "name": "Hanseul Lee",
       "avatar_url": "https://avatars.githubusercontent.com/u/69497936?v=4",
@@ -63,6 +63,15 @@
       "name": "조예진",
       "avatar_url": "https://avatars.githubusercontent.com/u/40057032?v=4",
       "profile": "https://github.com/ooooorobo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jin-Pro",
+      "name": "jin-Pro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70205497?v=4",
+      "profile": "https://velog.io/@0_jin",
       "contributions": [
         "code"
       ]
