@@ -1,15 +1,15 @@
-export interface FileChanged {
-  directory: Directory;
-}
-
-export interface Directory {
+export type Directory = {
   // 추가 라인 수
   insertions: number;
   // 삭제 라인 수
   deletions: number;
-}
+};
 
-export interface CommitList {
+export type FileChanged = {
+  directory: Directory;
+};
+
+export type CommitList = {
   // basic: 일반 commit
   // merge: merge commit
   type: string;
@@ -23,9 +23,7 @@ export interface CommitList {
   committer: string;
   committerEmail: string;
   commitDate: string;
-  // view에 따라서 달라짐
-  message: string[];
-  // 파일 변경 사항
+  message: string;
   fileChanged: FileChanged;
   branches: string[];
-}
+};
