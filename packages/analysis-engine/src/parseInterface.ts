@@ -9,12 +9,12 @@ export interface FileChanged {
   directory: Directory;
 }
 
-export interface CommitList {
+export interface CommitRaw {
   // basic: 일반 commit
   // merge: merge commit
   type: string;
   commitId: string;
-  parentIdList: string[];
+  parentIds: string[];
   author: string;
   authorEmail: string;
   authorDate: string;
