@@ -36,7 +36,8 @@
                 "insertions": 39
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md"
         },
         "implicitBranchNo": 2627,
         "seq": 15518,
@@ -78,7 +79,8 @@
                 "insertions": 39
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md (#6245)"
         },
         "implicitBranchNo": 0,
         "seq": 15519,
@@ -136,7 +138,8 @@
                 "insertions": 108
               }
             }
-          }
+          },
+          "message": "WIP"
         },
         "implicitBranchNo": 2596,
         "seq": 15369,
@@ -185,7 +188,8 @@
                 "insertions": 43
               }
             }
-          }
+          },
+          "message": "Add Javadoc. Remove problematic getSubscription on RealmResults."
         },
         "implicitBranchNo": 2596,
         "seq": 15480,
@@ -230,7 +234,8 @@
                 "insertions": 14
               }
             }
-          }
+          },
+          "message": "WIP"
         },
         "implicitBranchNo": 2596,
         "seq": 15481,
@@ -816,7 +821,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/better-subscriptions"
         },
         "implicitBranchNo": 2596,
         "seq": 15482,
@@ -873,7 +879,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Add subscription capabilities on RealmQuery"
         },
         "implicitBranchNo": 2596,
         "seq": 15483,
@@ -914,7 +921,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Add Subscription to query based module"
         },
         "implicitBranchNo": 2596,
         "seq": 15484,
@@ -967,7 +975,8 @@
                 "insertions": 12
               }
             }
-          }
+          },
+          "message": "Add Realm tests. Fix a few bugs plus and docs."
         },
         "implicitBranchNo": 2596,
         "seq": 15485,
@@ -1016,7 +1025,8 @@
                 "insertions": 19
               }
             }
-          }
+          },
+          "message": "Add RealmQuery tests"
         },
         "implicitBranchNo": 2596,
         "seq": 15486,
@@ -1073,7 +1083,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Use ObjectStore implementation as much as possible."
         },
         "implicitBranchNo": 2596,
         "seq": 15487,
@@ -1114,7 +1125,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Added changelog"
         },
         "implicitBranchNo": 2596,
         "seq": 15488,
@@ -1191,7 +1203,8 @@
                 "insertions": 65
               }
             }
-          }
+          },
+          "message": "Refactor Realm initialization to support loading subscriptions. Other small fixes"
         },
         "implicitBranchNo": 2596,
         "seq": 15489,
@@ -1232,7 +1245,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use correct version of Object Store"
         },
         "implicitBranchNo": 2596,
         "seq": 15491,
@@ -1273,7 +1287,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Work-around for adding __ResultSets twice"
         },
         "implicitBranchNo": 2596,
         "seq": 15492,
@@ -1318,7 +1333,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Fix Findbugs warnings"
         },
         "implicitBranchNo": 2596,
         "seq": 15493,
@@ -1363,7 +1379,8 @@
                 "insertions": 23
               }
             }
-          }
+          },
+          "message": "Update Object Store. Revert RealmCache changes so opening Realm instances are minimized."
         },
         "implicitBranchNo": 2596,
         "seq": 15494,
@@ -1408,7 +1425,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use OS master"
         },
         "implicitBranchNo": 2596,
         "seq": 15502,
@@ -1449,7 +1467,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add missing field from schema"
         },
         "implicitBranchNo": 2596,
         "seq": 15503,
@@ -1498,7 +1517,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2596,
         "seq": 15511,
@@ -1556,7 +1576,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/better-subscriptions\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2596,
         "seq": 15520,
@@ -1617,7 +1638,8 @@
                 "insertions": 38
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2629,
         "seq": 15521,
@@ -1682,7 +1704,8 @@
                 "insertions": 38
               }
             }
-          }
+          },
+          "message": "Attempt to fix flaky test"
         },
         "implicitBranchNo": 2596,
         "seq": 15525,
@@ -1719,7 +1742,8 @@
             "insertions": 0,
             "deletions": 0,
             "files": {}
-          }
+          },
+          "message": "Merge branch 'cm/better-subscriptions' of https://github.com/realm/realm-java into cm/better-subscriptions"
         },
         "implicitBranchNo": 2596,
         "seq": 15526,
@@ -1836,7 +1860,8 @@
                 "insertions": 47
               }
             }
-          }
+          },
+          "message": "Fix unstable tests by moving reset into tearing down tests instead of starting the next one."
         },
         "implicitBranchNo": 2596,
         "seq": 15532,
@@ -2018,7 +2043,8 @@
                 "insertions": 47
               }
             }
-          }
+          },
+          "message": "Expose subscriptions more directly (#6231)"
         },
         "implicitBranchNo": 0,
         "seq": 15533,
@@ -2104,7 +2130,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add ImportFlag class and argument to API's"
         },
         "implicitBranchNo": 2624,
         "seq": 15436,
@@ -2181,7 +2208,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add initial version of OsObjectBuilder"
         },
         "implicitBranchNo": 2624,
         "seq": 15437,
@@ -2226,7 +2254,8 @@
                 "insertions": 124
               }
             }
-          }
+          },
+          "message": "Add support for all list types. Optimize common case of sending realm models"
         },
         "implicitBranchNo": 2624,
         "seq": 15438,
@@ -2279,7 +2308,8 @@
                 "insertions": 23
               }
             }
-          }
+          },
+          "message": "Fix bugs in adding byte arrays."
         },
         "implicitBranchNo": 2624,
         "seq": 15439,
@@ -2332,7 +2362,8 @@
                 "insertions": 33
               }
             }
-          }
+          },
+          "message": "Migrate `copy` method to use OsObjectBuilder"
         },
         "implicitBranchNo": 2624,
         "seq": 15440,
@@ -2385,7 +2416,8 @@
                 "insertions": 22
               }
             }
-          }
+          },
+          "message": "Fix copying circular data structures."
         },
         "implicitBranchNo": 2624,
         "seq": 15441,
@@ -2454,7 +2486,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Fix issues with reporting errors with same primary key values"
         },
         "implicitBranchNo": 2624,
         "seq": 15442,
@@ -2495,7 +2528,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix lists not being correctly updated in some cases"
         },
         "implicitBranchNo": 2624,
         "seq": 15443,
@@ -2540,7 +2574,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Fix wrong exception types"
         },
         "implicitBranchNo": 2624,
         "seq": 15444,
@@ -2581,7 +2616,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix exception messages"
         },
         "implicitBranchNo": 2624,
         "seq": 15445,
@@ -2654,7 +2690,8 @@
                 "insertions": 24
               }
             }
-          }
+          },
+          "message": "Fix annotation processor unit tests"
         },
         "implicitBranchNo": 2624,
         "seq": 15446,
@@ -2695,7 +2732,8 @@
                 "insertions": 38
               }
             }
-          }
+          },
+          "message": "Add ImportFlag docs"
         },
         "implicitBranchNo": 2624,
         "seq": 15447,
@@ -2760,7 +2798,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix compiler warning"
         },
         "implicitBranchNo": 2624,
         "seq": 15448,
@@ -2801,7 +2840,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Remove tests not needed anymore"
         },
         "implicitBranchNo": 2624,
         "seq": 15449,
@@ -2850,7 +2890,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Cleanup OsObjectBuilder"
         },
         "implicitBranchNo": 2624,
         "seq": 15450,
@@ -2895,7 +2936,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Nicer formatting"
         },
         "implicitBranchNo": 2624,
         "seq": 15451,
@@ -2936,7 +2978,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "More cleanup"
         },
         "implicitBranchNo": 2624,
         "seq": 15452,
@@ -2993,7 +3036,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Cleanup changelog and Javadoc"
         },
         "implicitBranchNo": 2624,
         "seq": 15453,
@@ -3074,7 +3118,8 @@
                 "insertions": 14
               }
             }
-          }
+          },
+          "message": "Send \"ignore fields\" flag to C++"
         },
         "implicitBranchNo": 2624,
         "seq": 15454,
@@ -3115,7 +3160,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Include unknown type (for debugging)"
         },
         "implicitBranchNo": 2624,
         "seq": 15455,
@@ -3156,7 +3202,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix annotation processor tests"
         },
         "implicitBranchNo": 2624,
         "seq": 15456,
@@ -3201,7 +3248,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Simplify print and verify behaviour better"
         },
         "implicitBranchNo": 2624,
         "seq": 15457,
@@ -3246,7 +3294,8 @@
                 "insertions": 25
               }
             }
-          }
+          },
+          "message": "Another fix for printing primary key values"
         },
         "implicitBranchNo": 2624,
         "seq": 15458,
@@ -3287,7 +3336,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Attempt to use hash_code"
         },
         "implicitBranchNo": 2624,
         "seq": 15459,
@@ -3336,7 +3386,8 @@
                 "insertions": 90
               }
             }
-          }
+          },
+          "message": "Add copyToRealm benchmarks"
         },
         "implicitBranchNo": 2624,
         "seq": 15460,
@@ -3377,7 +3428,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Revert using hash_code"
         },
         "implicitBranchNo": 2624,
         "seq": 15461,
@@ -3418,7 +3470,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Temporary: Disable 1 test branch to track down failing type"
         },
         "implicitBranchNo": 2624,
         "seq": 15462,
@@ -3459,7 +3512,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Temporary: Disable string key"
         },
         "implicitBranchNo": 2624,
         "seq": 15463,
@@ -3500,7 +3554,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Temporary: Testing only String"
         },
         "implicitBranchNo": 2624,
         "seq": 15464,
@@ -3541,7 +3596,8 @@
                 "insertions": 144
               }
             }
-          }
+          },
+          "message": "Add benchmark for diffed updates"
         },
         "implicitBranchNo": 2624,
         "seq": 15465,
@@ -3590,7 +3646,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add ObjectStore support from branch-in-progress."
         },
         "implicitBranchNo": 2624,
         "seq": 15466,
@@ -3631,7 +3688,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Temporary: Only test long"
         },
         "implicitBranchNo": 2624,
         "seq": 15467,
@@ -3672,7 +3730,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Just guessing at this point :/"
         },
         "implicitBranchNo": 2624,
         "seq": 15468,
@@ -3725,7 +3784,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Disable breaking test and list under known bugs. Prepare RC release"
         },
         "implicitBranchNo": 2624,
         "seq": 15469,
@@ -3766,7 +3826,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Remove unused var name"
         },
         "implicitBranchNo": 2624,
         "seq": 15470,
@@ -3811,7 +3872,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix unit test"
         },
         "implicitBranchNo": 2624,
         "seq": 15471,
@@ -3852,7 +3914,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix bad commit"
         },
         "implicitBranchNo": 2624,
         "seq": 15472,
@@ -3925,7 +3988,8 @@
                 "insertions": 82
               }
             }
-          }
+          },
+          "message": "Use column indices instead of String based keys when building the object using `Object::create`"
         },
         "implicitBranchNo": 2624,
         "seq": 15473,
@@ -3990,7 +4054,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Fix annotation processor tests"
         },
         "implicitBranchNo": 2624,
         "seq": 15474,
@@ -4035,7 +4100,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add notification test"
         },
         "implicitBranchNo": 2624,
         "seq": 15475,
@@ -4080,7 +4146,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare BETA1 release"
         },
         "implicitBranchNo": 2624,
         "seq": 15476,
@@ -4121,7 +4188,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Spelling"
         },
         "implicitBranchNo": 2624,
         "seq": 15477,
@@ -4162,7 +4230,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Set release date for BETA1"
         },
         "implicitBranchNo": 2624,
         "seq": 15478,
@@ -4207,7 +4276,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Fix error in unit test and changelog"
         },
         "implicitBranchNo": 2624,
         "seq": 15479,
@@ -4257,7 +4327,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/bug/query-based-listeners' into cm/copy-ignore-same-values\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2624,
         "seq": 15506,
@@ -4298,7 +4369,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare BETA2"
         },
         "implicitBranchNo": 2624,
         "seq": 15507,
@@ -4339,7 +4411,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next beta release"
         },
         "implicitBranchNo": 2624,
         "seq": 15508,
@@ -4393,7 +4466,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/copy-ignore-same-values\n# Conflicts:\n#       CHANGELOG.md\n#       version.txt"
         },
         "implicitBranchNo": 2624,
         "seq": 15523,
@@ -4446,7 +4520,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update to latest OS. Fixed diffing list elements."
         },
         "implicitBranchNo": 2624,
         "seq": 15524,
@@ -4491,7 +4566,8 @@
                 "insertions": 185
               }
             }
-          }
+          },
+          "message": "WIP - JavaValueType"
         },
         "implicitBranchNo": 2624,
         "seq": 15527,
@@ -4532,7 +4608,8 @@
                 "insertions": 227
               }
             }
-          }
+          },
+          "message": "JavaValue variant type"
         },
         "implicitBranchNo": 2624,
         "seq": 15528,
@@ -4589,7 +4666,8 @@
                 "insertions": 81
               }
             }
-          }
+          },
+          "message": "Cleanup"
         },
         "implicitBranchNo": 2624,
         "seq": 15529,
@@ -4646,7 +4724,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "More cleanup. Preparing for a proper 5.8.0 release."
         },
         "implicitBranchNo": 2624,
         "seq": 15530,
@@ -4687,7 +4766,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Better changelog"
         },
         "implicitBranchNo": 2624,
         "seq": 15531,
@@ -4865,7 +4945,8 @@
                 "insertions": 47
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/copy-ignore-same-values\n# Conflicts:\n#       CHANGELOG.md\n#       realm/realm-library/src/main/cpp/util.cpp"
         },
         "implicitBranchNo": 2624,
         "seq": 15534,
@@ -4906,7 +4987,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Cleanup test"
         },
         "implicitBranchNo": 2624,
         "seq": 15535,
@@ -4951,7 +5033,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Swap Row* for RowExpr*. Catch all exceptions at JNI boundary."
         },
         "implicitBranchNo": 2624,
         "seq": 15546,
@@ -5008,7 +5091,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2624,
         "seq": 15549,
@@ -5053,7 +5137,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add reference to issue. Fix public field"
         },
         "implicitBranchNo": 2624,
         "seq": 15550,
@@ -5114,7 +5199,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Rename ImportFlag. Fixing other minor PR comments."
         },
         "implicitBranchNo": 2624,
         "seq": 15555,
@@ -5328,7 +5414,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Ignore same values when using copyToRealm (#6224)"
         },
         "implicitBranchNo": 0,
         "seq": 15560,
@@ -5386,7 +5473,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for latest version of Sync"
         },
         "implicitBranchNo": 2630,
         "seq": 15551,
@@ -5427,7 +5515,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Better error message if things crash"
         },
         "implicitBranchNo": 2630,
         "seq": 15552,
@@ -5468,7 +5557,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Revert test dependencies"
         },
         "implicitBranchNo": 2630,
         "seq": 15553,
@@ -5509,7 +5599,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update robolectric"
         },
         "implicitBranchNo": 2630,
         "seq": 15554,
@@ -5550,7 +5641,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Update test to be less flaky"
         },
         "implicitBranchNo": 2630,
         "seq": 15556,
@@ -5591,7 +5683,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Increase timeout"
         },
         "implicitBranchNo": 2630,
         "seq": 15557,
@@ -5801,7 +5894,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/update-sync-3.13.1\n# Conflicts:\n#       CHANGELOG.md\n#       realm/realm-library/src/syncIntegrationTest/java/io/realm/objectserver/EncryptedSynchronizedRealmTests.java"
         },
         "implicitBranchNo": 2630,
         "seq": 15561,
@@ -5867,7 +5961,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Add support for latest version of Sync (#6266)"
         },
         "implicitBranchNo": 0,
         "seq": 15564,
@@ -5953,7 +6048,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add support for setting a User-Agent String."
         },
         "implicitBranchNo": 2631,
         "seq": 15558,
@@ -5994,7 +6090,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2631,
         "seq": 15559,
@@ -6043,7 +6140,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2631,
         "seq": 15562,
@@ -6253,7 +6351,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/update-sync-3.13.1' into cm/user-agent-info"
         },
         "implicitBranchNo": 2631,
         "seq": 15563,
@@ -6290,7 +6389,8 @@
             "insertions": 0,
             "deletions": 0,
             "files": {}
-          }
+          },
+          "message": "Merge branch 'master' into cm/user-agent-info\n# Conflicts:\n#       realm/realm-library/src/main/cpp/io_realm_SyncManager.cpp"
         },
         "implicitBranchNo": 2631,
         "seq": 15565,
@@ -6331,7 +6431,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Better javadoc"
         },
         "implicitBranchNo": 2631,
         "seq": 15566,
@@ -6417,7 +6518,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add support for setting a custom User-Agent (#6270)"
         },
         "implicitBranchNo": 0,
         "seq": 15567,
@@ -6471,7 +6573,8 @@
                 "insertions": 78
               }
             }
-          }
+          },
+          "message": "Add support for uploading and downloading changes with a timeout"
         },
         "implicitBranchNo": 2585,
         "seq": 15178,
@@ -6516,7 +6619,8 @@
                 "insertions": 20
               }
             }
-          }
+          },
+          "message": "Expose return value like CountdownLatch"
         },
         "implicitBranchNo": 2585,
         "seq": 15179,
@@ -7274,7 +7378,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/upload-download-with-timeout\n# Conflicts:\n#       CHANGELOG.md\n#       realm/realm-library/src/objectServer/java/io/realm/SyncSession.java"
         },
         "implicitBranchNo": 2585,
         "seq": 15542,
@@ -7327,7 +7432,8 @@
                 "insertions": 24
               }
             }
-          }
+          },
+          "message": "Add support for `waitForInitialRemoteData` with timeout"
         },
         "implicitBranchNo": 2585,
         "seq": 15543,
@@ -7372,7 +7478,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Fix Doc and comments"
         },
         "implicitBranchNo": 2585,
         "seq": 15544,
@@ -7413,7 +7520,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md"
         },
         "implicitBranchNo": 2585,
         "seq": 15545,
@@ -7458,7 +7566,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "PR comments"
         },
         "implicitBranchNo": 2585,
         "seq": 15548,
@@ -7724,7 +7833,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/upload-download-with-timeout\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2585,
         "seq": 15568,
@@ -7765,7 +7875,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Remove logging"
         },
         "implicitBranchNo": 2585,
         "seq": 15569,
@@ -7827,7 +7938,8 @@
                 "insertions": 24
               }
             }
-          }
+          },
+          "message": "Add support for uploading and downloading changes with a timeout (#6073)"
         },
         "implicitBranchNo": 0,
         "seq": 15570,
@@ -7881,7 +7993,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2612,
         "seq": 15352,
@@ -7930,7 +8043,8 @@
                 "insertions": 24
               }
             }
-          }
+          },
+          "message": "Clean up tests and docs"
         },
         "implicitBranchNo": 2612,
         "seq": 15356,
@@ -8004,7 +8118,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/pr-feedback"
         },
         "implicitBranchNo": 2612,
         "seq": 15367,
@@ -8045,7 +8160,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2612,
         "seq": 15368,
@@ -8459,7 +8575,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/pr-feedback\n# Conflicts:\n#       realm/realm-library/src/syncIntegrationTest/java/io/realm/SyncedRealmIntegrationTests.java"
         },
         "implicitBranchNo": 2612,
         "seq": 15522,
@@ -8841,7 +8958,8 @@
                 "insertions": 47
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/pr-feedback\n# Conflicts:\n#       realm/realm-library/src/syncIntegrationTest/java/io/realm/SyncedRealmIntegrationTests.java"
         },
         "implicitBranchNo": 2612,
         "seq": 15571,
@@ -8882,7 +9000,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Use Java 1.7 syntax"
         },
         "implicitBranchNo": 2612,
         "seq": 15573,
@@ -8948,7 +9067,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Missing PR feedback (#6148)"
         },
         "implicitBranchNo": 0,
         "seq": 15574,
@@ -8994,7 +9114,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Update README.md"
         },
         "implicitBranchNo": 2632,
         "seq": 15580,
@@ -9036,7 +9157,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Merge pull request #6279 from realm/bmunkholm-patch-1\nUpdate README.md with links to issue templates."
         },
         "implicitBranchNo": 0,
         "seq": 15581,
@@ -9094,7 +9216,8 @@
                 "insertions": 127
               }
             }
-          }
+          },
+          "message": "First pass design"
         },
         "implicitBranchNo": 2178,
         "seq": 12681,
@@ -9135,7 +9258,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Appease FindBugs"
         },
         "implicitBranchNo": 2178,
         "seq": 12682,
@@ -9176,7 +9300,8 @@
                 "insertions": 15
               }
             }
-          }
+          },
+          "message": "First response to comments"
         },
         "implicitBranchNo": 2178,
         "seq": 12703,
@@ -9221,7 +9346,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "More fine tuning"
         },
         "implicitBranchNo": 2178,
         "seq": 12710,
@@ -9531,7 +9657,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'bulk/master' into bulk/working"
         },
         "implicitBranchNo": 2178,
         "seq": 12746,
@@ -9601,7 +9728,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Merge branch 'bulk/master' into bulk/working"
         },
         "implicitBranchNo": 2178,
         "seq": 12766,
@@ -12195,7 +12323,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into gbm/bulk-update\n# Conflicts:\n#       realm/realm-library/src/main/cpp/io_realm_internal_OsResults.cpp\n#       realm/realm-library/src/main/java/io/realm/OrderedRealmCollectionImpl.java\n#       realm/realm-library/src/main/java/io/realm/RealmResults.java\n#       realm/realm-library/src/main/java/io/realm/internal/OsResults.java"
         },
         "implicitBranchNo": 2178,
         "seq": 15490,
@@ -12413,7 +12542,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/copy-ignore-same-values' into gbm/bulk-update"
         },
         "implicitBranchNo": 2178,
         "seq": 15495,
@@ -12478,7 +12608,8 @@
                 "insertions": 15
               }
             }
-          }
+          },
+          "message": "Vertical slice of unit tests"
         },
         "implicitBranchNo": 2178,
         "seq": 15496,
@@ -12527,7 +12658,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Enable more type + their tests"
         },
         "implicitBranchNo": 2178,
         "seq": 15497,
@@ -12576,7 +12708,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Add Date support"
         },
         "implicitBranchNo": 2178,
         "seq": 15498,
@@ -12625,7 +12758,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Add support for binary fields"
         },
         "implicitBranchNo": 2178,
         "seq": 15499,
@@ -12666,7 +12800,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix Findbugs warning"
         },
         "implicitBranchNo": 2178,
         "seq": 15500,
@@ -12719,7 +12854,8 @@
                 "insertions": 15
               }
             }
-          }
+          },
+          "message": "Add support for setting object reference fields"
         },
         "implicitBranchNo": 2178,
         "seq": 15501,
@@ -12933,7 +13069,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/copy-ignore-same-values' into gbm/bulk-update\n# Conflicts:\n#       realm/realm-library/src/main/cpp/object-store\n#       realm/realm-library/src/main/cpp/util.cpp"
         },
         "implicitBranchNo": 2178,
         "seq": 15536,
@@ -12998,7 +13135,8 @@
                 "insertions": 29
               }
             }
-          }
+          },
+          "message": "Add support for primitive lists"
         },
         "implicitBranchNo": 2178,
         "seq": 15537,
@@ -13047,7 +13185,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Add support for lists of models."
         },
         "implicitBranchNo": 2178,
         "seq": 15538,
@@ -13088,7 +13227,8 @@
                 "insertions": 232
               }
             }
-          }
+          },
+          "message": "Added setValue tests"
         },
         "implicitBranchNo": 2178,
         "seq": 15539,
@@ -13129,7 +13269,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Fix example"
         },
         "implicitBranchNo": 2178,
         "seq": 15540,
@@ -13170,7 +13311,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Increase timeout"
         },
         "implicitBranchNo": 2178,
         "seq": 15541,
@@ -13215,7 +13357,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Doc fixes"
         },
         "implicitBranchNo": 2178,
         "seq": 15547,
@@ -13381,7 +13524,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into gbm/bulk-update\n# Conflicts:\n#       CHANGELOG.md\n#       library-benchmarks/src/androidTest/java/io/realm/benchmarks/CopyToRealmBenchmarks.java\n#       library-benchmarks/src/androidTest/java/io/realm/benchmarks/CopyToRealmOrUpdateBenchmarks.java\n#       realm/realm-annotations-processor/src/main/java/io/realm/processor/OsObjectBuilderTypeHelper.java\n#       realm/realm-library/src/androidTest/java/io/realm/NotificationsTest.java\n#       realm/realm-library/src/main/cpp/io_realm_internal_objectstore_OsObjectBuilder.cpp\n#       realm/realm-library/src/main/cpp/java_object_accessor.hpp\n#       realm/realm-library/src/main/cpp/util.cpp\n#       realm/realm-library/src/main/java/io/realm/ImportFlag.java\n#       realm/realm-library/src/main/java/io/realm/Realm.java\n#       realm/realm-library/src/main/java/io/realm/internal/objectstore/OsObjectBuilder.java\n#       realm/realm-library/src/syncIntegrationTest/java/io/realm/objectserver/EncryptedSynchronizedRealmTests.java"
         },
         "implicitBranchNo": 2178,
         "seq": 15572,
@@ -13447,7 +13591,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into gbm/bulk-update"
         },
         "implicitBranchNo": 2178,
         "seq": 15575,
@@ -13488,7 +13633,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix error message"
         },
         "implicitBranchNo": 2178,
         "seq": 15576,
@@ -13537,7 +13683,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback. Mostly doc and formatting"
         },
         "implicitBranchNo": 2178,
         "seq": 15577,
@@ -13578,7 +13725,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Kotlin requires Java 8 support"
         },
         "implicitBranchNo": 2178,
         "seq": 15578,
@@ -13619,7 +13767,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix changelog"
         },
         "implicitBranchNo": 2178,
         "seq": 15579,
@@ -13660,7 +13809,8 @@
                 "insertions": 11
               }
             }
-          }
+          },
+          "message": "Check that realm is open before accessing schema"
         },
         "implicitBranchNo": 2178,
         "seq": 15583,
@@ -13750,7 +13900,8 @@
                 "insertions": 29
               }
             }
-          }
+          },
+          "message": "Add support for bulk updating fields in query results (#5133)"
         },
         "implicitBranchNo": 0,
         "seq": 15584,
@@ -13796,7 +13947,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Added missing changelog entry"
         },
         "implicitBranchNo": 0,
         "seq": 15585,
@@ -13842,7 +13994,8 @@
                 "insertions": 51
               }
             }
-          }
+          },
+          "message": "Fix Gradle cache not working in parallel builds"
         },
         "implicitBranchNo": 0,
         "seq": 15588,
@@ -13889,7 +14042,8 @@
                 "insertions": 51
               }
             }
-          }
+          },
+          "message": "Fix Gradle cache not working in parallel builds (#6285)"
         },
         "implicitBranchNo": 2635,
         "seq": 15589,
@@ -13938,7 +14092,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Transformer strips similar named methods"
         },
         "implicitBranchNo": 2634,
         "seq": 15591,
@@ -13988,7 +14143,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Transformer strips similar named methods (#6286)"
         },
         "implicitBranchNo": 2635,
         "seq": 15592,
@@ -14038,7 +14194,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' of https://github.com/realm/realm-java"
         },
         "implicitBranchNo": 0,
         "seq": 15594,
@@ -14084,7 +14241,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Add release date"
         },
         "implicitBranchNo": 2637,
         "seq": 15596,
@@ -14125,7 +14283,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.8.0"
         },
         "implicitBranchNo": 2637,
         "seq": 15597,
@@ -14166,7 +14325,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.8.1-SNAPSHOT"
         },
         "implicitBranchNo": 2637,
         "seq": 15598,
@@ -14212,7 +14372,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge cdda26c30decf36cf196bc6dbe6785b740566be2 into master"
         },
         "implicitBranchNo": 0,
         "seq": 15599,
@@ -14258,7 +14419,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Use D8 for calculating method count"
         },
         "implicitBranchNo": 0,
         "seq": 15602,
@@ -14304,7 +14466,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use latest build tools"
         },
         "implicitBranchNo": 0,
         "seq": 15604,
@@ -14350,7 +14513,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Re-enable PermissionManager tests"
         },
         "implicitBranchNo": 2641,
         "seq": 15606,
@@ -14392,7 +14556,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Re-enable PermissionManager tests (#6293)"
         },
         "implicitBranchNo": 0,
         "seq": 15607,
@@ -14446,7 +14611,8 @@
                 "insertions": 56
               }
             }
-          }
+          },
+          "message": "Remove Java8 bytecode"
         },
         "implicitBranchNo": 2639,
         "seq": 15611,
@@ -14519,7 +14685,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Add support for native error category and code"
         },
         "implicitBranchNo": 2638,
         "seq": 15612,
@@ -14560,7 +14727,8 @@
                 "insertions": 140
               }
             }
-          }
+          },
+          "message": "Add types to all errors"
         },
         "implicitBranchNo": 2638,
         "seq": 15613,
@@ -14609,7 +14777,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix compiler errors"
         },
         "implicitBranchNo": 2638,
         "seq": 15614,
@@ -14658,7 +14827,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Fix unit test"
         },
         "implicitBranchNo": 2638,
         "seq": 15615,
@@ -14699,7 +14869,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Proper newline seperator"
         },
         "implicitBranchNo": 2638,
         "seq": 15616,
@@ -14740,7 +14911,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Properly report the category and value for unknown errors."
         },
         "implicitBranchNo": 2638,
         "seq": 15617,
@@ -14785,7 +14957,8 @@
                 "insertions": 20
               }
             }
-          }
+          },
+          "message": "Cover more common errors. Remove breaking changes"
         },
         "implicitBranchNo": 2638,
         "seq": 15618,
@@ -14826,7 +14999,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add reference to issue"
         },
         "implicitBranchNo": 2638,
         "seq": 15619,
@@ -14867,7 +15041,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/objectServer/java/io/realm/ObjectServerError.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2638,
         "seq": 15620,
@@ -14917,7 +15092,8 @@
                 "insertions": 56
               }
             }
-          }
+          },
+          "message": "Remove Java8 bytecode (#6372)"
         },
         "implicitBranchNo": 2637,
         "seq": 15621,
@@ -14962,7 +15138,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update Sync"
         },
         "implicitBranchNo": 2643,
         "seq": 15622,
@@ -15003,7 +15180,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Update ROS and set Sync dependency correctly"
         },
         "implicitBranchNo": 2643,
         "seq": 15623,
@@ -15048,7 +15226,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update ObjectStore"
         },
         "implicitBranchNo": 2643,
         "seq": 15624,
@@ -15093,7 +15272,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix bug detecting files being upgraded from old version of ROS"
         },
         "implicitBranchNo": 2643,
         "seq": 15625,
@@ -15143,7 +15323,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update Sync (#6390)\n* Update Sync\n* Update ROS and set Sync dependency correctly\n* Update ObjectStore\n* Fix bug detecting files being upgraded from old version of ROS"
         },
         "implicitBranchNo": 2637,
         "seq": 15626,
@@ -15193,7 +15374,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/bug/error-codes"
         },
         "implicitBranchNo": 2638,
         "seq": 15627,
@@ -15234,7 +15416,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add missing types"
         },
         "implicitBranchNo": 2638,
         "seq": 15628,
@@ -15292,7 +15475,8 @@
                 "insertions": 56
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases' into cm/bug/error-codes\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2638,
         "seq": 15629,
@@ -15333,7 +15517,8 @@
                 "insertions": 18
               }
             }
-          }
+          },
+          "message": "Add missing categories"
         },
         "implicitBranchNo": 2638,
         "seq": 15630,
@@ -15374,7 +15559,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix unit test"
         },
         "implicitBranchNo": 2638,
         "seq": 15631,
@@ -15468,7 +15654,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Add support for native error category and code (#6379)"
         },
         "implicitBranchNo": 0,
         "seq": 15632,
@@ -15563,7 +15750,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into releases\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2637,
         "seq": 15634,
@@ -15608,7 +15796,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Bump version + add release date to changelog"
         },
         "implicitBranchNo": 2637,
         "seq": 15635,
@@ -15649,7 +15838,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.9.0"
         },
         "implicitBranchNo": 2637,
         "seq": 15636,
@@ -15690,7 +15880,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.9.1-SNAPSHOT"
         },
         "implicitBranchNo": 2637,
         "seq": 15637,
@@ -15736,7 +15927,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge 4a16aa85c103f521dac46220908d1cda70407db0 into master"
         },
         "implicitBranchNo": 0,
         "seq": 15638,
@@ -15782,7 +15974,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 15639,
@@ -15828,7 +16021,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add missing bug information"
         },
         "implicitBranchNo": 0,
         "seq": 15640,
@@ -15914,7 +16108,8 @@
                 "insertions": 60
               }
             }
-          }
+          },
+          "message": "Convert to Kotlin and use data binding"
         },
         "implicitBranchNo": 2647,
         "seq": 15641,
@@ -15963,7 +16158,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2647,
         "seq": 15642,
@@ -16004,7 +16200,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Use same compile sdk version as the rest of the project"
         },
         "implicitBranchNo": 2647,
         "seq": 15643,
@@ -16045,7 +16242,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix gradle error"
         },
         "implicitBranchNo": 2647,
         "seq": 15644,
@@ -16086,7 +16284,8 @@
                 "insertions": 16
               }
             }
-          }
+          },
+          "message": "Attempt to fix licenses"
         },
         "implicitBranchNo": 2647,
         "seq": 15645,
@@ -16135,7 +16334,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "More PR feedback"
         },
         "implicitBranchNo": 2647,
         "seq": 15646,
@@ -16176,7 +16376,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update examples/objectServerExample/build.gradle"
         },
         "implicitBranchNo": 2647,
         "seq": 15647,
@@ -16233,7 +16434,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2647,
         "seq": 15648,
@@ -16327,7 +16529,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Convert ObjectServerExample to Kotlin and use data binding (#6413)"
         },
         "implicitBranchNo": 0,
         "seq": 15649,
@@ -16381,7 +16584,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fixed JNI reference not released correctly"
         },
         "implicitBranchNo": 2644,
         "seq": 15653,
@@ -16426,7 +16630,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Revert OS upgrade"
         },
         "implicitBranchNo": 2644,
         "seq": 15654,
@@ -16467,7 +16672,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2644,
         "seq": 15655,
@@ -16513,7 +16719,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fixed JNI reference not released correctly (#6437)"
         },
         "implicitBranchNo": 2637,
         "seq": 15656,
@@ -16554,7 +16761,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Updated release date"
         },
         "implicitBranchNo": 2637,
         "seq": 15657,
@@ -16595,7 +16803,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.9.1"
         },
         "implicitBranchNo": 2637,
         "seq": 15658,
@@ -16636,7 +16845,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.9.2-SNAPSHOT"
         },
         "implicitBranchNo": 2637,
         "seq": 15659,
@@ -16686,7 +16896,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       version.txt"
         },
         "implicitBranchNo": 0,
         "seq": 15660,
@@ -16732,7 +16943,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update ROS"
         },
         "implicitBranchNo": 2649,
         "seq": 15677,
@@ -16773,7 +16985,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Fix https://github.com/realm/realm-object-server/issues/413"
         },
         "implicitBranchNo": 2649,
         "seq": 15678,
@@ -16819,7 +17032,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Fix ROS not being able to start (#6446)"
         },
         "implicitBranchNo": 2637,
         "seq": 15679,
@@ -16865,7 +17079,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'"
         },
         "implicitBranchNo": 0,
         "seq": 15680,
@@ -17023,7 +17238,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade Gradle and Android Build Tools"
         },
         "implicitBranchNo": 2650,
         "seq": 15661,
@@ -17064,7 +17280,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Create source.properties expected by Android plugin"
         },
         "implicitBranchNo": 2650,
         "seq": 15662,
@@ -17105,7 +17322,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Syntax error"
         },
         "implicitBranchNo": 2650,
         "seq": 15663,
@@ -17146,7 +17364,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Fix location of compiled java files."
         },
         "implicitBranchNo": 2650,
         "seq": 15664,
@@ -17187,7 +17406,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Downgrade Android Gradle Plugin"
         },
         "implicitBranchNo": 2652,
         "seq": 15665,
@@ -17256,7 +17476,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Downgrade Gradle"
         },
         "implicitBranchNo": 2650,
         "seq": 15666,
@@ -17298,7 +17519,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/upgrade-gradle' of https://github.com/realm/realm-java into cm/upgrade-gradle"
         },
         "implicitBranchNo": 2650,
         "seq": 15667,
@@ -17339,7 +17561,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade Android Gradle Plugin"
         },
         "implicitBranchNo": 2650,
         "seq": 15668,
@@ -17432,7 +17655,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix lint"
         },
         "implicitBranchNo": 2650,
         "seq": 15669,
@@ -17473,7 +17697,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Downgrade Gradle version"
         },
         "implicitBranchNo": 2650,
         "seq": 15670,
@@ -17514,7 +17739,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Findbugs"
         },
         "implicitBranchNo": 2650,
         "seq": 15671,
@@ -17571,7 +17797,8 @@
                 "insertions": 31
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2650,
         "seq": 15674,
@@ -17612,7 +17839,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use same gradle version across all projects"
         },
         "implicitBranchNo": 2650,
         "seq": 15675,
@@ -17653,7 +17881,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update ROS"
         },
         "implicitBranchNo": 2650,
         "seq": 15676,
@@ -17695,7 +17924,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases' into cm/upgrade-gradle"
         },
         "implicitBranchNo": 2650,
         "seq": 15681,
@@ -17736,7 +17966,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix wrong test conversion"
         },
         "implicitBranchNo": 2650,
         "seq": 15683,
@@ -17781,7 +18012,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2650,
         "seq": 15686,
@@ -18023,7 +18255,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Upgrade Gradle and Android Build Tools (#6439)"
         },
         "implicitBranchNo": 2637,
         "seq": 15687,
@@ -18064,7 +18297,8 @@
                 "insertions": 11
               }
             }
-          }
+          },
+          "message": "Better docs around nullability"
         },
         "implicitBranchNo": 2654,
         "seq": 15715,
@@ -18105,7 +18339,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update realm-annotations/src/main/java/io/realm/annotations/Required.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2654,
         "seq": 15716,
@@ -18147,7 +18382,8 @@
                 "insertions": 12
               }
             }
-          }
+          },
+          "message": "Better nullability docs (#6470)"
         },
         "implicitBranchNo": 2637,
         "seq": 15717,
@@ -18393,7 +18629,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       realm/build.gradle"
         },
         "implicitBranchNo": 0,
         "seq": 15718,
@@ -18451,7 +18688,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix timestamp overflows"
         },
         "implicitBranchNo": 2653,
         "seq": 15688,
@@ -18520,7 +18758,8 @@
                 "insertions": 142
               }
             }
-          }
+          },
+          "message": "Add support for timestamps/query updates to Subscriptio"
         },
         "implicitBranchNo": 2653,
         "seq": 15689,
@@ -18561,7 +18800,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "no message"
         },
         "implicitBranchNo": 2653,
         "seq": 15690,
@@ -18602,7 +18842,8 @@
                 "insertions": 71
               }
             }
-          }
+          },
+          "message": "refactor subscribe names to match object creation API's. Javadoc"
         },
         "implicitBranchNo": 2653,
         "seq": 15691,
@@ -18651,7 +18892,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "More subscribe tests  + fixes"
         },
         "implicitBranchNo": 2653,
         "seq": 15692,
@@ -18712,7 +18954,8 @@
                 "insertions": 112
               }
             }
-          }
+          },
+          "message": "First draft for findAllAsync variants + unit tests."
         },
         "implicitBranchNo": 2653,
         "seq": 15693,
@@ -18757,7 +19000,8 @@
                 "insertions": 65
               }
             }
-          }
+          },
+          "message": "Add findAllAsync tests"
         },
         "implicitBranchNo": 2653,
         "seq": 15694,
@@ -18798,7 +19042,8 @@
                 "insertions": 49
               }
             }
-          }
+          },
+          "message": "Fix missing annotation and Javadoc"
         },
         "implicitBranchNo": 2653,
         "seq": 15695,
@@ -18843,7 +19088,8 @@
                 "insertions": 13
               }
             }
-          }
+          },
+          "message": "Align TTL API's"
         },
         "implicitBranchNo": 2653,
         "seq": 15696,
@@ -18884,7 +19130,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Fix Findbugs"
         },
         "implicitBranchNo": 2653,
         "seq": 15697,
@@ -18925,7 +19172,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15698,
@@ -18966,7 +19214,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15699,
@@ -19007,7 +19256,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15700,
@@ -19048,7 +19298,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15701,
@@ -19089,7 +19340,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/androidTest/java/io/realm/internal/JNINativeTest.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15702,
@@ -19130,7 +19382,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15703,
@@ -19171,7 +19424,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15704,
@@ -19212,7 +19466,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15705,
@@ -19253,7 +19508,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15706,
@@ -19294,7 +19550,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15707,
@@ -19335,7 +19592,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15708,
@@ -19376,7 +19634,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/RealmQuery.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15709,
@@ -19417,7 +19676,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15710,
@@ -19466,7 +19726,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Update OS"
         },
         "implicitBranchNo": 2653,
         "seq": 15711,
@@ -19519,7 +19780,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2653,
         "seq": 15712,
@@ -19564,7 +19826,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use OS master"
         },
         "implicitBranchNo": 2653,
         "seq": 15714,
@@ -19810,7 +20073,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/subscription-timestamps"
         },
         "implicitBranchNo": 2653,
         "seq": 15719,
@@ -19855,7 +20119,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update to latest OS"
         },
         "implicitBranchNo": 2653,
         "seq": 15720,
@@ -19904,7 +20169,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Fix test"
         },
         "implicitBranchNo": 2653,
         "seq": 15721,
@@ -19957,7 +20223,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Attempt to fix Fifo test"
         },
         "implicitBranchNo": 2653,
         "seq": 15722,
@@ -20002,7 +20269,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update OS to include fifo dir fix"
         },
         "implicitBranchNo": 2653,
         "seq": 15723,
@@ -20047,7 +20315,8 @@
                 "insertions": 11
               }
             }
-          }
+          },
+          "message": "More test fixes"
         },
         "implicitBranchNo": 2653,
         "seq": 15724,
@@ -20088,7 +20357,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix PMD warning"
         },
         "implicitBranchNo": 2653,
         "seq": 15725,
@@ -20129,7 +20399,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15726,
@@ -20170,7 +20441,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/sync/Subscription.java\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2653,
         "seq": 15727,
@@ -20223,7 +20495,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2653,
         "seq": 15728,
@@ -20357,7 +20630,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Better Subscription lifecycle management (#6456)"
         },
         "implicitBranchNo": 0,
         "seq": 15729,
@@ -20403,7 +20677,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 0,
         "seq": 15730,
@@ -20449,7 +20724,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.10.0"
         },
         "implicitBranchNo": 0,
         "seq": 15731,
@@ -20495,7 +20771,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.10.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15732,
@@ -20549,7 +20826,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix batch updates which removes objects from the query results"
         },
         "implicitBranchNo": 2655,
         "seq": 15734,
@@ -20590,7 +20868,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix Docker build"
         },
         "implicitBranchNo": 2655,
         "seq": 15735,
@@ -20644,7 +20923,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix batch updates which removes objects from the query results (#6482)"
         },
         "implicitBranchNo": 0,
         "seq": 15736,
@@ -20690,7 +20970,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix monkey output"
         },
         "implicitBranchNo": 0,
         "seq": 15753,
@@ -20736,7 +21017,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next dev iteration"
         },
         "implicitBranchNo": 2656,
         "seq": 15733,
@@ -20789,7 +21071,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade to new Sync release"
         },
         "implicitBranchNo": 2657,
         "seq": 15737,
@@ -20862,7 +21145,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Use. existing QueryDescriptor + tests"
         },
         "implicitBranchNo": 2657,
         "seq": 15738,
@@ -20916,7 +21200,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'"
         },
         "implicitBranchNo": 2656,
         "seq": 15739,
@@ -20966,7 +21251,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/include-backlinks-in-subscription\n# Conflicts:\n#       CHANGELOG.md\n#       realm/realm-library/src/main/cpp/object-store"
         },
         "implicitBranchNo": 2657,
         "seq": 15740,
@@ -21007,7 +21293,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Set correct ROS dependency"
         },
         "implicitBranchNo": 2657,
         "seq": 15741,
@@ -21064,7 +21351,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for incremental annotation processors"
         },
         "implicitBranchNo": 2660,
         "seq": 15742,
@@ -21122,7 +21410,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for incremental annotation processors (#6496)"
         },
         "implicitBranchNo": 2658,
         "seq": 15744,
@@ -21191,7 +21480,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "WIP"
         },
         "implicitBranchNo": 2657,
         "seq": 15745,
@@ -21280,7 +21570,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use Java implementation for creating descriptor. Fix tests"
         },
         "implicitBranchNo": 2657,
         "seq": 15746,
@@ -21349,7 +21640,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Cleanup. Changelog and docs"
         },
         "implicitBranchNo": 2657,
         "seq": 15747,
@@ -21407,7 +21699,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/include-backlinks-in-subscription\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2657,
         "seq": 15748,
@@ -21456,7 +21749,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Better tests and more cleanup"
         },
         "implicitBranchNo": 2657,
         "seq": 15749,
@@ -21501,7 +21795,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "PR feedback"
         },
         "implicitBranchNo": 2657,
         "seq": 15751,
@@ -21615,7 +21910,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Including LinkingObjects in subscriptions (#6489)"
         },
         "implicitBranchNo": 2658,
         "seq": 15752,
@@ -21749,7 +22045,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into releases"
         },
         "implicitBranchNo": 0,
         "seq": 15754,
@@ -21795,7 +22092,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update changelog release date"
         },
         "implicitBranchNo": 0,
         "seq": 15755,
@@ -21841,7 +22139,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.11.0"
         },
         "implicitBranchNo": 0,
         "seq": 15756,
@@ -21887,7 +22186,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.11.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15757,
@@ -21933,7 +22233,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 15758,
@@ -21983,7 +22284,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Improve compatibility section in changelog and API docs"
         },
         "implicitBranchNo": 2665,
         "seq": 15759,
@@ -22028,7 +22330,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update version"
         },
         "implicitBranchNo": 2665,
         "seq": 15760,
@@ -22069,7 +22372,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md"
         },
         "implicitBranchNo": 2666,
         "seq": 15761,
@@ -22110,7 +22414,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Better API doc"
         },
         "implicitBranchNo": 2665,
         "seq": 15762,
@@ -22152,7 +22457,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/cleanup-changelog' of https://github.com/realm/realm-java into cm/cleanup-changelog"
         },
         "implicitBranchNo": 2665,
         "seq": 15763,
@@ -22197,7 +22503,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Correct required ROS version all around"
         },
         "implicitBranchNo": 2665,
         "seq": 15764,
@@ -22243,7 +22550,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Improve compatibility section in changelog and API docs (#6504)"
         },
         "implicitBranchNo": 0,
         "seq": 15766,
@@ -22301,7 +22609,8 @@
                 "insertions": 60
               }
             }
-          }
+          },
+          "message": "Only report fatal errors through the PermissionManager"
         },
         "implicitBranchNo": 2664,
         "seq": 15765,
@@ -22347,7 +22656,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/bug/permission-manager-lost-connection"
         },
         "implicitBranchNo": 2664,
         "seq": 15767,
@@ -22388,7 +22698,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix version"
         },
         "implicitBranchNo": 2664,
         "seq": 15768,
@@ -22429,7 +22740,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2664,
         "seq": 15769,
@@ -22470,7 +22782,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update CHANGELOG.md\nCo-Authored-By: cmelchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2664,
         "seq": 15770,
@@ -22511,7 +22824,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Better changelog"
         },
         "implicitBranchNo": 2664,
         "seq": 15771,
@@ -22565,7 +22879,8 @@
                 "insertions": 67
               }
             }
-          }
+          },
+          "message": "PermissionManager should ignore intermittent errors (#6506)"
         },
         "implicitBranchNo": 0,
         "seq": 15772,
@@ -22611,7 +22926,8 @@
                 "insertions": 31
               }
             }
-          }
+          },
+          "message": "Remove unused imports"
         },
         "implicitBranchNo": 0,
         "seq": 15773,
@@ -22661,7 +22977,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 0,
         "seq": 15774,
@@ -22795,7 +23112,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Use AndroidX Benchmark library"
         },
         "implicitBranchNo": 2668,
         "seq": 15825,
@@ -22868,7 +23186,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix license year"
         },
         "implicitBranchNo": 2668,
         "seq": 15849,
@@ -22998,7 +23317,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Use AndroidX Benchmark library (#6516)"
         },
         "implicitBranchNo": 0,
         "seq": 15851,
@@ -23076,7 +23396,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add Kotlin to project and Constants as the simplest file."
         },
         "implicitBranchNo": 2669,
         "seq": 15775,
@@ -23137,7 +23458,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Convert nameconverter package to kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15776,
@@ -23182,7 +23504,8 @@
                 "insertions": 80
               }
             }
-          }
+          },
+          "message": "Convert missing code in nameconverter package to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15777,
@@ -23223,7 +23546,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename backlink to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15778,
@@ -23264,7 +23588,8 @@
                 "insertions": 102
               }
             }
-          }
+          },
+          "message": "Convert Backlink to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15779,
@@ -23305,7 +23630,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Convert TypeMirrors to Kotlin file"
         },
         "implicitBranchNo": 2669,
         "seq": 15780,
@@ -23346,7 +23672,8 @@
                 "insertions": 53
               }
             }
-          }
+          },
+          "message": "Convert TypeMirrors to kotlin code"
         },
         "implicitBranchNo": 2669,
         "seq": 15781,
@@ -23387,7 +23714,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmVersionChecker to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15782,
@@ -23432,7 +23760,8 @@
                 "insertions": 55
               }
             }
-          }
+          },
+          "message": "Convert RealmVersionChecker to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15783,
@@ -23473,7 +23802,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmFieldElement to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15784,
@@ -23514,7 +23844,8 @@
                 "insertions": 44
               }
             }
-          }
+          },
+          "message": "Convert RealmFieldElement to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15785,
@@ -23555,7 +23886,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename OsObjectBuilderTypeHelper to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15786,
@@ -23600,7 +23932,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Convert OsObjectBuilderTypeHelper to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15787,
@@ -23641,7 +23974,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmProcessor to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15788,
@@ -23682,7 +24016,8 @@
                 "insertions": 199
               }
             }
-          }
+          },
+          "message": "Convert RealmProcessor to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15789,
@@ -23723,7 +24058,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename ClassCollection to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15790,
@@ -23764,7 +24100,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Convert ClassCollection to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15791,
@@ -23805,7 +24142,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename DefaultModuleGenerator to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15792,
@@ -23846,7 +24184,8 @@
                 "insertions": 32
               }
             }
-          }
+          },
+          "message": "Convert DefaultModuleGenerator to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15793,
@@ -23887,7 +24226,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmJsonTypeHelper to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15794,
@@ -23932,7 +24272,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Convert RealmJsonTypeHelper to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15795,
@@ -23973,7 +24314,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename ModuleMetaData to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15796,
@@ -24014,7 +24356,8 @@
                 "insertions": 211
               }
             }
-          }
+          },
+          "message": "Convert ModuleMetaData to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15797,
@@ -24055,7 +24398,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmProxyInterfaceGenerator to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15798,
@@ -24096,7 +24440,8 @@
                 "insertions": 38
               }
             }
-          }
+          },
+          "message": "Convert RealmProxyInterfaceGenerator to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15799,
@@ -24137,7 +24482,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename ClassMetaData to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15800,
@@ -24186,7 +24532,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Convert ClassMetaData to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15801,
@@ -24227,7 +24574,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix RealmProxyInterfaceGenerator"
         },
         "implicitBranchNo": 2669,
         "seq": 15802,
@@ -24268,7 +24616,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmProxyMediatorGenerator to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15803,
@@ -24309,7 +24658,8 @@
                 "insertions": 287
               }
             }
-          }
+          },
+          "message": "Convert RealmProxyMediatorGenerator to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15804,
@@ -24350,7 +24700,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename RealmProxyClassGenerator to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15805,
@@ -24395,7 +24746,8 @@
                 "insertions": 1101
               }
             }
-          }
+          },
+          "message": "Convert RealmProxyClassGenerator to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15806,
@@ -24436,7 +24788,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Rename Utils to .kt"
         },
         "implicitBranchNo": 2669,
         "seq": 15807,
@@ -24481,7 +24834,8 @@
                 "insertions": 230
               }
             }
-          }
+          },
+          "message": "Convert Utils to Kotlin"
         },
         "implicitBranchNo": 2669,
         "seq": 15808,
@@ -24554,7 +24908,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Cleanup imports"
         },
         "implicitBranchNo": 2669,
         "seq": 15809,
@@ -24595,7 +24950,8 @@
                 "insertions": 41
               }
             }
-          }
+          },
+          "message": "Cleanup Backlink class"
         },
         "implicitBranchNo": 2669,
         "seq": 15810,
@@ -24652,7 +25008,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Cleanup ClassCollection"
         },
         "implicitBranchNo": 2669,
         "seq": 15811,
@@ -24697,7 +25054,8 @@
                 "insertions": 68
               }
             }
-          }
+          },
+          "message": "Cleanup RealmProcessor"
         },
         "implicitBranchNo": 2669,
         "seq": 15812,
@@ -24738,7 +25096,8 @@
                 "insertions": 13
               }
             }
-          }
+          },
+          "message": "Cleanup Constants"
         },
         "implicitBranchNo": 2669,
         "seq": 15813,
@@ -24779,7 +25138,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Cleanup DefaultModuleGenerator"
         },
         "implicitBranchNo": 2669,
         "seq": 15814,
@@ -24820,7 +25180,8 @@
                 "insertions": 58
               }
             }
-          }
+          },
+          "message": "Cleanup ClassMetaData"
         },
         "implicitBranchNo": 2669,
         "seq": 15815,
@@ -24861,7 +25222,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Cleanup ModuleMetaData"
         },
         "implicitBranchNo": 2669,
         "seq": 15816,
@@ -24902,7 +25264,8 @@
                 "insertions": 14
               }
             }
-          }
+          },
+          "message": "Cleanup RealmVersionChecker"
         },
         "implicitBranchNo": 2669,
         "seq": 15817,
@@ -24943,7 +25306,8 @@
                 "insertions": 322
               }
             }
-          }
+          },
+          "message": "Cleanup RealmProxyMediatorGenerator"
         },
         "implicitBranchNo": 2669,
         "seq": 15818,
@@ -24984,7 +25348,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2669,
         "seq": 15819,
@@ -25029,7 +25394,8 @@
                 "insertions": 1576
               }
             }
-          }
+          },
+          "message": "Cleanup RealmProxyClassGenerator"
         },
         "implicitBranchNo": 2669,
         "seq": 15820,
@@ -25070,7 +25436,8 @@
                 "insertions": 27
               }
             }
-          }
+          },
+          "message": "Cleanup RealmProxyInterfaceGenerator"
         },
         "implicitBranchNo": 2669,
         "seq": 15821,
@@ -25115,7 +25482,8 @@
                 "insertions": 188
               }
             }
-          }
+          },
+          "message": "Cleanup RealmJsonTypeHelper"
         },
         "implicitBranchNo": 2669,
         "seq": 15822,
@@ -25156,7 +25524,8 @@
                 "insertions": 13
               }
             }
-          }
+          },
+          "message": "Cleanup docs"
         },
         "implicitBranchNo": 2669,
         "seq": 15823,
@@ -25245,7 +25614,8 @@
                 "insertions": 39
               }
             }
-          }
+          },
+          "message": "Add inline classes for improving string handling of class names"
         },
         "implicitBranchNo": 2669,
         "seq": 15824,
@@ -25286,7 +25656,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix clean build"
         },
         "implicitBranchNo": 2669,
         "seq": 15826,
@@ -25399,7 +25770,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "update copyright year"
         },
         "implicitBranchNo": 2669,
         "seq": 15844,
@@ -25444,7 +25816,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "PR feedback. More Kotlin ideomatic."
         },
         "implicitBranchNo": 2669,
         "seq": 15847,
@@ -25489,7 +25862,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Disable broken SSL tests for now"
         },
         "implicitBranchNo": 2669,
         "seq": 15850,
@@ -25707,7 +26081,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Convert annotation processor to Kotlin (#6515)"
         },
         "implicitBranchNo": 0,
         "seq": 15852,
@@ -25765,7 +26140,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "exposing to_json from Core"
         },
         "implicitBranchNo": 2670,
         "seq": 15856,
@@ -25806,7 +26182,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "update test dependency"
         },
         "implicitBranchNo": 2670,
         "seq": 15857,
@@ -25847,7 +26224,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "update Sync dependency"
         },
         "implicitBranchNo": 2670,
         "seq": 15859,
@@ -25888,7 +26266,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "update OS commit"
         },
         "implicitBranchNo": 2670,
         "seq": 15860,
@@ -25929,7 +26308,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Fixing tests, Core is using time in UTC for the to_json"
         },
         "implicitBranchNo": 2670,
         "seq": 15863,
@@ -25970,7 +26350,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Releasing asJSON() as Beta method, until https://github.com/realm/realm-core/issues/3305 is implemented"
         },
         "implicitBranchNo": 2670,
         "seq": 15865,
@@ -26011,7 +26392,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "update object store"
         },
         "implicitBranchNo": 2670,
         "seq": 15866,
@@ -26052,7 +26434,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update Changelog"
         },
         "implicitBranchNo": 2670,
         "seq": 15867,
@@ -26093,7 +26476,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Update dependencies"
         },
         "implicitBranchNo": 2670,
         "seq": 15868,
@@ -26163,7 +26547,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "exposing to_json from Core (#6540)\n* exposing to_json from Core"
         },
         "implicitBranchNo": 0,
         "seq": 15870,
@@ -26213,7 +26598,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Remove app_name from Kotlin Extensions"
         },
         "implicitBranchNo": 2663,
         "seq": 15858,
@@ -26254,7 +26640,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Ignore tests"
         },
         "implicitBranchNo": 2663,
         "seq": 15861,
@@ -26295,7 +26682,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Ignore more tests"
         },
         "implicitBranchNo": 2663,
         "seq": 15862,
@@ -26349,7 +26737,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Remove app_name from Kotlin Extensions (#6541)"
         },
         "implicitBranchNo": 2662,
         "seq": 15864,
@@ -26711,7 +27100,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into releases"
         },
         "implicitBranchNo": 2671,
         "seq": 15871,
@@ -26752,7 +27142,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.12.0"
         },
         "implicitBranchNo": 2671,
         "seq": 15872,
@@ -26793,7 +27184,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.12.1-SNAPSHOT"
         },
         "implicitBranchNo": 2671,
         "seq": 15873,
@@ -26847,7 +27239,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge pull request #6543 from realm/releases\nMerging Releases to Master manually after 5.12.0 release"
         },
         "implicitBranchNo": 0,
         "seq": 15874,
@@ -26893,7 +27286,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next dev iteration"
         },
         "implicitBranchNo": 2672,
         "seq": 15875,
@@ -26935,7 +27329,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge pull request #6544 from realm/nh/next_dev_iteration\nPrepare next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 15876,
@@ -26993,7 +27388,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Better logging for sessions."
         },
         "implicitBranchNo": 2673,
         "seq": 15879,
@@ -27034,7 +27430,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Link to issue"
         },
         "implicitBranchNo": 2673,
         "seq": 15880,
@@ -27075,7 +27472,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix findbugs warning"
         },
         "implicitBranchNo": 2673,
         "seq": 15881,
@@ -27129,7 +27527,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Better logging for sessions (#6552)"
         },
         "implicitBranchNo": 0,
         "seq": 15882,
@@ -27203,7 +27602,8 @@
                 "insertions": 65
               }
             }
-          }
+          },
+          "message": "Add support for AsyncOpen"
         },
         "implicitBranchNo": 2674,
         "seq": 15878,
@@ -27264,7 +27664,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Fix support for AsyncOpen"
         },
         "implicitBranchNo": 2674,
         "seq": 15883,
@@ -27318,7 +27719,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/async-open-support\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2674,
         "seq": 15884,
@@ -27363,7 +27765,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix Kotlin tests + better doc"
         },
         "implicitBranchNo": 2674,
         "seq": 15885,
@@ -27404,7 +27807,8 @@
                 "insertions": 15
               }
             }
-          }
+          },
+          "message": "Fix race condition in test"
         },
         "implicitBranchNo": 2674,
         "seq": 15886,
@@ -27457,7 +27861,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix more tests"
         },
         "implicitBranchNo": 2674,
         "seq": 15887,
@@ -27502,7 +27907,8 @@
                 "insertions": 12
               }
             }
-          }
+          },
+          "message": "Fix a potential leak of the JNI global reference"
         },
         "implicitBranchNo": 2674,
         "seq": 15888,
@@ -27592,7 +27998,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Add support for AsyncOpen (#6548)\n* Add support for AsyncOpen"
         },
         "implicitBranchNo": 0,
         "seq": 15889,
@@ -27638,7 +28045,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "update release date in CHANGELOG.md"
         },
         "implicitBranchNo": 0,
         "seq": 15890,
@@ -27684,7 +28092,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.13.0"
         },
         "implicitBranchNo": 0,
         "seq": 15891,
@@ -27730,7 +28139,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.13.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15892,
@@ -27796,7 +28206,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Correctly copy JAR files in the Realm transformer"
         },
         "implicitBranchNo": 2676,
         "seq": 15906,
@@ -27858,7 +28269,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Correctly copy JAR files in the Realm transformer (#6575)"
         },
         "implicitBranchNo": 0,
         "seq": 15907,
@@ -27909,7 +28321,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge pull request #6565 from realm/releases\nMerging Releases to Master manually after 5.13.0 release"
         },
         "implicitBranchNo": 2675,
         "seq": 15893,
@@ -27950,7 +28363,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update version.txt"
         },
         "implicitBranchNo": 2678,
         "seq": 15894,
@@ -27992,7 +28406,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge pull request #6566 from realm/nh/next_dev_iteration_5.14.0\nPrepare next dev iteration"
         },
         "implicitBranchNo": 2675,
         "seq": 15895,
@@ -28033,7 +28448,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix minor typo."
         },
         "implicitBranchNo": 2680,
         "seq": 15899,
@@ -28086,7 +28502,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add instructions for building Realm from a local source"
         },
         "implicitBranchNo": 2679,
         "seq": 15900,
@@ -28127,7 +28544,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Correct path"
         },
         "implicitBranchNo": 2679,
         "seq": 15901,
@@ -28169,7 +28587,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix minor typo. (#6572)"
         },
         "implicitBranchNo": 2675,
         "seq": 15902,
@@ -28210,7 +28629,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Apply suggestions from code review\nCo-Authored-By: Nabil Hachicha <nh@realm.io>"
         },
         "implicitBranchNo": 2679,
         "seq": 15903,
@@ -28264,7 +28684,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add instructions for building Realm from a local source (#6573)"
         },
         "implicitBranchNo": 2681,
         "seq": 15904,
@@ -28313,7 +28734,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Add support for configuring sync with the system proxy"
         },
         "implicitBranchNo": 2675,
         "seq": 15905,
@@ -28362,7 +28784,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update OS/Sync/Core"
         },
         "implicitBranchNo": 2675,
         "seq": 15908,
@@ -28403,7 +28826,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix hash value"
         },
         "implicitBranchNo": 2675,
         "seq": 15909,
@@ -28461,7 +28885,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Add support for configuring sync with the system proxy (#6576)"
         },
         "implicitBranchNo": 2681,
         "seq": 15910,
@@ -28535,7 +28960,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into releases\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 0,
         "seq": 15911,
@@ -28581,7 +29007,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add changelog entry"
         },
         "implicitBranchNo": 0,
         "seq": 15915,
@@ -28627,7 +29054,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 0,
         "seq": 15916,
@@ -28673,7 +29101,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Set proper version"
         },
         "implicitBranchNo": 0,
         "seq": 15917,
@@ -28719,7 +29148,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.13.1"
         },
         "implicitBranchNo": 0,
         "seq": 15918,
@@ -28765,7 +29195,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.13.2-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15919,
@@ -28811,7 +29242,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare for next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 15920,
@@ -28857,7 +29289,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Deprecate nickname provider"
         },
         "implicitBranchNo": 2667,
         "seq": 15921,
@@ -28902,7 +29335,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Deprecate IdentityProvider.NICKNAME, update changelog"
         },
         "implicitBranchNo": 2667,
         "seq": 15922,
@@ -29340,7 +29774,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' of https://github.com/realm/realm-java into jf/deprecate_nickname"
         },
         "implicitBranchNo": 2667,
         "seq": 15923,
@@ -29386,7 +29821,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "ROS-49 Deprecate nickname provider (#6579)"
         },
         "implicitBranchNo": 0,
         "seq": 15924,
@@ -29432,7 +29868,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "update release date in CHANGELOG.md"
         },
         "implicitBranchNo": 0,
         "seq": 15927,
@@ -29478,7 +29915,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.14.0"
         },
         "implicitBranchNo": 0,
         "seq": 15928,
@@ -29524,7 +29962,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.14.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15929,
@@ -29582,7 +30021,8 @@
                 "insertions": 44
               }
             }
-          }
+          },
+          "message": "Added unit tests and fix"
         },
         "implicitBranchNo": 2682,
         "seq": 15930,
@@ -29623,7 +30063,8 @@
                 "insertions": 9
               }
             }
-          }
+          },
+          "message": "Add missing sections"
         },
         "implicitBranchNo": 2682,
         "seq": 15931,
@@ -29673,7 +30114,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases' into cm/bug/copy_or_update_overriden_field\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2682,
         "seq": 15933,
@@ -29714,7 +30156,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Whitespace"
         },
         "implicitBranchNo": 2682,
         "seq": 15934,
@@ -29768,7 +30211,8 @@
                 "insertions": 44
               }
             }
-          }
+          },
+          "message": "Fix crash if combining @RealmField and @LinkingObjects  (#6582)"
         },
         "implicitBranchNo": 0,
         "seq": 15935,
@@ -29814,7 +30258,8 @@
                 "insertions": 65
               }
             }
-          }
+          },
+          "message": "Add tests to show the expected behavior"
         },
         "implicitBranchNo": 2683,
         "seq": 15943,
@@ -29855,7 +30300,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "Only add jCenter repository when no other repository was defined"
         },
         "implicitBranchNo": 2683,
         "seq": 15945,
@@ -29901,7 +30347,8 @@
                 "insertions": 65
               }
             }
-          }
+          },
+          "message": "Fix #6597 - Don't enforce jCenter repository (#6598)"
         },
         "implicitBranchNo": 0,
         "seq": 15946,
@@ -29983,7 +30430,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for Client Resync"
         },
         "implicitBranchNo": 2684,
         "seq": 15939,
@@ -30032,7 +30480,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix tests"
         },
         "implicitBranchNo": 2684,
         "seq": 15940,
@@ -30073,7 +30522,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix more tests"
         },
         "implicitBranchNo": 2684,
         "seq": 15941,
@@ -30118,7 +30568,8 @@
                 "insertions": 11
               }
             }
-          }
+          },
+          "message": "ClientResync is only support for full Realms"
         },
         "implicitBranchNo": 2684,
         "seq": 15942,
@@ -30159,7 +30610,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Better Javadoc"
         },
         "implicitBranchNo": 2684,
         "seq": 15944,
@@ -30204,7 +30656,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Apply suggestions from code review\nCo-Authored-By: Kenneth Geisshirt <kg@realm.io>\nCo-Authored-By: Nikola Irinchev <irinchev@me.com>"
         },
         "implicitBranchNo": 2686,
         "seq": 15947,
@@ -30245,7 +30698,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Better docs"
         },
         "implicitBranchNo": 2684,
         "seq": 15948,
@@ -30291,7 +30745,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'cm/client-resync' of https://github.com/realm/realm-java into cm/client-resync"
         },
         "implicitBranchNo": 2684,
         "seq": 15949,
@@ -30332,7 +30787,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix test"
         },
         "implicitBranchNo": 2684,
         "seq": 15950,
@@ -30426,7 +30882,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for Client Resync (#6596)"
         },
         "implicitBranchNo": 0,
         "seq": 15951,
@@ -30484,7 +30941,8 @@
                 "insertions": 44
               }
             }
-          }
+          },
+          "message": "Bypass the sync proxy on Cloud"
         },
         "implicitBranchNo": 2687,
         "seq": 15952,
@@ -30525,7 +30983,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "changelog"
         },
         "implicitBranchNo": 2687,
         "seq": 15953,
@@ -30566,7 +31025,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "new line"
         },
         "implicitBranchNo": 2687,
         "seq": 15954,
@@ -30624,7 +31084,8 @@
                 "insertions": 44
               }
             }
-          }
+          },
+          "message": "[RJAVA-4] Bypass the sync proxy on Cloud (#6599)\n* Bypass the sync proxy on Cloud\n* changelog\n* new line"
         },
         "implicitBranchNo": 0,
         "seq": 15955,
@@ -30674,7 +31135,8 @@
                 "insertions": 58
               }
             }
-          }
+          },
+          "message": "Fix #6597 - Don't enforce jCenter repository (followup #6598)"
         },
         "implicitBranchNo": 2689,
         "seq": 15956,
@@ -30720,7 +31182,8 @@
                 "insertions": 58
               }
             }
-          }
+          },
+          "message": "Fix #6597 - Don't enforce jCenter repository (followup #6598) (#6602)"
         },
         "implicitBranchNo": 0,
         "seq": 15958,
@@ -30778,7 +31241,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade to Sync 4.7.4"
         },
         "implicitBranchNo": 2688,
         "seq": 15957,
@@ -30824,7 +31288,8 @@
                 "insertions": 58
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/sync-4.7.4"
         },
         "implicitBranchNo": 2688,
         "seq": 15959,
@@ -30865,7 +31330,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Move Gradle plugin test step"
         },
         "implicitBranchNo": 2688,
         "seq": 15960,
@@ -30910,7 +31376,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Fix Gradle plugin unit tests"
         },
         "implicitBranchNo": 2688,
         "seq": 15961,
@@ -30955,7 +31422,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Attempt to debug on CI"
         },
         "implicitBranchNo": 2688,
         "seq": 15962,
@@ -31000,7 +31468,8 @@
                 "insertions": 5
               }
             }
-          }
+          },
+          "message": "More tests"
         },
         "implicitBranchNo": 2688,
         "seq": 15963,
@@ -31041,7 +31510,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Catch assertion"
         },
         "implicitBranchNo": 2688,
         "seq": 15964,
@@ -31082,7 +31552,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Attempt to log errors"
         },
         "implicitBranchNo": 2688,
         "seq": 15965,
@@ -31127,7 +31598,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Redirect test streams"
         },
         "implicitBranchNo": 2688,
         "seq": 15966,
@@ -31172,7 +31644,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Test fixes for CI"
         },
         "implicitBranchNo": 2688,
         "seq": 15967,
@@ -31213,7 +31686,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add reference to FAQ entry"
         },
         "implicitBranchNo": 2688,
         "seq": 15968,
@@ -31254,7 +31728,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update README.md"
         },
         "implicitBranchNo": 2688,
         "seq": 15969,
@@ -31324,7 +31799,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade to Sync 4.7.4 (#6603)"
         },
         "implicitBranchNo": 0,
         "seq": 15970,
@@ -31370,7 +31846,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Updated release date"
         },
         "implicitBranchNo": 0,
         "seq": 15971,
@@ -31416,7 +31893,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.15.0"
         },
         "implicitBranchNo": 0,
         "seq": 15972,
@@ -31462,7 +31940,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.15.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 15973,
@@ -31508,7 +31987,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 15974,
@@ -31562,7 +32042,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Fix support for flatDirs"
         },
         "implicitBranchNo": 2692,
         "seq": 15975,
@@ -31612,7 +32093,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Fix support for flatDirs (#6612)"
         },
         "implicitBranchNo": 2691,
         "seq": 15976,
@@ -31653,7 +32135,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.15.1"
         },
         "implicitBranchNo": 2691,
         "seq": 15977,
@@ -31694,7 +32177,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.15.2-SNAPSHOT"
         },
         "implicitBranchNo": 2691,
         "seq": 15978,
@@ -31744,7 +32228,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       version.txt"
         },
         "implicitBranchNo": 0,
         "seq": 15979,
@@ -31790,7 +32275,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Make setList Javadoc more accurate."
         },
         "implicitBranchNo": 2694,
         "seq": 15994,
@@ -31831,7 +32317,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/main/java/io/realm/DynamicRealmObject.java\nCo-Authored-By: Brian Munkholm <bmunkholm@users.noreply.github.com>"
         },
         "implicitBranchNo": 2694,
         "seq": 15995,
@@ -31873,7 +32360,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Make setList Javadoc more accurate. (#6617)"
         },
         "implicitBranchNo": 0,
         "seq": 15996,
@@ -32031,7 +32519,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Initial implementation of REST API"
         },
         "implicitBranchNo": 2690,
         "seq": 15980,
@@ -32084,7 +32573,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "All tests pass"
         },
         "implicitBranchNo": 2690,
         "seq": 15981,
@@ -32157,7 +32647,8 @@
                 "insertions": 15
               }
             }
-          }
+          },
+          "message": "Add Javadoc for public API methods. Renamed some API methods slightly to match JS"
         },
         "implicitBranchNo": 2690,
         "seq": 15982,
@@ -32234,7 +32725,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Fix findbugs warnings + more doc cleanup"
         },
         "implicitBranchNo": 2690,
         "seq": 15983,
@@ -32284,7 +32776,8 @@
                 "insertions": 48
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into cm/java-6.0\n# Conflicts:\n#       CHANGELOG.md\n#       version.txt"
         },
         "implicitBranchNo": 2690,
         "seq": 15984,
@@ -32325,7 +32818,8 @@
                 "insertions": 22
               }
             }
-          }
+          },
+          "message": "Revert Java 8 lamdas"
         },
         "implicitBranchNo": 2690,
         "seq": 15985,
@@ -32366,7 +32860,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Ups"
         },
         "implicitBranchNo": 2690,
         "seq": 15986,
@@ -32407,7 +32902,8 @@
                 "insertions": 8
               }
             }
-          }
+          },
+          "message": "Revert wrong rename of comments"
         },
         "implicitBranchNo": 2690,
         "seq": 15987,
@@ -32456,7 +32952,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "More test fixes and cleanup"
         },
         "implicitBranchNo": 2690,
         "seq": 15988,
@@ -32565,7 +33062,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "More cleanup and rename server interface as it now is more than just auth"
         },
         "implicitBranchNo": 2690,
         "seq": 15989,
@@ -32634,7 +33132,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "More cleanup"
         },
         "implicitBranchNo": 2690,
         "seq": 15990,
@@ -32675,7 +33174,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "ROS is now killed correctly"
         },
         "implicitBranchNo": 2690,
         "seq": 15991,
@@ -32720,7 +33220,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Apply suggestions from code review\nCo-Authored-By: Kenneth Geisshirt <kg@realm.io>"
         },
         "implicitBranchNo": 2690,
         "seq": 15992,
@@ -32761,7 +33262,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Wording"
         },
         "implicitBranchNo": 2690,
         "seq": 15993,
@@ -32802,7 +33304,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/objectServer/java/io/realm/SyncUser.java\nCo-Authored-By: Nabil Hachicha <nh@realm.io>"
         },
         "implicitBranchNo": 2690,
         "seq": 16010,
@@ -32843,7 +33346,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/syncIntegrationTest/java/io/realm/PathLevelPermissionsTests.java\nCo-Authored-By: Nabil Hachicha <nh@realm.io>"
         },
         "implicitBranchNo": 2690,
         "seq": 16011,
@@ -33013,7 +33517,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Replace Permissions with REST API (#6615)"
         },
         "implicitBranchNo": 0,
         "seq": 16012,
@@ -33063,7 +33568,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Fields should be optional"
         },
         "implicitBranchNo": 2693,
         "seq": 15997,
@@ -33120,7 +33626,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Add fix + test"
         },
         "implicitBranchNo": 2693,
         "seq": 15998,
@@ -33161,7 +33668,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update OS"
         },
         "implicitBranchNo": 2693,
         "seq": 15999,
@@ -33202,7 +33710,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update changelog"
         },
         "implicitBranchNo": 2693,
         "seq": 16000,
@@ -33243,7 +33752,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update Node version used by Docker CI"
         },
         "implicitBranchNo": 2693,
         "seq": 16001,
@@ -33292,7 +33802,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Use platform specific flag. Update to Node 10"
         },
         "implicitBranchNo": 2693,
         "seq": 16002,
@@ -33333,7 +33844,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Set platform flag"
         },
         "implicitBranchNo": 2693,
         "seq": 16003,
@@ -33378,7 +33890,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update to latest OS"
         },
         "implicitBranchNo": 2693,
         "seq": 16004,
@@ -33423,7 +33936,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Updated Sync + Core"
         },
         "implicitBranchNo": 2693,
         "seq": 16005,
@@ -33501,7 +34015,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "IllegalStateException when opening old synchronized Realm (#6621)"
         },
         "implicitBranchNo": 2691,
         "seq": 16006,
@@ -33542,7 +34057,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 2691,
         "seq": 16007,
@@ -33583,7 +34099,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v5.15.2"
         },
         "implicitBranchNo": 2691,
         "seq": 16008,
@@ -33624,7 +34141,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v5.15.3-SNAPSHOT"
         },
         "implicitBranchNo": 2691,
         "seq": 16009,
@@ -33694,7 +34212,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       CHANGELOG.md\n#       version.txt"
         },
         "implicitBranchNo": 0,
         "seq": 16013,
@@ -33740,7 +34259,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 0,
         "seq": 16015,
@@ -33786,7 +34306,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v6.0.0"
         },
         "implicitBranchNo": 0,
         "seq": 16016,
@@ -33832,7 +34353,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v6.0.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 16017,
@@ -33886,7 +34408,8 @@
                 "insertions": 53
               }
             }
-          }
+          },
+          "message": "Upgrade sync"
         },
         "implicitBranchNo": 2695,
         "seq": 16053,
@@ -33927,7 +34450,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Fix test"
         },
         "implicitBranchNo": 2695,
         "seq": 16054,
@@ -33976,7 +34500,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Fix test"
         },
         "implicitBranchNo": 2695,
         "seq": 16055,
@@ -34017,7 +34542,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Apply suggestions from code review\nCo-Authored-By: Brian Munkholm <bmunkholm@users.noreply.github.com>"
         },
         "implicitBranchNo": 2695,
         "seq": 16056,
@@ -34058,7 +34584,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add other common errors"
         },
         "implicitBranchNo": 2695,
         "seq": 16057,
@@ -34099,7 +34626,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Cleanup"
         },
         "implicitBranchNo": 2695,
         "seq": 16058,
@@ -34157,7 +34685,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Upgrade sync + fix encryption race (#6647)"
         },
         "implicitBranchNo": 0,
         "seq": 16093,
@@ -34203,7 +34732,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 0,
         "seq": 16096,
@@ -34249,7 +34779,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v6.0.1"
         },
         "implicitBranchNo": 0,
         "seq": 16097,
@@ -34295,7 +34826,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v6.0.2-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 16098,
@@ -34341,7 +34873,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare for next dev iteration"
         },
         "implicitBranchNo": 2696,
         "seq": 16021,
@@ -34422,7 +34955,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Upgrade benchmarks to use latest release"
         },
         "implicitBranchNo": 2697,
         "seq": 16069,
@@ -34504,7 +35038,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Upgrade benchmarks to use latest release (#6651)"
         },
         "implicitBranchNo": 2696,
         "seq": 16070,
@@ -34577,7 +35112,8 @@
                 "insertions": 77
               }
             }
-          }
+          },
+          "message": "Add support for async change listeners"
         },
         "implicitBranchNo": 2696,
         "seq": 16100,
@@ -34639,7 +35175,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases' into cm/async-open-changelisteners\n# Conflicts:\n#       version.txt"
         },
         "implicitBranchNo": 2696,
         "seq": 16101,
@@ -34680,7 +35217,8 @@
                 "insertions": 17
               }
             }
-          }
+          },
+          "message": "Add changelog"
         },
         "implicitBranchNo": 2696,
         "seq": 16102,
@@ -34725,7 +35263,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Don't throw on non-sync configs"
         },
         "implicitBranchNo": 2696,
         "seq": 16103,
@@ -34766,7 +35305,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add extra check"
         },
         "implicitBranchNo": 2696,
         "seq": 16128,
@@ -34888,7 +35428,8 @@
                 "insertions": 77
               }
             }
-          }
+          },
+          "message": "Enable progress listeners for Realms using waitForInitialRemoteData (#6659)"
         },
         "implicitBranchNo": 0,
         "seq": 16129,
@@ -34938,7 +35479,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix Proguard setup for release builds using R8"
         },
         "implicitBranchNo": 2702,
         "seq": 16125,
@@ -35060,7 +35602,8 @@
                 "insertions": 77
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases' into cm/bug/r8-proguard-config\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 2702,
         "seq": 16130,
@@ -35106,7 +35649,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Fix Proguard setup for release builds using R8 (#6663)"
         },
         "implicitBranchNo": 0,
         "seq": 16131,
@@ -35156,7 +35700,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update to latest Sync release"
         },
         "implicitBranchNo": 2706,
         "seq": 16132,
@@ -35202,7 +35747,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update to latest Sync release (#6664)"
         },
         "implicitBranchNo": 0,
         "seq": 16133,
@@ -35248,7 +35794,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update release date"
         },
         "implicitBranchNo": 0,
         "seq": 16134,
@@ -35294,7 +35841,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v6.0.2"
         },
         "implicitBranchNo": 0,
         "seq": 16135,
@@ -35340,7 +35888,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v6.0.3-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 16136,
@@ -35418,7 +35967,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix transform crashing when you delete transformed objects"
         },
         "implicitBranchNo": 2707,
         "seq": 16167,
@@ -35475,7 +36025,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "PR feedback. Revert support for immutable schemas."
         },
         "implicitBranchNo": 2707,
         "seq": 16183,
@@ -35545,7 +36096,8 @@
                 "insertions": 7
               }
             }
-          }
+          },
+          "message": "Fix transform crashing when you delete transformed objects (#6680)"
         },
         "implicitBranchNo": 0,
         "seq": 16184,
@@ -35595,7 +36147,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Better support for Gradle offline mode"
         },
         "implicitBranchNo": 2714,
         "seq": 16185,
@@ -35641,7 +36194,8 @@
                 "insertions": 4
               }
             }
-          }
+          },
+          "message": "Better support for Gradle offline mode (#6692)"
         },
         "implicitBranchNo": 0,
         "seq": 16187,
@@ -35687,7 +36241,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Realm plugin: consider kotlin-multiplatform plugin"
         },
         "implicitBranchNo": 2701,
         "seq": 16076,
@@ -35749,7 +36304,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       version.txt"
         },
         "implicitBranchNo": 2700,
         "seq": 16099,
@@ -35790,7 +36346,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Updated README\nAndroid Studio stable version updated to the latest"
         },
         "implicitBranchNo": 2703,
         "seq": 16124,
@@ -35832,7 +36389,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Updated README (#6662)\nUpdated to point to latest stable version of Android Studio."
         },
         "implicitBranchNo": 2700,
         "seq": 16127,
@@ -35918,7 +36476,8 @@
                 "insertions": 77
               }
             }
-          }
+          },
+          "message": "Merge branch 'releases'\n# Conflicts:\n#       version.txt"
         },
         "implicitBranchNo": 2700,
         "seq": 16137,
@@ -35960,7 +36519,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Realm plugin: consider kotlin-multiplatform plugin (#6652)"
         },
         "implicitBranchNo": 2700,
         "seq": 16154,
@@ -36001,7 +36561,8 @@
                 "insertions": 21
               }
             }
-          }
+          },
+          "message": "Add credits for KMP improvements"
         },
         "implicitBranchNo": 2700,
         "seq": 16155,
@@ -36042,7 +36603,8 @@
                 "insertions": 353
               }
             }
-          }
+          },
+          "message": "Add multi-threaded stress set"
         },
         "implicitBranchNo": 2708,
         "seq": 16166,
@@ -36083,7 +36645,8 @@
                 "insertions": 71
               }
             }
-          }
+          },
+          "message": "PR feedback. Use thread pool with variable amount of threads for reuse."
         },
         "implicitBranchNo": 2708,
         "seq": 16182,
@@ -36125,7 +36688,8 @@
                 "insertions": 338
               }
             }
-          }
+          },
+          "message": "Add multi-threaded stress test (#6677)\n* Add multi-threaded stress set\n* PR feedback. Use thread pool with variable amount of threads for reuse."
         },
         "implicitBranchNo": 2700,
         "seq": 16186,
@@ -36170,7 +36734,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update ReLinker"
         },
         "implicitBranchNo": 2715,
         "seq": 16199,
@@ -36211,7 +36776,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix test"
         },
         "implicitBranchNo": 2715,
         "seq": 16200,
@@ -36261,7 +36827,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update ReLinker (#6710)"
         },
         "implicitBranchNo": 2700,
         "seq": 16201,
@@ -36334,7 +36901,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade to latest version of Sync and Core"
         },
         "implicitBranchNo": 2717,
         "seq": 16212,
@@ -36383,7 +36951,8 @@
                 "insertions": 25
               }
             }
-          }
+          },
+          "message": "Fix JSON tests"
         },
         "implicitBranchNo": 2717,
         "seq": 16214,
@@ -36424,7 +36993,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update changelog"
         },
         "implicitBranchNo": 2717,
         "seq": 16217,
@@ -36469,7 +37039,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Update to Sync 4.9.4"
         },
         "implicitBranchNo": 2717,
         "seq": 16218,
@@ -36547,7 +37118,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Upgrade to latest version of Sync and Core (#6723)"
         },
         "implicitBranchNo": 2700,
         "seq": 16219,
@@ -36645,7 +37217,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Merge branch 'master' into releases\n# Conflicts:\n#       CHANGELOG.md"
         },
         "implicitBranchNo": 0,
         "seq": 16220,
@@ -36691,7 +37264,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Release v6.1.0"
         },
         "implicitBranchNo": 0,
         "seq": 16221,
@@ -36737,7 +37311,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare next release v6.1.1-SNAPSHOT"
         },
         "implicitBranchNo": 0,
         "seq": 16222,
@@ -36783,7 +37358,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Prepare for next dev iteration"
         },
         "implicitBranchNo": 0,
         "seq": 16223,
@@ -36829,7 +37405,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Official Gradle Wrapper Validation Action\nSee: https://github.com/gradle/wrapper-validation-action"
         },
         "implicitBranchNo": 2722,
         "seq": 16249,
@@ -36871,7 +37448,8 @@
                 "insertions": 10
               }
             }
-          }
+          },
+          "message": "Official Gradle Wrapper Validation Action (#6740)\nSee: https://github.com/gradle/wrapper-validation-action"
         },
         "implicitBranchNo": 0,
         "seq": 16251,
@@ -36917,7 +37495,8 @@
                 "insertions": 3
               }
             }
-          }
+          },
+          "message": "Add support for RealmProxy#toString() to print length information for binary field #1650"
         },
         "implicitBranchNo": 2726,
         "seq": 16310,
@@ -36958,7 +37537,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update some_test_AllTypesRealmProxy.java to match new result"
         },
         "implicitBranchNo": 2726,
         "seq": 16312,
@@ -36999,7 +37579,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Update some_test_NullTypesRealmProxy.java to match new result"
         },
         "implicitBranchNo": 2726,
         "seq": 16313,
@@ -37049,7 +37630,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Add support for RealmProxy#toString() to print length information for binary field (#6767)"
         },
         "implicitBranchNo": 0,
         "seq": 16403,
@@ -37095,7 +37677,8 @@
                 "insertions": 20
               }
             }
-          }
+          },
+          "message": "Add credits to changelog"
         },
         "implicitBranchNo": 0,
         "seq": 16404,
@@ -37149,7 +37732,8 @@
                 "insertions": 85
               }
             }
-          }
+          },
+          "message": "Add three new test cases, two in RealmInMemoryTest.java one in IOSRealmTests.java"
         },
         "implicitBranchNo": 2725,
         "seq": 16401,
@@ -37190,7 +37774,8 @@
                 "insertions": 2
               }
             }
-          }
+          },
+          "message": "Delete new test cases in RealmInMemoryTest.java"
         },
         "implicitBranchNo": 2725,
         "seq": 16402,
@@ -37231,7 +37816,8 @@
                 "insertions": 0
               }
             }
-          }
+          },
+          "message": "Update realm/realm-library/src/androidTest/java/io/realm/RealmInMemoryTest.java\nRemove a blank line\nCo-Authored-By: Christian Melchior <christian@ilios.dk>"
         },
         "implicitBranchNo": 2725,
         "seq": 16405,
@@ -37281,7 +37867,8 @@
                 "insertions": 33
               }
             }
-          }
+          },
+          "message": "Add new test cases (#6777)"
         },
         "implicitBranchNo": 0,
         "seq": 16410,
@@ -37327,7 +37914,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Updated readme file"
         },
         "implicitBranchNo": 2738,
         "seq": 16475,
@@ -37369,7 +37957,8 @@
                 "insertions": 6
               }
             }
-          }
+          },
+          "message": "Merge pull request #6794 from realm/el/update-readme\nUpdate README.md file"
         },
         "implicitBranchNo": 0,
         "seq": 16485,
@@ -37432,7 +38021,8 @@
                 "insertions": 1
               }
             }
-          }
+          },
+          "message": "Fix annotation processor not compiling (#6791)"
         },
         "implicitBranchNo": 0,
         "seq": 16486,
