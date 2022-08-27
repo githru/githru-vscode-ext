@@ -11,16 +11,9 @@ export interface DifferenceStatistic {
   fileDictionary: FileChanged;
 }
 
-export interface Author {
+export interface User {
   name: string;
   email: string;
-  date: string;
-}
-
-export interface Committer {
-  name: string;
-  email: string;
-  date: string;
 }
 
 export interface CommitRaw {
@@ -28,8 +21,10 @@ export interface CommitRaw {
   parents: string[];
   branches: string[];
   tags: string[];
-  author: Author;
-  committer: Committer;
+  author: User;
+  authorDate: string;
+  committer: User;
+  committerDate: string;
   message: string;
   differenceStatistic: DifferenceStatistic;
 }
