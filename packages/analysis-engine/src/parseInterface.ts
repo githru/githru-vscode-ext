@@ -1,3 +1,14 @@
+export interface FileChanged {
+  directory: Directory;
+}
+
+export interface Directory {
+  // 추가 라인 수
+  insertions: number;
+  // 삭제 라인 수
+  deletions: number;
+}
+
 export interface CommitList {
   // basic: 일반 commit
   // merge: merge commit
@@ -17,15 +28,4 @@ export interface CommitList {
   // 파일 변경 사항
   fileChanged: FileChanged;
   branches: string[];
-}
-
-export interface FileChanged {
-  directory: Directory;
-}
-
-export interface Directory {
-  // 추가 라인 수
-  insertions: number;
-  // 삭제 라인 수
-  deletions: number;
 }
