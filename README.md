@@ -14,8 +14,11 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
 <table>
   <tr>
     <td align="center"><a href="https://github.com/ansrlm"><img src="https://avatars.githubusercontent.com/u/28749913?v=4" width="100px;" alt=""/><br /><sub><b>key</b></sub></a></td>
+    <td align="center"><a href="https://velog.io/@gwsyl22"><img src="https://avatars.githubusercontent.com/u/60775453?v=4" width="100px;" alt=""/><br /><sub><b>HyojinKim</b></sub></a></td>
     <td align="center"><a href="https://github.com/kmin-jeong"><img src="https://avatars.githubusercontent.com/u/53456037?v=4" width="100px;" alt=""/><br /><sub><b>kmin-jeong</b></sub></a></td>
     <td align="center"><a href="https://github.com/anpaul0615"><img src="https://avatars.githubusercontent.com/u/8488507?v=4" width="100px;" alt=""/><br /><sub><b>Paul An</b></sub></a></td>
+    <td align="center"><a href="https://github.com/ooooorobo"><img src="https://avatars.githubusercontent.com/u/40057032?v=4" width="100px;" alt=""/><br /><sub><b>조예진</b></sub></a></td>
+    <td align="center"><a href="https://github.com/hanseul-lee"><img src="https://avatars.githubusercontent.com/u/69497936?v=4" width="100px;" alt=""/><br /><sub><b>Hanseul Lee</b></sub></a></td>
   </tr>
 </table>
 
