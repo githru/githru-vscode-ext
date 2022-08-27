@@ -1,3 +1,3 @@
 export * from "./Statistics";
-export * from "./VerticalClusterList";
 export * from "./TemporalFilter";
+export * from "./VerticalClusterList";
