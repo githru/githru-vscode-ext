@@ -1,25 +1,36 @@
-export interface Directory {
-  insertions: number;
-  deletions: number;
+export interface fileChanged {
+  [path: string]: {
+    insertionCount: number;
+    deletionCount: number;
+  };
 }
 
-export interface FileChanged {
-  directory: Directory;
+export interface DifferenceStatistic {
+  totalInsertionCount: number;
+  totalDeletionCount: number;
+  files: fileChanged;
+}
+
+export interface Author {
+  name: string;
+  email: string;
+  date: string;
+}
+
+export interface Committer {
+  name: string;
+  email: string;
+  date: string;
 }
 
 export interface CommitRaw {
-  // basic: 일반 commit
-  // merge: merge commit
   type: string;
+  branches: string[];
+  tags: string[];
   id: string;
   parents: string[];
-  author: string;
-  authorEmail: string;
-  authorDate: string;
-  committer: string;
-  committerEmail: string;
-  commitDate: string;
+  author: Author;
+  committer: Committer;
   message: string;
-  fileChanged: FileChanged;
-  branches: string[];
+  differenceStatistic: DifferenceStatistic;
 }
