@@ -70,6 +70,6 @@ export type CommitNode = NodeBase & {
 };
 
 export type ClusterNode = NodeBase & {
-  nodeTypeName: "CLUSTR";
+  nodeTypeName: "CLUSTER";
   commitNodeList: CommitNode[];
 };
