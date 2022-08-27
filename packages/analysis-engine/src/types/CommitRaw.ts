@@ -11,7 +11,7 @@ export interface DifferenceStatistic {
   fileDictionary: FileChanged;
 }
 
-export interface User {
+export interface GitUser {
   name: string;
   email: string;
 }
@@ -21,9 +21,9 @@ export interface CommitRaw {
   parents: string[];
   branches: string[];
   tags: string[];
-  author: User;
+  author: GitUser;
   authorDate: string;
-  committer: User;
+  committer: GitUser;
   committerDate: string;
   message: string;
   differenceStatistic: DifferenceStatistic;
