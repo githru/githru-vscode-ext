@@ -24,7 +24,6 @@ export interface Committer {
 }
 
 export interface CommitRaw {
-  type: string;
   branches: string[];
   tags: string[];
   id: string;
