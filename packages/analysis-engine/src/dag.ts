@@ -1,19 +1,14 @@
-// TODO: git log parsing을 통해 생성되는 Commit 타입으로 대체
-interface Commit {
-  id: string;
-  parents: string[];
-  branches: string[];
-}
+import { CommitRaw } from "./NodeTypes.temp";
 
 export interface CommitDagNode {
   id: string;
   parents: string[];
-  commit: Commit;
+  commit: CommitRaw;
 }
 
 export type CommitDag = Map<string, CommitDagNode>;
 
-function generateDagNode(commit: Commit): CommitDagNode {
+function generateDagNode(commit: CommitRaw): CommitDagNode {
   return {
     id: commit.id,
     parents: commit.parents,
@@ -21,7 +16,7 @@ function generateDagNode(commit: Commit): CommitDagNode {
   } as CommitDagNode;
 }
 
-export function buildDag(commitList: Commit[]): CommitDag {
+export function buildDag(commitList: CommitRaw[]): CommitDag {
   const dag: CommitDag = new Map<string, CommitDagNode>();
 
   commitList
