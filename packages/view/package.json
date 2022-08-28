@@ -1,6 +1,6 @@
 {
   "name": "view",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "view module for githru",
   "engines": {
     "node": ">=16",
