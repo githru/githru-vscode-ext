@@ -1,5 +1,5 @@
 {
-  "name": "vscode",
+  "name": "@githru-vscode-ext/vscode",
   "displayName": "vscode",
   "description": "vscode extension module for githru-vscode-ext",
   "version": "0.1.0",
@@ -34,6 +34,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@githru-vscode-ext/analysis-engine": "^0.1.0",
     "@types/copy-webpack-plugin": "^10.1.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",

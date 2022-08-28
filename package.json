@@ -1,5 +1,5 @@
 {
-    "name": "@githru/githru-vscode-ext",
+    "name": "githru-vscode-ext",
     "version": "0.1.0",
     "description": "githru-vscode-ext root package.json",
     "scripts": {

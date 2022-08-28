@@ -1,5 +1,5 @@
 {
-  "name": "view",
+  "name": "@githru-vscode-ext/view",
   "version": "0.1.0",
   "description": "view module for githru",
   "engines": {

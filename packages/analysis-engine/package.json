@@ -1,5 +1,5 @@
 {
-  "name": "analysis-engine",
+  "name": "@githru-vscode-ext/analysis-engine",
   "version": "0.1.0",
   "description": "analysis-engine module for githru",
   "main": "dist/index.js",
