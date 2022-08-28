@@ -1,10 +1,9 @@
 # Contributing to Githru
 
-수정 필요!
+TODO: Add support수정 필요!
 
 ## Develop Environment
 
-- [yarn berry](https://yarnpkg.com/) -v 3.0.1
 - [node](https://nodejs.org/ko/download/) -v v14.17.3
 - [vscode](https://code.visualstudio.com/)
 - [vscode plugin - eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
