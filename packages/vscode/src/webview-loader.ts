@@ -7,7 +7,7 @@ export default class WebviewLoader {
     private fsPath: string;
     
     constructor(private readonly fileUri: vscode.Uri, private readonly extensionPath: string, content: string) {
-        console.log(content)
+        console.log(content);
         const viewColumn = vscode.ViewColumn.One;
 
         this.fsPath = fileUri.fsPath;
