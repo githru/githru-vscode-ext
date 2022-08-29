@@ -1,13 +1,23 @@
-import type { StatisticsProps } from "types";
+import type { DifferenceStatistic } from "@githru-vscode-ext/analysis-engine/src/types/CommitRaw";
 
-import { AuthorBarChart } from "./AuthorBarChart";
-import "./Statistics.scss";
+const mockDifferenceStatistic: DifferenceStatistic = {
+  totalInsertionCount: 300,
+  totalDeletionCount: 100,
+  fileDictionary: {
+    "./a": {
+      insertionCount: 140,
+      deletionCount: 30,
+    },
+    "./b": {
+      insertionCount: 160,
+      deletionCount: 70,
+    },
+  },
+};
 
-const Statistics = ({ data }: StatisticsProps) => {
+const Statistics = () => {
   return (
-    <div className="statistics">
-      <AuthorBarChart data={data} />
-    </div>
+    <div>{mockDifferenceStatistic.fileDictionary["./a"].insertionCount}</div>
   );
 };
 
