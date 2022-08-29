@@ -1,6 +1,6 @@
 {
-    "name": "@githru/githru-vscode-ext",
-    "version": "0.0.1",
+    "name": "githru-vscode-ext",
+    "version": "0.1.0",
     "description": "githru-vscode-ext root package.json",
     "scripts": {
         "build:all": "npm run build --workspaces",
