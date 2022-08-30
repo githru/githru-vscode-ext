@@ -1,4 +1,9 @@
-import { VerticalClusterList, TemporalFilter, Statistics } from "components";
+import {
+  VerticalClusterList,
+  TemporalFilter,
+  Statistics,
+  Detail,
+} from "components";
 
 const App = () => {
   return (
@@ -7,6 +12,7 @@ const App = () => {
       <TemporalFilter />
       <VerticalClusterList />
       <Statistics />
+      <Detail />
     </>
   );
 };
