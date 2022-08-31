@@ -7,7 +7,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run build && react-scripts start",
     "build": "npm run build:react && npm run build:bundle",
     "build:react": "react-scripts build",
     "build:bundle": "webpack --config webpack.config.js",
