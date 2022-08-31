@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import {
   VerticalClusterList,
   TemporalFilter,
@@ -5,14 +6,18 @@ import {
   Detail,
 } from "components";
 
+import { useGetTotalData } from "./App.hook";
+
 const App = () => {
+  const { data } = useGetTotalData();
+
   return (
     <>
       <div>Welcome to githru.</div>
-      <TemporalFilter />
-      <VerticalClusterList />
-      <Statistics />
-      <Detail />
+      <TemporalFilter data={data} />
+      <VerticalClusterList data={data} />
+      <Statistics data={data} />
+      <Detail data={data} />
     </>
   );
 };
