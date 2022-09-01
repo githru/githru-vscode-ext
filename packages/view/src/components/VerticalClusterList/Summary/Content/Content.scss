@@ -1,0 +1,98 @@
+
+.summary {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.namebox {
+    display: flex;
+    height: 60px;
+    flex-direction: column;
+}
+
+.name {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    background-color: #0077aa;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 15pt;
+    margin: 0 0 5px 0;
+}
+
+.name:after {
+    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+	-moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+	transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+}
+
+.name:hover {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    font-weight: bold;
+    background-color: #0077aa;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 15pt;
+    margin: 0 0 5px 0;
+}
+
+[data-tooltip-text]:hover {
+	position: relative;
+}
+
+[data-tooltip-text]:after {
+    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+	-moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+	transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	-moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+	content: attr(data-tooltip-text);
+
+    position: absolute;
+    top: 90%;
+	left: -9999px;
+    
+    
+	color: #FFFFFF;
+	font-size: 12px;
+	margin-bottom: 10px;
+	padding: 7px 12px;
+	position: absolute;
+	width: auto;
+	min-width: max-content;
+	word-wrap: break-word;
+
+    opacity: 0;
+	z-index: 9999;
+}
+
+[data-tooltip-text]:hover:after {
+	left: 90%;
+    background-color: rgba(0, 119, 170, 0.8);
+	opacity: 1;
+}
+
+.message {
+    display: flex;
+    word-break: break-all;
+    margin-left: 15px;
+}
