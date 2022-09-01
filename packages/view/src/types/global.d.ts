@@ -2,4 +2,4 @@ import type { ClusterNode } from "*/NodeTypes.temp";
 
 type FixMe = any;
 
-type GlobalProps = { data: ClusterNode[] };
+export type GlobalProps = { data: ClusterNode[] };
