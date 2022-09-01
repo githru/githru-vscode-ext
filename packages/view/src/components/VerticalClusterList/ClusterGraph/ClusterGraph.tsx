@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { select } from "d3";
 
-import sampleClusterNodeList from "assets/json/sampleClusterNodeList.json";
+import type { ClusterNode } from "types/NodeTypes.temp";
 
 import { getGraphHeight, getNumberOfCommit } from "./ClusterGraph.util";
 import {
@@ -11,8 +11,11 @@ import {
   SVG_WIDTH,
 } from "./ClusterGraph.const";
 
-const ClusterGraph = () => {
-  const [data] = useState(sampleClusterNodeList);
+interface Props {
+  data: ClusterNode[];
+}
+
+const ClusterGraph = ({ data }: Props) => {
   const svgRef = useRef(null);
 
   const numOfCommit = useMemo(() => getNumberOfCommit(data), [data]);
@@ -25,7 +28,7 @@ const ClusterGraph = () => {
       .enter()
       .append("rect")
       .attr("width", () => GRAPH_WIDTH)
-      .attr("height", (d: any) => d * COMMIT_HEIGHT)
+      .attr("height", (d) => (d as number) * COMMIT_HEIGHT)
       .attr("x", 2)
       .attr("y", (_, i, prev) =>
         i > 0
