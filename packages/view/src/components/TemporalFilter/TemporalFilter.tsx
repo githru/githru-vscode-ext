@@ -1,4 +1,4 @@
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
 
 const TemporalFilter = ({ data }: GlobalProps) => {
   console.log(data);

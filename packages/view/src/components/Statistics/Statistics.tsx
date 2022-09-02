@@ -1,8 +1,13 @@
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
+
+import { AuthorBarChart } from "./AuthorBarChart";
 
 const Statistics = ({ data }: GlobalProps) => {
-  console.log(data);
-  return <div>Statistics</div>;
+  return (
+    <div>
+      <AuthorBarChart data={data} />
+    </div>
+  );
 };
 
 export default Statistics;

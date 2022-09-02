@@ -1,4 +1,4 @@
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
 import "./VerticalClusterList.scss";
 
 import { ClusterGraph } from "components/VerticalClusterList/ClusterGraph";
