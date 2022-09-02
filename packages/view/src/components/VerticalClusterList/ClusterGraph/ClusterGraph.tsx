@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { select } from "d3";
 
 import type { ClusterNode } from "types/NodeTypes.temp";
@@ -18,8 +18,8 @@ interface Props {
 const ClusterGraph = ({ data }: Props) => {
   const svgRef = useRef(null);
 
-  const numOfCommit = useMemo(() => getNumberOfCommit(data), [data]);
-  const graphHeight = useMemo(() => getGraphHeight(numOfCommit), [numOfCommit]);
+  const numOfCommit = getNumberOfCommit(data);
+  const graphHeight = getGraphHeight(numOfCommit);
 
   useEffect(() => {
     select(svgRef.current)
