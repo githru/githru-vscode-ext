@@ -97,9 +97,19 @@
       "name": "Parksunghyeon",
       "avatar_url": "https://avatars.githubusercontent.com/u/79688915?v=4",
       "profile": "https://pshdev1030.github.io/",
-      "contributions": [
+       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "wherehows",
+      "name": "edward",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81841082?v=4",
+      "profile": "https://github.com/wherehows",
+       "contributions": [
+        "code"
+      ]
+    }
     }
   ]
 }

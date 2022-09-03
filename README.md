@@ -25,6 +25,7 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
     <td align="center"><a href="http://dev-jejecrunch.tistory.com/"><img src="https://avatars.githubusercontent.com/u/41473964?v=4?s=100" width="100px;" alt=""/><br /><sub><b>제제jeje</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=jejecrunch" title="Code">💻</a></td>
     <td align="center"><a href="http://vgihan.github.io"><img src="https://avatars.githubusercontent.com/u/49841765?v=4?s=100" width="100px;" alt=""/><br /><sub><b>김기한</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=vgihan" title="Code">💻</a></td>
     <td align="center"><a href="https://pshdev1030.github.io/"><img src="https://avatars.githubusercontent.com/u/79688915?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Parksunghyeon</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=pshdev1030" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/wherehows"><img src="https://avatars.githubusercontent.com/u/81841082?v=4?s=100" width="100px;" alt=""/><br /><sub><b>edward</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=wherehows" title="Code">💻</a></td>
   </tr>
 </table>
 
