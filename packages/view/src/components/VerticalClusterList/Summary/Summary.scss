@@ -1,117 +1,117 @@
 @import "../../../styles/pallete";
 
 @mixin animation {
-    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-    -moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-    transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+  -webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  -moz-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 @mixin shadow {
-    -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-    -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-    box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+  -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+  -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+  box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
 }
 
 @mixin border($border--radius) {
-    -webkit-border-radius: $border--radius;
-    -moz-border-radius: $border--radius;
-    border-radius: $border--radius;
+  -webkit-border-radius: $border--radius;
+  -moz-border-radius: $border--radius;
+  border-radius: $border--radius;
 }
 
-body {
-    background-color: #fff;
-    color: #222
-}
+// body {
+//     background-color: #fff;
+//     color: #222
+// }
 
 .entire {
-    width: 85%;
-    margin-left: 20px;
+  width: 85%;
+  margin-left: 20px;
 }
 
 .cluster {
-    align-items: center;
-    width: 85%;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  align-items: center;
+  width: 85%;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .commit {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .nameBox {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .name {
-    @include border(50px);
+  @include border(50px);
 
-    display: flex;
-    width: 30px;
-    height: 30px;
-    font-weight: bold;
-    background-color: $blue-light-A700;
-    color: white;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 15pt;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  background-color: $blue-light-A700;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 15pt;
 
-    &::after {
-        @include animation()
-    }
+  &::after {
+    @include animation();
+  }
 
-    &:hover {
-        background-color: $blue-light-A200;
-    }
+  &:hover {
+    background-color: $blue-light-A200;
+  }
 }
 
 [data-tooltip-text] {
-    &:hover {
-        position: relative;
-    }
+  &:hover {
+    position: relative;
+  }
 
-    &::after {
-        @include animation();
+  &::after {
+    @include animation();
 
-        @include shadow();
-        
-        @include border(5px);
-    
-        content: attr(data-tooltip-text);
-    
-        position: absolute;
-        bottom: 30%;
-        left: -9999px;
-        
-        color: #FFFFFF;
-        font-size: 12px;
-        padding: 7px 12px;
-        margin-bottom: 10px;
-        width: auto;
-        min-width: max-content;
-        word-wrap: break-word;
-    
-        opacity: 0;
-        z-index: 9999;
-    }
+    @include shadow();
 
-    &:hover::after {
-        left: 100%;
-        background-color: rgba(0, 119, 170, 0.8);
-        opacity: 1;
-    }
+    @include border(5px);
+
+    content: attr(data-tooltip-text);
+
+    position: absolute;
+    bottom: 30%;
+    left: -9999px;
+
+    color: #ffffff;
+    font-size: 12px;
+    padding: 7px 12px;
+    margin-bottom: 10px;
+    width: auto;
+    min-width: max-content;
+    word-wrap: break-word;
+
+    opacity: 0;
+    z-index: 9999;
+  }
+
+  &:hover::after {
+    left: 100%;
+    background-color: rgba(0, 119, 170, 0.8);
+    opacity: 1;
+  }
 }
 
 .message {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-left: 15px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 15px;
 }

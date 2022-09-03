@@ -1,6 +1,4 @@
-import type { GlobalProps } from "types/global";
-
-import type { CommitNode } from "types/NodeTypes.temp";
+import type { GlobalProps, CommitNode } from "types/";
 
 type GetTargetCommit = GlobalProps & { id: string };
 

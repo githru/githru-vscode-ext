@@ -1,8 +1,7 @@
 import type { GlobalProps } from "types";
+
 import "./VerticalClusterList.scss";
-
-import { ClusterGraph } from "components/VerticalClusterList/ClusterGraph";
-
+import { ClusterGraph } from "./ClusterGraph";
 import { Summary } from "./Summary";
 
 const VerticalClusterList = ({ data }: GlobalProps) => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { select } from "d3";
 
-import type { ClusterNode } from "types/NodeTypes.temp";
+import type { ClusterNode } from "types";
 
 import { getGraphHeight, getCommitCounts } from "./ClusterGraph.util";
 import {

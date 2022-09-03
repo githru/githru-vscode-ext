@@ -1,8 +1,6 @@
 export type AuthorDataType = {
   name: string;
-  totalCommits: number;
-  totalInsertionCount: number;
-  totalDeletionCount: number;
+  commit: number;
+  insertion: number;
+  deletion: number;
 };
-
-export type MetricType = "commit" | "deletion" | "insertion";

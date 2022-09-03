@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
 
 import { getTargetCommit, getTime } from "./Detail.util";
 

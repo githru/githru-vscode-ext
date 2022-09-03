@@ -1,8 +1,8 @@
-import "./Summary.scss";
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
 
-import type { Commit, Author, Cluster } from ".";
-import { getInitData } from ".";
+import type { Commit, Author, Cluster } from "./Summary.type";
+import { getInitData } from "./Summary.util";
+import "./Summary.scss";
 
 const Summary = ({ data }: GlobalProps) => {
   const info = getInitData({ data });
