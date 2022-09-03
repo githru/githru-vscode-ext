@@ -4,7 +4,8 @@ import {
   FileChanged,
   GitUser,
 } from "./types/CommitRaw";
-import { exampleDataPrivate, exampleDataFlutter } from "./tempData";
+// import { exampleDataPrivate, exampleDataFlutter } from "./tempData";
+import { inspect } from "util";
 
 declare let JSONArray: CommitRaw[];
 declare let eachDifferenceStatistic: DifferenceStatistic;
@@ -98,12 +99,15 @@ export function parseToJSON(log: string) {
         commitDates.push(str.split(": ")[1].trim());
         messages.push(eachCommitMessage);
       } else if (/^\d/.test(str) || /^-/.test(str)) {
-        let [addition, deletion, path] = str.split(" ").filter((e) => e);
+        let [addition, deletion, path] = str
+          .split(" ")
+          .filter((e) => e)[0]
+          .split("\t");
         let numberedAddition = addition === "-" ? 0 : Number(addition);
         let numberedDeletion = deletion === "-" ? 0 : Number(deletion);
         differenceStatistics[commitIdx].totalInsertionCount += numberedAddition;
         differenceStatistics[commitIdx].totalDeletionCount += numberedDeletion;
-        differenceStatistics[commitIdx].fileDictionary[path.toString()] = {
+        differenceStatistics[commitIdx].fileDictionary[path] = {
           insertionCount: numberedAddition,
           deletionCount: numberedDeletion,
         };
@@ -127,9 +131,5 @@ export function parseToJSON(log: string) {
     });
   }
 
-  console.log(JSONArray);
-  return JSONArray;
+  return inspect(JSONArray, { showHidden: false, depth: null, colors: true });
 }
-
-parseToJSON(exampleDataPrivate);
-parseToJSON(exampleDataFlutter);
