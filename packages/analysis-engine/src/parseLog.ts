@@ -37,8 +37,6 @@ export function parseToJSON(log: string) {
     splitByNewLine.map((str, idx) => {
       if (str.slice(0, 6) === "commit") {
         commitIdx += 1;
-        let totalInsertionCount = 0;
-        let totalDeletionCount = 0;
         tags.push([]);
         branches.push([]);
         differenceStatistics.push({
@@ -101,45 +99,17 @@ export function parseToJSON(log: string) {
         messages.push(eachCommitMessage);
       } else if (/^\d/.test(str) || /^-/.test(str)) {
         let [addition, deletion, path] = str.split(" ").filter((e) => e);
-        console.log(addition, deletion, Number(addition), Number(deletion));
         let numberedAddition = addition === "-" ? 0 : Number(addition);
         let numberedDeletion = deletion === "-" ? 0 : Number(deletion);
-        console.log(numberedAddition, numberedDeletion, path);
         differenceStatistics[commitIdx].totalInsertionCount += numberedAddition;
         differenceStatistics[commitIdx].totalDeletionCount += numberedDeletion;
         differenceStatistics[commitIdx].fileDictionary[path.toString()] = {
           insertionCount: numberedAddition,
           deletionCount: numberedDeletion,
         };
-        // }
-        // // fileChanged의 경우 각 commit 별 여러 개가 될 수 있으니 commit 별로 나눠줘야 한다.
-        // else if (/^\d/.test(str)) {
-        //   const eachLine: FileChanged = {
-        //     addition: null,
-        //     deletion: null,
-        //     directory: null,
-        //   };
-        //   eachLine.addition = Number(str.split(" ").join("").split("\t")[0]);
-        //   eachLine.deletion = Number(str.split(" ").join("").split("\t")[1]);
-        //   eachLine.directory = str.split(" ").join("").split("\t")[2];
-        //   fileChangeds[commitIdx].push(eachLine);
       }
     });
   }
-  // console.log("ids", ids);
-  // console.log("parents", parents);
-  // console.log("tags", tags);
-  // console.log("branches", branches);
-  // console.log("authors", authors);
-  // console.log("authorDates", authorDates);
-  // console.log("commiters", committers);
-  // console.log("commitDates", commitDates);
-  messages.map((message) => {
-    message.includes(
-      "add firebase auth login with email and password\n\n- you can register any email address which is not even exist\n- login will not work if there's empty space in email text so you need to watch it carefully"
-    ) && console.log(message);
-  });
-  // console.log(differenceStatistics);
 
   // 카테고리 별로 담은 것을 JSON화 시키기
   for (let i = 0; i < ids.length; i++) {
