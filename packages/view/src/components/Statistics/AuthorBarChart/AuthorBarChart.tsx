@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { ChangeEvent } from "react";
-import { useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 
 import type { ClusterNode } from "types";
 
@@ -44,6 +44,11 @@ const AuthorBarChart = ({ data: data2 }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
   // const AuthorData = getDataByAuthor(data);
 
+  const numOfTotalCommit = useMemo(
+    () => data.reduce((acc, item) => acc + item.totalCommits, 0),
+    [data]
+  );
+
   const [metric, setMetric] = useState("totalCommits");
 
   useEffect(() => {
@@ -69,7 +74,7 @@ const AuthorBarChart = ({ data: data2 }: AuthorBarChartProps) => {
       // Scales
       const xScale = d3
         .scaleLinear()
-        .domain([0, 1])
+        .domain([0, numOfTotalCommit])
         .range([0, DIMENSIONS.width]);
 
       const yScale = d3
@@ -81,7 +86,7 @@ const AuthorBarChart = ({ data: data2 }: AuthorBarChartProps) => {
         .align(0.5);
 
       // Axis
-      const xAxis = d3.axisBottom(xScale).ticks(4, "%");
+      const xAxis = d3.axisBottom(xScale).ticks(6, "%");
       xAxisGroup.call(xAxis);
 
       const yAxis = d3.axisLeft(yScale).ticks(0);
@@ -113,7 +118,7 @@ const AuthorBarChart = ({ data: data2 }: AuthorBarChartProps) => {
       // .attr("height", yScale.bandwidth());
     };
     drawChart();
-  }, [data, svgRef.current]);
+  }, [data, svgRef.current, metric]);
 
   const optionList = ["commit", "deletion", "insertion"];
 
