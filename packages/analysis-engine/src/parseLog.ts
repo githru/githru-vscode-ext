@@ -1,9 +1,15 @@
-import { CommitRaw, DifferenceStatistic, FileChanged } from "./types/CommitRaw";
+import {
+  CommitRaw,
+  DifferenceStatistic,
+  FileChanged,
+  GitUser,
+} from "./types/CommitRaw";
 import { exampleDataPrivate, exampleDataFlutter } from "./tempData";
 
 declare let JSONArray: CommitRaw[];
 declare let eachDifferenceStatistic: DifferenceStatistic;
 declare let eachLine: FileChanged;
+declare let eachUser: GitUser;
 
 export function parseToJSON(log: string) {
   // line 별로 분리하기
@@ -14,25 +20,25 @@ export function parseToJSON(log: string) {
   const parents: string[][] = [];
   const branches: string[][] = [];
   const tags: string[][] = [];
-  // const authors: string[] = [];
-  // const authorDates: string[] = [];
-  // const committers: string[] = [];
-  // const committerEmails: string[] = [];
-  // const commitDates: string[] = [];
-  // const messages: string[] = [];
+  const authors: GitUser[] = [];
+  const authorDates: string[] = [];
+  const committers: GitUser[] = [];
+  const commitDates: string[] = [];
+  const messages: string[] = [];
   // fileChanged의 경우 2개 이상이 될 수 있으므로 배열로 지정
   const differenceStatistics: DifferenceStatistic[] = [];
 
   // 각 카테고리로 담은 다음 다시 JSON으로 변환하기 위함
-  // const JSONArray: CommitRaw[] = [];
+  const JSONArray: CommitRaw[] = [];
 
   // commit별 fileChanged를 분리시키기 위한 임시 index
   let commitIdx = -1;
-
   if (typeof splitByNewLine !== undefined) {
-    splitByNewLine.map((str) => {
+    splitByNewLine.map((str, idx) => {
       if (str.slice(0, 6) === "commit") {
         commitIdx += 1;
+        let totalInsertionCount = 0;
+        let totalDeletionCount = 0;
         tags.push([]);
         branches.push([]);
         differenceStatistics.push({
@@ -64,21 +70,47 @@ export function parseToJSON(log: string) {
             }
           });
         }
-        // } else if (str.slice(0, 7) === "Author:") {
-        //   authors.push(str.split(": ")[1].split("<")[0].trim());
-        //   authorEmails.push(
-        //     str.split(": ")[1].split("<")[1].split(">")[0].trim()
-        //   );
-        // } else if (str.slice(0, 10) === "AuthorDate") {
-        //   authorDates.push(str.split(": ")[1].trim());
-        // } else if (str.slice(0, 7) === "Commit:") {
-        //   committers.push(str.split(": ")[1].trim());
-        //   committerEmails.push(
-        //     str.split(": ")[1].split("<")[1].split(">")[0].trim()
-        //   );
-        //   messages.push(splitByNewLine[idx + 3].trim());
-        // } else if (str.slice(0, 10) === "CommitDate") {
-        //   commitDates.push(str.split(": ")[1].trim());
+      } else if (str.slice(0, 7) === "Author:") {
+        authors.push({
+          name: str.split(": ")[1].split("<")[0].trim(),
+          email: str.split(": ")[1].split("<")[1].split(">")[0].trim(),
+        });
+      } else if (str.slice(0, 10) === "AuthorDate") {
+        authorDates.push(str.split(": ")[1].trim());
+      } else if (str.slice(0, 7) === "Commit:") {
+        committers.push({
+          name: str.split(": ")[1].split("<")[0].trim(),
+          email: str.split(": ")[1].split("<")[1].split(">")[0].trim(),
+        });
+      } else if (str.slice(0, 10) === "CommitDate") {
+        let indexCheckFileChanged = idx + 2;
+        let eachCommitMessage = "";
+        while (true) {
+          if (splitByNewLine[indexCheckFileChanged] === "") {
+            break;
+          }
+          if (eachCommitMessage != "") {
+            eachCommitMessage +=
+              "\n" + splitByNewLine[indexCheckFileChanged].trim();
+          } else {
+            eachCommitMessage += splitByNewLine[indexCheckFileChanged].trim();
+          }
+          indexCheckFileChanged++;
+        }
+        commitDates.push(str.split(": ")[1].trim());
+        messages.push(eachCommitMessage);
+      } else if (/^\d/.test(str) || /^-/.test(str)) {
+        let [addition, deletion, path] = str.split(" ").filter((e) => e);
+        console.log(addition, deletion, Number(addition), Number(deletion));
+        let numberedAddition = addition === "-" ? 0 : Number(addition);
+        let numberedDeletion = deletion === "-" ? 0 : Number(deletion);
+        console.log(numberedAddition, numberedDeletion, path);
+        differenceStatistics[commitIdx].totalInsertionCount += numberedAddition;
+        differenceStatistics[commitIdx].totalDeletionCount += numberedDeletion;
+        differenceStatistics[commitIdx].fileDictionary[path.toString()] = {
+          insertionCount: numberedAddition,
+          deletionCount: numberedDeletion,
+        };
         // }
         // // fileChanged의 경우 각 commit 별 여러 개가 될 수 있으니 commit 별로 나눠줘야 한다.
         // else if (/^\d/.test(str)) {
@@ -94,47 +126,39 @@ export function parseToJSON(log: string) {
       }
     });
   }
-  console.log("ids", ids);
-  console.log("parents", parents);
-  console.log("tags", tags);
-  console.log("branches", branches);
-
-  // console.log("commit", ids);
-  // console.log("author", authors);
-  // console.log("authorEmail", authorEmails);
-  // console.log("authorDate", authorDates);
-  // console.log("Committer", committers);
-  // console.log("CommitterEmail", committerEmails);
-  // console.log("CommitDate", commitDates);
-  // console.log("message", messages);
-  // console.log("fileChanged", fileChangeds);
+  // console.log("ids", ids);
+  // console.log("parents", parents);
+  // console.log("tags", tags);
+  // console.log("branches", branches);
+  // console.log("authors", authors);
+  // console.log("authorDates", authorDates);
+  // console.log("commiters", committers);
+  // console.log("commitDates", commitDates);
+  messages.map((message) => {
+    message.includes(
+      "add firebase auth login with email and password\n\n- you can register any email address which is not even exist\n- login will not work if there's empty space in email text so you need to watch it carefully"
+    ) && console.log(message);
+  });
+  // console.log(differenceStatistics);
 
   // 카테고리 별로 담은 것을 JSON화 시키기
-  // for (let i = 0; i < commits.length; i++) {
-  //   JSONArray.push({
-  //     commit: null,
-  //     Author: null,
-  //     AuthorEmail: null,
-  //     AuthorDate: null,
-  //     Committer: null,
-  //     CommitterEmail: null,
-  //     CommitDate: null,
-  //     message: null,
-  //     fileChanged: [],
-  //   });
-  //   JSONArray[i]["commit"] = commits[i];
-  //   JSONArray[i]["Author"] = authors[i];
-  //   JSONArray[i]["AuthorEmail"] = authorEmails[i];
-  //   JSONArray[i]["AuthorDate"] = authorDates[i];
-  //   JSONArray[i]["Committer"] = committers[i];
-  //   JSONArray[i]["CommitterEmail"] = committerEmails[i];
-  //   JSONArray[i]["CommitDate"] = commitDates[i];
-  //   JSONArray[i]["message"] = messages[i];
-  //   JSONArray[i]["fileChanged"] = fileChangeds[i];
-  // }
+  for (let i = 0; i < ids.length; i++) {
+    JSONArray.push({
+      id: ids[i],
+      parents: parents[i],
+      branches: branches[i],
+      tags: tags[i],
+      author: authors[i],
+      authorDate: authorDates[i],
+      committer: committers[i],
+      committerDate: commitDates[i],
+      message: messages[i],
+      differenceStatistic: differenceStatistics[i],
+    });
+  }
 
-  // console.log(JSONArray);
-  // return JSONArray;
+  console.log(JSONArray);
+  return JSONArray;
 }
 
 parseToJSON(exampleDataPrivate);
