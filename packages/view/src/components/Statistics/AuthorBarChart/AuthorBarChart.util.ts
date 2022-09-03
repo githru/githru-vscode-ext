@@ -1,39 +1,38 @@
 import type { ClusterNode } from "types";
 
-// import type { AuthorDataType } from "./AuthorBarChart.type";
+import type { AuthorDataType } from "./AuthorBarChart.type";
 
-// export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
-export const getDataByAuthor = (data: ClusterNode[]) => {
-  // console.log(0, data);
+export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
+  // 0: {name: 'Brian Munkholm ', totalCommits: 2, totalInsertionCount: 6, totalDeletionCount: 6}
+  // 1: {name: 'Christian Melchior ', totalCommits: 4, totalInsertionCount: 56, totalDeletionCount: 60}
+  // 2: {name: 'Nabil Hachicha ', totalCommits: 2, totalInsertionCount: 2, totalDeletionCount: 2}
 
-  // { name: "Brian Munkholm", totalCommits: 2 },
-  // { name: "Christian Melchior", totalCommits: 4 },
-  // { name: "Nabil Hachicha", totalCommits: 1 },
-
-  const selectedData: ClusterNode[] = [data[7], data[11], data[19]];
+  const selectedData: ClusterNode[] = [data[7], data[11], data[43]];
 
   const authorDataObj = {};
 
-  selectedData.map((clusterNode) => {
-    clusterNode.commitNodeList.reduce((acc, commitNode) => {
-      const author = commitNode.commit.author.names[0];
+  selectedData.forEach(({ commitNodeList }) => {
+    commitNodeList.reduce((acc, { commit }) => {
+      const author = commit.author.names[0];
 
       if (!acc[author]) {
-        acc[author] = {};
-        acc[author].name = acc[author];
+        acc[author] = { name: author };
       }
-      acc[author].totalCommits = (acc[author].totalCommits || 0) + 1;
-      acc[author].totalInsertionCount =
-        (acc[author].totalInsertionCount || 0) + 1;
-      acc[author].totalDeletionCount =
-        (acc[author].totalDeletionCount || 0) + 1;
+
+      acc[author] = {
+        ...acc[author],
+        totalCommits: (acc[author].totalCommits || 0) + 1,
+        totalInsertionCount:
+          (acc[author].totalInsertionCount || 0) +
+          commit.diffStatistics.insertions,
+        totalDeletionCount:
+          (acc[author].totalDeletionCount || 0) +
+          commit.diffStatistics.deletions,
+      };
+
       return acc;
     }, authorDataObj);
-
-    return 123;
   });
 
-  console.log(123, authorDataObj);
-
-  return authorDataObj;
+  return Object.values(authorDataObj);
 };
