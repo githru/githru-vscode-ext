@@ -1,31 +1,49 @@
+import { nanoid } from "nanoid";
 import type { GlobalProps } from "types/global";
 
 import type { CommitNode } from "types/NodeTypes.temp";
 
-export function getCommitIds({ data }: GlobalProps) {
-  return data.map((v) => {
-    return v.commitNodeList.map((a: CommitNode) => {
-      return a.commit.id;
-    });
-  });
-}
+import type { Cluster, Commit, Author } from ".";
 
-export function getCommitAuthorNames({ data }: GlobalProps) {
-  return data
-    .map((v) => {
-      return v.commitNodeList.map((a: CommitNode) => {
-        return a.commit.author.names
-          .map((b: string) => {
-            return b.trim();
-          })
-          .join("");
+export function getInitData({ data }: GlobalProps) {
+  const clusters: Cluster[] = [];
+
+  data.map((clusterNode) => {
+    const cluster: Cluster = {
+      id: nanoid(),
+      commits: [],
+    };
+
+    const commitArray: Commit[] = [];
+
+    clusterNode.commitNodeList.map((commitNode: CommitNode) => {
+      const authors: Author[] = [];
+
+      commitNode.commit.author.names.map((name) => {
+        const author: Author = {
+          id: nanoid(),
+          name: name.trim(),
+        };
+        authors.push(author);
+
+        return author;
       });
-    })
-    .map((v) => v.filter((e: string[], i: number) => v.indexOf(e) === i));
-}
 
-export function getCommitMessages({ data }: GlobalProps) {
-  return data.map((v) => {
-    return v.commitNodeList[v.commitNodeList.length - 1].commit.message;
+      const temp = {
+        commitId: commitNode.commit.id,
+        authorNames: authors,
+        message: commitNode.commit.message,
+      };
+
+      commitArray.push(temp);
+
+      cluster.commits = commitArray;
+
+      return temp;
+    });
+    clusters.push(cluster);
+    return cluster;
   });
+
+  return clusters;
 }

@@ -1,9 +1,15 @@
-export interface Info {
-  ids: Array<Array<string>>;
-  names: Array<Array<string>>;
-  messages: Array<string>;
-}
+export type Author = {
+  id: string;
+  name: string;
+};
 
-export interface IInfo {
-  info: Info;
-}
+export type Commit = {
+  commitId: string;
+  authorNames: Array<Author>;
+  message: string;
+};
+
+export type Cluster = {
+  id: string;
+  commits: Commit[];
+};
