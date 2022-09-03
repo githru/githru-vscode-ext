@@ -84,7 +84,7 @@ describe("stem", () => {
       "1",
     ]);
     expect(
-      stemDict.get("implicit")?.nodes.map((node) => node.commit.id)
+      stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
     ).toEqual(["10", "9", "8"]);
     expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual([
       "14",

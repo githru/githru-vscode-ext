@@ -16,10 +16,13 @@ function generateStem(stemNodes: CommitNode[]): Stem {
 export function getStemNodes(
   tailId: string,
   commitDict: Map<string, CommitNode>,
-  q: Queue<CommitNode>
+  q: Queue<CommitNode>,
+  implicitBranchCount: number
 ): CommitNode[] {
   let now: CommitNode | undefined = commitDict.get(tailId);
-  const stemId: string = now?.commit.branches[0] ?? "implicit";
+  const stemId: string =
+    now?.commit.branches[0] ?? `implicit-${implicitBranchCount}`;
+
   const nodes: CommitNode[] = [];
   while (now && !now.traversed) {
     now.stemId = stemId;
@@ -72,11 +75,21 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
+  let implicitBranchCount = 1;
+
   while (!q.isEmpty()) {
     const tail = q.pop();
     // eslint-disable-next-line no-continue
     if (!tail) continue;
-    const nodes = getStemNodes(tail.commit.id, commitDict, q);
+    const nodes = getStemNodes(
+      tail.commit.id,
+      commitDict,
+      q,
+      implicitBranchCount
+    );
+    if (tail.commit.branches.length === 0) {
+      implicitBranchCount += 1;
+    }
     // eslint-disable-next-line no-continue
     if (nodes.length === 0) continue;
     const stem: Stem = generateStem(nodes);
