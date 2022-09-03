@@ -3,7 +3,7 @@ import { select } from "d3";
 
 import type { ClusterNode } from "types/NodeTypes.temp";
 
-import { getGraphHeight, getNumberOfCommit } from "./ClusterGraph.util";
+import { getGraphHeight, getCommitCounts } from "./ClusterGraph.util";
 import {
   COMMIT_HEIGHT,
   GRAPH_WIDTH,
@@ -11,20 +11,20 @@ import {
   SVG_WIDTH,
 } from "./ClusterGraph.const";
 
-interface Props {
+type ClusterGraphProps = {
   data: ClusterNode[];
-}
+};
 
-const ClusterGraph = ({ data }: Props) => {
+const ClusterGraph = ({ data }: ClusterGraphProps) => {
   const svgRef = useRef(null);
 
-  const numOfCommit = getNumberOfCommit(data);
-  const graphHeight = getGraphHeight(numOfCommit);
+  const commitCounts = getCommitCounts(data);
+  const graphHeight = getGraphHeight(commitCounts);
 
   useEffect(() => {
     select(svgRef.current)
       .selectAll("rect")
-      .data(numOfCommit)
+      .data(commitCounts)
       .enter()
       .append("rect")
       .attr("width", () => GRAPH_WIDTH)
@@ -35,12 +35,12 @@ const ClusterGraph = ({ data }: Props) => {
           ? prev[i - 1].y.baseVal.value +
             prev[i - 1].height.baseVal.value +
             NODE_GAP
-          : 5
+          : 10
       )
       .attr("rx", 10)
       .attr("ry", 10)
       .attr("stroke-width", 1)
-      .attr("stroke", "#d9008f")
+      .attr("stroke", "black")
       .attr("fill", "transparent");
   }, [data]);
 
