@@ -1,5 +1,7 @@
-const Greeter = (name: string) => `Hello ${name}`;
+import { getGitLog } from "./parseSpawn";
+import { parseToJSON } from "./parseLog";
 
-export default Greeter;
-
-console.log("Success");
+(async function () {
+  const value = await getGitLog();
+  parseToJSON(value);
+})();
