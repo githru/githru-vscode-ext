@@ -18,6 +18,8 @@ const dummy = [
   { id: "12", parents: ["11"], branches: [] },
   { id: "13", parents: ["12"], branches: [] },
   { id: "14", parents: ["13"], branches: ["dev"] },
+  { id: "15", parents: ["13", "10"], branches: [] },
+  { id: "16", parents: ["15"], branches: ["HEAD"] },
 ];
 
 function createTestCommit({
@@ -69,7 +71,7 @@ describe("stem", () => {
 
   it("should get leaf nodes", () => {
     const leafNodes = getLeafNodes(commitDict);
-    expect(leafNodes.map((node) => node.commit.id)).toEqual(["7", "14"]);
+    expect(leafNodes.map((node) => node.commit.id)).toEqual(["7", "14", "16"]);
   });
 
   it("should make stem", () => {
@@ -91,6 +93,10 @@ describe("stem", () => {
       "13",
       "12",
       "11",
+    ]);
+    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual([
+      "16",
+      "15",
     ]);
   });
 });
