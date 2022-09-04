@@ -1,4 +1,4 @@
-import type { DifferenceStatistic } from "@githru-vscode-ext/analysis-engine/src/types/CommitRaw";
+import type { DifferenceStatistic } from "@githru-vscode-ext/analysis-engine/src/types";
 
 const mockDifferenceStatistic: DifferenceStatistic = {
   totalInsertionCount: 300,
