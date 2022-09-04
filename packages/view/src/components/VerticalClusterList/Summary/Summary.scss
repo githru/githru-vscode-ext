@@ -86,14 +86,13 @@ body {
         content: attr(data-tooltip-text);
     
         position: absolute;
-        top: 90%;
+        bottom: 30%;
         left: -9999px;
         
         color: #FFFFFF;
         font-size: 12px;
-        margin-bottom: 10px;
         padding: 7px 12px;
-        position: absolute;
+        margin-bottom: 10px;
         width: auto;
         min-width: max-content;
         word-wrap: break-word;
@@ -103,7 +102,7 @@ body {
     }
 
     &:hover::after {
-        left: 90%;
+        left: 100%;
         background-color: rgba(0, 119, 170, 0.8);
         opacity: 1;
     }
