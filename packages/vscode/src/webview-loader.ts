@@ -31,7 +31,7 @@ export default class WebviewLoader {
     );
 
     this._panel.webview.onDidReceiveMessage(
-      (message: { command: string; payload: Object }) =>
+      (message: { command: string; payload: unknown }) =>
         this.respondToMessage(message)
     );
 
@@ -40,7 +40,7 @@ export default class WebviewLoader {
 
   private async respondToMessage(message: {
     command: string;
-    payload: Object;
+    payload: unknown;
   }) {
     if (message.command === "fetchMockData") {
       const fetchState = await getStringifiedMockData("fetchState");
