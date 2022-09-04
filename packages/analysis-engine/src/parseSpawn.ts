@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 
-let git = spawn("git", [
+const git = spawn("git", [
   "--no-pager",
   "log",
   "--all",
@@ -11,7 +11,7 @@ let git = spawn("git", [
   "-c",
 ]);
 
-export function getGitLog(): Promise<string> {
+export default function getGitLog(): Promise<string> {
   return new Promise((resolve, reject) => {
     let gitLog = "";
 

@@ -1,17 +1,17 @@
+import { inspect } from "util";
 import {
   CommitRaw,
   DifferenceStatistic,
-  FileChanged,
+  // FileChanged,
   GitUser,
 } from "./types/CommitRaw";
-import { inspect } from "util";
 
-declare let JSONArray: CommitRaw[];
-declare let eachDifferenceStatistic: DifferenceStatistic;
-declare let eachLine: FileChanged;
-declare let eachUser: GitUser;
+// declare let JSONArray: CommitRaw[];
+// declare let eachDifferenceStatistic: DifferenceStatistic;
+// declare let eachLine: FileChanged;
+// declare let eachUser: GitUser;
 
-export function parseToJSON(log: string) {
+export default function parseToJSON(log: string) {
   // line 별로 분리하기
   const splitByNewLine = log.split(/\r?\n/);
 
@@ -33,8 +33,8 @@ export function parseToJSON(log: string) {
 
   // commit별 fileChanged를 분리시키기 위한 임시 index
   let commitIdx = -1;
-  if (typeof splitByNewLine !== undefined) {
-    splitByNewLine.map((str, idx) => {
+  if (typeof splitByNewLine !== "undefined") {
+    splitByNewLine.forEach((str, idx) => {
       if (str.slice(0, 6) === "commit") {
         commitIdx += 1;
         tags.push([]);
@@ -44,24 +44,21 @@ export function parseToJSON(log: string) {
           totalDeletionCount: 0,
           fileDictionary: {},
         });
-        let splitedCommitLine = str.split("(");
-        let commitInfos = splitedCommitLine[0]
+        const splitedCommitLine = str.split("(");
+        const commitInfos = splitedCommitLine[0]
           .replace("commit ", "")
           .split(" ")
-          .filter((commit) => {
-            return commit !== "";
-          });
+          .filter((commit) => commit !== "");
         ids.push(commitInfos[0]);
         commitInfos.splice(0, 1);
         parents.push(commitInfos);
         let branchAndTagsInfos = splitedCommitLine[1];
-        if (branchAndTagsInfos) {
+        if (typeof branchAndTagsInfos !== "undefined") {
           if (branchAndTagsInfos.slice(0, 7) === "HEAD ->") {
-            branchAndTagsInfos = branchAndTagsInfos.split("HEAD ->")[1];
+            [, branchAndTagsInfos] = branchAndTagsInfos.split("HEAD ->");
           }
-          branchAndTagsInfos.split(",").map((eachInfo) => {
-            eachInfo = eachInfo.trim();
-            if (eachInfo.slice(0, 4) === "tag:") {
+          branchAndTagsInfos.split(",").forEach((eachInfo) => {
+            if (eachInfo.trim().slice(0, 4) === "tag:") {
               tags[commitIdx].push(eachInfo.replace("tag: ", ""));
             } else {
               branches[commitIdx].push(eachInfo.replace(")", ""));
@@ -83,27 +80,24 @@ export function parseToJSON(log: string) {
       } else if (str.slice(0, 10) === "CommitDate") {
         let indexCheckFileChanged = idx + 2;
         let eachCommitMessage = "";
-        while (true) {
-          if (splitByNewLine[indexCheckFileChanged] === "") {
-            break;
-          }
-          if (eachCommitMessage != "") {
-            eachCommitMessage +=
-              "\n" + splitByNewLine[indexCheckFileChanged].trim();
+        while (splitByNewLine[indexCheckFileChanged] !== "") {
+          if (eachCommitMessage !== "") {
+            eachCommitMessage += "/n";
+            eachCommitMessage += splitByNewLine[indexCheckFileChanged].trim();
           } else {
             eachCommitMessage += splitByNewLine[indexCheckFileChanged].trim();
           }
-          indexCheckFileChanged++;
+          indexCheckFileChanged += 1;
         }
         commitDates.push(str.split(": ")[1].trim());
         messages.push(eachCommitMessage);
       } else if (/^\d/.test(str) || /^-/.test(str)) {
-        let [addition, deletion, path] = str
+        const [addition, deletion, path] = str
           .split(" ")
           .filter((e) => e)[0]
           .split("\t");
-        let numberedAddition = addition === "-" ? 0 : Number(addition);
-        let numberedDeletion = deletion === "-" ? 0 : Number(deletion);
+        const numberedAddition = addition === "-" ? 0 : Number(addition);
+        const numberedDeletion = deletion === "-" ? 0 : Number(deletion);
         differenceStatistics[commitIdx].totalInsertionCount += numberedAddition;
         differenceStatistics[commitIdx].totalDeletionCount += numberedDeletion;
         differenceStatistics[commitIdx].fileDictionary[path] = {
@@ -115,7 +109,7 @@ export function parseToJSON(log: string) {
   }
 
   // 카테고리 별로 담은 것을 JSON화 시키기
-  for (let i = 0; i < ids.length; i++) {
+  for (let i = 0; i < ids.length; i += 1) {
     JSONArray.push({
       sequenceNumber: i,
       id: ids[i],
@@ -131,5 +125,10 @@ export function parseToJSON(log: string) {
     });
   }
 
-  return inspect(JSONArray, { showHidden: false, depth: null, colors: true });
+  return inspect(JSONArray, {
+    showHidden: false,
+    depth: null,
+    colors: true,
+    maxArrayLength: null,
+  });
 }
