@@ -13,10 +13,10 @@ const App = () => {
 
   return (
     <>
-      <Detail data={data} />
-      <Statistics data={data} />
       <TemporalFilter data={data} />
       <VerticalClusterList data={data} />
+      <Statistics data={data} />
+      <Detail data={data} />
     </>
   );
 };

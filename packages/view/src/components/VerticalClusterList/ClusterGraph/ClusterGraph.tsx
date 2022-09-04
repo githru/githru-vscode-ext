@@ -42,7 +42,7 @@ const ClusterGraph = ({ data }: ClusterGraphProps) => {
       .attr("stroke-width", 1)
       .attr("stroke", "black")
       .attr("fill", "transparent");
-  }, [data]);
+  }, [commitCounts, data]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };

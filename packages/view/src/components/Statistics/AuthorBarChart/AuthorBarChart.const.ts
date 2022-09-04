@@ -4,8 +4,4 @@ export const DIMENSIONS = {
   margins: 60,
 };
 
-export const METRIC_TYPE = {
-  commit: "commit",
-  insertion: "insertion",
-  deletion: "deletion",
-};
+export const METRIC_TYPE = ["commit", "insertion", "deletion"] as const;

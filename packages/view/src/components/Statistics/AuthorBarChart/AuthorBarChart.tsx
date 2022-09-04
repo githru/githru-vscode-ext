@@ -4,7 +4,7 @@ import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
 
-import type { AuthorDataType } from "./AuthorBarChart.type";
+import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
@@ -16,14 +16,13 @@ type AuthorBarChartProps = {
 
 const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
-  const [metric, setMetric] = useState(METRIC_TYPE.commit);
+  const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
   const authorData = getDataByAuthor(rawData);
   const totalMetricValues = authorData.reduce(
     (acc, item) => acc + item[metric],
     0
   );
-  const optionList = Object.keys(METRIC_TYPE);
 
   useEffect(() => {
     const data = authorData.sort((a, b) => {
@@ -100,16 +99,16 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth() - DIMENSIONS.height / data.length)
       .html((d) => d.name);
-  }, [rawData, svgRef.current, metric]);
+  }, [rawData, metric, authorData, totalMetricValues]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setMetric(e.target.value);
+    setMetric(e.target.value as MetricType);
   };
 
   return (
     <div className="root">
       <select className="selectBox" onChange={handleChangeMetric}>
-        {optionList.map((option) => (
+        {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
