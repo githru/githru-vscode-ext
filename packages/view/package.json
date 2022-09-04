@@ -11,7 +11,7 @@
     "build": "npm run build:react && npm run build:bundle",
     "build:react": "react-scripts build",
     "build:bundle": "webpack --config webpack.config.js",
-    "test": "react-scripts test",
+    "test": "",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
