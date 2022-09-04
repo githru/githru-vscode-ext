@@ -17,6 +17,7 @@ export interface GitUser {
 }
 
 export interface CommitRaw {
+  sequenceNumber: number;
   id: string;
   parents: string[];
   branches: string[];
