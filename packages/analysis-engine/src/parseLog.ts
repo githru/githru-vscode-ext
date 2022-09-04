@@ -1,15 +1,12 @@
 import { inspect } from "util";
-import {
-  CommitRaw,
-  DifferenceStatistic,
-  // FileChanged,
-  GitUser,
-} from "./types/CommitRaw";
+import { CommitRaw, DifferenceStatistic, GitUser } from "./types/CommitRaw";
 
-// declare let JSONArray: CommitRaw[];
-// declare let eachDifferenceStatistic: DifferenceStatistic;
-// declare let eachLine: FileChanged;
-// declare let eachUser: GitUser;
+function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
+  category.push({
+    name: preParsedInfo.split(": ")[1].split("<")[0].trim(),
+    email: preParsedInfo.split(": ")[1].split("<")[1].split(">")[0].trim(),
+  });
+}
 
 export default function parseToJSON(log: string) {
   // line 별로 분리하기
@@ -66,17 +63,11 @@ export default function parseToJSON(log: string) {
           });
         }
       } else if (str.slice(0, 7) === "Author:") {
-        authors.push({
-          name: str.split(": ")[1].split("<")[0].trim(),
-          email: str.split(": ")[1].split("<")[1].split(">")[0].trim(),
-        });
+        getNameAndEmail(authors, str);
       } else if (str.slice(0, 10) === "AuthorDate") {
         authorDates.push(str.split(": ")[1].trim());
       } else if (str.slice(0, 7) === "Commit:") {
-        committers.push({
-          name: str.split(": ")[1].split("<")[0].trim(),
-          email: str.split(": ")[1].split("<")[1].split(">")[0].trim(),
-        });
+        getNameAndEmail(committers, str);
       } else if (str.slice(0, 10) === "CommitDate") {
         let indexCheckFileChanged = idx + 2;
         let eachCommitMessage = "";
@@ -111,7 +102,7 @@ export default function parseToJSON(log: string) {
   // 카테고리 별로 담은 것을 JSON화 시키기
   for (let i = 0; i < ids.length; i += 1) {
     JSONArray.push({
-      sequenceNumber: i,
+      sequence: i,
       id: ids[i],
       parents: parents[i],
       branches: branches[i],

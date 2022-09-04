@@ -19,7 +19,7 @@ export default function getGitLog(): Promise<string> {
       gitLog += data.toString();
     });
 
-    git.stderr.on("data", (data) => {
+    git.stderr.on("error", (data) => {
       console.error(`stderr: ${data}`);
       reject(data);
     });
