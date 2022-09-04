@@ -31,18 +31,21 @@ body {
 .cluster {
     align-items: center;
     width: 85%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .commit {
     display: flex;
     align-items: center;
     flex-direction: row;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .nameBox {
     display: flex;
+    justify-content: center;
 }
 
 .name {
@@ -58,7 +61,6 @@ body {
     align-items: center;
     text-align: center;
     font-size: 15pt;
-    margin-bottom: 10px;
 
     &::after {
         @include animation()
