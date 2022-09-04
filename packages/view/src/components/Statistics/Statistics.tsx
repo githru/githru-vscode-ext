@@ -1,3 +1,4 @@
+import type { GlobalProps } from "types/global";
 import type { DifferenceStatistic } from "@githru-vscode-ext/analysis-engine/src/types";
 
 const mockDifferenceStatistic: DifferenceStatistic = {
@@ -15,7 +16,8 @@ const mockDifferenceStatistic: DifferenceStatistic = {
   },
 };
 
-const Statistics = () => {
+const Statistics = ({ data }: GlobalProps) => {
+  console.log(data);
   return (
     <div>{mockDifferenceStatistic.fileDictionary["./a"].insertionCount}</div>
   );
