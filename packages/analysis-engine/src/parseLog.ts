@@ -4,7 +4,6 @@ import {
   FileChanged,
   GitUser,
 } from "./types/CommitRaw";
-// import { exampleDataPrivate, exampleDataFlutter } from "./tempData";
 import { inspect } from "util";
 
 declare let JSONArray: CommitRaw[];
@@ -118,6 +117,7 @@ export function parseToJSON(log: string) {
   // 카테고리 별로 담은 것을 JSON화 시키기
   for (let i = 0; i < ids.length; i++) {
     JSONArray.push({
+      sequenceNumber: i,
       id: ids[i],
       parents: parents[i],
       branches: branches[i],
