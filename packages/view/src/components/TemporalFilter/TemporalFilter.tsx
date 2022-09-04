@@ -1,8 +1,10 @@
 import type { GlobalProps } from "types";
 
 const TemporalFilter = ({ data }: GlobalProps) => {
-  console.log(data);
-  return <>TemporalFilter</>;
+  if (!data) {
+    console.log(data);
+  }
+  return <div className="temporal-filter">TemporalFilter</div>;
 };
 
 export default TemporalFilter;

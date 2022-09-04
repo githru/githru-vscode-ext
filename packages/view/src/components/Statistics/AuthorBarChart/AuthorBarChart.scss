@@ -1,8 +1,9 @@
 @import "styles/app.scss";
 
-.root {
+.AuthorBarChartWrap {
+  width: 500px;
   background: $gray-900;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

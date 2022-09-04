@@ -11,7 +11,7 @@ const Detail = ({ data }: GlobalProps) => {
   const { authorDate, message, committer } = commit;
   const time = getTime(authorDate);
   return (
-    <>
+    <div className="detail">
       <div>작성 날짜</div>
       <p>{time}</p>
 
@@ -27,7 +27,7 @@ const Detail = ({ data }: GlobalProps) => {
       {committer.emails.map((email: string, i: number) => (
         <p key={i}>{email}</p>
       ))}
-    </>
+    </div>
   );
 };
 

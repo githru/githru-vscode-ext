@@ -106,7 +106,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   };
 
   return (
-    <div className="root">
+    <div className="AuthorBarChartWrap">
       <select className="selectBox" onChange={handleChangeMetric}>
         {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
