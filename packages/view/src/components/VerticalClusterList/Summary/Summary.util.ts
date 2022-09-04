@@ -3,7 +3,7 @@ import type { GlobalProps } from "types/global";
 
 import type { CommitNode } from "types/NodeTypes.temp";
 
-import type { Cluster, Commit, Author } from ".";
+import type { Cluster, Commit } from ".";
 
 export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
@@ -17,21 +17,12 @@ export function getInitData({ data }: GlobalProps) {
     const commitArray: Commit[] = [];
 
     clusterNode.commitNodeList.map((commitNode: CommitNode) => {
-      const authors: Author[] = [];
-
-      commitNode.commit.author.names.map((name) => {
-        const author: Author = {
-          id: nanoid(),
-          name: name.trim(),
-        };
-        authors.push(author);
-
-        return author;
-      });
-
       const temp = {
         commitId: commitNode.commit.id,
-        authorNames: authors,
+        authorNames: commitNode.commit.author.names.map((name) => ({
+          id: nanoid(),
+          name: name.trim(),
+        })),
         message: commitNode.commit.message,
       };
 
@@ -41,6 +32,7 @@ export function getInitData({ data }: GlobalProps) {
 
       return temp;
     });
+
     clusters.push(cluster);
     return cluster;
   });

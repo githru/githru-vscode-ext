@@ -11,5 +11,5 @@ export type Commit = {
 
 export type Cluster = {
   id: string;
-  commits: Commit[];
+  commits: Array<Commit>;
 };
