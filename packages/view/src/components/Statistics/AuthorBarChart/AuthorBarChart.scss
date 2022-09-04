@@ -46,13 +46,14 @@
 }
 
 .bar {
-  fill: #0077aa;
+  rect {
+    fill: #0077aa;
+  }
 
   &:hover {
-    fill: none;
-    stroke: #0077aa;
-
     rect {
+      fill: $gray-900;
+      stroke: #0077aa;
       stroke-width: 2;
     }
   }

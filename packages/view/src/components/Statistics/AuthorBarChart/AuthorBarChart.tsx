@@ -94,7 +94,8 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .append("text")
       .attr("class", "name")
       .attr("x", 5)
-      .attr("y", (d) => yScale(d.name) || null)
+      // FIXME
+      .attr("y", (d) => (yScale(d.name) || 0) + 40)
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth() - DIMENSIONS.height / data.length)
       .html((d) => d.name);
