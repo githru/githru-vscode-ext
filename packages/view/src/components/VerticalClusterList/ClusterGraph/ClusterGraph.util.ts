@@ -11,5 +11,5 @@ export function getGraphHeight(commitCounts: number[]) {
     (sum: number, commit: number) => sum + commit,
     0
   );
-  return totalCommit * COMMIT_HEIGHT + (commitCounts.length - 1) * NODE_GAP;
+  return totalCommit * COMMIT_HEIGHT + commitCounts.length * NODE_GAP;
 }
