@@ -18,19 +18,18 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
-  const authorData = getDataByAuthor(rawData);
-  const totalMetricValues = authorData.reduce(
-    (acc, item) => acc + item[metric],
-    0
-  );
-
   useEffect(() => {
+    const authorData = getDataByAuthor(rawData);
     const data = authorData.sort((a, b) => {
       if (a[metric] === b[metric]) {
         return sortDataByName(a.name, b.name);
       }
       return a[metric] - b[metric];
     });
+    const totalMetricValues = authorData.reduce(
+      (acc, item) => acc + item[metric],
+      0
+    );
 
     const svg = d3
       .select(svgRef.current)
@@ -99,7 +98,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth() - DIMENSIONS.height / data.length)
       .html((d) => d.name);
-  }, [rawData, metric, authorData, totalMetricValues]);
+  }, [rawData, metric]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
