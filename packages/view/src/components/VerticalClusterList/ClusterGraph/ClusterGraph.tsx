@@ -3,7 +3,7 @@ import { select } from "d3";
 
 import type { ClusterNode } from "types";
 
-import { getGraphHeight, getCommitCounts } from "./ClusterGraph.util";
+import { getGraphHeight, getClusterSizes } from "./ClusterGraph.util";
 import {
   COMMIT_HEIGHT,
   GRAPH_WIDTH,
@@ -18,31 +18,41 @@ type ClusterGraphProps = {
 const ClusterGraph = ({ data }: ClusterGraphProps) => {
   const svgRef = useRef(null);
 
-  const commitCounts = getCommitCounts(data);
-  const graphHeight = getGraphHeight(commitCounts);
+  const clusterSizes = getClusterSizes(data);
+  const graphHeight = getGraphHeight(clusterSizes);
+  const maxOfClusterSize = Math.max(...clusterSizes);
 
   useEffect(() => {
     select(svgRef.current)
-      .selectAll("rect")
-      .data(commitCounts)
+      .selectAll(".cluster-graph-container")
+      .data(clusterSizes)
       .enter()
       .append("rect")
-      .attr("width", () => GRAPH_WIDTH)
-      .attr("height", (d) => (d as number) * COMMIT_HEIGHT)
+      .attr("class", "cluster-graph-container")
+      .attr("width", GRAPH_WIDTH)
+      .attr("height", COMMIT_HEIGHT)
       .attr("x", 2)
-      .attr("y", (_, i, prev) =>
-        i > 0
-          ? prev[i - 1].y.baseVal.value +
-            prev[i - 1].height.baseVal.value +
-            NODE_GAP
-          : 10
-      )
+      .attr("y", (_, i) => 10 + i * (NODE_GAP + COMMIT_HEIGHT))
       .attr("rx", 10)
       .attr("ry", 10)
       .attr("stroke-width", 1)
       .attr("stroke", "black")
       .attr("fill", "transparent");
-  }, [commitCounts, data]);
+
+    select(svgRef.current)
+      .selectAll(".degree-box")
+      .data(clusterSizes)
+      .enter()
+      .append("rect")
+      .attr("class", "degree-box")
+      .attr("width", (d) => GRAPH_WIDTH * (d / maxOfClusterSize))
+      .attr("height", COMMIT_HEIGHT)
+      .attr("x", (d) => (GRAPH_WIDTH * (1 - d / maxOfClusterSize)) / 2 + 2)
+      .attr("y", (_, i) => 10 + i * (NODE_GAP + COMMIT_HEIGHT))
+      .attr("rx", 10)
+      .attr("ry", 10)
+      .attr("fill", "rgba(0,0,0,0.2)");
+  }, [clusterSizes, maxOfClusterSize]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
