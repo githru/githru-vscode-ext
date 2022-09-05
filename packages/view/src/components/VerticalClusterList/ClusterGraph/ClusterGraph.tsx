@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { select } from "d3";
 
-import type { ClusterNode } from "types/NodeTypes.temp";
+import type { ClusterNode } from "types";
 
 import { getGraphHeight, getCommitCounts } from "./ClusterGraph.util";
 import {
@@ -42,7 +42,7 @@ const ClusterGraph = ({ data }: ClusterGraphProps) => {
       .attr("stroke-width", 1)
       .attr("stroke", "black")
       .attr("fill", "transparent");
-  }, [data]);
+  }, [commitCounts, data]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
