@@ -1,10 +1,20 @@
-import type { GlobalProps } from "types";
+import type { GlobalProps } from "types/global";
+
+import { ClocLineChart } from "./ClocLineChart";
+import { CommitLineChart } from "./CommitLineChart";
+import { Filter } from "./Filter";
 
 const TemporalFilter = ({ data }: GlobalProps) => {
-  if (!data) {
-    console.log(data);
-  }
-  return <div className="temporal-filter">TemporalFilter</div>;
+  console.log(data);
+  const refinedData = data; // 정제해야하는 데이터
+
+  return (
+    <>
+      <Filter />
+      <ClocLineChart data={refinedData} />
+      <CommitLineChart data={refinedData} />
+    </>
+  );
 };
 
 export default TemporalFilter;
