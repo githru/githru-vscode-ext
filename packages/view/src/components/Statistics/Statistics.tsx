@@ -1,25 +1,13 @@
-import type { GlobalProps } from "types/global";
-import type { DifferenceStatistic } from "@githru-vscode-ext/analysis-engine/src/types";
+import type { GlobalProps } from "types";
 
-const mockDifferenceStatistic: DifferenceStatistic = {
-  totalInsertionCount: 300,
-  totalDeletionCount: 100,
-  fileDictionary: {
-    "./a": {
-      insertionCount: 140,
-      deletionCount: 30,
-    },
-    "./b": {
-      insertionCount: 160,
-      deletionCount: 70,
-    },
-  },
-};
+import { AuthorBarChart } from "./AuthorBarChart";
+import "./Statistics.scss";
 
 const Statistics = ({ data }: GlobalProps) => {
-  console.log(data);
   return (
-    <div>{mockDifferenceStatistic.fileDictionary["./a"].insertionCount}</div>
+    <div className="statistics">
+      <AuthorBarChart data={data} />
+    </div>
   );
 };
 
