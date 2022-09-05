@@ -1,4 +1,4 @@
-import type { ClusterNode } from "types/NodeTypes.temp";
+import type { ClusterNode } from "types";
 
 import { COMMIT_HEIGHT, NODE_GAP } from "./ClusterGraph.const";
 

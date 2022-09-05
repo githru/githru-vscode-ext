@@ -1,9 +1,8 @@
 import { nanoid } from "nanoid";
-import type { GlobalProps } from "types/global";
 
-import type { CommitNode } from "types/NodeTypes.temp";
+import type { GlobalProps, CommitNode } from "types";
 
-import type { Cluster, Commit } from ".";
+import type { Cluster, Commit } from "./Summary.type";
 
 export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
