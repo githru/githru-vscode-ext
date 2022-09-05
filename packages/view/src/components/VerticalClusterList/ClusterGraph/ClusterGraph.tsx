@@ -3,11 +3,14 @@ import { select } from "d3";
 
 import type { ClusterNode } from "types";
 
+import "./ClusterGraph.scss";
+
 import { getGraphHeight, getClusterSizes } from "./ClusterGraph.util";
 import {
   COMMIT_HEIGHT,
   GRAPH_WIDTH,
   NODE_GAP,
+  SVG_MARGIN,
   SVG_WIDTH,
 } from "./ClusterGraph.const";
 
@@ -31,13 +34,8 @@ const ClusterGraph = ({ data }: ClusterGraphProps) => {
       .attr("class", "cluster-graph-container")
       .attr("width", GRAPH_WIDTH)
       .attr("height", COMMIT_HEIGHT)
-      .attr("x", 2)
-      .attr("y", (_, i) => 10 + i * (NODE_GAP + COMMIT_HEIGHT))
-      .attr("rx", 10)
-      .attr("ry", 10)
-      .attr("stroke-width", 1)
-      .attr("stroke", "black")
-      .attr("fill", "transparent");
+      .attr("x", SVG_MARGIN.left)
+      .attr("y", (_, i) => SVG_MARGIN.bottom + i * (NODE_GAP + COMMIT_HEIGHT));
 
     select(svgRef.current)
       .selectAll(".degree-box")
@@ -47,11 +45,11 @@ const ClusterGraph = ({ data }: ClusterGraphProps) => {
       .attr("class", "degree-box")
       .attr("width", (d) => GRAPH_WIDTH * (d / maxOfClusterSize))
       .attr("height", COMMIT_HEIGHT)
-      .attr("x", (d) => (GRAPH_WIDTH * (1 - d / maxOfClusterSize)) / 2 + 2)
-      .attr("y", (_, i) => 10 + i * (NODE_GAP + COMMIT_HEIGHT))
-      .attr("rx", 10)
-      .attr("ry", 10)
-      .attr("fill", "rgba(0,0,0,0.2)");
+      .attr(
+        "x",
+        (d) => (GRAPH_WIDTH * (1 - d / maxOfClusterSize)) / 2 + SVG_MARGIN.left
+      )
+      .attr("y", (_, i) => SVG_MARGIN.bottom + i * (NODE_GAP + COMMIT_HEIGHT));
   }, [clusterSizes, maxOfClusterSize]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
