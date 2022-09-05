@@ -33,8 +33,10 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
+  "dependencies": {
+    "@githru-vscode-ext/analysis-engine": "^0.1.0"
+  },
   "devDependencies": {
-    "@githru-vscode-ext/analysis-engine": "^0.1.0",
     "@types/copy-webpack-plugin": "^10.1.0",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
@@ -46,6 +48,7 @@
     "@vscode/test-electron": "^2.1.3",
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.14.0",
+    "prettier": "^2.7.1",
     "glob": "^8.0.1",
     "mocha": "^9.2.2",
     "ts-loader": "^9.2.8",

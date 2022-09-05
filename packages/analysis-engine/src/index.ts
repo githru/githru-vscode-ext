@@ -1,5 +1,36 @@
-const Greeter = (name: string) => `Hello ${name}`;
+interface MockData {
+  message: string;
+  dictionary: {
+    [id: string]: {
+      parentIds: string[];
+    };
+  };
+  obj: Object;
+}
 
-export default Greeter;
+export const getMockData = async (message: string) =>
+  new Promise<MockData>((resolve) => {
+    setTimeout(() => {
+      console.log(message);
+      resolve({
+        message,
+        dictionary: {
+          first: {
+            parentIds: [],
+          },
+          second: {
+            parentIds: ["first"],
+          },
+          third: {
+            parentIds: ["first", "second"],
+          },
+        },
+        obj: {},
+      });
+    }, 30);
+  });
 
-console.log("Success");
+export const getStringifiedMockData = async (message: string) => {
+  const mockData = await getMockData(message);
+  return JSON.stringify(mockData);
+};
