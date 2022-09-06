@@ -1,5 +1,5 @@
 import type { ClusterNode } from "types/NodeTypes.temp";
-import type { ClocType } from "../ClocLineChart/ClocType";
+import type { ClocType } from "./ClocType";
 // import { CommitType } from "./CommitType";
 // 데이터 가공 양식 => 커밋 날짜, diffStatistics.delations + diffStatistics.insertions
 // diffStatistics.delations + diffStatistics.insertions은 total로 가공
@@ -8,23 +8,23 @@ export function TotalCommitNum(data: ClusterNode[]): ClocType[] {
   const TotalDict = {};
 
   data.forEach(({ commitNodeList }) => {
-    commitNodeList.reduce((arr, { commit }) => {
+    commitNodeList.reduce((acc, { commit }) => {
       const Date = commit.commitDate[0];
       const { insertions, deletions } = commit.diffStatistics;
 
-      if (!arr[Date]) {
-        arr[Date] = { name: Date };
+      if (!acc[Date]) {
+        acc[Date] = { name: Date };
       }
 
-      arr[Date] = {
-        ...arr[Date],
-        commit: (arr[Date].commit || 0) + 1,
-        insertion: (arr[Date].insertion || 0) + insertions,
-        deletion: (arr[Date].deletion || 0) + deletions,
+      acc[Date] = {
+        ...acc[Date],
+        commit: (acc[Date].commit || 0) + 1,
+        insertion: (acc[Date].insertion || 0) + insertions,
+        deletion: (acc[Date].deletion || 0) + deletions,
         total: insertions + deletions,
       };
 
-      return arr[Date].total;
+      return acc[Date].total;
     }, TotalDict);
   });
 

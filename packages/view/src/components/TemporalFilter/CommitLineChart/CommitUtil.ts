@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types/NodeTypes.temp";
 // import type { CommitType } from "./CommitType";
-import { CommitH } from "../CommitLineChart/Const";
+import { CommitH } from "./Const";
 // import { CommitType } from "./CommitType";
 
 //   console.log(data[7].commit.commitDate);
