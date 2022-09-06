@@ -79,7 +79,6 @@ export function buildStemDict(
 
   while (!q.isEmpty()) {
     const tail = q.pop();
-    // eslint-disable-next-line no-continue
     if (!tail) continue;
     const nodes = getStemNodes(
       tail.commit.id,
@@ -90,7 +89,6 @@ export function buildStemDict(
     if (tail.commit.branches.length === 0) {
       implicitBranchCount += 1;
     }
-    // eslint-disable-next-line no-continue
     if (nodes.length === 0) continue;
     const stem: Stem = generateStem(nodes);
     stemDict.set(stem.id, stem);
