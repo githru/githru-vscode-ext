@@ -52,6 +52,7 @@ const drawIcicleTree = async (
   $target: RefObject<SVGSVGElement>,
   data: TFileData
 ) => {
+  let focus: HierarchyRectangularNode<TFileData> | null = null;
   const root = partition(data);
 
   const svg = d3
@@ -68,7 +69,7 @@ const drawIcicleTree = async (
     .attr("transform", (d) => `translate(${d.y0},${d.x0})`);
 
   // Draw rect of partition
-  cell
+  const rect = cell
     .append("rect")
     .attr("width", (d) => d.y1 - d.y0 - 1)
     .attr("height", (d) => rectHeight(d))
@@ -90,10 +91,47 @@ const drawIcicleTree = async (
 
   text.append("tspan").text((d) => d.data.name);
 
-  text
+  const tspan = text
     .append("tspan")
     .attr("fill-opacity", (d) => +labelVisible(d) * 0.7)
     .text((d) => ` ${d.value?.toLocaleString()}`);
+
+  rect.on("click", (_event, p) => {
+    const positionMap = new WeakMap();
+    // When users click the focused node, change focus to its parent
+    const targetNode = focus === p ? p.parent : p;
+
+    if (targetNode === null) {
+      return;
+    }
+
+    focus = targetNode;
+
+    root.each((d) => {
+      positionMap.set(d, {
+        x0: ((d.x0 - targetNode.x0) / (targetNode.x1 - targetNode.x0)) * HEIGHT,
+        x1: ((d.x1 - targetNode.x0) / (targetNode.x1 - targetNode.x0)) * HEIGHT,
+        y0: d.y0 - targetNode.y0,
+        y1: d.y1 - targetNode.y0,
+      });
+    });
+
+    const t = cell
+      .transition()
+      .duration(750)
+      .attr(
+        "transform",
+        (d) => `translate(${positionMap.get(d).y0},${positionMap.get(d).x0})`
+      );
+
+    rect.transition(t).attr("height", (d) => rectHeight(positionMap.get(d)));
+    text
+      .transition(t)
+      .attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)));
+    tspan
+      .transition(t)
+      .attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)) * 0.7);
+  });
 };
 
 const destroyIcicleTree = ($target: RefObject<SVGSVGElement>) => {
