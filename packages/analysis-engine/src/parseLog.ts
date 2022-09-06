@@ -88,6 +88,7 @@ export default function parseToJSON(log: string) {
           deletionCount: numberedDeletion,
         };
       }
+      return false;
     });
   }
 
