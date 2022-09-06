@@ -5,29 +5,25 @@
         "ecmaVersion": 6,
         "sourceType": "module"
     },
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "rules": {
-        "max-len": ["warn", {
-            "code": 160,
-            "tabWidth": 4,
-            "ignoreStrings": true
-        }],
+        "max-len": [
+            "warn",
+            {
+                "code": 160,
+                "tabWidth": 4,
+                "ignoreStrings": true
+            }
+        ],
         "quotes": "off",
         "semi": "off",
         "eqeqeq": "warn",
-		"@typescript-eslint/no-empty-function": "off"
+        "@typescript-eslint/no-empty-function": "off"
         // "@typescript-eslint/naming-convention": "warn",
         // "@typescript-eslint/semi": "warn",
         // "curly": "warn",
         // "no-throw-literal": "warn",
     },
     "extends": ["plugin:@typescript-eslint/recommended"],
-    "ignorePatterns": [
-        "out",
-        "dist",
-        "**/*.d.ts",
-        "webpack*"
-    ]
+    "ignorePatterns": ["out", "dist", "**/*.d.ts", "webpack*"]
 }
