@@ -30,13 +30,23 @@ export function getStemNodes(
   return nodes;
 }
 
+function compareCommitPriority(a: CommitNode, b: CommitNode): number {
+  // branches 값 존재하는 노드 => leaf / main / HEAD 노드.
+  // 이 노드는 큐에 들어올 때 순서가 정해져 있기 때문에 순서를 바꾸지 않음.
+  if (a.commit.branches.length || b.commit.branches.length) {
+    return 0;
+  }
+  // 나중에 커밋된 것을 먼저 담기
+  return (
+    new Date(b.commit.committerDate).getTime() -
+    new Date(a.commit.committerDate).getTime()
+  );
+}
+
 export function buildStemDict(
   commitDict: Map<string, CommitNode>
 ): Map<string, Stem> {
-  const stemDict = new Map<string, Stem>();
-
-  const q = new Queue<CommitNode>();
-  q.push.bind(q);
+  const q = new Queue<CommitNode>(compareCommitPriority);
 
   /**
    * 처음 큐에 담기는 순서
@@ -44,6 +54,7 @@ export function buildStemDict(
    * 2. sub-branches
    * 3. HEAD
    */
+  const stemDict = new Map<string, Stem>();
   const leafNodes = getLeafNodes(commitDict);
   const mainNode = leafNodes.find(
     (node) =>

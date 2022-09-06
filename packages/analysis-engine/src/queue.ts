@@ -1,9 +1,15 @@
 export default class Queue<T> {
   private queue: Array<T> = [];
 
+  private readonly compareFn: (a: T, b: T) => number;
+
+  constructor(compareFn: (a: T, b: T) => number) {
+    this.compareFn = compareFn;
+  }
+
   push(node: T): void {
     this.queue.push(node);
-    this.queue.sort();
+    this.queue.sort(this.compareFn);
   }
 
   pop(): T | undefined {
