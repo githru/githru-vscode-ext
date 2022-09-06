@@ -1,6 +1,6 @@
-import type { GlobalProps } from "types/global";
+import type { CommitNode } from "../TemporalFilter.type";
 
-const ClocLineChart = ({ data }: GlobalProps) => {
+const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   console.log(data);
   return <>ClocLineChart</>;
 };
