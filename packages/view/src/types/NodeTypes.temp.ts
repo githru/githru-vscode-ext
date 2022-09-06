@@ -41,7 +41,7 @@ export type Commit = {
   authorDate: Date;
   commitDate: Date;
   diffStatistics: DiffStatistics;
-
+  message: string;
   // fill necessary properties...
 };
 
@@ -63,7 +63,7 @@ export type CommitNode = NodeBase & {
   nodeTypeName: "COMMIT";
   commit: Commit;
   seq: number;
-
+  taskId: number; // 동일한 Cluster 내부 commit 참조 id
   hasMajorTag: boolean;
   hasMinorTag: boolean;
   isMergeCommit: boolean;

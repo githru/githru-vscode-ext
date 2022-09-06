@@ -1,4 +1,4 @@
-import type { GlobalProps } from "types/global";
+import type { GlobalProps } from "types";
 
 import { ClocLineChart } from "./ClocLineChart";
 import { CommitLineChart } from "./CommitLineChart";
