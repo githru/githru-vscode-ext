@@ -1,10 +1,21 @@
-import type { GlobalProps } from "types";
+import type { GlobalProps } from "types/global";
+
+import { ClocLineChart } from "./ClocLineChart";
+import { CommitLineChart } from "./CommitLineChart";
+import { Filter } from "./Filter";
+import { sortBasedOnCommitNode } from "./TemporalFilter.util";
 
 const TemporalFilter = ({ data }: GlobalProps) => {
-  if (!data) {
-    console.log(data);
-  }
-  return <div className="temporal-filter">TemporalFilter</div>;
+  console.log(data);
+  const sortedData = sortBasedOnCommitNode(data);
+
+  return (
+    <>
+      <Filter />
+      <ClocLineChart data={sortedData} />
+      <CommitLineChart data={sortedData} />
+    </>
+  );
 };
 
 export default TemporalFilter;
