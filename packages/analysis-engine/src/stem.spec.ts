@@ -3,7 +3,7 @@ import { buildStemDict } from "./stem";
 import { CommitNode } from "./types/CommitNode";
 import { CommitRaw } from "./types/CommitRaw";
 
-const dummy = [
+const dummy: Pick<CommitRaw, "id" | "parents" | "branches">[] = [
   { id: "1", parents: [], branches: [] },
   { id: "2", parents: ["1"], branches: [] },
   { id: "3", parents: ["2", "8"], branches: [] },

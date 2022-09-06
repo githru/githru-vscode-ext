@@ -3,7 +3,7 @@ export default class Queue<T> {
 
   push(node: T): void {
     this.queue.push(node);
-    this.queue = this.queue.sort();
+    this.queue.sort();
   }
 
   pop(): T | undefined {

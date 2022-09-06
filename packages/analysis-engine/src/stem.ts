@@ -3,30 +3,18 @@ import Queue from "./queue";
 import { CommitNode } from "./types/CommitNode";
 import { Stem } from "./types/Stem";
 
-function generateStem(stemNodes: CommitNode[]): Stem {
-  const tail = stemNodes[0];
-  return {
-    id: tail?.stemId ?? tail?.commit.id,
-    headId: stemNodes[stemNodes.length - 1].commit.id,
-    tailId: tail?.commit.id,
-    nodes: stemNodes,
-  };
-}
-
 export function getStemNodes(
   tailId: string,
   commitDict: Map<string, CommitNode>,
   q: Queue<CommitNode>,
-  implicitBranchCount: number
+  stemId: string
 ): CommitNode[] {
-  let now: CommitNode | undefined = commitDict.get(tailId);
-  const stemId: string =
-    now?.commit.branches[0] ?? `implicit-${implicitBranchCount}`;
+  let now = commitDict.get(tailId);
+  if (!now) return [];
 
   const nodes: CommitNode[] = [];
-  while (now && !now.traversed) {
+  while (now && !now.stemId) {
     now.stemId = stemId;
-    now.traversed = true;
     if (now.commit.parents.length > 1) {
       now.commit.parents.forEach((parent, idx) => {
         if (idx === 0) return;
@@ -75,23 +63,23 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  let implicitBranchCount = 1;
+  let implicitBranchNumber = 1;
 
   while (!q.isEmpty()) {
     const tail = q.pop();
     if (!tail) continue;
-    const nodes = getStemNodes(
-      tail.commit.id,
-      commitDict,
-      q,
-      implicitBranchCount
-    );
+
+    const stemId =
+      tail.commit.branches[0] ?? `implicit-${implicitBranchNumber}`;
     if (tail.commit.branches.length === 0) {
-      implicitBranchCount += 1;
+      implicitBranchNumber += 1;
     }
+
+    const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
     if (nodes.length === 0) continue;
-    const stem: Stem = generateStem(nodes);
-    stemDict.set(stem.id, stem);
+
+    const stem: Stem = { nodes };
+    stemDict.set(stemId, stem);
   }
 
   return stemDict;
