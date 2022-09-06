@@ -3,16 +3,17 @@ import type { GlobalProps } from "types/global";
 import { ClocLineChart } from "./ClocLineChart";
 import { CommitLineChart } from "./CommitLineChart";
 import { Filter } from "./Filter";
+import { sortBasedOnCommitNode } from "./TemporalFilter.util";
 
 const TemporalFilter = ({ data }: GlobalProps) => {
   console.log(data);
-  const refinedData = data; // 정제해야하는 데이터
+  const sortedData = sortBasedOnCommitNode(data);
 
   return (
     <>
       <Filter />
-      <ClocLineChart data={refinedData} />
-      <CommitLineChart data={refinedData} />
+      <ClocLineChart data={sortedData} />
+      <CommitLineChart data={sortedData} />
     </>
   );
 };
