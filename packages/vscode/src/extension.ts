@@ -3,12 +3,10 @@ import * as vscode from "vscode";
 import { COMMAND_LAUNCH } from "./commands";
 import WebviewLoader from "./webview-loader";
 
-
 let myStatusBarItem: vscode.StatusBarItem;
 
-
 export function activate(context: vscode.ExtensionContext) {
-    const { subscriptions } = context; 
+    const { subscriptions } = context;
 
     console.log('Congratulations, your extension "githru" is now active!');
 
@@ -29,7 +27,6 @@ export function activate(context: vscode.ExtensionContext) {
     // update status bar item once at start
     myStatusBarItem.show();
 }
-
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
