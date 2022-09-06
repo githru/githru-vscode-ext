@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
     subscriptions.push(disposable);
 
-    myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
     myStatusBarItem.text = "githru";
     myStatusBarItem.command = COMMAND_LAUNCH;
     subscriptions.push(myStatusBarItem);
