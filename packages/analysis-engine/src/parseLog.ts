@@ -11,7 +11,6 @@ function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
 export default function parseToJSON(log: string) {
   // line 별로 분리하기
   const splitByNewLine = log.split(/\r?\n/);
-
   // 분리한 것들을 쭉 돌면서 각 카테고리별로 담을 예정
   const ids: string[] = [];
   const parents: string[][] = [];
@@ -56,9 +55,9 @@ export default function parseToJSON(log: string) {
           }
           branchAndTagsInfos.split(",").forEach((eachInfo) => {
             if (eachInfo.trim().slice(0, 4) === "tag:") {
-              tags[commitIdx].push(eachInfo.replace("tag: ", ""));
+              tags[commitIdx].push(eachInfo.replace("tag: ", "").trim());
             } else {
-              branches[commitIdx].push(eachInfo.replace(")", ""));
+              branches[commitIdx].push(eachInfo.replace(")", "").trim());
             }
           });
         }
