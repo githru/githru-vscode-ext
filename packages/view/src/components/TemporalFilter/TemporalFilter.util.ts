@@ -5,12 +5,12 @@ import type { ClusterNode } from "types/NodeTypes.temp";
 
 import type { CommitNode } from "./TemporalFilter.type";
 
-export function filterData(data: ClusterNode[]): any {
+export function filterData(
+  data: ClusterNode[]
+): [string, { cloc: number; commit: number }][] {
   const dateMap = new Map();
 
   data.forEach((cluster) => {
-    const commitLength = cluster.commitNodeList.length;
-
     cluster.commitNodeList
       .filter((commitNode) => commitNode.nodeTypeName === "COMMIT")
       .forEach((commitNode) => {
@@ -26,7 +26,7 @@ export function filterData(data: ClusterNode[]): any {
         const mapItem = dateMap.get(formattedCommitDate) || {};
 
         mapItem.cloc = mapItem.cloc + cloc || cloc;
-        mapItem.commit = mapItem.commit + commitLength || commitLength;
+        mapItem.commit = mapItem.commit + 1 || 1;
 
         dateMap.set(formattedCommitDate, mapItem);
       });
