@@ -1,7 +1,39 @@
 // import type { GlobalProps } from "types/global";
+import dayjs from "dayjs";
+
 import type { ClusterNode } from "types/NodeTypes.temp";
 
 import type { CommitNode } from "./TemporalFilter.type";
+
+export function filterData(data: ClusterNode[]): any {
+  const dateMap = new Map();
+
+  data.forEach((cluster) => {
+    const commitLength = cluster.commitNodeList.length;
+
+    cluster.commitNodeList
+      .filter((commitNode) => commitNode.nodeTypeName === "COMMIT")
+      .forEach((commitNode) => {
+        // 날짜 계산
+        const { commitDate } = commitNode.commit;
+        const formattedCommitDate = dayjs(commitDate).format("YYYY MM DD");
+
+        // cloc 계산
+        const { insertions, deletions } = commitNode.commit.diffStatistics;
+        const cloc = insertions + deletions;
+
+        // mapItem 만들기
+        const mapItem = dateMap.get(formattedCommitDate) || {};
+
+        mapItem.cloc = mapItem.cloc + cloc || cloc;
+        mapItem.commit = mapItem.commit + commitLength || commitLength;
+
+        dateMap.set(formattedCommitDate, mapItem);
+      });
+  });
+
+  return Array.from(dateMap.entries()).sort((a, b) => dayjs(a[0]).diff(b[0]));
+}
 
 export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
   console.log(data);
