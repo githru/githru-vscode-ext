@@ -1,3 +1,4 @@
+/* eslint-disable */
 export * from "./Detail";
 export * from "./Statistics";
 export * from "./TemporalFilter";

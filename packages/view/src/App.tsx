@@ -1,9 +1,11 @@
-import {
-  // VerticalClusterList,
-  TemporalFilter,
-  // Statistics,
-  // Detail,
-} from "components";
+// import {
+//   // VerticalClusterList,
+//   TemporalFilter,
+//   // Statistics,
+//   // Detail,
+// } from "components";
+
+import TemporalFilter from "./components/TemporalFilter/TemporalFilter";
 
 import { useGetTotalData } from "./App.hook";
 import "./App.scss";

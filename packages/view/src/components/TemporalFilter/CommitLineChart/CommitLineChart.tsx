@@ -2,15 +2,17 @@
 import { useEffect, useRef } from "react";
 import { select } from "d3";
 
-import type { ClusterNode } from "types/NodeTypes.temp";
+// import type { ClusterNode } from "types/NodeTypes.temp";
+import type { CommitNode } from "../Type/TemporalFilter.type";
 
 import { CommitNum } from "./CommitUtil";
+// import { sortBasedOnCommitNode } from "../TemporalFilter.util";
 // , TotalCommit
-type CommitGraphProps = {
-  data: ClusterNode[];
-};
+// type CommitGraphProps = {
+//   data: ClusterNode[];
+// };
 
-const CommitLineChart = ({ data }: CommitGraphProps) => {
+const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
   const svgRef = useRef(null);
   const width = 600;
   const height = 150;
