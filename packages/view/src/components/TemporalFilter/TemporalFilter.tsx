@@ -1,21 +1,18 @@
-// import { useEffect } from "react";
-// // import type { GlobalProps } from "types/global";
-// import * as d3 from "d3";
-// import type { CommitRaw } from "types/NodeTypes.temp";
-// { data }: GlobalProps
-// console.log(data);
-// commitDate 하나는 이렇게 뽑아냄
-// console.log(data[7].commitNodeList[0].commit.commitDate);
-import ClocChart from "./Clocchart";
-import CommitChart from "./CommitChart";
+import type { GlobalProps } from "types/global";
 
-const TemporalFilter = () => {
+import { ClocLineChart } from "./ClocLineChart";
+import { CommitLineChart } from "./CommitLineChart";
+
+const TemporalFilter = ({ data }: GlobalProps) => {
+  // console.log(data);
+  // return <>TemporalFilter</>;
+  const refinedData = data; // 정제해야하는 데이터
+
   return (
-    <div>
-      <ClocChart />
-      <br />
-      <CommitChart />
-    </div>
+    <>
+      <ClocLineChart data={refinedData} />
+      <CommitLineChart data={refinedData} />
+    </>
   );
 };
 

@@ -1,10 +1,14 @@
 // import type { GlobalProps } from "types/global";
-import * as d3 from "d3";
+// import type { FilterDataType } from "./Filtertype";
 // { data }: GlobalProps
-const ClocChart = () => {
+import * as d3 from "d3";
+
+const Graph = () => {
+  //   console.log(data[1].commit.commitDate);
+  //   console.log(data[7].commit.commitDate);
   const width = 600;
   const height = 150;
-  const title = "ClocGraph";
+  const title = "CommitGraph";
   // const [data, setData] = useState([]);
 
   // const svgRef = useRef();
@@ -28,4 +32,4 @@ const ClocChart = () => {
   return <div>{title}</div>;
 };
 
-export default ClocChart;
+export default Graph;

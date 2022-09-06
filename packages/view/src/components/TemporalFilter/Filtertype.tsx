@@ -1,5 +1,5 @@
 export type FilterDataType = {
-  CommitNum: number;
+  Commit: number;
   commitDate: number;
   insertion: number;
   deletion: number;
