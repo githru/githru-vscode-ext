@@ -8,6 +8,7 @@ const git = spawn("git", [
   "--numstat",
   "--date-order",
   "--pretty=fuller",
+  "--decorate",
   "-c",
 ]);
 
