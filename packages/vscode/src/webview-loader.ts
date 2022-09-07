@@ -1,18 +1,15 @@
 import { getStringifiedMockData } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import * as path from "path";
-export default class WebviewLoader {
+export default class WebviewLoader implements vscode.Disposable {
     private readonly _panel: vscode.WebviewPanel | undefined;
-    private fileName: string;
     private fsPath: string;
 
     constructor(private readonly fileUri: vscode.Uri, private readonly extensionPath: string, data: string) {
         const viewColumn = vscode.ViewColumn.One;
-
         this.fsPath = fileUri.fsPath;
-        this.fileName = path.basename(this.fsPath);
 
-        this._panel = vscode.window.createWebviewPanel("WebviewLoader", "webview", viewColumn, {
+        this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
             enableScripts: true,
             retainContextWhenHidden: true,
             localResourceRoots: [vscode.Uri.file(path.join(this.extensionPath, "dist"))],
@@ -23,6 +20,10 @@ export default class WebviewLoader {
         );
 
         this._panel.webview.html = this.getWebviewContent(data);
+    }
+
+    dispose() {
+        this._panel?.dispose();
     }
 
     private async respondToMessage(message: { command: string; payload: unknown }) {
