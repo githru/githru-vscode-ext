@@ -27,6 +27,7 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
     <td align="center"><a href="https://pshdev1030.github.io/"><img src="https://avatars.githubusercontent.com/u/79688915?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Parksunghyeon</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=pshdev1030" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/wherehows"><img src="https://avatars.githubusercontent.com/u/81841082?v=4?s=100" width="100px;" alt=""/><br /><sub><b>edward</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=wherehows" title="Code">💻</a></td>
     <td align="center"><a href="https://jeonghye.blog"><img src="https://avatars.githubusercontent.com/u/54584063?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeonghye Choi</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=jeonghye-choi" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/taejs"><img src="https://avatars.githubusercontent.com/u/41318449?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tae</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=taejs" title="Code">💻</a></td>
   </tr>
 </table>
 
