@@ -85,7 +85,6 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "d3": "^7.6.1",
-    "dayjs": "^1.11.5",
     "nanoid": "^4.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
