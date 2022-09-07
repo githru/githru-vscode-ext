@@ -1,6 +1,5 @@
-import type { RefObject } from "react";
+import type { MouseEvent, RefObject } from "react";
 import { useEffect, useRef } from "react";
-import type { Selection } from "d3";
 import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
@@ -15,10 +14,9 @@ import {
   SVG_MARGIN,
   SVG_WIDTH,
 } from "./ClusterGraph.const";
+import type { SVGElementSelection } from "./ClusterGraph.type";
 
-const drawClusterBox = (
-  container: Selection<SVGGElement, number, SVGSVGElement | null, unknown>
-) => {
+const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
     .append("rect")
     .attr("class", "cluster-box")
@@ -28,9 +26,7 @@ const drawClusterBox = (
     .attr("y", (_, i) => SVG_MARGIN.bottom + i * (NODE_GAP + COMMIT_HEIGHT));
 };
 
-const drawDegreeBox = (
-  container: Selection<SVGGElement, number, SVGSVGElement | null, unknown>
-) => {
+const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
   const widthScale = d3.scaleLinear().range([0, GRAPH_WIDTH]).domain([0, 10]);
 
   container
@@ -48,7 +44,7 @@ const drawDegreeBox = (
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
   data: ClusterNode[],
-  onClickCluster: (this: SVGGElement, event: any, d: number) => void
+  onClickCluster: (this: SVGGElement, event: MouseEvent, d: number) => void
 ) => {
   const group = d3
     .select(svgRef.current)
