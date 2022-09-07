@@ -63,30 +63,19 @@
     @include animation();
     background-color: $gray-200 !important;
     color: $black !important;
-
-    &:first-child {
-      margin-right: 10px;
-    }
+    z-index: 9999;
   }
 
   &:nth-child(2n){
     &:hover {
       @include animation();
-      margin-right: 10px;
-    }
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
-    &:last-child {
-      margin-right: 0px;
+      z-index: 9999;
     }
   }
 
   &:nth-child(3n):hover {
     @include animation();
-    margin-right: 10px;
+    z-index: 9999;
   }
 }
 
