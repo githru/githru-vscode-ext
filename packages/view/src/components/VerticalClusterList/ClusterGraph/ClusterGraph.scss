@@ -1,13 +1,23 @@
-.cluster-graph-container {
-  rx: 10;
-  ry: 10;
-  stroke-width: 1;
-  stroke: black;
-  fill: transparent;
-}
+.cluster-container {
+  .cluster-box {
+    rx: 10;
+    ry: 10;
+    stroke-width: 1;
+    stroke: rgb(13, 71, 161, 0.4);
+    fill: transparent;
+  }
 
-.degree-box {
-  rx: 10;
-  ry: 10;
-  fill: rgba(0, 0, 0, 0.2);
+  .degree-box {
+    rx: 10;
+    ry: 10;
+    fill: rgb(13, 71, 161, 0.4);
+  }
+
+  &:hover {
+    .cluster-box {
+      stroke-width: 3;
+    }
+  }
+
+  cursor: pointer;
 }
