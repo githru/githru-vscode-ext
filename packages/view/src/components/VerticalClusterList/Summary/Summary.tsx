@@ -13,13 +13,10 @@ const Summary = ({ data }: GlobalProps) => {
   return (
     <div className="entire">
       {info.map((cluster: Cluster) => {
-        const nameBoxId = nanoid();
-        const keywordsId = nanoid();
-
         return (
           <div className="cluster" key={cluster.clusterId}>
-            <p className="summary" key={cluster.summary.summaryId}>
-              <span className="nameBox" key={nameBoxId}>
+            <p className="summary">
+              <span className="nameBox">
                 {cluster.summary.authorNames.map(
                   (authorArray: Array<string>) => {
                     return authorArray.map((authorName: string) => {
@@ -38,7 +35,7 @@ const Summary = ({ data }: GlobalProps) => {
                   }
                 )}
               </span>
-              <span className="keywords" key={keywordsId}>
+              <span className="keywords">
                 {cluster.summary.keywords.map((keyword: Keyword) => {
                   let size = "";
 
