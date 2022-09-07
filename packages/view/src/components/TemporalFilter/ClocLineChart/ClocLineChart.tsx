@@ -31,14 +31,13 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     .scaleLinear()
     .domain(data.map((_d) => counts[10]))
     .range([height - margin.bottom, margin.top]);
- const yAxis = d3.axisLeft(y);
-
+  const yAxis = d3.axisLeft(y);
+  // .append('g').call(xAxis);
+  // .append('g').call(yAxis);
   useEffect(() => {
     select(svgRef.current)
       .selectAll("rect")
       .data(counts)
-      // .append('g').call(xAxis);
-      // .append('g').call(yAxis);
       .enter()
       .append("rect")
       .attr("width", width)
