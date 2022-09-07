@@ -46,17 +46,19 @@ const drawDegreeBox = (
 
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
-  data: ClusterNode[]
+  data: ClusterNode[],
+  onClickCluster: (this: SVGGElement, event: any, d: number) => void
 ) => {
   const clusterSizes = getClusterSizes(data);
   const maxOfClusterSize = Math.max(...clusterSizes);
 
   const group = select(svgRef.current)
-    .selectAll("g")
+    .selectAll(".cluster-container")
     .data(clusterSizes)
     .enter()
     .append("g")
-    .attr("class", "cluster-container");
+    .attr("class", "cluster-container")
+    .on("click", onClickCluster);
 
   drawClusterBox(group);
   drawDegreeBox(group, maxOfClusterSize);
@@ -75,8 +77,13 @@ const ClusterGraph = ({ data }: ClusterGraphProps) => {
   const clusterSizes = getClusterSizes(data);
   const graphHeight = getGraphHeight(clusterSizes);
 
+  const handleClickCluster = () => {
+    // for solving lint error (@typescript-eslint/no-empty-function)
+    console.log("cluster click");
+  };
+
   useEffect(() => {
-    drawClusterGraph(svgRef, data);
+    drawClusterGraph(svgRef, data, handleClickCluster);
 
     return () => {
       destroyClusterGraph(svgRef);
