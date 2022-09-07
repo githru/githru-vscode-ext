@@ -18,8 +18,8 @@ export type Commit = {
   id: string;
   author: GitHubUser;
   committer: GitHubUser;
-  authorDate: string;
-  commitDate: string;
+  authorDate: Date;
+  commitDate: Date;
   diffStatistics: DiffStatistics;
 };
 
