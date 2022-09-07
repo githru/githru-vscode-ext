@@ -8,6 +8,7 @@ const WIDTH = 600;
 const HEIGHT = 400;
 const FONT_SIZE = 10;
 const MAX_DEPTH = 4;
+const SINGLE_RECT_WIDTH = WIDTH / MAX_DEPTH;
 const LABEL_VISIBLE_HEIGHT = 16;
 const COLOR_CODE = {
   dir: "#ffcc80",
@@ -66,7 +67,7 @@ const drawIcicleTree = async (
     .data(root.descendants())
     .join("g")
     // Hide root node
-    .attr("transform", (d) => `translate(${d.y0},${d.x0})`);
+    .attr("transform", (d) => `translate(${d.y0 - SINGLE_RECT_WIDTH},${d.x0})`);
 
   // Draw rect of partition
   const rect = cell
@@ -106,13 +107,14 @@ const drawIcicleTree = async (
     }
 
     focus = targetNode;
+    const isRootFocused = focus.depth === 0;
 
     root.each((d) => {
       positionMap.set(d, {
         x0: ((d.x0 - targetNode.x0) / (targetNode.x1 - targetNode.x0)) * HEIGHT,
         x1: ((d.x1 - targetNode.x0) / (targetNode.x1 - targetNode.x0)) * HEIGHT,
-        y0: d.y0 - targetNode.y0,
-        y1: d.y1 - targetNode.y0,
+        y0: d.y0 - targetNode.y0 - (isRootFocused ? SINGLE_RECT_WIDTH : 0),
+        y1: d.y1 - targetNode.y0 - (isRootFocused ? SINGLE_RECT_WIDTH : 0),
       });
     });
 
