@@ -5,7 +5,7 @@ import { select } from "d3";
 // import type { ClusterNode } from "types/NodeTypes.temp";
 import type { CommitNode } from "../Type/TemporalFilter.type";
 
-import { CommitNum } from "./CommitUtil";
+import { CommitNum } from "./CommitLineChart.util";
 // import { sortBasedOnCommitNode } from "../TemporalFilter.util";
 // , TotalCommit
 // type CommitGraphProps = {

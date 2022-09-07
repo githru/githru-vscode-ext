@@ -1,6 +1,6 @@
 // import type { ClusterNode } from "types/NodeTypes.temp";
 // import type { CommitType } from "./CommitType";
-import { CommitH } from "./Const";
+import { CommitH } from "./CommitLineChart.const";
 import type { CommitNode } from "../Type/TemporalFilter.type";
 // import { CommitType } from "./CommitType";
 
