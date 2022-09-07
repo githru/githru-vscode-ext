@@ -18,11 +18,6 @@
   border-radius: $border--radius;
 }
 
-// body {
-//     background-color: #fff;
-//     color: #222
-// }
-
 .entire {
   width: 85%;
   margin-left: 20px;
@@ -32,10 +27,9 @@
   align-items: center;
   width: 85%;
   padding-top: 10px;
-  padding-bottom: 10px;
 }
 
-.commit {
+.summary {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -46,6 +40,7 @@
 .nameBox {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .name {
@@ -55,19 +50,43 @@
   width: 30px;
   height: 30px;
   font-weight: bold;
-  background-color: $blue-light-A700;
-  color: white;
+  
+  color: $white;
   justify-content: center;
   align-items: center;
   text-align: center;
   font-size: 15pt;
-
-  &::after {
-    @include animation();
-  }
+  margin-left: -5px;
+  margin-right: -5px;
 
   &:hover {
-    background-color: $blue-light-A200;
+    @include animation();
+    background-color: $gray-200 !important;
+    color: $black !important;
+
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+
+  &:nth-child(2n){
+    &:hover {
+      @include animation();
+      margin-right: 10px;
+    }
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+
+  &:nth-child(3n):hover {
+    @include animation();
+    margin-right: 10px;
   }
 }
 
@@ -78,9 +97,7 @@
 
   &::after {
     @include animation();
-
     @include shadow();
-
     @include border(5px);
 
     content: attr(data-tooltip-text);
@@ -103,15 +120,46 @@
 
   &:hover::after {
     left: 100%;
-    background-color: rgba(0, 119, 170, 0.8);
+    background-color: rgba(34, 34, 34, 0.8);
     opacity: 1;
   }
 }
 
-.message {
+.keywords {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 15px;
+}
+
+.keyword {
+  margin-left: 5px;
+  margin-right: 5px;
+
+  &:hover {
+    @include animation();
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &.large {
+    font-size: 18pt;
+    font-weight: 900;
+
+    &:hover {
+      @include animation();
+      cursor: pointer;
+    }
+  }
+
+  &.medium {
+    font-size: 16pt;
+    font-weight: 700;
+    
+    &:hover {
+      @include animation();
+      cursor: pointer;
+    }
+  }
 }
