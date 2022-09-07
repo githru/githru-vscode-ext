@@ -2,7 +2,7 @@ import type { GlobalProps } from "types/global";
 
 import { getCommitListDetail, getCommitListInCluster } from "./Detail.util";
 
-const TARGET_CLUSTER_ID = 2433;
+const TARGET_CLUSTER_ID = 2435;
 
 const Detail = ({ data }: GlobalProps) => {
   const commitNodeListInCluster = getCommitListInCluster({

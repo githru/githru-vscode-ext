@@ -53,9 +53,6 @@ const getChangeFileLength = ({
   return getDataSetSize(commitNodeListInCluster, fn);
 };
 
-const numAddCommar = (num: number) =>
-  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
 type ObjAddCommarProps = {
   authorLength: number;
   fileLength: number;
@@ -68,7 +65,7 @@ const objAddCommar = (obj: ObjAddCommarProps): ObjAddCommarReturn =>
   Object.entries(obj).reduce((acc, [k, v]) => {
     return {
       ...acc,
-      [k]: numAddCommar(v),
+      [k]: v.toLocaleString("en"),
     };
   }, {}) as ObjAddCommarReturn;
 
