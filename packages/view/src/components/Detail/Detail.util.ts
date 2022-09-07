@@ -28,7 +28,7 @@ const getCommitListAuthorLength = ({
   commitNodeListInCluster,
 }: GetCommitListAuthorLength) => {
   const fn =
-    (set: Set<unknown>) =>
+    (set: Set<string>) =>
     ({
       commit: {
         author: { names },
@@ -43,7 +43,7 @@ const getChangeFileLength = ({
   commitNodeListInCluster,
 }: GetChangeFileLength) => {
   const fn =
-    (set: Set<unknown>) =>
+    (set: Set<string>) =>
     ({
       commit: {
         diffStatistics: { files },
