@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid";
-
 import type { GlobalProps, CommitNode } from "types";
 
 import type { Cluster } from "./Summary.type";
@@ -11,7 +9,6 @@ export function getInitData({ data }: GlobalProps) {
     const cluster: Cluster = {
       clusterId: clusterNode.commitNodeList[0].taskId,
       summary: {
-        summaryId: nanoid(),
         authorNames: [],
         keywords: [],
       },

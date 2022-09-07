@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid";
-
 import type { GlobalProps } from "types";
 
 import type { Cluster, Keyword } from "./Summary.type";
@@ -8,11 +6,11 @@ import { getColorValue, getInitData } from "./Summary.util";
 import "./Summary.scss";
 
 const Summary = ({ data }: GlobalProps) => {
-  const info = getInitData({ data });
+  const clusters = getInitData({ data });
 
   return (
     <div className="entire">
-      {info.map((cluster: Cluster) => {
+      {clusters.map((cluster: Cluster) => {
         return (
           <div className="cluster" key={cluster.clusterId}>
             <p className="summary">
@@ -36,21 +34,19 @@ const Summary = ({ data }: GlobalProps) => {
                 )}
               </span>
               <span className="keywords">
-                {cluster.summary.keywords.map((keyword: Keyword) => {
+                {cluster.summary.keywords.map((keywordObj: Keyword) => {
                   let size = "";
 
-                  if (keyword.count > 6) size = "large";
-                  else if (keyword.count > 3) size = "medium";
+                  if (keywordObj.count > 6) size = "large";
+                  else if (keywordObj.count > 3) size = "medium";
                   else size = "small";
-
-                  const keywordId = nanoid();
 
                   return (
                     <span
                       className={["keyword", size].join(" ")}
-                      key={keywordId}
+                      key={keywordObj.keyword}
                     >
-                      {keyword.keyword}
+                      {keywordObj.keyword}
                     </span>
                   );
                 })}

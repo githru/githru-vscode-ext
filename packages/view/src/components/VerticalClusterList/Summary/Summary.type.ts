@@ -4,7 +4,6 @@ export type Keyword = {
 };
 
 export type Summary = {
-  summaryId: string;
   authorNames: Array<Array<string>>;
   keywords: Array<Keyword>;
 };
