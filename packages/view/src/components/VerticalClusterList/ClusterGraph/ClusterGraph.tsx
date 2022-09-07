@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 import type { Selection } from "d3";
-import { select } from "d3";
+import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
 
@@ -29,17 +29,24 @@ const drawClusterBox = (
 };
 
 const drawDegreeBox = (
-  container: Selection<SVGGElement, number, SVGSVGElement | null, unknown>,
-  maxOfClusterSize: number
+  container: Selection<SVGGElement, number, SVGSVGElement | null, unknown>
 ) => {
+  const blockHeightScale = d3
+    .scaleLinear()
+    .range([0, GRAPH_WIDTH])
+    .domain([0, 10]);
+
   container
     .append("rect")
     .attr("class", "degree-box")
-    .attr("width", (d) => GRAPH_WIDTH * (d / maxOfClusterSize))
+    .attr("width", (d) => blockHeightScale(Math.min(d, 10)))
     .attr("height", COMMIT_HEIGHT)
     .attr(
       "x",
-      (d) => (GRAPH_WIDTH * (1 - d / maxOfClusterSize)) / 2 + SVG_MARGIN.left
+      (d) =>
+        SVG_MARGIN.left +
+        GRAPH_WIDTH / 2 -
+        blockHeightScale(Math.min(d, 10)) / 2
     )
     .attr("y", (_, i) => SVG_MARGIN.bottom + i * (NODE_GAP + COMMIT_HEIGHT));
 };
@@ -50,9 +57,9 @@ const drawClusterGraph = (
   onClickCluster: (this: SVGGElement, event: any, d: number) => void
 ) => {
   const clusterSizes = getClusterSizes(data);
-  const maxOfClusterSize = Math.max(...clusterSizes);
 
-  const group = select(svgRef.current)
+  const group = d3
+    .select(svgRef.current)
     .selectAll(".cluster-container")
     .data(clusterSizes)
     .enter()
@@ -61,11 +68,11 @@ const drawClusterGraph = (
     .on("click", onClickCluster);
 
   drawClusterBox(group);
-  drawDegreeBox(group, maxOfClusterSize);
+  drawDegreeBox(group);
 };
 
 const destroyClusterGraph = (target: RefObject<SVGElement>) => {
-  select(target.current).selectAll("svg").remove();
+  d3.select(target.current).selectAll("svg").remove();
 };
 
 type ClusterGraphProps = {
