@@ -1,10 +1,17 @@
-import type { GlobalProps } from "types";
+import React from "react";
+
+import type { GlobalProps, SelectedDataProps } from "types";
 
 import "./VerticalClusterList.scss";
 import { ClusterGraph } from "./ClusterGraph";
 import { Summary } from "./Summary";
 
-const VerticalClusterList = ({ data }: GlobalProps) => {
+type Props = GlobalProps & {
+  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
+};
+
+const VerticalClusterList = ({ data, setSelectedData }: Props) => {
+  console.log(setSelectedData);
   return (
     <div className="vertical-cluster-list">
       <ClusterGraph data={data} />

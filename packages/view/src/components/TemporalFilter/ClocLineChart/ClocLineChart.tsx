@@ -1,69 +1,76 @@
+import {
+  axisBottom,
+  axisLeft,
+  extent,
+  scaleBand,
+  scaleLinear,
+  scaleTime,
+  select,
+  ticks,
+  timeTicks,
+} from "d3";
 import { useEffect, useRef } from "react";
-import { select } from "d3";
-import * as d3 from "d3";
 
-// import type { ClusterNode } from "types/NodeTypes.temp";
-import type { CommitNode } from "../Type/TemporalFilter.type";
+import type { CommitNode } from "../TemporalFilter.type";
+import { getCloc, timeFormatter } from "../TemporalFilter.util";
 
-import { getDiffStatisticsArray } from "./ClocLineChart.util";
-// import { CommitNum } from "../CommitLineChart/CommitUtil";
-
-// import type { GlobalProps } from "types/global";
-
-// type ClocGraphProps = {
-//   data: ClusterNode[];
-// };
+// TODO margin 추가하기
 
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
-  const svgRef = useRef(null);
-  const width = 600;
-  const height = 150;
-  const counts = getDiffStatisticsArray(data); // [2, 4, -52, 4]
-  const margin = { top: 20, left: 20, bottom: 20, right: 20 };
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<SVGSVGElement>(null);
 
-  const x = d3
-    .scaleBand()
-    .domain(data.map((d) => d.commit.commitDate))
-    .range([margin.left, width - margin.right]);
-  const xAxis = d3
-  .axisBottom(x).tickFormat((_, i) => x[i]);
-  .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
-
-  const y = d3
-    .scaleLinear()
-    .domain(data.map((_d) => counts[10]))
-    .range([height - margin.bottom, margin.top]);
-  const yAxis = d3.axisLeft(y);
-  // .append('g').call(xAxis);
-  // .append('g').call(yAxis);
   useEffect(() => {
-    select(svgRef.current)
-      .selectAll("rect")
-      .data(counts)
-      .enter()
-      .append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("x", 2)
-      .attr("rx", 10)
-      .attr("ry", 10)
-      .attr("stroke-width", 1)
-      .attr("stroke", "black")
-      .attr("fill", "transparent");
-  }, [counts, data]);
+    if (!wrapperRef.current || !ref.current || !data) return;
 
-  return <svg ref={svgRef} />;
+    const { width, height } = wrapperRef.current.getBoundingClientRect();
+    const svg = select(ref.current).attr("width", width).attr("height", height);
+
+    // TODO cleanup으로 옮기기
+    svg.selectAll("*").remove();
+
+    const xMin = data[0].commit.commitDate;
+    const xMax = data[data.length - 1].commit.commitDate;
+
+    const [yMin, yMax] = extent(data, (d) => getCloc(d)) as [number, number];
+
+    const xScale = scaleTime()
+      .domain([new Date(xMin), new Date(xMax)])
+      .range([0, width]);
+
+    const xScaleBand = scaleBand<Date>()
+      .domain(data.map((commitNode) => commitNode.commit.commitDate))
+      .range([0, width]);
+
+    const xAxis = axisBottom<Date>(xScale)
+      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 10))
+      .tickFormat((d) => timeFormatter(new Date(d)));
+
+    const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
+
+    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 10));
+
+    svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
+
+    svg.append("g").call(yAxis).attr("transform", `translate(${width},0)`);
+
+    svg
+      .selectAll(".cloc")
+      .data(data)
+      .join("rect")
+      .classed("cloc", true)
+      .attr("x", (d) => xScale(new Date(d.commit.commitDate)))
+      .attr("y", (d) => yScale(getCloc(d)))
+      .attr("height", (d) => height - yScale(getCloc(d)))
+      .attr("width", xScaleBand.bandwidth())
+      .attr("fill", "black");
+  }, [data]);
+
+  return (
+    <div ref={wrapperRef}>
+      <svg ref={ref} />
+    </div>
+  );
 };
 
 export default ClocLineChart;
-
-// import type { GlobalProps } from "types/global";
-
-// const ClocLineChart = ({ data }: GlobalProps) => {
-// console.log(data);
-// return <>ClocLineChart</>;
-// };
-
-// export default ClocLineChart;
-
-//
