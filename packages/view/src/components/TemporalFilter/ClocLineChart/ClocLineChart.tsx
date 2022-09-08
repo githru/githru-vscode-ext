@@ -25,7 +25,9 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     .scaleBand()
     .domain(data.map((d) => d.commit.commitDate))
     .range([margin.left, width - margin.right]);
-  const xAxis = d3.axisBottom(x).tickFormat((_, i) => x[i]);
+  const xAxis = d3
+  .axisBottom(x).tickFormat((_, i) => x[i]);
+  .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
 
   const y = d3
     .scaleLinear()
