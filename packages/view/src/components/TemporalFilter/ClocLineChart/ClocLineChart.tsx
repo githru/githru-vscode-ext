@@ -21,7 +21,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!wrapperRef.current || !ref.current) return;
+    if (!wrapperRef.current || !ref.current || !data) return;
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
     const svg = select(ref.current).attr("width", width).attr("height", height);
