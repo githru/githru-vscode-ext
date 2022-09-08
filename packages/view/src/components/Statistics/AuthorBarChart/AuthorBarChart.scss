@@ -1,6 +1,6 @@
 @import "styles/app.scss";
 
-.AuthorBarChartWrap {
+.author-bar-chart-wrap {
   width: 500px;
   background: $gray-900;
   height: 100%;
@@ -10,12 +10,12 @@
   font-size: 20px;
 }
 
-.authorBarChart {
+.author-bar-chart {
   overflow: visible;
   margin: 40px;
 }
 
-.selectBox {
+.select-box {
   background: transparent;
   border: none;
   margin: 50px;
@@ -32,14 +32,14 @@
   font-size: 11px;
 }
 
-.yAxis {
+.y-axis {
   text {
     display: none;
   }
 }
 
-.xAxis {
-  .xAxisLabel {
+.x-axis {
+  .x-axis-label {
     fill: $white;
     font-size: 15px;
   }
