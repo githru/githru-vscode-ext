@@ -1,3 +1,5 @@
+import { timeFormat } from "d3";
+
 import type { ClusterNode } from "types/NodeTypes.temp";
 
 import type { CommitNode } from "./TemporalFilter.type";
@@ -14,3 +16,8 @@ export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
     })
   );
 }
+
+export const getCloc = (d: CommitNode) =>
+  d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
+
+export const timeFormatter = timeFormat("%y-%m-%d");
