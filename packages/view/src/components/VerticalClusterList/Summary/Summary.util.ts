@@ -10,7 +10,7 @@ export function getInitData({ data }: GlobalProps) {
 
   data.map((clusterNode) => {
     const cluster: Cluster = {
-      clusterId: clusterNode.commitNodeList[0].taskId,
+      clusterId: clusterNode.commitNodeList[0].clusterId,
       summary: {
         authorNames: [],
         keywords: [],
@@ -74,8 +74,7 @@ export function getColorValue(name: string) {
   let result = "";
 
   const index =
-    (name[0].charCodeAt(0) + name[1].charCodeAt(0) + name[2].charCodeAt(0)) %
-    colorName.length;
+    (name[0].charCodeAt(0) + name[1].charCodeAt(0)) % colorName.length;
   result = `#${colorName[index]}`;
   colorName.slice(0 + index, index + 1);
 
