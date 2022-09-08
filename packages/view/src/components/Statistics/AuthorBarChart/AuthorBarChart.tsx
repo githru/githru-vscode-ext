@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { StatisticsProps } from "types";
+import type { ClusterNode, StatisticsProps } from "types";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
@@ -16,18 +16,21 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
+  const authorData = getDataByAuthor(rawData as ClusterNode[]);
+  let data = authorData.sort((a, b) => {
+    if (a[metric] === b[metric]) {
+      return sortDataByName(a.name, b.name);
+    }
+    return b[metric] - a[metric];
+  });
+  if (data.length > 10) {
+    data = data.slice(0, 3);
+  }
+
+  console.log(data);
+
   useEffect(() => {
-    const authorData = getDataByAuthor(rawData);
-    const data = authorData.sort((a, b) => {
-      if (a[metric] === b[metric]) {
-        return sortDataByName(a.name, b.name);
-      }
-      return a[metric] - b[metric];
-    });
-    const totalMetricValues = authorData.reduce(
-      (acc, item) => acc + item[metric],
-      0
-    );
+    const totalMetricValues = data.reduce((acc, item) => acc + item[metric], 0);
 
     const svg = d3
       .select(svgRef.current)
@@ -38,9 +41,9 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
 
     const xAxisGroup = svg
       .append("g")
-      .attr("class", "axis xAxis")
+      .attr("class", "axis x-axis")
       .style("transform", `translateY(${DIMENSIONS.height}px)`);
-    const yAxisGroup = svg.append("g").attr("class", "axis yAxis");
+    const yAxisGroup = svg.append("g").attr("class", "axis y-axis");
     const barGroup = svg.append("g").attr("class", "bars");
 
     // Scales
@@ -49,9 +52,9 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const yScale = d3
       .scaleBand()
       .domain(data.map((d) => d.name))
-      .range([DIMENSIONS.height, 0])
-      .paddingInner(data.length / 10)
-      .paddingOuter(0.2)
+      .range([0, DIMENSIONS.height])
+      .paddingInner(data.length === 10 ? 0.1 : 1 - data.length / 10)
+      .paddingOuter(data.length > 5 ? 0.2 : 0.4)
       .align(0.5);
 
     // Axis
@@ -63,7 +66,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
 
     xAxisGroup
       .append("text")
-      .attr("class", "xAxisLabel")
+      .attr("class", "x-axis-label")
       .style(
         "transform",
         `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins}px)`
@@ -79,40 +82,44 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .attr("class", "bar");
 
     bar
-      .append("rect")
-      .attr("x", 1)
-      .attr("y", (d) => yScale(d.name) || null)
       .attr(
         "width",
         (d: AuthorDataType) => xScale(d[metric]) / totalMetricValues
       )
-      .attr("height", yScale.bandwidth());
+      // FIXME 막대 바 y축 위치
+      .attr("height", yScale.bandwidth())
+      .attr("x", 1)
+      .attr("y", (d) => yScale(d.name) || null);
 
     bar
       .append("text")
       .attr("class", "name")
       .attr("x", 5)
-      // FIXME
-      .attr("y", (d) => (yScale(d.name) || 0) + 40)
+      // FIXME 이름 y축 위치
+      .attr(
+        "y",
+        (d) => yScale(d.name) || null
+        // (yScale.bandwidth() - DIMENSIONS.height / data.length - 1) / 3
+      )
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth() - DIMENSIONS.height / data.length)
       .html((d) => d.name);
-  }, [rawData, metric]);
+  }, [rawData, data, metric]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
   };
 
   return (
-    <div className="AuthorBarChartWrap">
-      <select className="selectBox" onChange={handleChangeMetric}>
+    <div className="author-bar-chart-wrap">
+      <select className="select-box" onChange={handleChangeMetric}>
         {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
         ))}
       </select>
-      <svg className="authorBarChart" ref={svgRef} />
+      <svg className="author-bar-chart" ref={svgRef} />
       <div className="tooltip" />
     </div>
   );
