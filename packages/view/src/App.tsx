@@ -38,7 +38,7 @@ const App = () => {
         />
         <Statistics data={selectedData ? [selectedData] : filteredData} />
       </div>
-      <Detail data={data} />
+      <Detail selectedData={selectedData} />
     </div>
   );
 };
