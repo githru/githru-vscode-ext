@@ -26,7 +26,7 @@
 .cluster {
   align-items: center;
   width: 85%;
-  padding-top: 10px;
+  padding: 10px 0;
 }
 
 .summary {
@@ -49,11 +49,11 @@
   display: flex;
   width: 30px;
   height: 30px;
+  line-height: 30px;
   font-weight: bold;
-  
+
   color: $white;
   justify-content: center;
-  align-items: center;
   text-align: center;
   font-size: 15pt;
   margin-left: -5px;
@@ -66,7 +66,7 @@
     z-index: 9999;
   }
 
-  &:nth-child(2n){
+  &:nth-child(2n) {
     &:hover {
       @include animation();
       z-index: 9999;
@@ -135,6 +135,7 @@
   &.large {
     font-size: 18pt;
     font-weight: 900;
+    line-height: 28px;
 
     &:hover {
       @include animation();
@@ -145,7 +146,8 @@
   &.medium {
     font-size: 16pt;
     font-weight: 700;
-    
+    line-height: 28px;
+
     &:hover {
       @include animation();
       cursor: pointer;
