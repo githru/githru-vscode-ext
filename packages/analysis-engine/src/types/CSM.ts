@@ -1,18 +1,10 @@
-import type { CommitRaw } from "./CommitRaw";
+import type { CommitNode } from "./CommitNode";
 
 export interface CSMNode {
-  commits: CommitRaw[];
+  commits: CommitNode[];
+  no?: number;
 }
 
 export interface CSMDictionary {
   [branch: string]: CSMNode[];
-
-  // [branch: string]: Array<{
-  //   nodeTypeName: "CLUSTER";
-  //   commitNodeList: Array<{
-  //     nodeTypeName: "COMMIT";
-  //     commit: CommitRaw;
-  //     seq: string;
-  //   }>;
-  // }>;
 }

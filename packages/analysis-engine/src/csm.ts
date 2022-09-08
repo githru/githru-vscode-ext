@@ -1,123 +1,94 @@
-import type { CommitRaw } from "./types/CommitRaw";
+/* eslint-disable import/prefer-default-export */
+
+import type { CommitNode } from "./types/CommitNode";
+import type { Stem } from "./types/Stem";
 import type { CSMDictionary, CSMNode } from "./types/CSM";
-
-// todo: import type { StemDictionary } from "./types/STEM";
-interface StemDictionary {
-  [branch: string]: CommitRaw[];
-}
-
-/**
- * extract root-commits
- */
-const getRootCommitStems = (stemDict: StemDictionary) =>
-  Object.keys(stemDict)
-    .filter((branch) => {
-      const stem = stemDict[branch];
-      return stem[stem.length - 1].parents.length === 0;
-    })
-    .map((branch) => ({ branch, stem: stemDict[branch] }));
 
 /**
  * CSM 생성
  *
- * @param commits
- * @returns Array<Stem>
+ * @param {Map<string, CommitNode>} commitDict
+ * @param {Map<string, Stem>} stemDict
+ * @returns {CSMDictionary}
  */
 export const buildCSM = (
-  commitDict: Map<string, CommitRaw>,
-  stemDict: StemDictionary
+  commitDict: Map<string, CommitNode>,
+  stemDict: Map<string, Stem>
 ): CSMDictionary => {
-  if (Object.values(stemDict).length === 0) {
-    // throw new Error("no stem");
-    return {};
+  if (stemDict.size === 0) {
+    throw new Error("no stem");
+    // return {};
   }
-
-  /*
-  const commit = {} // root-commit
-  const mergedCommit = commit.parent[0]
-  const stemId = mergedCommit.stemId
-  const stem = stemDict[stemId]
-
-  stem
-  => head부터~ merged커밋노드까지 splice 하고
-  => 이걸 CSM의 노드에 넣어줌
-  => 
-  */
 
   const csmDict: CSMDictionary = {};
 
-  /*
-    commits[0] : 가장 최근 커밋
-    commits[-1] : 가장 오래된 커밋
+  // v0.1 에서는 master STEM 으로만 CSM 생성함
+  const masterStem = stemDict.get("master") ?? stemDict.get("main");
+  if (!masterStem) {
+    throw new Error("no master-stem");
+    // return {};
+  }
 
-    루트노드가 N개일수있음
-    => stem 의 가장첫번째 커밋을 확인하여 parent 여부 확인
-    => parent 없는 커밋을 루트노드로 취급
+  // CSM 생성시작
+  const branch = "master";
+  const stemNodes = masterStem.nodes;
 
-    루트노드부터 순회 시작 
-    => if 머지커밋발견하면, 머지parent로 올라가서 해당stem 가져오기
-    => 아니면 통과
+  const csmNodes: CSMNode[] = [];
+  stemNodes.forEach((commitNode) => {
+    const { commit } = commitNode;
 
-    머지parent로 어떻게 찾아 올라가나..?
-    => commitDict 로 찾아옴..!
+    const mergeParentId = commit.parents[1];
+    const mergeParentCommit = commitDict.get(mergeParentId);
 
-    머지parent 부터 시작해서 해당 stem 어떻게 가져오나..??
-    => 머지커밋id로 그에 속한 stem을 찾을수있어야함..!
-   */
+    console.dir(mergeParentId, { depth: null });
 
-  const rootCommitStems = getRootCommitStems(stemDict);
-  // 마스터브랜치루트 → HEAD브랜치 루트 → 서브브랜치 루트 순서대로 CSM 생성
+    console.dir(mergeParentCommit, { depth: null });
 
-  rootCommitStems.forEach(({ branch, stem }) => {
-    const csm: CSMNode[] = [];
+    if (mergeParentCommit) {
+      const squashCommitNodes: CommitNode[] = [];
 
-    stem.forEach((commit) => {
-      if (commit.parents[1]) {
-        const squashCommits: CommitRaw[] = [];
+      const taskQueue: CommitNode[] = [mergeParentCommit];
+      while (taskQueue.length > 0) {
+        // 작업할 머지커밋을 가져온다
+        const mergeCommitNode = taskQueue.shift()!;
 
-        // stem1 = [5, 4,           3,               2, 1, 0]
-        // stem2 =       [5,4,   3,    2,1,        0]
-        // stem3 =       [    4,3,          2,1,0]
-
-        const taskQueue = [commitDict[commit.parents[1]]];
-        while (taskQueue.length > 0) {
-          const mergingCommit = taskQueue.shift()!;
-
-          // prepare sqush
-          const branchStem = stemDict[(mergingCommit as any).stemId];
-          const branchStemLastIndex = branchStem.length - 1;
-          const branchStemMergedCommitIndex = branchStem.findIndex(
-            ({ id }) => id === mergingCommit.id
-          );
-          const commitCount =
-            branchStemLastIndex - branchStemMergedCommitIndex + 1;
-
-          // sqush
-          const spliceCommits = branchStem.splice(
-            branchStemLastIndex,
-            commitCount
-          );
-          squashCommits.push(...spliceCommits);
-
-          // nested merge
-          const nestedMergingCommits = spliceCommits.filter(
-            ({ parents }) => parents.length > 1
-          );
-          taskQueue.push(...nestedMergingCommits);
+        // 그 머지커밋의 stem 을 가져온다
+        const mergeCommitStemId = mergeCommitNode.stemId!;
+        const mergeCommitStem = stemDict.get(mergeCommitStemId);
+        if (!mergeCommitStem) {
+          // eslint-disable-next-line no-continue
+          continue;
         }
 
-        csm.push({ commits: squashCommits });
-      } else {
-        csm.push({ commits: [commit] });
-      }
-    });
+        // squash 대상 커밋노드들을 잘라올 준비
+        const branchStemLastIndex = mergeCommitStem.nodes.length - 1;
+        const branchStemMergeCommitIndex = mergeCommitStem.nodes.findIndex(
+          ({ commit: { id } }) => id === mergeCommitNode.commit.id
+        );
+        const commitNodeCount =
+          branchStemLastIndex - branchStemMergeCommitIndex + 1;
 
-    csmDict[branch] = csm;
+        // squash
+        const spliceCommitNodes = mergeCommitStem.nodes.splice(
+          branchStemLastIndex,
+          commitNodeCount
+        );
+        squashCommitNodes.push(...spliceCommitNodes);
+
+        // check nested merge
+        const nestedMergeCommits = spliceCommitNodes.filter(
+          (node) => node.commit.parents.length > 1
+        );
+        taskQueue.push(...nestedMergeCommits);
+      }
+
+      csmNodes.push({ commits: squashCommitNodes });
+    } else {
+      csmNodes.push({ commits: [commitNode] });
+    }
   });
+
+  csmDict[branch] = csmNodes;
 
   return csmDict;
 };
-
-export const csm = () => "csm";
-
-export default csm;
