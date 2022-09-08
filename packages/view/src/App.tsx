@@ -5,12 +5,12 @@ import {
   VerticalClusterList,
 } from "components";
 
-import { useGetTotalData } from "./App.hook";
+import { useGlobalData } from "./hooks/useGlobalData";
 import "./App.scss";
 
 const App = () => {
-  const { data } = useGetTotalData();
-  if (!data.length) return null;
+  const { data } = useGlobalData();
+  if (!data?.length) return null;
 
   return (
     <div>
