@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <div>
-      <TemporalFilter data={data} />
+      <TemporalFilter data={data} setFilteredData={setFilteredData} />
       <div className="middle-container">
         <VerticalClusterList
           data={filteredData}
@@ -38,7 +38,7 @@ const App = () => {
         />
         <Statistics data={selectedData ?? filteredData} />
       </div>
-      <Detail data={data} /> 
+      <Detail data={data} />
     </div>
   );
 };

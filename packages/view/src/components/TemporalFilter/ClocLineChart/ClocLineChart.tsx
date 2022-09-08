@@ -14,11 +14,13 @@ import { useEffect, useRef } from "react";
 import type { CommitNode } from "../TemporalFilter.type";
 import { getCloc, timeFormatter } from "../TemporalFilter.util";
 
+import "./ClocLineChart.scss";
 // TODO margin 추가하기
 
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
+  const margin = { left: 2.5, right: 2.5, top: 2.5, bottom: 2.5 };
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current || !data) return;
@@ -36,7 +38,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     const xScale = scaleTime()
       .domain([new Date(xMin), new Date(xMax)])
-      .range([0, width]);
+      .range([0, width - margin.right]);
 
     const xScaleBand = scaleBand<Date>()
       .domain(data.map((commitNode) => commitNode.commit.commitDate))
@@ -63,12 +65,13 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "black");
+      .attr("margin", margin.left + margin.right + margin.top)
+      .attr("fill", "red");
   }, [data]);
 
   return (
-    <div ref={wrapperRef}>
-      <svg ref={ref} />
+    <div className="ClocLineChartWrap" ref={wrapperRef}>
+      <svg className="ClocLineChart" ref={ref} />
     </div>
   );
 };

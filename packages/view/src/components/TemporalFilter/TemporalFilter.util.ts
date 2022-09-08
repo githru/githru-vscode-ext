@@ -3,6 +3,7 @@ import { timeFormat } from "d3";
 import type { ClusterNode } from "types/NodeTypes.temp";
 
 import type { CommitNode } from "./TemporalFilter.type";
+import { CommitH } from "./CommitLineChart/CommitLineChart.const";
 
 export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
   const sortedData: CommitNode[] = [];
@@ -16,6 +17,18 @@ export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
     })
   );
 }
+
+export function CommitNum(data: CommitNode[]) {
+  return data.map((node) => node.commit);
+}
+
+export const TotalCommit = (commitCounts: number[]) => {
+  const totalCommit = commitCounts.reduce(
+    (sum: number, c: number) => sum + c,
+    0
+  );
+  return totalCommit * CommitH + commitCounts.length;
+};
 
 export const getCloc = (d: CommitNode) =>
   d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
