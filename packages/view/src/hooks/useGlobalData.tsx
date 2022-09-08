@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode } from "react";
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import type { ClusterNode } from "../types";
 import { useGetTotalData } from "../App.hook";
@@ -20,6 +20,10 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const { data } = useGetTotalData();
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
+
+  useEffect(() => {
+    setSelectedData([]);
+  }, [filteredData]);
 
   const value = useMemo(
     () => ({
