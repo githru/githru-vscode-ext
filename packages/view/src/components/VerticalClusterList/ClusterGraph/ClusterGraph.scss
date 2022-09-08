@@ -1,0 +1,21 @@
+.cluster-container {
+  .cluster-box {
+    rx: 5;
+    stroke-width: 1;
+    stroke: rgb(13, 71, 161, 0.4);
+    fill: transparent;
+  }
+
+  .degree-box {
+    rx: 5;
+    fill: rgb(13, 71, 161, 0.4);
+  }
+
+  &:hover {
+    .cluster-box {
+      stroke-width: 3;
+    }
+  }
+
+  cursor: pointer;
+}
