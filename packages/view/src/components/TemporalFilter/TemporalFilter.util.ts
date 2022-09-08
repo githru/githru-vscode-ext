@@ -17,7 +17,15 @@ export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
   );
 }
 
+// TODO: 음수값 반영
 export const getCloc = (d: CommitNode) =>
   d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
 
 export const timeFormatter = timeFormat("%y-%m-%d");
+
+export const getMinMaxDate = (data: CommitNode[]) => [
+  data[0].commit.commitDate,
+  data[data.length - 1].commit.commitDate,
+];
+
+export const getCommitDate = (data: CommitNode[]) => data;
