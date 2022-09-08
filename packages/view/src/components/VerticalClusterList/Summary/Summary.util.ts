@@ -1,6 +1,9 @@
 import type { GlobalProps, CommitNode } from "types";
 
+import { authorBgColorArray } from "./Summary.const";
 import type { Cluster } from "./Summary.type";
+
+const colorName = [...authorBgColorArray];
 
 export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
@@ -69,15 +72,12 @@ export function getInitData({ data }: GlobalProps) {
 
 export function getColorValue(name: string) {
   let result = "";
-  const random = Math.floor(Math.random() * 100 + 1);
 
-  const total = [];
-
-  for (let i = 0; i < 3; i += 1) {
-    total.push(name[i].charCodeAt(0) + (i === 1 ? random : 10));
-  }
-
-  result = `rgb(${total.join(", ")})`;
+  const index =
+    (name[0].charCodeAt(0) + name[1].charCodeAt(0) + name[2].charCodeAt(0)) %
+    colorName.length;
+  result = `#${colorName[index]}`;
+  colorName.slice(0 + index, index + 1);
 
   return result;
 }
