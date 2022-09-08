@@ -156,7 +156,7 @@ describe("stem", () => {
     commitDict = generateCommitNodeDict(commits);
   });
 
-  it("temp test", () => {
+  it("should make instance of Map", () => {
     const stemDict = buildStemDict(commitDict);
     expect(stemDict).toBeInstanceOf(Map);
   });
