@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import {
-  Detail,
+  // Detail,
   Statistics,
   TemporalFilter,
   VerticalClusterList,
@@ -34,11 +34,12 @@ const App = () => {
       <div className="middle-container">
         <VerticalClusterList
           data={filteredData}
+          selectedData={selectedData}
           setSelectedData={setSelectedData}
         />
         <Statistics data={selectedData ? [selectedData] : filteredData} />
       </div>
-      <Detail selectedData={selectedData} />
+      {/* <Detail selectedData={selectedData} /> */}
     </div>
   );
 };

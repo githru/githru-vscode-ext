@@ -5,6 +5,7 @@ import type { ClusterNode } from "types";
 export type ClusterGraphElement = {
   cluster: ClusterNode;
   clusterSize: number;
+  selected?: number;
 };
 
 export type SVGElementSelection<T extends BaseType> = Selection<
