@@ -1,65 +1,37 @@
-import type { CommitNode } from "types";
+import type { GlobalProps, CommitNode } from "types/";
+
+type GetCommitListInCluster = GlobalProps & { clusterId: number };
+export const getCommitListInCluster = ({
+  data,
+  clusterId,
+}: GetCommitListInCluster) =>
+  data
+    .map((clusterNode) => clusterNode.commitNodeList)
+    .flat()
+    .filter((commitNode) => commitNode.clusterId === clusterId);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getDataSetSize = <T extends any[]>(arr: T, callback: Function) => {
-  const set = new Set();
-  const fn = callback(set);
-  arr.forEach(fn);
+const getDataSetSize = <T extends any[]>(arr: T) => {
+  const set = new Set(arr);
   return set.size;
 };
 
-type GetCommitListAuthorLength = GetCommitListDetail;
-const getCommitListAuthorLength = ({
-  commitNodeListInCluster,
-}: GetCommitListAuthorLength) => {
-  const fn =
-    (set: Set<string>) =>
-    ({
-      commit: {
-        author: { names },
-      },
-    }: CommitNode) =>
-      names.forEach((name) => set.add(name));
-  return getDataSetSize(commitNodeListInCluster, fn);
+const getCommitListAuthorLength = (commitNodes: CommitNode[]) => {
+  return getDataSetSize(commitNodes.map((d) => d.commit.author.names).flat());
 };
 
-type GetChangeFileLength = GetCommitListDetail;
-const getChangeFileLength = ({
-  commitNodeListInCluster,
-}: GetChangeFileLength) => {
-  const fn =
-    (set: Set<string>) =>
-    ({
-      commit: {
-        diffStatistics: { files },
-      },
-    }: CommitNode) =>
-      Object.keys(files).forEach((file) => set.add(file));
-  return getDataSetSize(commitNodeListInCluster, fn);
+const getChangeFileLength = (commitNodes: CommitNode[]) => {
+  return getDataSetSize(
+    commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat()
+  );
 };
-
-type ObjAddCommaProps = {
-  authorLength: number;
-  fileLength: number;
-  commitLength: number;
-  insertions: number;
-  deletions: number;
-};
-type ObjAddCommaReturn = { [key in keyof ObjAddCommaProps]: string };
-const objAddComma = (obj: ObjAddCommaProps): ObjAddCommaReturn =>
-  Object.entries(obj).reduce((acc, [k, v]) => {
-    return {
-      ...acc,
-      [k]: v.toLocaleString("en"),
-    };
-  }, {}) as ObjAddCommaReturn;
 
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
 export const getCommitListDetail = ({
   commitNodeListInCluster,
 }: GetCommitListDetail) => {
-  const authorLength = getCommitListAuthorLength({ commitNodeListInCluster });
-  const fileLength = getChangeFileLength({ commitNodeListInCluster });
+  const authorLength = getCommitListAuthorLength(commitNodeListInCluster);
+  const fileLength = getChangeFileLength(commitNodeListInCluster);
   const diffStatistics = commitNodeListInCluster.reduce(
     (acc, { commit: { diffStatistics: cur } }) => ({
       insertions: acc.insertions + cur.insertions,
@@ -70,10 +42,11 @@ export const getCommitListDetail = ({
       deletions: 0,
     }
   );
-  return objAddComma({
-    authorLength,
-    fileLength,
-    commitLength: commitNodeListInCluster.length,
-    ...diffStatistics,
-  });
+  return {
+    authorLength: authorLength.toLocaleString("en"),
+    fileLength: fileLength.toLocaleString("en"),
+    commitLength: commitNodeListInCluster.length.toLocaleString("en"),
+    insertions: diffStatistics.insertions.toLocaleString("en"),
+    deletions: diffStatistics.deletions.toLocaleString("en"),
+  };
 };
