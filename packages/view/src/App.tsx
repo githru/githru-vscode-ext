@@ -36,7 +36,7 @@ const App = () => {
           data={filteredData}
           setSelectedData={setSelectedData}
         />
-        <Statistics data={selectedData ?? filteredData} />
+        <Statistics data={selectedData ? [selectedData] : filteredData} />
       </div>
       <Detail data={data} />
     </div>

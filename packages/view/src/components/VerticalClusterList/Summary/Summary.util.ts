@@ -1,4 +1,4 @@
-import type { GlobalProps, CommitNode } from "types";
+import type { GlobalProps, CommitNode, ClusterNode } from "types";
 
 import { authorBgColorArray } from "./Summary.const";
 import type { Cluster } from "./Summary.type";
@@ -79,4 +79,10 @@ export function getColorValue(name: string) {
   colorName.slice(0 + index, index + 1);
 
   return result;
+}
+
+export function getClusterById(clusters: ClusterNode[], clusterId: number) {
+  return clusters.filter(
+    (cluster) => cluster.commitNodeList[0].clusterId === clusterId
+  )[0];
 }

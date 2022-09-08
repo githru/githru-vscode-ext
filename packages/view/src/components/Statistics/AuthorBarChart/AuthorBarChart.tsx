@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode, StatisticsProps } from "types";
+import type { StatisticsProps } from "types";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
@@ -17,8 +17,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
   useEffect(() => {
-    // type as
-    const authorData = getDataByAuthor(rawData as ClusterNode[]);
+    const authorData = getDataByAuthor(rawData);
     const data = authorData.sort((a, b) => {
       if (a[metric] === b[metric]) {
         return sortDataByName(a.name, b.name);

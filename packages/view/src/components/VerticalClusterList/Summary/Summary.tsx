@@ -1,18 +1,40 @@
-import type { GlobalProps } from "types";
+import React from "react";
+
+import type { ClusterNode, SelectedDataProps } from "types";
 
 import type { Cluster, Keyword } from "./Summary.type";
-import { getColorValue, getInitData } from "./Summary.util";
+import { getClusterById, getColorValue, getInitData } from "./Summary.util";
 
 import "./Summary.scss";
 
-const Summary = ({ data }: GlobalProps) => {
+type SummaryProps = {
+  data: ClusterNode[];
+  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
+};
+
+const Summary = ({ data, setSelectedData }: SummaryProps) => {
   const clusters = getInitData({ data });
+
+  const onClickClusterSummary = (clusterId: number) => () => {
+    const selected = getClusterById(data, clusterId);
+    setSelectedData((prev: ClusterNode | null) => {
+      if (prev === null) return selected;
+      const { clusterId: prevClusterId } = prev.commitNodeList[0];
+      if (prevClusterId === clusterId) return null;
+      return selected;
+    });
+  };
 
   return (
     <div className="entire">
       {clusters.map((cluster: Cluster) => {
         return (
-          <div className="cluster" key={cluster.clusterId}>
+          <div
+            role="presentation"
+            className="cluster"
+            key={cluster.clusterId}
+            onClick={onClickClusterSummary(cluster.clusterId)}
+          >
             <p className="summary">
               <span className="nameBox">
                 {cluster.summary.authorNames.map(

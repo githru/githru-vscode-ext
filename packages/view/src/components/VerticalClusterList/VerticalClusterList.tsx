@@ -14,8 +14,8 @@ const VerticalClusterList = ({ data, setSelectedData }: Props) => {
   console.log(setSelectedData);
   return (
     <div className="vertical-cluster-list">
-      <ClusterGraph data={data} />
-      <Summary data={data} />
+      <ClusterGraph data={data} setSelectedData={setSelectedData} />
+      <Summary data={data} setSelectedData={setSelectedData} />
     </div>
   );
 };

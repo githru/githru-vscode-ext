@@ -1,8 +1,8 @@
 import type { MouseEvent, RefObject } from "react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode } from "types";
+import type { ClusterNode, SelectedDataProps } from "types";
 
 import "./ClusterGraph.scss";
 
@@ -65,16 +65,16 @@ const destroyClusterGraph = (target: RefObject<SVGElement>) => {
 
 type ClusterGraphProps = {
   data: ClusterNode[];
+  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
 };
 
-const ClusterGraph = ({ data }: ClusterGraphProps) => {
+const ClusterGraph = ({ data, setSelectedData }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
   const graphHeight = getGraphHeight(clusterSizes);
 
   const handleClickCluster = () => {
-    // for solving lint error (@typescript-eslint/no-empty-function)
-    console.log("cluster click");
+    console.log(setSelectedData);
   };
 
   useEffect(() => {
