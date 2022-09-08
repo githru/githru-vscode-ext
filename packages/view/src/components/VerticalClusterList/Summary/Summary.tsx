@@ -2,6 +2,8 @@ import React from "react";
 
 import type { ClusterNode, SelectedDataProps } from "types";
 
+import { selectedDataUpdater } from "../VerticalClusterList.util";
+
 import type { Cluster, Keyword } from "./Summary.type";
 import { getClusterById, getColorValue, getInitData } from "./Summary.util";
 
@@ -17,12 +19,7 @@ const Summary = ({ data, setSelectedData }: SummaryProps) => {
 
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
-    setSelectedData((prev: ClusterNode | null) => {
-      if (prev === null) return selected;
-      const { clusterId: prevClusterId } = prev.commitNodeList[0];
-      if (prevClusterId === clusterId) return null;
-      return selected;
-    });
+    setSelectedData(selectedDataUpdater(selected, clusterId));
   };
 
   return (

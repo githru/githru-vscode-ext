@@ -6,6 +6,8 @@ import type { ClusterNode, SelectedDataProps } from "types";
 
 import "./ClusterGraph.scss";
 
+import { selectedDataUpdater } from "../VerticalClusterList.util";
+
 import { getGraphHeight, getClusterSizes } from "./ClusterGraph.util";
 import {
   COMMIT_HEIGHT,
@@ -14,7 +16,10 @@ import {
   SVG_MARGIN,
   SVG_WIDTH,
 } from "./ClusterGraph.const";
-import type { SVGElementSelection } from "./ClusterGraph.type";
+import type {
+  ClusterGraphElement,
+  SVGElementSelection,
+} from "./ClusterGraph.type";
 
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
@@ -32,24 +37,31 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
   container
     .append("rect")
     .attr("class", "degree-box")
-    .attr("width", (d) => widthScale(Math.min(d, 10)))
+    .attr("width", (d) => widthScale(Math.min(d.clusterSize, 10)))
     .attr("height", COMMIT_HEIGHT)
     .attr(
       "x",
-      (d) => SVG_MARGIN.left + GRAPH_WIDTH / 2 - widthScale(Math.min(d, 10)) / 2
+      (d) =>
+        SVG_MARGIN.left +
+        GRAPH_WIDTH / 2 -
+        widthScale(Math.min(d.clusterSize, 10)) / 2
     )
     .attr("y", (_, i) => SVG_MARGIN.bottom + i * (NODE_GAP + COMMIT_HEIGHT));
 };
 
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
-  data: ClusterNode[],
-  onClickCluster: (this: SVGGElement, event: MouseEvent, d: number) => void
+  data: ClusterGraphElement[],
+  onClickCluster: (
+    this: SVGGElement,
+    event: MouseEvent,
+    d: ClusterGraphElement
+  ) => void
 ) => {
   const group = d3
     .select(svgRef.current)
     .selectAll(".cluster-container")
-    .data(getClusterSizes(data))
+    .data(data)
     .enter()
     .append("g")
     .attr("class", "cluster-container")
@@ -72,13 +84,19 @@ const ClusterGraph = ({ data, setSelectedData }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
   const graphHeight = getGraphHeight(clusterSizes);
+  const clusterGraphElements = data.map((cluster, i) => ({
+    cluster,
+    clusterSize: clusterSizes[i],
+  }));
 
-  const handleClickCluster = () => {
-    console.log(setSelectedData);
+  const handleClickCluster = (_: MouseEvent, d: ClusterGraphElement) => {
+    setSelectedData(
+      selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
+    );
   };
 
   useEffect(() => {
-    drawClusterGraph(svgRef, data, handleClickCluster);
+    drawClusterGraph(svgRef, clusterGraphElements, handleClickCluster);
 
     return () => {
       destroyClusterGraph(svgRef);
