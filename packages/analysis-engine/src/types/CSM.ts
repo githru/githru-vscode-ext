@@ -3,7 +3,6 @@ import type { CommitNode } from "./CommitNode";
 export interface CSMNode {
   base: CommitNode;
   source: CommitNode[];
-  no?: number;
 }
 
 export interface CSMDictionary {
