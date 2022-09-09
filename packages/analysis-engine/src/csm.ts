@@ -32,10 +32,16 @@ export const buildCSM = (
   const stemNodes = masterStem.nodes;
 
   const csmNodes: CSMNode[] = [];
+
   stemNodes.forEach((commitNode) => {
+    const csmNode: CSMNode = {
+      base: commitNode,
+      source: [],
+    };
+
     const mergeParentCommit = commitDict.get(commitNode.commit.parents[1]);
     if (mergeParentCommit) {
-      const squashCommitNodes: CommitNode[] = [commitNode];
+      const squashCommitNodes: CommitNode[] = [];
 
       const squashTaskQueue: CommitNode[] = [mergeParentCommit];
       while (squashTaskQueue.length > 0) {
@@ -70,10 +76,10 @@ export const buildCSM = (
 
       squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
-      csmNodes.push({ commits: squashCommitNodes });
-    } else {
-      csmNodes.push({ commits: [commitNode] });
+      csmNode.source = squashCommitNodes;
     }
+
+    csmNodes.push(csmNode);
   });
 
   csmDict[branch] = csmNodes;

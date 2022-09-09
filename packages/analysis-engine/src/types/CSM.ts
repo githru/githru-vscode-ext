@@ -1,7 +1,8 @@
 import type { CommitNode } from "./CommitNode";
 
 export interface CSMNode {
-  commits: CommitNode[];
+  base: CommitNode;
+  source: CommitNode[];
   no?: number;
 }
 
