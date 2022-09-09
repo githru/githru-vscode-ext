@@ -10,12 +10,7 @@
   font-size: 20px;
 }
 
-.author-bar-chart {
-  overflow: visible;
-  margin: 40px;
-}
-
-.select-box {
+.author-bar-chart__select-box {
   background: transparent;
   border: none;
   margin: 50px;
@@ -26,46 +21,66 @@
   text-align: center;
 }
 
-.axis {
-  color: $white;
-  font-weight: bold;
-  font-size: 11px;
-}
+.author-bar-chart {
+  overflow: visible;
+  margin: 40px;
 
-.y-axis {
-  text {
-    display: none;
+  .axis {
+    color: $white;
+    font-weight: bold;
+    font-size: 11px;
+
+    &.y-axis {
+      text {
+        display: none;
+      }
+    }
+
+    &.x-axis {
+      .x-axis-label {
+        fill: $white;
+        font-size: 15px;
+      }
+    }
   }
-}
 
-.x-axis {
-  .x-axis-label {
-    fill: $white;
-    font-size: 15px;
-  }
-}
+  .bars {
+    .bar {
+      fill: #0077aa;
 
-.author-bar-chart__name {
-  fill: $white;
-  stroke: none;
-  font-size: 14px;
-  text-anchor: start;
+      &:hover {
+        fill: $gray-900;
+        stroke: #0077aa;
+        stroke-width: 2;
+      }
+    }
 
-  &:hover {
-    & + rect.bar {
-      fill: $gray-900;
-      stroke: #0077aa;
-      stroke-width: 2;
+    .name {
+      fill: $white;
+      stroke: none;
+      font-size: 14px;
+      text-anchor: start;
+      font-weight: normal;
     }
   }
 }
 
-.bar {
-  fill: #0077aa;
+.author-bar-chart__tooltip {
+  display: none;
+  position: absolute;
+  background: $white;
+  border: 1px solid #0077aa;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 5px;
+  color: $gray-900;
 
-  &:hover {
-    fill: $gray-900;
-    stroke: #0077aa;
-    stroke-width: 2;
+  .selected {
+    color: #0077aa;
+    font-weight: bold;
+  }
+  .name {
+    font-weight: bold;
   }
 }
