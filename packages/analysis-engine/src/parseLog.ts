@@ -8,6 +8,8 @@ function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
 }
 
 export default function parseToJSON(log: string) {
+  if (log === "") return [];
+
   // line 별로 분리하기
   const splitByNewLine = log.split(/\r?\n/);
 
