@@ -1,4 +1,3 @@
-import { inspect } from "util";
 import { CommitRaw, DifferenceStatistic, GitUser } from "./types/CommitRaw";
 
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
@@ -11,11 +10,14 @@ function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
 export default function parseToJSON(log: string) {
   // line 별로 분리하기
   const splitByNewLine = log.split(/\r?\n/);
+
   // 분리한 것들을 쭉 돌면서 각 카테고리별로 담을 예정
+  type Refs = string[];
+
   const ids: string[] = [];
-  const parents: string[][] = [];
-  const branches: string[][] = [];
-  const tags: string[][] = [];
+  const parentsMatrix: string[][] = [];
+  const branchesMatrix: Refs[] = [];
+  const tagsMatrix: Refs[] = [];
   const authors: GitUser[] = [];
   const authorDates: string[] = [];
   const committers: GitUser[] = [];
@@ -25,12 +27,13 @@ export default function parseToJSON(log: string) {
 
   // commit별 fileChanged를 분리시키기 위한 임시 index
   let commitIdx = -1;
-  if (typeof splitByNewLine !== "undefined") {
+
+  if (splitByNewLine) {
     splitByNewLine.forEach((str, idx) => {
       if (str.startsWith("commit")) {
         commitIdx += 1;
-        tags.push([]);
-        branches.push([]);
+        tagsMatrix.push([]);
+        branchesMatrix.push([]);
         differenceStatistics.push({
           totalInsertionCount: 0,
           totalDeletionCount: 0,
@@ -43,7 +46,7 @@ export default function parseToJSON(log: string) {
           .filter((e) => e);
         ids.push(commitInfos[0]);
         commitInfos.splice(0, 1);
-        parents.push(commitInfos);
+        parentsMatrix.push(commitInfos);
         let branchAndTagsInfos = splitedCommitLine[1];
         if (typeof branchAndTagsInfos !== "undefined") {
           if (branchAndTagsInfos.startsWith("HEAD ->")) {
@@ -51,10 +54,15 @@ export default function parseToJSON(log: string) {
           }
           branchAndTagsInfos.split(",").forEach((eachInfo) => {
             if (eachInfo.trim().startsWith("tag:"))
-              return tags[commitIdx].push(eachInfo.replace("tag: ", "").trim());
-            return branches[commitIdx].push(eachInfo.replace(")", "").trim());
+              return tagsMatrix[commitIdx].push(
+                eachInfo.replace("tag: ", "").trim()
+              );
+            return branchesMatrix[commitIdx].push(
+              eachInfo.replace(")", "").trim()
+            );
           });
         }
+        return false;
       }
       if (str.startsWith("Author:")) return getNameAndEmail(authors, str);
       if (str.startsWith("AuthorDate"))
@@ -100,9 +108,9 @@ export default function parseToJSON(log: string) {
     JSONArray.push({
       sequence: i,
       id: ids[i],
-      parents: parents[i],
-      branches: branches[i],
-      tags: tags[i],
+      parents: parentsMatrix[i],
+      branches: branchesMatrix[i],
+      tags: tagsMatrix[i],
       author: authors[i],
       authorDate: authorDates[i],
       committer: committers[i],
@@ -112,10 +120,5 @@ export default function parseToJSON(log: string) {
     });
   }
 
-  return inspect(JSONArray, {
-    showHidden: false,
-    depth: null,
-    colors: true,
-    maxArrayLength: null,
-  });
+  return JSONArray;
 }
