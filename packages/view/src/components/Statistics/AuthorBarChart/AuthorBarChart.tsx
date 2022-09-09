@@ -13,8 +13,9 @@ import "./AuthorBarChart.scss";
 type AuthorBarChartProps = StatisticsProps;
 
 const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
-  const svgRef = useRef(null);
-  const tooltipRef = useRef(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
@@ -29,8 +30,6 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   }
 
   useEffect(() => {
-    const totalMetricValues = data.reduce((acc, item) => acc + item[metric], 0);
-
     const svg = d3
       .select(svgRef.current)
       .attr("width", DIMENSIONS.width)
@@ -38,6 +37,8 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const tooltip = d3.select(tooltipRef.current);
 
     svg.selectAll("*").remove();
+
+    const totalMetricValues = data.reduce((acc, item) => acc + item[metric], 0);
 
     const xAxisGroup = svg
       .append("g")
@@ -86,18 +87,20 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
         .style("top", `${e.pageY - 70}px`)
         .html(
           `<p class="name">${d.name}</p>
-          <p>${metric}: 
-            <span class="selected">
-              ${d[metric].toLocaleString()}
-            </span> 
-            / ${totalMetricValues.toLocaleString()}
-          </p>`
+        <p>${metric}: 
+          <span class="selected">
+            ${d[metric].toLocaleString()}
+          </span> 
+          / ${totalMetricValues.toLocaleString()} 
+          (${((d[metric] / totalMetricValues) * 100).toFixed(0)}%) 
+        </p>`
         );
     };
     const handleMouseOut = () => {
       tooltip.style("display", "none");
     };
 
+    // Draw bars
     barGroup
       .selectAll("rect")
       .data(data)
@@ -125,21 +128,30 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       )
       .attr("height", yScale.bandwidth())
       .attr("x", 1)
-      .attr("y", (d) => yScale(d.name) || 0);
+      .attr("y", (d: AuthorDataType) => yScale(d.name) || 0);
 
-    barGroup
-      .selectAll("text")
-      .data(data)
-      .join("text")
-      .attr("class", "name")
-      .attr("width", (d: AuthorDataType) => xScale(d[metric]))
-      .attr("height", yScale.bandwidth())
-      .attr("x", 3)
-      .attr("y", (d) => (yScale(d.name) ?? 0) + yScale.bandwidth() / 2 + 5)
-      .on("mouseover", handleMouseOver)
-      .on("mousemove", handleMouseMove)
-      .on("mouseout", handleMouseOut)
-      .html((d) => d.name);
+    // Draw author names
+    const barElements = d3.selectAll(".bar").nodes();
+    if (!barElements.length) return;
+
+    barElements.forEach((barElement, i) => {
+      const bar = d3.select(barElement).datum(data[i]);
+      bar
+        .append("text")
+        .attr("class", "name")
+        .attr("width", (d: AuthorDataType) => xScale(d[metric]))
+        .attr("height", yScale.bandwidth())
+        .attr("x", 3)
+        .attr(
+          "y",
+          (d: AuthorDataType) =>
+            (yScale(d.name) ?? 0) + yScale.bandwidth() / 2 + 5
+        )
+        .on("mouseover", handleMouseOver)
+        .on("mousemove", handleMouseMove)
+        .on("mouseout", handleMouseOut)
+        .html((d: AuthorDataType) => d.name);
+    });
   }, [data, metric]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {

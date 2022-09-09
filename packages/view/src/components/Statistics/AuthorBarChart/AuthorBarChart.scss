@@ -46,21 +46,25 @@
 
   .bars {
     .bar {
-      fill: #0077aa;
-
       &:hover {
-        fill: $gray-900;
-        stroke: #0077aa;
-        stroke-width: 2;
+        rect {
+          fill: $gray-900;
+          stroke: #0077aa;
+          stroke-width: 2;
+        }
       }
-    }
 
-    .name {
-      fill: $white;
-      stroke: none;
-      font-size: 14px;
-      text-anchor: start;
-      font-weight: normal;
+      rect {
+        fill: #0077aa;
+      }
+
+      .name {
+        fill: $white;
+        stroke: none;
+        font-size: 14px;
+        text-anchor: start;
+        font-weight: normal;
+      }
     }
   }
 }
@@ -69,10 +73,10 @@
   display: none;
   position: absolute;
   background: $white;
-  border: 1px solid #0077aa;
   padding: 8px 16px;
   text-align: center;
   font-size: 15px;
+  line-height: 1.5;
   border-radius: 5px;
   color: $gray-900;
 
