@@ -68,6 +68,8 @@ export const buildCSM = (
         squashTaskQueue.push(...nestedMergeCommits);
       }
 
+      squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
+
       csmNodes.push({ commits: squashCommitNodes });
     } else {
       csmNodes.push({ commits: [commitNode] });
