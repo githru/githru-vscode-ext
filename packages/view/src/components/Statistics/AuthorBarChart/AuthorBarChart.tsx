@@ -24,10 +24,8 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     return b[metric] - a[metric];
   });
   if (data.length > 10) {
-    data = data.slice(0, 3);
+    data = data.slice(0, 10);
   }
-
-  console.log(data);
 
   useEffect(() => {
     const totalMetricValues = data.reduce((acc, item) => acc + item[metric], 0);
@@ -53,7 +51,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .scaleBand()
       .domain(data.map((d) => d.name))
       .range([0, DIMENSIONS.height])
-      .paddingInner(data.length === 10 ? 0.1 : 1 - data.length / 10)
+      .paddingInner(0.3)
       .paddingOuter(data.length > 5 ? 0.2 : 0.4)
       .align(0.5);
 
@@ -74,37 +72,50 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .text(`${metric} # / Total ${metric} # (%)`);
 
     // Draw Bars
-    const bar = barGroup
-      .selectAll("rect")
-      .attr("class", "bars")
-      .data(data)
-      .join("g")
-      .attr("class", "bar");
+    // const bar = barGroup
+    //   .selectAll("rect")
+    //   .attr("class", "bars")
+    //   .data(data)
+    //   .join("g")
+    //   .attr("class", "bar");
 
-    bar
+    barGroup
+      .selectAll("rect")
+      .data(data)
+      .join(
+        (enter) =>
+          enter
+            .append("g")
+            .attr("class", "bar")
+            .append("rect")
+            .attr("width", 0)
+            .attr("height", yScale.bandwidth())
+            .attr("x", 1)
+            .attr("y", (d) => yScale(d.name) || 0),
+        (update) => update,
+        (exit) => exit.attr("width", 0).attr("x", DIMENSIONS.width).remove()
+      )
+      .transition()
+      .duration(500)
       .attr(
         "width",
         (d: AuthorDataType) => xScale(d[metric]) / totalMetricValues
       )
-      // FIXME 막대 바 y축 위치
       .attr("height", yScale.bandwidth())
       .attr("x", 1)
-      .attr("y", (d) => yScale(d.name) || null);
+      .attr("y", (d) => yScale(d.name) || 0);
 
-    bar
-      .append("text")
-      .attr("class", "name")
-      .attr("x", 5)
-      // FIXME 이름 y축 위치
-      .attr(
-        "y",
-        (d) => yScale(d.name) || null
-        // (yScale.bandwidth() - DIMENSIONS.height / data.length - 1) / 3
-      )
+    barGroup
+      .selectAll("text")
+      .data(data)
+      .join("text")
+      .attr("class", "author-bar-chart__name")
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
-      .attr("height", yScale.bandwidth() - DIMENSIONS.height / data.length)
+      .attr("height", yScale.bandwidth())
+      .attr("x", 3)
+      .attr("y", (d) => (yScale(d.name) ?? 0) + yScale.bandwidth() / 2 + 5)
       .html((d) => d.name);
-  }, [rawData, data, metric]);
+  }, [data, metric]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);

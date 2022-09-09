@@ -45,32 +45,27 @@
   }
 }
 
-.bar {
-  rect {
-    fill: #0077aa;
-  }
+.author-bar-chart__name {
+  fill: $white;
+  stroke: none;
+  font-size: 14px;
+  text-anchor: start;
 
   &:hover {
-    rect {
+    & + rect.bar {
       fill: $gray-900;
       stroke: #0077aa;
       stroke-width: 2;
     }
   }
-
-  .name {
-    fill: $white;
-    stroke: none;
-    font-size: 14px;
-  }
 }
 
-.hoverValue {
-  height: 30px;
+.bar {
+  fill: #0077aa;
 
-  .focusText {
-    color: $white;
-    font-size: 25px;
-    text-align: center;
+  &:hover {
+    fill: $gray-900;
+    stroke: #0077aa;
+    stroke-width: 2;
   }
 }
