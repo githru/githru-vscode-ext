@@ -28,31 +28,21 @@ export const buildCSM = (
     throw new Error("no master-stem");
     // return {};
   }
-
-  // CSM 생성시작
   const branch = "master";
   const stemNodes = masterStem.nodes;
 
   const csmNodes: CSMNode[] = [];
   stemNodes.forEach((commitNode) => {
-    const { commit } = commitNode;
-
-    const mergeParentId = commit.parents[1];
-    const mergeParentCommit = commitDict.get(mergeParentId);
-
-    console.dir(mergeParentId, { depth: null });
-
-    console.dir(mergeParentCommit, { depth: null });
-
+    const mergeParentCommit = commitDict.get(commitNode.commit.parents[1]);
     if (mergeParentCommit) {
-      const squashCommitNodes: CommitNode[] = [];
+      const squashCommitNodes: CommitNode[] = [commitNode];
 
-      const taskQueue: CommitNode[] = [mergeParentCommit];
-      while (taskQueue.length > 0) {
-        // 작업할 머지커밋을 가져온다
-        const mergeCommitNode = taskQueue.shift()!;
+      const squashTaskQueue: CommitNode[] = [mergeParentCommit];
+      while (squashTaskQueue.length > 0) {
+        // get target
+        const mergeCommitNode = squashTaskQueue.shift()!;
 
-        // 그 머지커밋의 stem 을 가져온다
+        // get target's stem
         const mergeCommitStemId = mergeCommitNode.stemId!;
         const mergeCommitStem = stemDict.get(mergeCommitStemId);
         if (!mergeCommitStem) {
@@ -60,26 +50,22 @@ export const buildCSM = (
           continue;
         }
 
-        // squash 대상 커밋노드들을 잘라올 준비
-        const branchStemLastIndex = mergeCommitStem.nodes.length - 1;
-        const branchStemMergeCommitIndex = mergeCommitStem.nodes.findIndex(
+        // squash
+        const spliceIndex = mergeCommitStem.nodes.findIndex(
           ({ commit: { id } }) => id === mergeCommitNode.commit.id
         );
-        const commitNodeCount =
-          branchStemLastIndex - branchStemMergeCommitIndex + 1;
-
-        // squash
         const spliceCommitNodes = mergeCommitStem.nodes.splice(
-          branchStemLastIndex,
-          commitNodeCount
+          0,
+          spliceIndex + 1
         );
         squashCommitNodes.push(...spliceCommitNodes);
 
         // check nested merge
-        const nestedMergeCommits = spliceCommitNodes.filter(
-          (node) => node.commit.parents.length > 1
-        );
-        taskQueue.push(...nestedMergeCommits);
+        const nestedMergeCommits = spliceCommitNodes
+          .map((node) => commitDict.get(node.commit.parents[1]))
+          .filter((node): node is CommitNode => node !== undefined);
+
+        squashTaskQueue.push(...nestedMergeCommits);
       }
 
       csmNodes.push({ commits: squashCommitNodes });
