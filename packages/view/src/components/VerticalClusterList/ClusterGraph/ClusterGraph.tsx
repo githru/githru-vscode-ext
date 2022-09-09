@@ -124,16 +124,16 @@ const ClusterGraph = ({
     selected: selectedNextId,
   }));
 
-  const handleClickCluster = (_: MouseEvent, d: ClusterGraphElement) =>
-    setSelectedData(
-      selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
-    );
   useEffect(() => {
+    const handleClickCluster = (_: MouseEvent, d: ClusterGraphElement) =>
+      setSelectedData(
+        selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
+      );
     drawClusterGraph(svgRef, clusterGraphElements, handleClickCluster);
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [clusterGraphElements]);
+  }, [clusterGraphElements, setSelectedData]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
