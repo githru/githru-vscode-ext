@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
@@ -14,6 +14,7 @@ type AuthorBarChartProps = StatisticsProps;
 
 const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
+  const tooltipRef = useRef(null);
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
 
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
@@ -34,6 +35,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .select(svgRef.current)
       .attr("width", DIMENSIONS.width)
       .attr("height", DIMENSIONS.height);
+    const tooltip = d3.select(tooltipRef.current);
 
     svg.selectAll("*").remove();
 
@@ -71,13 +73,30 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       )
       .text(`${metric} # / Total ${metric} # (%)`);
 
-    // Draw Bars
-    // const bar = barGroup
-    //   .selectAll("rect")
-    //   .attr("class", "bars")
-    //   .data(data)
-    //   .join("g")
-    //   .attr("class", "bar");
+    // Event handler
+    const handleMouseOver = () => {
+      tooltip.style("display", "inline-block");
+    };
+    const handleMouseMove = (
+      e: MouseEvent<SVGRectElement | SVGTextElement>,
+      d: AuthorDataType
+    ) => {
+      tooltip
+        .style("left", `${e.pageX - 70}px`)
+        .style("top", `${e.pageY - 70}px`)
+        .html(
+          `<p class="name">${d.name}</p>
+          <p>${metric}: 
+            <span class="selected">
+              ${d[metric].toLocaleString()}
+            </span> 
+            / ${totalMetricValues.toLocaleString()}
+          </p>`
+        );
+    };
+    const handleMouseOut = () => {
+      tooltip.style("display", "none");
+    };
 
     barGroup
       .selectAll("rect")
@@ -95,6 +114,9 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
         (update) => update,
         (exit) => exit.attr("width", 0).attr("x", DIMENSIONS.width).remove()
       )
+      .on("mouseover", handleMouseOver)
+      .on("mousemove", handleMouseMove)
+      .on("mouseout", handleMouseOut)
       .transition()
       .duration(500)
       .attr(
@@ -109,11 +131,14 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .selectAll("text")
       .data(data)
       .join("text")
-      .attr("class", "author-bar-chart__name")
+      .attr("class", "name")
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth())
       .attr("x", 3)
       .attr("y", (d) => (yScale(d.name) ?? 0) + yScale.bandwidth() / 2 + 5)
+      .on("mouseover", handleMouseOver)
+      .on("mousemove", handleMouseMove)
+      .on("mouseout", handleMouseOut)
       .html((d) => d.name);
   }, [data, metric]);
 
@@ -123,7 +148,10 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
 
   return (
     <div className="author-bar-chart-wrap">
-      <select className="select-box" onChange={handleChangeMetric}>
+      <select
+        className="author-bar-chart__select-box"
+        onChange={handleChangeMetric}
+      >
         {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
             {option}
@@ -131,7 +159,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
         ))}
       </select>
       <svg className="author-bar-chart" ref={svgRef} />
-      <div className="tooltip" />
+      <div className="author-bar-chart__tooltip" ref={tooltipRef} />
     </div>
   );
 };
