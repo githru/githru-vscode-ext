@@ -38,8 +38,8 @@ export type Commit = {
   parentIds: string[];
   author: GitHubUser;
   committer: GitHubUser;
-  authorDate: Date;
-  commitDate: Date;
+  authorDate: string;
+  commitDate: string;
   diffStatistics: DiffStatistics;
   message: string;
   // fill necessary properties...
