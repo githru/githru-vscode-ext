@@ -127,6 +127,7 @@ const dummy: FakeCommitData[] = [
 
 function createTestCommit(fakeCommitData: FakeCommitData): CommitRaw {
   return {
+    sequence: 0,
     tags: [],
     author: {
       name: "",
