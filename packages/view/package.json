@@ -42,7 +42,6 @@
     ]
   },
   "devDependencies": {
-    "@githru-vscode-ext/analysis-engine": "^0.1.0",
     "@babel/core": "^7.18.10",
     "@babel/runtime": "^7.18.9",
     "@githru-vscode-ext/analysis-engine": "^0.1.0",

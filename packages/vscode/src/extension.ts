@@ -1,4 +1,4 @@
-import { getStringifiedMockData } from "@githru-vscode-ext/analysis-engine";
+import { analyzeGit } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import { COMMAND_LAUNCH } from "./commands";
 import WebviewLoader from "./webview-loader";
@@ -11,7 +11,11 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "githru" is now active!');
 
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-        const data = await getStringifiedMockData("initialState");
+        const csmDict = await analyzeGit({ isDebugMode: process.env.NODE_ENV !== 'production' });
+
+		// TODO: run mapper function csm dictionary into the structure for view
+		// below treatments soon be deleted
+		const data = JSON.stringify(csmDict);
 
         new WebviewLoader(context.extensionUri, context.extensionPath, data);
 

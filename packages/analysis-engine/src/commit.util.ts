@@ -3,7 +3,7 @@ import { CommitRaw } from "./types/CommitRaw";
 
 type CommitDict = Map<string, CommitNode>;
 
-export function generateCommitNodeDict(commits: CommitRaw[]): CommitDict {
+export function buildCommitDict(commits: CommitRaw[]): CommitDict {
   return new Map(
     commits.map((commit) => [commit.id, { commit } as CommitNode])
   );
