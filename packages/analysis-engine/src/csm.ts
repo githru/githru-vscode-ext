@@ -46,9 +46,11 @@ export const buildCSM = (
       const squashTaskQueue: CommitNode[] = [mergeParentCommit];
       while (squashTaskQueue.length > 0) {
         // get target
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const mergeCommitNode = squashTaskQueue.shift()!;
 
         // get target's stem
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const mergeCommitStemId = mergeCommitNode.stemId!;
         const mergeCommitStem = stemDict.get(mergeCommitStemId);
         if (!mergeCommitStem) {
