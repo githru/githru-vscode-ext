@@ -1,4 +1,4 @@
-import { generateCommitNodeDict, getLeafNodes } from "./commit.util";
+import { buildCommitDict, getLeafNodes } from "./commit.util";
 import { buildStemDict } from "./stem";
 import { CommitNode } from "./types/CommitNode";
 import { CommitRaw } from "./types/CommitRaw";
@@ -154,7 +154,7 @@ describe("stem", () => {
 
   beforeEach(() => {
     commits = dummy.map(createTestCommit);
-    commitDict = generateCommitNodeDict(commits);
+    commitDict = buildCommitDict(commits);
   });
 
   it("should make instance of Map", () => {

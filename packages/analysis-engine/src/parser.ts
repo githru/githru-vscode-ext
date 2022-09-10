@@ -1,4 +1,10 @@
+import { execSync } from "child_process";
 import { CommitRaw, DifferenceStatistic, GitUser } from "./types/CommitRaw";
+
+export function getGitLog(path: string) {
+  const command = `${path} --no-pager log --all --parents --numstat --date-order --pretty=fuller --decorate -c`;
+  return execSync(command, { encoding: "utf8" });
+}
 
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   category.push({
@@ -7,8 +13,8 @@ function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   });
 }
 
-export default function parseToJSON(log: string) {
-  if (log === "") return [];
+export function getCommitRaws(log: string) {
+  if (!log) return [];
 
   // line 별로 분리하기
   const splitByNewLine = log.split(/\r?\n/);
@@ -103,11 +109,11 @@ export default function parseToJSON(log: string) {
   }
 
   // 각 카테고리로 담은 다음 다시 JSON으로 변환하기 위함
-  const JSONArray: CommitRaw[] = [];
+  const commitRaws: CommitRaw[] = [];
 
   // 카테고리 별로 담은 것을 JSON화 시키기
   for (let i = 0; i < ids.length; i += 1) {
-    JSONArray.push({
+    commitRaws.push({
       sequence: i,
       id: ids[i],
       parents: parentsMatrix[i],
@@ -122,5 +128,5 @@ export default function parseToJSON(log: string) {
     });
   }
 
-  return JSONArray;
+  return commitRaws;
 }

@@ -1,36 +1,24 @@
-interface MockData {
-  message: string;
-  dictionary: {
-    [id: string]: {
-      parentIds: string[];
-    };
-  };
-  obj: Object;
-}
+import { getCommitRaws } from "./parser";
+import { buildCommitDict } from "./commit.util";
+import { buildStemDict } from "./stem";
+import { buildCSMDict } from "./csm";
 
-export const getMockData = async (message: string) =>
-  new Promise<MockData>((resolve) => {
-    setTimeout(() => {
-      console.log(message);
-      resolve({
-        message,
-        dictionary: {
-          first: {
-            parentIds: [],
-          },
-          second: {
-            parentIds: ["first"],
-          },
-          third: {
-            parentIds: ["first", "second"],
-          },
-        },
-        obj: {},
-      });
-    }, 30);
-  });
-
-export const getStringifiedMockData = async (message: string) => {
-  const mockData = await getMockData(message);
-  return JSON.stringify(mockData);
+type AnalysisEngineArgs = {
+  isDebugMode: boolean;
+  gitLog: string;
 };
+
+export const analyzeGit = async (args: AnalysisEngineArgs) => {
+  const commitRaws = await getCommitRaws(args.gitLog);
+  const commitDict = buildCommitDict(commitRaws);
+  const stemDict = buildStemDict(commitDict);
+  const csmDict = buildCSMDict(commitDict, stemDict);
+
+  if (args.isDebugMode) {
+    console.log(csmDict);
+  }
+
+  return csmDict;
+};
+
+export default analyzeGit;
