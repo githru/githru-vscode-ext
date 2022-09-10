@@ -1,4 +1,4 @@
-import type { SelectedDataProps } from "types/global";
+import type { SelectedDataProps } from "types";
 
 import { getCommitListDetail } from "./Detail.util";
 

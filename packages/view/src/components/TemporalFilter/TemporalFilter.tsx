@@ -1,8 +1,7 @@
-import * as React from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState, useEffect } from "react";
 
-import type { GlobalProps } from "types/global";
-import type { ClusterNode } from "types";
+import type { ClusterNode, GlobalProps } from "types";
 
 import { ClocLineChart } from "./ClocLineChart";
 import { CommitLineChart } from "./CommitLineChart";
@@ -16,7 +15,7 @@ import { ThemeSelector } from "./ThemeSelector";
 import "./TemporalFilter.scss";
 
 type Props = GlobalProps & {
-  setFilteredData: React.Dispatch<React.SetStateAction<ClusterNode[]>>;
+  setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
 };
 
 const TemporalFilter = ({ data, setFilteredData }: Props) => {

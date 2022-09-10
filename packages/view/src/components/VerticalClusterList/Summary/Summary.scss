@@ -1,4 +1,4 @@
-@import "../../../styles/pallete";
+@import "styles/pallete";
 
 @mixin animation {
   -webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -18,139 +18,139 @@
   border-radius: $border--radius;
 }
 
-.entire {
+.summary__entire {
   width: 85%;
   margin-left: 20px;
-}
 
-.cluster {
-  align-items: center;
-  width: 85%;
-  padding: 10px 0;
-}
-
-.summary {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.nameBox {
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-.name {
-  @include border(50px);
-
-  display: flex;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  font-weight: bold;
-
-  color: $white;
-  justify-content: center;
-  text-align: center;
-  font-size: 15pt;
-  margin-left: -5px;
-  margin-right: -5px;
-
-  &:hover {
-    @include animation();
-    background-color: $gray-200 !important;
-    color: $black !important;
-    z-index: 9999;
+  .cluster {
+    align-items: center;
+    width: 85%;
+    padding: 10px 0;
   }
 
-  &:nth-child(2n) {
+  .summary {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .nameBox {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .name {
+    @include border(50px);
+
+    display: flex;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+
+    color: $white;
+    justify-content: center;
+    text-align: center;
+    font-size: 15pt;
+    margin-left: -5px;
+    margin-right: -5px;
+
     &:hover {
+      @include animation();
+      background-color: $gray-200 !important;
+      color: $black !important;
+      z-index: 9999;
+    }
+
+    &:nth-child(2n) {
+      &:hover {
+        @include animation();
+        z-index: 9999;
+      }
+    }
+
+    &:nth-child(3n):hover {
       @include animation();
       z-index: 9999;
     }
   }
 
-  &:nth-child(3n):hover {
-    @include animation();
-    z-index: 9999;
-  }
-}
-
-[data-tooltip-text] {
-  &:hover {
-    position: relative;
-  }
-
-  &::after {
-    @include animation();
-    @include shadow();
-    @include border(5px);
-
-    content: attr(data-tooltip-text);
-
-    position: absolute;
-    bottom: 30%;
-    left: -9999px;
-
-    color: #ffffff;
-    font-size: 12px;
-    padding: 7px 12px;
-    margin-bottom: 10px;
-    width: auto;
-    min-width: max-content;
-    word-wrap: break-word;
-
-    opacity: 0;
-    z-index: 9999;
-  }
-
-  &:hover::after {
-    left: 100%;
-    background-color: rgba(34, 34, 34, 0.8);
-    opacity: 1;
-  }
-}
-
-.keywords {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-left: 15px;
-}
-
-.keyword {
-  margin-left: 5px;
-  margin-right: 5px;
-
-  &:hover {
-    @include animation();
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  &.large {
-    font-size: 18pt;
-    font-weight: 900;
-    line-height: 28px;
-
+  [data-tooltip-text] {
     &:hover {
+      position: relative;
+    }
+
+    &::after {
       @include animation();
-      cursor: pointer;
+      @include shadow();
+      @include border(5px);
+
+      content: attr(data-tooltip-text);
+
+      position: absolute;
+      bottom: 30%;
+      left: -9999px;
+
+      color: #ffffff;
+      font-size: 12px;
+      padding: 7px 12px;
+      margin-bottom: 10px;
+      width: auto;
+      min-width: max-content;
+      word-wrap: break-word;
+
+      opacity: 0;
+      z-index: 9999;
+    }
+
+    &:hover::after {
+      left: 100%;
+      background-color: rgba(34, 34, 34, 0.8);
+      opacity: 1;
     }
   }
 
-  &.medium {
-    font-size: 16pt;
-    font-weight: 700;
-    line-height: 28px;
+  .keywords {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 15px;
+  }
+
+  .keyword {
+    margin-left: 5px;
+    margin-right: 5px;
 
     &:hover {
       @include animation();
+      font-weight: 700;
       cursor: pointer;
+    }
+
+    &.large {
+      font-size: 18pt;
+      font-weight: 900;
+      line-height: 28px;
+
+      &:hover {
+        @include animation();
+        cursor: pointer;
+      }
+    }
+
+    &.medium {
+      font-size: 16pt;
+      font-weight: 700;
+      line-height: 28px;
+
+      &:hover {
+        @include animation();
+        cursor: pointer;
+      }
     }
   }
 }
