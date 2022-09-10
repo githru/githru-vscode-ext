@@ -1,12 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import type { ClusterNode } from "types";
+
 import App from "./App";
 import "styles/app.scss";
 
 declare global {
   interface Window {
     acquireVsCodeApi(): unknown;
+    githruData: ClusterNode[];
+    isProduction: boolean;
   }
 }
 

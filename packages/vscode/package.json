@@ -23,6 +23,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run package",
+        "prebuild": "npm run --prefix ../view/ build",
         "build": "npm run compile",
         "compile": "webpack",
         "watch": "webpack --watch",
