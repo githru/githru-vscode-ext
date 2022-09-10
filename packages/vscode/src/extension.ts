@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
         const data = await getStringifiedMockData("initialState");
 
-        new WebviewLoader(context.extensionUri, context.extensionPath, data);
+        subscriptions.push(new WebviewLoader(context.extensionUri, context.extensionPath, data));
 
         vscode.window.showInformationMessage("Hello Githru");
     });

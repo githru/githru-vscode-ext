@@ -32,7 +32,7 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
   };
 
   return (
-    <div className="entire">
+    <div className="summary__entire">
       {clusters.map((cluster: Cluster) => {
         return (
           <React.Fragment key={cluster.clusterId}>
@@ -46,7 +46,7 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
                   {cluster.summary.authorNames.map(
                     (authorArray: Array<string>) => {
                       return authorArray.map((authorName: string) => (
-                        <AuthorName authorName={authorName} />
+                        <AuthorName key={authorName} authorName={authorName} />
                       ));
                       // const colorValue = getColorValue(authorName);
                       // return (
@@ -70,8 +70,8 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
 
                     return (
                       <span
+                        key={`${cluster.clusterId}-${keywordObj.keyword}`}
                         className={["keyword", size].join(" ")}
-                        key={keywordObj.keyword}
                       >
                         {keywordObj.keyword}
                       </span>

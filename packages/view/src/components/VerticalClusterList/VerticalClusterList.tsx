@@ -2,9 +2,10 @@ import React from "react";
 
 import type { GlobalProps, SelectedDataProps } from "types";
 
-import "./VerticalClusterList.scss";
 import { ClusterGraph } from "./ClusterGraph";
 import { Summary } from "./Summary";
+
+import "./VerticalClusterList.scss";
 
 type Props = GlobalProps & {
   setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
