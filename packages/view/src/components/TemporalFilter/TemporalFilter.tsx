@@ -32,7 +32,7 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
       const filteredData = filterDataByDate({ data, fromDate, toDate });
       setFilteredData(filteredData);
     }
-  }, [fromDate, toDate]);
+  }, [data, fromDate, toDate, setFilteredData]);
 
   return (
     <article className="temporal-filter">

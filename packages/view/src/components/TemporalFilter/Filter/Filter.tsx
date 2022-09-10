@@ -29,7 +29,7 @@ const Filter = (props: Props) => {
   useEffect(() => {
     setFromDate(fromDateFilter);
     setToDate(toDateFilter);
-  }, [fromDateFilter, toDateFilter]);
+  }, [fromDateFilter, toDateFilter, setFromDate, setToDate]);
 
   return (
     <section className="filter">
