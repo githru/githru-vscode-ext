@@ -15,7 +15,7 @@ import { getCloc, getMinMaxDate } from "../TemporalFilter.util";
 import "./ClocLineChart.scss";
 // TODO margin 추가하기
 // timeFormatter
-// import { Clocstyling } from "./ClocLineChart.const";
+import { Clocstyling } from "./ClocLineChart.const";
 
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,12 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     if (!wrapperRef.current || !ref.current || !data) return;
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
-    const svg = select(ref.current).attr("width", width).attr("height", height);
+    const svg = select(ref.current)
+      .attr("width", width - Clocstyling.padding.left)
+      .attr(
+        "height",
+        height - Clocstyling.padding.bottom - -Clocstyling.padding.top
+      );
 
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
