@@ -94,4 +94,4 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
   );
 };
 
-export default ClocLineChart;
+export default CommitLineChart;
