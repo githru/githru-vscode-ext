@@ -1,14 +1,10 @@
-import type { GlobalProps } from "types/global";
+import type { SelectedDataProps } from "types/global";
 
-import { getCommitListDetail, getCommitListInCluster } from "./Detail.util";
+import { getCommitListDetail } from "./Detail.util";
 
-const TARGET_CLUSTER_ID = 2435;
-
-const Detail = ({ data }: GlobalProps) => {
-  const commitNodeListInCluster = getCommitListInCluster({
-    data,
-    clusterId: TARGET_CLUSTER_ID,
-  });
+const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
+  if (!selectedData) return null;
+  const commitNodeListInCluster = selectedData.commitNodeList;
   const { authorLength, fileLength, commitLength, insertions, deletions } =
     getCommitListDetail({ commitNodeListInCluster });
 

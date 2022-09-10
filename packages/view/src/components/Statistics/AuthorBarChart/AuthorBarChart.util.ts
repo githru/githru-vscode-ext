@@ -2,12 +2,17 @@ import type { ClusterNode } from "types";
 
 import type { AuthorDataType } from "./AuthorBarChart.type";
 
-export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
+export const getDataByAuthor = (
+  selectedData: ClusterNode[]
+): AuthorDataType[] => {
   // Sample Selected Data
   // 0: {name: 'Brian Munkholm ', commit: 2, insertion: 24, deletion: 78}
   // 1: {name: 'Christian Melchior ', commit: 4, insertion: 56, deletion: 60}
   // 2: {name: 'Nabil Hachicha ', commit: 2, insertion: 2, deletion: 2}
-  const selectedData: ClusterNode[] = [data[0], data[11], data[43]];
+
+  // delete
+  if (!selectedData.length) return [];
+  // const selectedData: ClusterNode[] = [data[0], data[11], data[43]];
 
   const authorDataObj = {};
 

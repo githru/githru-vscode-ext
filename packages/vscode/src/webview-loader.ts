@@ -1,4 +1,3 @@
-import { getStringifiedMockData } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import * as path from "path";
 export default class WebviewLoader implements vscode.Disposable {
@@ -27,12 +26,7 @@ export default class WebviewLoader implements vscode.Disposable {
     }
 
     private async respondToMessage(message: { command: string; payload: unknown }) {
-        if (message.command === "fetchMockData") {
-            const fetchState = await getStringifiedMockData("fetchState");
-            this._panel?.webview.postMessage({
-                command: message.command,
-                payload: fetchState,
-            });
+        if (message.command === "changeClusterOption") {
         }
     }
 
@@ -47,36 +41,16 @@ export default class WebviewLoader implements vscode.Disposable {
                     <meta charset="UTF-8">
                     <meta name="viewport" content="initial-scale=1.0">
                     <title>githru-vscode-ext webview</title>
-                    <meta http-equiv="Content-Security-Policy" 
-                        content="default-src 'none';
-                            img-src https:;
-                            script-src 'unsafe-eval' 'unsafe-inline' vscode-resource:;
-                            style-src vscode-resource: 'unsafe-inline';">
                     <script>
                         window.githruData = ${data};
+                        window.isProduction = false;
                     </script>
                 </head>
                 <body>
-                    <div id="mock1">
-                        <span>githruData</span>
-                    </div>
-                    <script>
-                        document.getElementById("mock1").innerHTML = "<span>githruData1: " + window.githruData + "</span>";
-                    </script>
-                    <div id="mock2">
-                        <span>githruData.dictionary["third"].parentIds[1]</span>
-                    </div>
-                    <script>
-                        document.getElementById("mock2").innerHTML = "githruData2: " + window.githruData.dictionary["third"].parentIds[1] + "</span>";
-                    </script>
-                    <div>
-                        <input id="mockButton" type="button" value="button">
-                    </div>
                     <div id="root" style="position: absolute;width: 100%; height: 100%; overflow: auto; margin-left:80px; left: -80px;">
                     <script src="${reactAppUri}"></script>
                     <script>
-                        var vscode = acquireVsCodeApi();
-                        document.getElementById("mockButton").addEventListener('click', function(){ vscode.postMessage({ command: 'fetchMockData' }); });
+                        const vscode = acquireVsCodeApi();
                     </script>
                 </body>
             </html>

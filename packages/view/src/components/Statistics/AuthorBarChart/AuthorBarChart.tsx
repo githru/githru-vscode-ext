@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode } from "types";
+import type { StatisticsProps } from "types";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
@@ -10,9 +10,7 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
 
-type AuthorBarChartProps = {
-  data: ClusterNode[];
-};
+type AuthorBarChartProps = StatisticsProps;
 
 const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   const svgRef = useRef(null);
