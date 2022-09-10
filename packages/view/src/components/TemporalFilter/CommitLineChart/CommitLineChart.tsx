@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 import type { CommitNode } from "../TemporalFilter.type";
 import { getMinMaxDate } from "../TemporalFilter.util";
 
-// import { Commits } from "./CommitLineChart.const";
+// import { CLOC_STYLING } from "./CommitLineChart.const";
 
 import "./CommitLineChart.scss";
 
@@ -92,8 +92,8 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("fill", "#666666");
   }, [data]);
   return (
-    <div className="CommitLineChartWrap" ref={wrapperRef}>
-      <svg className="CommitLineChart" ref={ref} />
+    <div className="commit-linechart-wrap" ref={wrapperRef}>
+      <svg className="commit-linechart" ref={ref} />
     </div>
   );
 };

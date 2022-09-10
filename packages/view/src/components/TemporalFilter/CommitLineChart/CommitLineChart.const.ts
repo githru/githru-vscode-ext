@@ -1,11 +1,11 @@
 export const CommitH = 50;
 
-export const width = 600; // We will be generating many of these, so let's keep our chart small
+export const WIDTH = 600; // We will be generating many of these, so let's keep our chart small
 
-export const Commits = {
+export const COMMIT_STYLING = {
   // NOTE: Histograms are easier to read when they are wider than they are tall
-  width: width,
-  height: width * 0.9,
+  width: WIDTH,
+  height: WIDTH * 0.9,
   padding: {
     top: 0.1,
     right: 0.3,
