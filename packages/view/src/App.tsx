@@ -30,7 +30,9 @@ const App = () => {
 
   return (
     <div>
-      <TemporalFilter data={data} setFilteredData={setFilteredData} />
+      <div className="head-container">
+        <TemporalFilter data={data} setFilteredData={setFilteredData} />
+      </div>
       <div className="middle-container">
         <VerticalClusterList
           data={filteredData}

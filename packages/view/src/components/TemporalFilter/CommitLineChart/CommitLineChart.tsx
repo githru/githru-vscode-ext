@@ -15,6 +15,10 @@ import { useEffect, useRef } from "react";
 import type { CommitNode } from "../TemporalFilter.type";
 import { getMinMaxDate } from "../TemporalFilter.util";
 
+// import { CLOC_STYLING } from "./CommitLineChart.const";
+
+import "./CommitLineChart.scss";
+
 const timeFormatter = timeFormat("%Y %m %d");
 
 const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
@@ -62,10 +66,10 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
     const xAxis = axisBottom<Date>(xScale)
-      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 10))
+      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
       .tickFormat((d) => timeFormatter(new Date(d)));
 
-    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 10));
+    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
 
     svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
@@ -76,17 +80,20 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .data(commitData)
       .join("rect")
       .classed("commit", true)
-      .attr("x", (d) => {
-        return xScale(new Date(d.date));
-      })
+      // .attr("x", (d) => {
+      //   console.log(xScale(new Date(d.date)));
+      //   return xScale(new Date(d.date));
+      // })
+      .attr("x", (d) => xScale(new Date(d.date)))
+      // .attr("x", (d) => xScale(new Date(d.commit.commitDate)))
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "black");
+      .attr("fill", "#666666");
   }, [data]);
   return (
-    <div ref={wrapperRef}>
-      <svg ref={ref} />
+    <div className="commit-linechart-wrap" ref={wrapperRef}>
+      <svg className="commit-linechart" ref={ref} />
     </div>
   );
 };

@@ -13,7 +13,7 @@
     padding: 10px;
     background: #212121;
     color: white;
-
+    margin-top: 10px;
     .filter {
       display: flex;
       flex: 1;
@@ -28,6 +28,7 @@
   .line-chart {
     display: flex;
     flex-direction: column;
+    height:130px;
     width: 100%;
     // height: 130px;
   }
