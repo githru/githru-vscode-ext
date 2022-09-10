@@ -16,6 +16,7 @@ import { getCloc, getMinMaxDate, timeFormatter } from "../TemporalFilter.util";
 
 import "./ClocLineChart.scss";
 // TODO margin 추가하기
+import { Clocstyling } from "./ClocLineChart.const";
 
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,15 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     if (!wrapperRef.current || !ref.current || !data) return;
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
-    const svg = select(ref.current).attr("width", width).attr("height", height);
+    const svg = select(ref.current)
+      .attr(
+        "width",
+        width - Clocstyling.padding.left - Clocstyling.padding.right
+      )
+      .attr(
+        "height",
+        height - Clocstyling.padding.top - Clocstyling.padding.bottom
+      );
 
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
@@ -43,12 +52,12 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .range([0, width]);
 
     const xAxis = axisBottom<Date>(xScale)
-      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 10))
+      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
       .tickFormat((d) => timeFormatter(new Date(d)));
 
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
-    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 10));
+    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
 
     svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
@@ -56,6 +65,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     svg
       .selectAll(".cloc")
+      .style("background", "gray")
       .data(data)
       .join("rect")
       .classed("cloc", true)
@@ -63,7 +73,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "black");
+      .attr("fill", "red");
   }, [data]);
 
   return (

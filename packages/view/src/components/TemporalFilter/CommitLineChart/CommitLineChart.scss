@@ -1,6 +1,6 @@
 @import "styles/app.scss";
 
-.ClocLineChartWrap {
+.CommitLineChartWrap {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -9,7 +9,7 @@
   margin:auto 0;
 }
 
-.ClocLineChart {
+.CommitLineChart {
   overflow: visible;
   // margin-left: 60px;
   // margin-right:60px;
