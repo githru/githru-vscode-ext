@@ -1,6 +1,6 @@
 // import type { ClusterNode } from "types/NodeTypes.temp";
 // import type { CommitType } from "./CommitType";
-import { CommitH } from "./CommitLineChart.const";
+import { COMMIT_HEIGHT } from "./CommitLineChart.const";
 import type { CommitNode } from "../Type/TemporalFilter.type";
 // import { CommitType } from "./CommitType";
 
@@ -17,5 +17,5 @@ export function TotalCommit(commitCounts: number[]) {
     (sum: number, commit: number) => sum + commit,
     0
   );
-  return totalCommit * CommitH + commitCounts.length;
+  return totalCommit * COMMIT_HEIGHT + commitCounts.length;
 }

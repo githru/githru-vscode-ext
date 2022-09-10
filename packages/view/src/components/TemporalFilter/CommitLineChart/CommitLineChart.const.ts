@@ -1,4 +1,4 @@
-export const CommitH = 50;
+export const COMMIT_HEIGHT = 50;
 
 export const WIDTH = 600; // We will be generating many of these, so let's keep our chart small
 
