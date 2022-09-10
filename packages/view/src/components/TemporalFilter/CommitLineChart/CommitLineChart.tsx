@@ -57,8 +57,6 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       number
     ];
 
-    console.log(commitData);
-
     const xScaleBand = scaleBand<Date>()
       .domain(commitData.map(({ date }) => new Date(date)))
       .range([0, width]);

@@ -38,8 +38,8 @@ export type Commit = {
   parentIds: string[];
   author: GitHubUser;
   committer: GitHubUser;
-  authorDate: Date;
-  commitDate: Date;
+  authorDate: string;
+  commitDate: string;
   diffStatistics: DiffStatistics;
   message: string;
   // fill necessary properties...
@@ -50,10 +50,10 @@ export type NodeTypeName = typeof NODE_TYPE_NAME[number];
 
 export type NodeBase = {
   nodeTypeName: NodeTypeName;
-  isRootNode: boolean;
-  isLeafNode: boolean;
+  isRootNode?: boolean;
+  isLeafNode?: boolean;
 
-  getParents: () => NodeType[];
+  getParents?: () => NodeType[];
 };
 
 export type NodeType = CommitNode | ClusterNode;

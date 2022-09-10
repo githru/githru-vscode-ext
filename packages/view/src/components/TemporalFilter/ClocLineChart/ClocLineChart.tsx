@@ -47,7 +47,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .domain([new Date(xMin), new Date(xMax)])
       .range([0, width]);
 
-    const xScaleBand = scaleBand<Date>()
+    const xScaleBand = scaleBand<string>()
       .domain(data.map((commitNode) => commitNode.commit.commitDate))
       .range([0, width]);
 
