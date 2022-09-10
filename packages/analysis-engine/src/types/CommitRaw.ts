@@ -23,9 +23,9 @@ export interface CommitRaw {
   branches: string[];
   tags: string[];
   author: GitUser;
-  authorDate: string;
+  authorDate: Date;
   committer: GitUser;
-  committerDate: string;
+  committerDate: Date;
   message: string;
   differenceStatistic: DifferenceStatistic;
 }
