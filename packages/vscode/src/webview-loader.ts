@@ -27,6 +27,11 @@ export default class WebviewLoader implements vscode.Disposable {
 
     private async respondToMessage(message: { command: string; payload: unknown }) {
         if (message.command === "changeClusterOption") {
+            this._panel?.webview.postMessage({
+                command: message.command,
+                // TODO v2: need to re-fetch git data on behalf of cluster option
+                payload: {},
+            });
         }
     }
 

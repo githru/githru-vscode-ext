@@ -11,7 +11,7 @@ export const useGetTotalData = (): GlobalProps => {
     console.log("isProduction = ", window.isProduction);
 
     if (window.isProduction) {
-      setData(window.githruData);
+      setData(window.githruData as ClusterNode[]);
     } else {
       setData(fakeData as unknown as ClusterNode[]);
       // fetch("./sampleClusterNodeList.json")
