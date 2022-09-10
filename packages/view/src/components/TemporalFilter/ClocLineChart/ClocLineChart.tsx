@@ -12,7 +12,7 @@ import {
 import { useEffect, useRef } from "react";
 
 import type { CommitNode } from "../TemporalFilter.type";
-import { getCloc, timeFormatter } from "../TemporalFilter.util";
+import { getCloc, getMinMaxDate, timeFormatter } from "../TemporalFilter.util";
 
 import "./ClocLineChart.scss";
 // TODO margin 추가하기
@@ -30,8 +30,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
 
-    const xMin = data[0].commit.commitDate;
-    const xMax = data[data.length - 1].commit.commitDate;
+    const [xMin, xMax] = getMinMaxDate(data);
 
     const [yMin, yMax] = extent(data, (d) => getCloc(d)) as [number, number];
 

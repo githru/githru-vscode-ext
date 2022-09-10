@@ -1,15 +1,14 @@
-export type Author = {
-  id: string;
-  name: string;
+export type Keyword = {
+  keyword: string;
+  count: number;
 };
 
-export type Commit = {
-  commitId: string;
-  authorNames: Array<Author>;
-  message: string;
+export type Summary = {
+  authorNames: Array<Array<string>>;
+  keywords: Array<Keyword>;
 };
 
 export type Cluster = {
-  id: string;
-  commits: Array<Commit>;
+  clusterId: number;
+  summary: Summary;
 };
