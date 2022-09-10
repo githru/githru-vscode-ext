@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 import type { CommitNode } from "../TemporalFilter.type";
 import { getMinMaxDate } from "../TemporalFilter.util";
 
-import { Commits } from "./CommitLineChart.const";
+// import { Commits } from "./CommitLineChart.const";
 
 import "./CommitLineChart.scss";
 
@@ -30,9 +30,7 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
 
-    const svg = select(ref.current)
-      .attr("width", width - Commits.padding.left - Commits.padding.right)
-      .attr("height", height - Commits.padding.top - Commits.padding.bottom);
+    const svg = select(ref.current).attr("width", width).attr("height", height);
 
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
@@ -91,7 +89,7 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "blue");
+      .attr("fill", "#666666");
   }, [data]);
   return (
     <div className="CommitLineChartWrap" ref={wrapperRef}>

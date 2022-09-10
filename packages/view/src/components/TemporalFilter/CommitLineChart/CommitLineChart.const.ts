@@ -7,9 +7,9 @@ export const Commits = {
   width: width,
   height: width * 0.9,
   padding: {
-    top: 5,
+    top: 0.1,
     right: 0.3,
-    bottom: 5,
+    bottom: 0.1,
     left: 0.5,
   },
   //   margin: {

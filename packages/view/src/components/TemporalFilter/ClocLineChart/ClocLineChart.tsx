@@ -1,5 +1,4 @@
 import {
-  axisBottom,
   axisLeft,
   extent,
   scaleBand,
@@ -7,16 +6,16 @@ import {
   scaleTime,
   select,
   ticks,
-  timeTicks,
 } from "d3";
 import { useEffect, useRef } from "react";
 
 import type { CommitNode } from "../TemporalFilter.type";
-import { getCloc, getMinMaxDate, timeFormatter } from "../TemporalFilter.util";
+import { getCloc, getMinMaxDate } from "../TemporalFilter.util";
 
 import "./ClocLineChart.scss";
 // TODO margin 추가하기
-import { Clocstyling } from "./ClocLineChart.const";
+// timeFormatter
+// import { Clocstyling } from "./ClocLineChart.const";
 
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -26,15 +25,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
     if (!wrapperRef.current || !ref.current || !data) return;
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
-    const svg = select(ref.current)
-      .attr(
-        "width",
-        width - Clocstyling.padding.left - Clocstyling.padding.right
-      )
-      .attr(
-        "height",
-        height - Clocstyling.padding.top - Clocstyling.padding.bottom
-      );
+    const svg = select(ref.current).attr("width", width).attr("height", height);
 
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
@@ -51,15 +42,15 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .domain(data.map((commitNode) => commitNode.commit.commitDate))
       .range([0, width]);
 
-    const xAxis = axisBottom<Date>(xScale)
-      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
-      .tickFormat((d) => timeFormatter(new Date(d)));
+    // const xAxis = axisBottom<Date>(xScale)
+    //   .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
+    //   .tickFormat((d) => timeFormatter(new Date(d)));
 
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
     const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
 
-    svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
+    // svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
     svg.append("g").call(yAxis).attr("transform", `translate(${width},0)`);
 
@@ -73,7 +64,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "blue");
+      .attr("fill", "#666666");
   }, [data]);
 
   return (
