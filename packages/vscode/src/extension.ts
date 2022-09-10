@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// below treatments soon be deleted
 		const data = JSON.stringify(csmDict);
 
-        new WebviewLoader(context.extensionUri, context.extensionPath, data);
+        subscriptions.push(new WebviewLoader(context.extensionUri, context.extensionPath, data));
 
         vscode.window.showInformationMessage("Hello Githru");
     });

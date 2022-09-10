@@ -1,17 +1,14 @@
 import * as vscode from "vscode";
 import * as path from "path";
-export default class WebviewLoader {
+export default class WebviewLoader implements vscode.Disposable {
     private readonly _panel: vscode.WebviewPanel | undefined;
-    private fileName: string;
     private fsPath: string;
 
     constructor(private readonly fileUri: vscode.Uri, private readonly extensionPath: string, data: string) {
         const viewColumn = vscode.ViewColumn.One;
-
         this.fsPath = fileUri.fsPath;
-        this.fileName = path.basename(this.fsPath);
 
-        this._panel = vscode.window.createWebviewPanel("WebviewLoader", "webview", viewColumn, {
+        this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
             enableScripts: true,
             retainContextWhenHidden: true,
             localResourceRoots: [vscode.Uri.file(path.join(this.extensionPath, "dist"))],
@@ -24,13 +21,12 @@ export default class WebviewLoader {
         this._panel.webview.html = this.getWebviewContent(data);
     }
 
+    dispose() {
+        this._panel?.dispose();
+    }
+
     private async respondToMessage(message: { command: string; payload: unknown }) {
         if (message.command === "changeClusterOption") {
-            this._panel?.webview.postMessage({
-                command: message.command,
-                // TODO v2: need to re-fetch git data on behalf of cluster option
-                payload: {},
-            });
         }
     }
 
@@ -45,20 +41,16 @@ export default class WebviewLoader {
                     <meta charset="UTF-8">
                     <meta name="viewport" content="initial-scale=1.0">
                     <title>githru-vscode-ext webview</title>
-                    <meta http-equiv="Content-Security-Policy" 
-                        content="default-src 'none';
-                            img-src https:;
-                            script-src 'unsafe-eval' 'unsafe-inline' vscode-resource:;
-                            style-src vscode-resource: 'unsafe-inline';">
                     <script>
                         window.githruData = ${data};
+                        window.isProduction = false;
                     </script>
                 </head>
                 <body>
                     <div id="root" style="position: absolute;width: 100%; height: 100%; overflow: auto; margin-left:80px; left: -80px;">
                     <script src="${reactAppUri}"></script>
                     <script>
-                        var vscode = acquireVsCodeApi();
+                        const vscode = acquireVsCodeApi();
                     </script>
                 </body>
             </html>
