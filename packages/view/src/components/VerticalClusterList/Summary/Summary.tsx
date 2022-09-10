@@ -32,7 +32,7 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
   };
 
   return (
-    <div className="entire">
+    <div className="summary__entire">
       {clusters.map((cluster: Cluster) => {
         return (
           <React.Fragment key={cluster.clusterId}>

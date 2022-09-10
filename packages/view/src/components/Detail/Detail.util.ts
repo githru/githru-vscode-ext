@@ -1,4 +1,4 @@
-import type { CommitNode } from "types/";
+import type { CommitNode } from "types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getDataSetSize = <T extends any[]>(arr: T, callback: Function) => {
@@ -38,21 +38,21 @@ const getChangeFileLength = ({
   return getDataSetSize(commitNodeListInCluster, fn);
 };
 
-type ObjAddCommarProps = {
+type ObjAddCommaProps = {
   authorLength: number;
   fileLength: number;
   commitLength: number;
   insertions: number;
   deletions: number;
 };
-type ObjAddCommarReturn = { [key in keyof ObjAddCommarProps]: string };
-const objAddCommar = (obj: ObjAddCommarProps): ObjAddCommarReturn =>
+type ObjAddCommaReturn = { [key in keyof ObjAddCommaProps]: string };
+const objAddComma = (obj: ObjAddCommaProps): ObjAddCommaReturn =>
   Object.entries(obj).reduce((acc, [k, v]) => {
     return {
       ...acc,
       [k]: v.toLocaleString("en"),
     };
-  }, {}) as ObjAddCommarReturn;
+  }, {}) as ObjAddCommaReturn;
 
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
 export const getCommitListDetail = ({
@@ -70,7 +70,7 @@ export const getCommitListDetail = ({
       deletions: 0,
     }
   );
-  return objAddCommar({
+  return objAddComma({
     authorLength,
     fileLength,
     commitLength: commitNodeListInCluster.length,

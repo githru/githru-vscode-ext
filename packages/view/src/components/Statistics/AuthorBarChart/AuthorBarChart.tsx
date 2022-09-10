@@ -62,7 +62,11 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const xAxis = d3.axisBottom(xScale).ticks(5, "%").tickSizeOuter(0);
     xAxisGroup.call(xAxis);
 
-    const yAxis = d3.axisLeft(yScale).ticks(0).tickSizeOuter(0);
+    const yAxis = d3
+      .axisLeft(yScale)
+      .ticks(0)
+      .tickSizeInner(3)
+      .tickSizeOuter(0);
     yAxisGroup.call(yAxis);
 
     xAxisGroup
@@ -87,13 +91,13 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
         .style("top", `${e.pageY - 70}px`)
         .html(
           `<p class="name">${d.name}</p>
-        <p>${metric}: 
-          <span class="selected">
-            ${d[metric].toLocaleString()}
-          </span> 
-          / ${totalMetricValues.toLocaleString()} 
-          (${((d[metric] / totalMetricValues) * 100).toFixed(0)}%) 
-        </p>`
+          <p>${metric}: 
+            <span class="selected">
+              ${d[metric].toLocaleString()}
+            </span> 
+            / ${totalMetricValues.toLocaleString()} 
+            (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
+          </p>`
         );
     };
     const handleMouseOut = () => {
