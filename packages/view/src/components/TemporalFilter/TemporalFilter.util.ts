@@ -16,12 +16,10 @@ export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
     );
   });
 
-  return Array.from(
-    sortedData.sort((a, b) => {
-      return new Date(a.commit.commitDate) > new Date(b.commit.commitDate)
-        ? 1
-        : -1;
-    })
+  return sortedData.sort(
+    (a, b) =>
+      Number(new Date(a.commit.commitDate)) -
+      Number(new Date(b.commit.commitDate))
   );
 }
 
