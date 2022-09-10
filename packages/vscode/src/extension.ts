@@ -7,20 +7,20 @@ import WebviewLoader from "./webview-loader";
 let myStatusBarItem: vscode.StatusBarItem;
 
 export function activate(context: vscode.ExtensionContext) {
-    const { subscriptions } = context;
+    const { subscriptions, extensionUri, extensionPath } = context;
 
     console.log('Congratulations, your extension "githru" is now active!');
 
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
 		const { path } = await findGit();
-		const gitLog = await getGitLog(path, context.extensionPath);
+		const gitLog = await getGitLog(path, extensionPath);
         const csmDict = await analyzeGit({ isDebugMode: process.env.NODE_ENV !== 'production', gitLog });
 
 		// TODO: run mapper function csm dictionary into the structure for view
 		// below treatments soon be deleted
 		const data = JSON.stringify(csmDict);
 
-        subscriptions.push(new WebviewLoader(context.extensionUri, context.extensionPath, data));
+        subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
 
         vscode.window.showInformationMessage("Hello Githru");
     });
