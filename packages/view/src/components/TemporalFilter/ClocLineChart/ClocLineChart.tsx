@@ -73,7 +73,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "red");
+      .attr("fill", "blue");
   }, [data]);
 
   return (

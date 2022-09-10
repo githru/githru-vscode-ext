@@ -91,7 +91,7 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "red");
+      .attr("fill", "blue");
   }, [data]);
   return (
     <div className="CommitLineChartWrap" ref={wrapperRef}>
