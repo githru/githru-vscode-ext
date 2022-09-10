@@ -20,7 +20,6 @@ import "./ClocLineChart.scss";
 const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
-  const margin = { left: 2.5, right: 2.5, top: 2.5, bottom: 2.5 };
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current || !data) return;
@@ -38,7 +37,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     const xScale = scaleTime()
       .domain([new Date(xMin), new Date(xMax)])
-      .range([0, width - margin.right]);
+      .range([0, width]);
 
     const xScaleBand = scaleBand<Date>()
       .domain(data.map((commitNode) => commitNode.commit.commitDate))
@@ -65,8 +64,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("margin", margin.left + margin.right + margin.top)
-      .attr("fill", "red");
+      .attr("fill", "black");
   }, [data]);
 
   return (
