@@ -1,4 +1,4 @@
-import { buildCSM } from "./csm";
+import { buildCSMDict } from "./csm";
 
 import type { CommitRaw } from "./types/CommitRaw";
 import type { CommitNode } from "./types/CommitNode";
@@ -76,7 +76,7 @@ describe("csm", () => {
     let csmDict: CSMDictionary;
 
     beforeAll(() => {
-      csmDict = buildCSM(fakeCommitNodeDict, fakeStemDict);
+      csmDict = buildCSMDict(fakeCommitNodeDict, fakeStemDict);
     });
 
     it("should return csm-dictionary", () => {

@@ -11,7 +11,7 @@ import type { CSMDictionary, CSMNode } from "./types/CSM";
  * @param {Map<string, Stem>} stemDict
  * @returns {CSMDictionary}
  */
-export const buildCSM = (
+export const buildCSMDict = (
   commitDict: Map<string, CommitNode>,
   stemDict: Map<string, Stem>
 ): CSMDictionary => {
