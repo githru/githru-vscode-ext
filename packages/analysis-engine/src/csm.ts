@@ -29,7 +29,7 @@ export const buildCSM = (
     // return {};
   }
   const branch = "master";
-  const stemNodes = masterStem.nodes;
+  const stemNodes = masterStem.nodes.reverse(); // start on root-node
 
   const csmNodes: CSMNode[] = [];
 
@@ -56,13 +56,17 @@ export const buildCSM = (
           continue;
         }
 
-        // squash
+        // prepare squash
+        const mergeCommitStemLastIndex = mergeCommitStem.nodes.length - 1;
         const spliceIndex = mergeCommitStem.nodes.findIndex(
           ({ commit: { id } }) => id === mergeCommitNode.commit.id
         );
+        const spliceCount = mergeCommitStemLastIndex - spliceIndex + 1;
+
+        // squash
         const spliceCommitNodes = mergeCommitStem.nodes.splice(
-          0,
-          spliceIndex + 1
+          spliceIndex,
+          spliceCount
         );
         squashCommitNodes.push(...spliceCommitNodes);
 

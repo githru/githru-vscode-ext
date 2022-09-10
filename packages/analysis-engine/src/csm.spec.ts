@@ -15,31 +15,28 @@ describe("csm", () => {
     Pick<CommitRaw, "id" | "parents" | "branches" | "sequence">
   >([
     // master
-    ["0", { id: "0", parents: [], branches: [], sequence: 0 }],
-    ["1", { id: "1", parents: ["0"], branches: [], sequence: 1 }],
-    ["2", { id: "2", parents: ["1", "8"], branches: [], sequence: 7 }],
-    ["3", { id: "3", parents: ["2", "11"], branches: [], sequence: 14 }],
-    ["4", { id: "4", parents: ["3"], branches: [], sequence: 15 }],
-    ["5", { id: "5", parents: ["4"], branches: ["master"], sequence: 16 }],
+    ["0", { id: "0", parents: [], branches: [], sequence: 16 }],
+    ["1", { id: "1", parents: ["0"], branches: [], sequence: 15 }],
+    ["2", { id: "2", parents: ["1", "8"], branches: [], sequence: 9 }],
+    ["3", { id: "3", parents: ["2", "11"], branches: [], sequence: 2 }],
+    ["4", { id: "4", parents: ["3"], branches: [], sequence: 1 }],
+    ["5", { id: "5", parents: ["4"], branches: ["master"], sequence: 0 }],
     // sub1
-    ["6", { id: "6", parents: ["1"], branches: [], sequence: 2 }],
-    ["7", { id: "7", parents: ["6"], branches: [], sequence: 3 }],
-    ["8", { id: "8", parents: ["7", "13"], branches: [], sequence: 6 }],
+    ["6", { id: "6", parents: ["1"], branches: [], sequence: 14 }],
+    ["7", { id: "7", parents: ["6"], branches: [], sequence: 13 }],
+    ["8", { id: "8", parents: ["7", "13"], branches: [], sequence: 10 }],
     ["9", { id: "9", parents: ["8" /* "2" */], branches: [], sequence: 8 }],
-    ["10", { id: "10", parents: ["9"], branches: [], sequence: 9 }],
+    ["10", { id: "10", parents: ["9"], branches: [], sequence: 7 }],
     [
       "11",
-      { id: "11", parents: ["10", "16"], branches: ["sub1"], sequence: 13 },
+      { id: "11", parents: ["10", "16"], branches: ["sub1"], sequence: 3 },
     ],
     // sub2
-    ["12", { id: "12", parents: ["7"], branches: [], sequence: 4 }],
-    ["13", { id: "13", parents: ["12"], branches: [], sequence: 5 }],
-    [
-      "14",
-      { id: "14", parents: ["13" /* "10" */], branches: [], sequence: 10 },
-    ],
-    ["15", { id: "15", parents: ["14"], branches: [], sequence: 11 }],
-    ["16", { id: "16", parents: ["15"], branches: ["sub2"], sequence: 12 }],
+    ["12", { id: "12", parents: ["7"], branches: [], sequence: 12 }],
+    ["13", { id: "13", parents: ["12"], branches: [], sequence: 11 }],
+    ["14", { id: "14", parents: ["13" /* "10" */], branches: [], sequence: 6 }],
+    ["15", { id: "15", parents: ["14"], branches: [], sequence: 5 }],
+    ["16", { id: "16", parents: ["15"], branches: ["sub2"], sequence: 4 }],
   ]) as Map<string, CommitRaw>;
 
   function makeFakeStemTuple(
@@ -57,10 +54,13 @@ describe("csm", () => {
     ];
   }
 
+  // master = [0, 1,              2,                 3, 4, 5]
+  // sub1 =         [6,7,       8,  9,10,         11]
+  // sub2 =              [12,13,         14,15,16]
   const fakeStemDict: Map<string, Stem> = new Map([
-    makeFakeStemTuple("master", [0, 1, 2, 3, 4, 5].map(String)),
-    makeFakeStemTuple("sub1", [6, 7, 8, 9, 10, 11].map(String)),
-    makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].map(String)),
+    makeFakeStemTuple("master", [0, 1, 2, 3, 4, 5].reverse().map(String)),
+    makeFakeStemTuple("sub1", [6, 7, 8, 9, 10, 11].reverse().map(String)),
+    makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].reverse().map(String)),
   ]);
 
   const fakeCommitNodeDict: Map<string, CommitNode> = Array.from(
@@ -123,11 +123,11 @@ describe("csm", () => {
           expect(expectedMergeCommitIds.includes(commitId)).toBe(true);
         });
 
-        // 2 commit has squash-commits(6,7,12,13,8)
-        // 3 commit has squash-commits(9,10,14,15,16,11)
+        // 2 commit has squash-commits(8,13,12,7,6)
+        // 3 commit has squash-commits(11,16,15,14,10,9)
         const expectedSquashCommitIds = {
-          "2": ["6", "7", "12", "13", "8"],
-          "3": ["9", "10", "14", "15", "16", "11"],
+          "2": ["8", "13", "12", "7", "6"],
+          "3": ["11", "16", "15", "14", "10", "9"],
         };
         mergeCSMNodes.forEach((csmNode) => {
           const squashCommitIds = csmNode.source.map(
