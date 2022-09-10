@@ -1,22 +1,20 @@
-import { getCommitRaws, getGitLog } from "./parser";
+import { getCommitRaws } from "./parser";
 import { buildCommitDict } from "./commit.util";
 import { buildStemDict } from "./stem";
-// TODO: import { buildCSMDict } from "./csm"
 
-type AnalysisEngineOption = {
+type AnalysisEngineArgs = {
   isDebugMode: boolean;
+  gitLog: string;
 };
 
-export const analyzeGit = async (option?: AnalysisEngineOption) => {
-  const gitLog = await getGitLog();
-  const commitRaws = await getCommitRaws(gitLog);
+export const analyzeGit = async (args: AnalysisEngineArgs) => {
+  const commitRaws = await getCommitRaws(args.gitLog);
   const commitDict = buildCommitDict(commitRaws);
   const stemDict = buildStemDict(commitDict);
   // const csmDict = buildCSM(commitDict, stemDict);
-
   // return csmDict;
 
-  if (option?.isDebugMode) {
+  if (args.isDebugMode) {
     console.log(stemDict);
   }
 

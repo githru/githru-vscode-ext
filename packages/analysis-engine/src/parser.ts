@@ -1,35 +1,9 @@
-import { spawn } from "child_process";
+import { execSync } from "child_process";
 import { CommitRaw, DifferenceStatistic, GitUser } from "./types/CommitRaw";
 
-export function getGitLog(): Promise<string> {
-  const git = spawn("git", [
-    "--no-pager",
-    "log",
-    "--all",
-    "--parents",
-    "--numstat",
-    "--date-order",
-    "--pretty=fuller",
-    "--decorate",
-    "-c",
-  ]);
-
-  return new Promise((resolve, reject) => {
-    let gitLog = "";
-
-    git.stdout.on("data", (data) => {
-      gitLog += data.toString();
-    });
-
-    git.stderr.on("error", (data) => {
-      console.error(`stderr: ${data}`);
-      reject(data);
-    });
-
-    git.on("close", () => {
-      resolve(gitLog);
-    });
-  });
+export function getGitLog(path: string) {
+  const command = `${path} --no-pager log --all --parents --numstat --date-order --pretty=fuller --decorate -c`;
+  return execSync(command, { encoding: "utf8" });
 }
 
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
