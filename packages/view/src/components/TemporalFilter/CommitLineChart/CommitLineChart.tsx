@@ -51,8 +51,6 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       number
     ];
 
-    console.log(commitData);
-
     const xScaleBand = scaleBand<Date>()
       .domain(commitData.map(({ date }) => new Date(date)))
       .range([0, width]);
@@ -79,7 +77,6 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .join("rect")
       .classed("commit", true)
       .attr("x", (d) => {
-        console.log(xScale(new Date(d.date)));
         return xScale(new Date(d.date));
       })
       .attr("y", (d) => yScale(d.commit))
