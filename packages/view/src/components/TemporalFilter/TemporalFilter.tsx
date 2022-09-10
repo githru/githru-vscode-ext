@@ -1,15 +1,18 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 
-import type { ClusterNode } from "types";
 import type { GlobalProps } from "types/global";
+import type { ClusterNode } from "types";
 
 import { ClocLineChart } from "./ClocLineChart";
 import { CommitLineChart } from "./CommitLineChart";
 import { Filter } from "./Filter";
-import { filterDataByDate, sortBasedOnCommitNode } from "./TemporalFilter.util";
+import {
+  filterDataByDate,
+  getMinMaxDate,
+  sortBasedOnCommitNode,
+} from "./TemporalFilter.util";
 import { ThemeSelector } from "./ThemeSelector";
-
 import "./TemporalFilter.scss";
 
 type Props = GlobalProps & {
@@ -18,8 +21,9 @@ type Props = GlobalProps & {
 
 const TemporalFilter = ({ data, setFilteredData }: Props) => {
   const sortedData = sortBasedOnCommitNode(data);
-  const [fromDate, setFromDate] = useState<string>("");
-  const [toDate, setToDate] = useState<string>("");
+  const [minDate, maxDate] = getMinMaxDate(sortedData);
+  const [fromDate, setFromDate] = useState<string>(minDate);
+  const [toDate, setToDate] = useState<string>(maxDate);
 
   useEffect(() => {
     if (fromDate === "" || toDate === "") {
@@ -33,7 +37,12 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
   return (
     <article className="temporal-filter">
       <div className="data-control-container">
-        <Filter setFromDate={setFromDate} setToDate={setToDate} />
+        <Filter
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
         <ThemeSelector />
       </div>
       <div className="line-chart">

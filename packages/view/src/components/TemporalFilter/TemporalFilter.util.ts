@@ -1,6 +1,7 @@
 import { timeFormat } from "d3";
 
 import type { ClusterNode } from "types/NodeTypes.temp";
+import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
 
 import type { CommitNode } from "./TemporalFilter.type";
 
@@ -10,7 +11,9 @@ import type { CommitNode } from "./TemporalFilter.type";
 export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
   const sortedData: CommitNode[] = [];
   data.forEach((cluster) => {
-    cluster.commitNodeList.map((commitNode) => sortedData.push(commitNode));
+    cluster.commitNodeList.map((commitNode: CommitNode) =>
+      sortedData.push(commitNode)
+    );
   });
 
   return Array.from(
@@ -33,17 +36,28 @@ type FilterDataByDateProps = {
 export function filterDataByDate(props: FilterDataByDateProps): ClusterNode[] {
   const { data, fromDate, toDate } = props;
 
-  const filteredData = data.filter((clusterNode) => {
-    return clusterNode.commitNodeList.filter((commitNode) => {
-      if (
-        new Date(commitNode.commit.commitDate) >= new Date(fromDate) &&
-        new Date(commitNode.commit.commitDate) <= new Date(toDate)
-      ) {
-        return true;
-      }
-      return false;
+  const filteredData = data
+    .map((clusterNode) => {
+      const filteredCommitNodeList = clusterNode.commitNodeList.filter(
+        (commitNode: CommitNode) => {
+          if (
+            new Date(commitNode.commit.commitDate) >= new Date(fromDate) &&
+            new Date(commitNode.commit.commitDate) <= new Date(toDate)
+          ) {
+            return true;
+          }
+          return false;
+        }
+      );
+      return filteredCommitNodeList;
+    })
+    .filter((commitNodeList) => commitNodeList.length > 0)
+    .map((commitNodeList): ClusterNode => {
+      return {
+        nodeTypeName: NODE_TYPE_NAME[1],
+        commitNodeList,
+      };
     });
-  });
   return filteredData;
 }
 
