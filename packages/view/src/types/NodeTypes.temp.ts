@@ -1,5 +1,6 @@
 // TODO: Entire types will be imported from analysis-engine
 
+// todo: engine ComitRaw 와 통일
 // Holds just commit log raw data
 export type CommitRaw = {
   id: string;
@@ -15,6 +16,7 @@ export type CommitRaw = {
   // fill necessary properties...
 };
 
+// todo: engine DifferenceStatistic 와 통일
 export type DiffStatistics = {
   changedFileCount: number;
   insertions: number;
@@ -27,6 +29,7 @@ export type DiffStatistics = {
   };
 };
 
+// todo: engine GitUser 와 통일
 export type GitHubUser = {
   id: string;
   names: string[];
@@ -50,10 +53,10 @@ export type NodeTypeName = typeof NODE_TYPE_NAME[number];
 
 export type NodeBase = {
   nodeTypeName: NodeTypeName;
-  isRootNode?: boolean;
-  isLeafNode?: boolean;
+  // isRootNode: boolean;
+  // isLeafNode: boolean;
 
-  getParents?: () => NodeType[];
+  // getParents: () => NodeType[];
 };
 
 export type NodeType = CommitNode | ClusterNode;
@@ -62,11 +65,11 @@ export type NodeType = CommitNode | ClusterNode;
 export type CommitNode = NodeBase & {
   nodeTypeName: "COMMIT";
   commit: Commit;
-  seq: number;
+  // seq: number;
   clusterId: number; // 동일한 Cluster 내부 commit 참조 id
-  hasMajorTag: boolean;
-  hasMinorTag: boolean;
-  isMergeCommit: boolean;
+  // hasMajorTag: boolean;
+  // hasMinorTag: boolean;
+  // isMergeCommit: boolean;
 };
 
 export type ClusterNode = NodeBase & {
