@@ -77,6 +77,7 @@ function findGitOnWin32() {
 	return findSystemGitWin32(process.env['ProgramW6432'])
 		.then(undefined, () => findSystemGitWin32(process.env['ProgramFiles(x86)']))
 		.then(undefined, () => findSystemGitWin32(process.env['ProgramFiles']))
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		.then(undefined, () => findSystemGitWin32(process.env['LocalAppData'] ? path.join(process.env['LocalAppData']!, 'Programs') : undefined))
 		.then(undefined, () => findGitWin32InPath());
 }
