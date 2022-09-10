@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 
 import "./Filter.scss";
@@ -6,25 +6,30 @@ import "./Filter.scss";
 type Props = {
   setFromDate: React.Dispatch<React.SetStateAction<string>>;
   setToDate: React.Dispatch<React.SetStateAction<string>>;
+  minDate: string;
+  maxDate: string;
 };
 
 const Filter = (props: Props) => {
-  const { setFromDate, setToDate } = props;
-  const [fromDateFilter, setFromDateFilter] = useState<string>("");
-  const [toDateFilter, setToDateFilter] = useState<string>("");
+  const { setFromDate, setToDate, minDate, maxDate } = props;
+  const [fromDateFilter, setFromDateFilter] = useState<string>(minDate);
+  const [toDateFilter, setToDateFilter] = useState<string>(maxDate);
 
   const fromDateChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
     setFromDateFilter(e.target.value);
-    setFromDate(fromDateFilter);
   };
   const toDateChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
     setToDateFilter(e.target.value);
-    setToDate(toDateFilter);
   };
+
+  useEffect(() => {
+    setFromDate(fromDateFilter);
+    setToDate(toDateFilter);
+  }, [fromDateFilter, toDateFilter]);
 
   return (
     <section className="filter">
@@ -35,12 +40,16 @@ const Filter = (props: Props) => {
             className="date-from"
             type="date"
             value={fromDateFilter}
+            min={minDate}
+            max={maxDate}
             onChange={fromDateChangeHandler}
           />
           <span>To:</span>
           <input
             className="date-to"
             type="date"
+            min={minDate}
+            max={maxDate}
             value={toDateFilter}
             onChange={toDateChangeHandler}
           />
