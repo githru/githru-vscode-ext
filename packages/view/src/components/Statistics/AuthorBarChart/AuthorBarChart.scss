@@ -1,6 +1,6 @@
 @import "styles/app.scss";
 
-.AuthorBarChartWrap {
+.author-bar-chart-wrap {
   width: 500px;
   background: $gray-900;
   height: 100%;
@@ -10,12 +10,7 @@
   font-size: 20px;
 }
 
-.authorBarChart {
-  overflow: visible;
-  margin: 40px;
-}
-
-.selectBox {
+.author-bar-chart__select-box {
   background: transparent;
   border: none;
   margin: 50px;
@@ -26,51 +21,70 @@
   text-align: center;
 }
 
-.axis {
-  color: $white;
-  font-weight: bold;
-  font-size: 11px;
-}
+.author-bar-chart {
+  overflow: visible;
+  margin: 40px;
 
-.yAxis {
-  text {
-    display: none;
-  }
-}
+  .axis {
+    color: $white;
+    font-weight: bold;
+    font-size: 11px;
 
-.xAxis {
-  .xAxisLabel {
-    fill: $white;
-    font-size: 15px;
-  }
-}
+    &.y-axis {
+      text {
+        display: none;
+      }
+    }
 
-.bar {
-  rect {
-    fill: #0077aa;
-  }
-
-  &:hover {
-    rect {
-      fill: $gray-900;
-      stroke: #0077aa;
-      stroke-width: 2;
+    &.x-axis {
+      .x-axis-label {
+        fill: $white;
+        font-size: 15px;
+      }
     }
   }
 
-  .name {
-    fill: $white;
-    stroke: none;
-    font-size: 14px;
+  .bars {
+    .bar {
+      &:hover {
+        rect {
+          fill: $gray-900;
+          stroke: #0077aa;
+          stroke-width: 2;
+        }
+      }
+
+      rect {
+        fill: #0077aa;
+      }
+
+      .name {
+        fill: $white;
+        stroke: none;
+        font-size: 14px;
+        text-anchor: start;
+        font-weight: normal;
+      }
+    }
   }
 }
 
-.hoverValue {
-  height: 30px;
+.author-bar-chart__tooltip {
+  display: none;
+  position: absolute;
+  background: $white;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+  border-radius: 5px;
+  color: $gray-900;
 
-  .focusText {
-    color: $white;
-    font-size: 25px;
-    text-align: center;
+  .selected {
+    color: #0077aa;
+    font-weight: bold;
+  }
+  .name {
+    font-weight: bold;
   }
 }
