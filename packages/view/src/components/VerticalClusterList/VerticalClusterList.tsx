@@ -8,14 +8,26 @@ import { Summary } from "./Summary";
 
 type Props = GlobalProps & {
   setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
+  selectedData: SelectedDataProps;
 };
 
-const VerticalClusterList = ({ data, setSelectedData }: Props) => {
-  console.log(setSelectedData);
+const VerticalClusterList = ({
+  data,
+  setSelectedData,
+  selectedData,
+}: Props) => {
   return (
     <div className="vertical-cluster-list">
-      <ClusterGraph data={data} />
-      <Summary data={data} />
+      <ClusterGraph
+        data={data}
+        selectedData={selectedData}
+        setSelectedData={setSelectedData}
+      />
+      <Summary
+        data={data}
+        selectedData={selectedData}
+        setSelectedData={setSelectedData}
+      />
     </div>
   );
 };
