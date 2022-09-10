@@ -31,6 +31,9 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
       <td align="center"><a href="https://github.com/taejs"><img src="https://avatars.githubusercontent.com/u/41318449?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tae</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=taejs" title="Code">💻</a></td>
       <td align="center"><a href="https://velog.io/@blcklamb"><img src="https://avatars.githubusercontent.com/u/92101831?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chaejung Kim</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=blcklamb" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/ytaek"><img src="https://avatars.githubusercontent.com/u/24404665?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ytaek</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=ytaek" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
