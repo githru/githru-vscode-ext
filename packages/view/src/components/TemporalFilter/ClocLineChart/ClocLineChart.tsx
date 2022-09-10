@@ -6,6 +6,7 @@ import {
   scaleTime,
   select,
   ticks,
+  // axisBottom,
 } from "d3";
 import { useEffect, useRef } from "react";
 
@@ -47,9 +48,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .domain(data.map((commitNode) => commitNode.commit.commitDate))
       .range([0, width]);
 
-    // const xAxis = axisBottom<Date>(xScale)
-    //   .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
-    //   .tickFormat((d) => timeFormatter(new Date(d)));
+    // const xAxis = axisBottom<Date>(xScale);
 
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 

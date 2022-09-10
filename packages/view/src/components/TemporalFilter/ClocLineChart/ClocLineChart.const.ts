@@ -5,7 +5,7 @@ export const CLOC_STYLING = {
   padding: {
     top: 0.1,
     right: 0.3,
-    bottom: 0.1,
+    bottom: 0.3,
     left: 0.1,
   },
 };
