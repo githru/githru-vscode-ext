@@ -16,7 +16,7 @@
     "contributes": {
         "commands": [
             {
-                "command": "githru.command.open.webview",
+                "command": "githru.command.launch",
                 "title": "Open Githru View"
             }
         ]
