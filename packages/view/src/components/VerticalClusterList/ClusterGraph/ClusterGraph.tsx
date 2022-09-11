@@ -23,7 +23,7 @@ import type {
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
     .append("rect")
-    .attr("class", "cluster-box")
+    .attr("class", "cluster-graph_cluster")
     .attr("width", GRAPH_WIDTH)
     .attr("height", CLUSTER_HEIGHT);
 };
@@ -32,7 +32,7 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
   const widthScale = d3.scaleLinear().range([0, GRAPH_WIDTH]).domain([0, 10]);
   container
     .append("rect")
-    .attr("class", "degree-box")
+    .attr("class", "cluster-graph_degree")
     .attr("width", (d) => widthScale(Math.min(d.clusterSize, 10)))
     .attr("height", CLUSTER_HEIGHT)
     .attr(
@@ -48,11 +48,11 @@ const drawClusterGraph = (
 ) => {
   const group = d3
     .select(svgRef.current)
-    .selectAll(".cluster-container")
+    .selectAll(".cluster-graph_container")
     .data(data)
     .join("g")
     .on("click", onClickCluster)
-    .attr("class", "cluster-container")
+    .attr("class", "cluster-graph_container")
     .attr("transform", (d, i) => getClusterPosition(d, i, true));
   group
     .transition()

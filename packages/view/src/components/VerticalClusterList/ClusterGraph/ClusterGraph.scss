@@ -1,18 +1,18 @@
-.cluster-container {
-  .cluster-box {
+.cluster-graph_container {
+  .cluster-graph_cluster {
     rx: 5;
     stroke-width: 1;
     stroke: rgb(13, 71, 161, 0.4);
     fill: transparent;
   }
 
-  .degree-box {
+  .cluster-graph_degree {
     rx: 5;
     fill: rgb(13, 71, 161, 0.4);
   }
 
   &:hover {
-    .cluster-box {
+    .cluster-graph_cluster {
       stroke-width: 3;
     }
   }
