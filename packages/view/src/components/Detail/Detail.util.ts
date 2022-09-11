@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import type { GlobalProps, CommitNode } from "types/";
 
 type GetCommitListInCluster = GlobalProps & { clusterId: number };
@@ -49,4 +50,13 @@ export const getCommitListDetail = ({
     insertions: diffStatistics.insertions.toLocaleString("en"),
     deletions: diffStatistics.deletions.toLocaleString("en"),
   };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const take = (l: number, arr: any[]) => {
+  const res = [];
+  for (const item of arr) {
+    if (res.length < l) res.push(item);
+  }
+  return res;
 };

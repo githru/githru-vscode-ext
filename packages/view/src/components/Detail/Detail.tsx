@@ -1,8 +1,9 @@
 import type { CommitNode, SelectedDataProps } from "types";
 
-import { getCommitListDetail } from "./Detail.util";
-
 import "./Detail.scss";
+import { useCommitListHide } from "./Detail.hook";
+import { getCommitListDetail } from "./Detail.util";
+import { FIRST_SHOW_NUM } from "./Detail.const";
 
 const DetailSummary = ({
   commitNodeListInCluster,
@@ -30,17 +31,32 @@ const DetailSummary = ({
 };
 
 const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
+  const commitNodeListInCluster = selectedData?.commitNodeList ?? [];
+  const { commitNodeList, toggle, handleToggle } = useCommitListHide(
+    commitNodeListInCluster
+  );
+  const show = commitNodeListInCluster.length > FIRST_SHOW_NUM;
   if (!selectedData) return null;
-  const commitNodeListInCluster = selectedData.commitNodeList;
 
   return (
     <>
       <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
+
       <ul className="detail-commit_item_container">
-        {commitNodeListInCluster.map((commitNode) => (
+        {commitNodeList.map((commitNode) => (
           <li key={commitNode.commit.id}>{commitNode.commit.message}</li>
         ))}
       </ul>
+
+      {show && (
+        <button
+          className="detail-summary_toggleButton"
+          type="button"
+          onClick={handleToggle}
+        >
+          {toggle ? "Hide ..." : "Read More ..."}
+        </button>
+      )}
     </>
   );
 };
