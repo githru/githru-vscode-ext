@@ -2,6 +2,7 @@ import { analyzeGit } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import { COMMAND_LAUNCH } from "./commands";
 import { findGit, getGitLog } from "./utils/git.util";
+import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
@@ -14,11 +15,10 @@ export function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
 		const { path } = await findGit();
 		const gitLog = await getGitLog(path, extensionPath);
-        const csmDict = await analyzeGit({ isDebugMode: process.env.NODE_ENV !== 'production', gitLog });
+        const csmDict = await analyzeGit({ gitLog });
 
-		// TODO: run mapper function csm dictionary into the structure for view
-		// below treatments soon be deleted
-		const data = JSON.stringify(csmDict);
+		const clusterNodes = mapClusterNodesFrom(csmDict);
+		const data = JSON.stringify(clusterNodes);
 
         subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
 
