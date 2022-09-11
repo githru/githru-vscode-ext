@@ -72,8 +72,8 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
   }, [data]);
 
   return (
-    <div className="cloc-linechart-wrap " ref={wrapperRef}>
-      <svg className="cloc-linechart" ref={ref} />
+    <div className="cloc-line-chart-wrap " ref={wrapperRef}>
+      <svg className="cloc-line-chart" ref={ref} />
     </div>
   );
 };

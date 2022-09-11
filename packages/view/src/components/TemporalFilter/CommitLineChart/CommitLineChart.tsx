@@ -92,8 +92,8 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("fill", "#666666");
   }, [data]);
   return (
-    <div className="commit-linechart-wrap" ref={wrapperRef}>
-      <svg className="commit-linechart" ref={ref} />
+    <div className="commit-line-chart-wrap" ref={wrapperRef}>
+      <svg className="commit-line-chart" ref={ref} />
     </div>
   );
 };
