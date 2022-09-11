@@ -1,6 +1,6 @@
 export const DIMENSIONS = {
-  width: 300,
-  height: 300,
+  width: 200,
+  height: 200,
   margins: 60,
 };
 

@@ -1,7 +1,15 @@
+// FIXME
+body {
+  background: #212121;
+  color: #fff;
+}
+
+.head-container {
+  padding-bottom: 25px;
+}
+
 .middle-container {
   display: flex;
-  padding-top:25px;
-}
-.head-container{
-  padding-bottom: 25px;
+  padding-top: 25px;
+  height: calc(100vh - 200px);
 }
