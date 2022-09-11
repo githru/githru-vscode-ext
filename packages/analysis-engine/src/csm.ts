@@ -80,7 +80,11 @@ export const buildCSMDict = (
         const nestedMergeParentCommits = nestedMergeParentCommitIds
           .map((commitId) => commitDict.get(commitId))
           .filter((node): node is CommitNode => node !== undefined)
-          .filter((node) => node.stemId !== csmNode.base.stemId);
+          .filter(
+            (node) =>
+              node.stemId !== csmNode.base.stemId &&
+              node.stemId !== mergeCommitStemId
+          );
 
         squashTaskQueue.push(...nestedMergeParentCommits);
       }
