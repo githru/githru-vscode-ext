@@ -149,7 +149,7 @@ describe("stem", () => {
 
   it("must have main/master stem", () => {
     const stemDict = buildStemDict(commitDict);
-    expect(stemDict.has("main")).toBeTruthy();
+    expect(stemDict.has("main") || stemDict.has("master")).toBeTruthy();
   });
 
   it("should make stem", () => {
