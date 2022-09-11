@@ -147,7 +147,7 @@ describe("stem", () => {
     expect(leafNodes.map((node) => node.commit.id)).toEqual(["f", "m", "o"]);
   });
 
-  it("should have main stem", () => {
+  it("must have main/master stem", () => {
     const stemDict = buildStemDict(commitDict);
     expect(stemDict.has("main")).toBeTruthy();
   });
