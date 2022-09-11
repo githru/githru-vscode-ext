@@ -72,12 +72,17 @@ export const buildCSMDict = (
         );
         squashCommitNodes.push(...spliceCommitNodes);
 
-        // check nested merge
-        const nestedMergeCommits = spliceCommitNodes
-          .map((node) => commitDict.get(node.commit.parents[1]))
-          .filter((node): node is CommitNode => node !== undefined);
+        // check nested-merge
+        const nestedMergeParentCommitIds = spliceCommitNodes
+          .filter((node) => node.commit.parents.length > 1)
+          .map((node) => node.commit.parents)
+          .reduce((pCommitIds, parents) => [...pCommitIds, ...parents], []);
+        const nestedMergeParentCommits = nestedMergeParentCommitIds
+          .map((commitId) => commitDict.get(commitId))
+          .filter((node): node is CommitNode => node !== undefined)
+          .filter((node) => node.stemId !== csmNode.base.stemId);
 
-        squashTaskQueue.push(...nestedMergeCommits);
+        squashTaskQueue.push(...nestedMergeParentCommits);
       }
 
       squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
