@@ -8,8 +8,8 @@ type FakeCommitData = Pick<
   "id" | "parents" | "branches" | "committerDate"
 >;
 
-const dummy: FakeCommitData[] = [
   // 1
+const fakeCommits: FakeCommitData[] = [
   {
     id: "a1a605b38df7462e14503a2a0bb8d7453df7c8ae",
     parents: [],
@@ -125,9 +125,11 @@ const dummy: FakeCommitData[] = [
   },
 ];
 
-function createTestCommit(fakeCommitData: FakeCommitData): CommitRaw {
+function createTestCommit(
+  fakeCommitData: FakeCommitData,
+  sequence: number
+): CommitRaw {
   return {
-    sequence: 0,
     tags: [],
     author: {
       name: "",
@@ -144,6 +146,7 @@ function createTestCommit(fakeCommitData: FakeCommitData): CommitRaw {
       totalDeletionCount: 0,
       fileDictionary: {},
     },
+    sequence,
     ...fakeCommitData,
   } as CommitRaw;
 }
@@ -153,7 +156,9 @@ describe("stem", () => {
   let commitDict: Map<string, CommitNode>;
 
   beforeEach(() => {
-    commits = dummy.map(createTestCommit);
+    commits = fakeCommits.map((data, idx) =>
+      createTestCommit(data, fakeCommits.length - 1 - idx)
+    );
     commitDict = buildCommitDict(commits);
   });
 
