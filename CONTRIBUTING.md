@@ -44,20 +44,33 @@ TODO: Add support수정 필요!
 
 7. [demo README](https://github.com/EveryAnalytics/react-analytics-provider/tree/main/demo)를 참고해 demo앱도 실행해보세요.
 
+## Debugging
+
+1. root 폴더에서 build 합니다.
+
+   ```
+   yarn build:all
+   ```
+
+2. vscode 폴더로 이동합니다.
+
+3. Run 탭에서 Start Debugging을 누르거나 F5를 눌러 디버깅으로 진입합니다.
+
+4. palette를 띄어 Open Githru View를 입력합니다.
+
 ## Commit message
 
 커밋 메세지는 제목과 본문을 포함해야합니다.
 
 제목은 해당 커밋에 대한 주요 내용을 간략하게 기록합니다.
 형식은 https://www.conventionalcommits.org/en/v1.0.0/ 를 따릅니다.
+
 - optional scope을 사용하며, `engine`, `vscode`, `view` 3가지 scope만을 사용합니다.
 - ex) feat(view): Add File Icicle Tree view.
 
 본문은 커밋에서 수정된 상세내역을 작성합니다. 생략 가능하며, `어떻게`보단 `무엇을`, `왜` 해결했는지 적어주시는 것이 좋습니다.
 
 상황에 따라 연관된 이슈 트래킹 번호를 포함합니다.
-
-
 
 ## Issue
 
