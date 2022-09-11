@@ -1,7 +1,6 @@
 import { buildCommitDict, getLeafNodes } from "./commit.util";
 import { buildStemDict } from "./stem";
-import { CommitNode } from "./types/CommitNode";
-import { CommitRaw } from "./types/CommitRaw";
+import { CommitNode, CommitRaw } from "./types";
 
 type FakeCommitData = Pick<
   CommitRaw,
