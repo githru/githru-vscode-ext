@@ -159,4 +159,8 @@
   height: 280px;
   margin-top: 20px;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 }
