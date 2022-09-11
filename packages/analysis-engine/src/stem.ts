@@ -74,17 +74,27 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  let implicitBranchNumber = 1;
+  let implicitBranchNumber = 0;
+
+  function getStemId(id: string, branches: string[]) {
+    if (branches.length === 0) {
+      implicitBranchNumber += 1;
+      return `implicit-${implicitBranchNumber}`;
+    }
+    if (id === mainNode?.commit.id) {
+      return mainNode.commit.branches.includes("main") ? "main" : "master";
+    }
+    if (id === headNode?.commit.id) {
+      return "HEAD";
+    }
+    return branches[0];
+  }
 
   while (!q.isEmpty()) {
     const tail = q.pop();
     if (!tail) continue;
 
-    const stemId =
-      tail.commit.branches[0] ?? `implicit-${implicitBranchNumber}`;
-    if (tail.commit.branches.length === 0) {
-      implicitBranchNumber += 1;
-    }
+    const stemId = getStemId(tail.commit.id, tail.commit.branches);
 
     const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
     if (nodes.length === 0) continue;

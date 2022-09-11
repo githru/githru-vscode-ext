@@ -41,7 +41,7 @@ const fakeCommits: FakeCommitData[] = [
   {
     id: "f",
     parents: ["e"],
-    branches: ["main"],
+    branches: ["sub1", "main"],
     committerDate: new Date("Sat Sep 3 19:34:04 2022 +0900"),
   },
   {
@@ -145,6 +145,11 @@ describe("stem", () => {
   it("should get leaf nodes", () => {
     const leafNodes = getLeafNodes(commitDict);
     expect(leafNodes.map((node) => node.commit.id)).toEqual(["f", "m", "o"]);
+  });
+
+  it("should have main stem", () => {
+    const stemDict = buildStemDict(commitDict);
+    expect(stemDict.has("main")).toBeTruthy();
   });
 
   it("should make stem", () => {
