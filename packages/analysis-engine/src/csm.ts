@@ -47,27 +47,27 @@ export const buildCSMDict = (
       while (squashTaskQueue.length > 0) {
         // get target
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const mergeCommitNode = squashTaskQueue.shift()!;
+        const squashStartNode = squashTaskQueue.shift()!;
 
         // get target's stem
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const mergeCommitStemId = mergeCommitNode.stemId!;
-        const mergeCommitStem = stemDict.get(mergeCommitStemId);
-        if (!mergeCommitStem) {
+        const squashStemId = squashStartNode.stemId!;
+        const squashStem = stemDict.get(squashStemId);
+        if (!squashStem) {
           // eslint-disable-next-line no-continue
           continue;
         }
 
         // prepare squash
-        const mergeCommitStemLastIndex = mergeCommitStem.nodes.length - 1;
-        const spliceIndex = mergeCommitStem.nodes.findIndex(
-          ({ commit: { id } }) => id === mergeCommitNode.commit.id
+        const squashStemLastIndex = squashStem.nodes.length - 1;
+        const squashStartNodeIndex = squashStem.nodes.findIndex(
+          ({ commit: { id } }) => id === squashStartNode.commit.id
         );
-        const spliceCount = mergeCommitStemLastIndex - spliceIndex + 1;
+        const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
 
         // squash
-        const spliceCommitNodes = mergeCommitStem.nodes.splice(
-          spliceIndex,
+        const spliceCommitNodes = squashStem.nodes.splice(
+          squashStartNodeIndex,
           spliceCount
         );
         squashCommitNodes.push(...spliceCommitNodes);
@@ -83,7 +83,7 @@ export const buildCSMDict = (
           .filter(
             (node) =>
               node.stemId !== csmNode.base.stemId &&
-              node.stemId !== mergeCommitStemId
+              node.stemId !== squashStemId
           );
 
         squashTaskQueue.push(...nestedMergeParentCommits);
