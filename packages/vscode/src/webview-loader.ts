@@ -48,7 +48,7 @@ export default class WebviewLoader implements vscode.Disposable {
                     <title>githru-vscode-ext webview</title>
                     <script>
                         window.githruData = ${data};
-                        window.isProduction = false;
+                        window.isProduction = true;
                     </script>
                 </head>
                 <body>
