@@ -6,10 +6,11 @@ export type ClusterGraphElement = {
   cluster: ClusterNode;
   clusterSize: number;
   selected?: number;
+  prevSelected?: number;
 };
 
 export type SVGElementSelection<T extends BaseType> = Selection<
-  T,
+  T | BaseType,
   ClusterGraphElement,
   SVGSVGElement | null,
   unknown
