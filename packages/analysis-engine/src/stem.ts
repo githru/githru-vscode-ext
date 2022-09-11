@@ -42,6 +42,28 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
   );
 }
 
+function getStemIdClosure() {
+  let implicitBranchNumber = 0;
+  return function (
+    id: string,
+    branches: string[],
+    mainNode?: CommitNode,
+    headNode?: CommitNode
+  ) {
+    if (branches.length === 0) {
+      implicitBranchNumber += 1;
+      return `implicit-${implicitBranchNumber}`;
+    }
+    if (id === mainNode?.commit.id) {
+      return mainNode.commit.branches.includes("main") ? "main" : "master";
+    }
+    if (id === headNode?.commit.id) {
+      return "HEAD";
+    }
+    return branches[0];
+  };
+}
+
 export function buildStemDict(
   commitDict: Map<string, CommitNode>
 ): Map<string, Stem> {
@@ -73,27 +95,18 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  let implicitBranchNumber = 0;
-
-  function getStemId(id: string, branches: string[]) {
-    if (branches.length === 0) {
-      implicitBranchNumber += 1;
-      return `implicit-${implicitBranchNumber}`;
-    }
-    if (id === mainNode?.commit.id) {
-      return mainNode.commit.branches.includes("main") ? "main" : "master";
-    }
-    if (id === headNode?.commit.id) {
-      return "HEAD";
-    }
-    return branches[0];
-  }
+  const getStemId = getStemIdClosure();
 
   while (!q.isEmpty()) {
     const tail = q.pop();
     if (!tail) continue;
 
-    const stemId = getStemId(tail.commit.id, tail.commit.branches);
+    const stemId = getStemId(
+      tail.commit.id,
+      tail.commit.branches,
+      mainNode,
+      headNode
+    );
 
     const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
     if (nodes.length === 0) continue;
