@@ -1,7 +1,6 @@
 import { getLeafNodes } from "./commit.util";
 import Queue from "./queue";
-import { CommitNode } from "./types/CommitNode";
-import { Stem } from "./types/Stem";
+import { CommitNode, Stem } from "./types";
 
 export function getStemNodes(
   tailId: string,
