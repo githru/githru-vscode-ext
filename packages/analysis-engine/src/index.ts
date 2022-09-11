@@ -4,7 +4,7 @@ import { buildStemDict } from "./stem";
 import { buildCSMDict } from "./csm";
 
 type AnalysisEngineArgs = {
-  isDebugMode: boolean;
+  isDebugMode?: boolean;
   gitLog: string;
 };
 

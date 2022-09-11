@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
 		const { path } = await findGit();
 		const gitLog = await getGitLog(path, extensionPath);
-        const csmDict = await analyzeGit({ isDebugMode: process.env.NODE_ENV !== 'production', gitLog });
+        const csmDict = await analyzeGit({ gitLog });
 
 		const clusterNodes = mapClusterNodesFrom(csmDict);
 		const data = JSON.stringify(clusterNodes);

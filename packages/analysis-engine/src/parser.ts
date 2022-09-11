@@ -27,9 +27,9 @@ export function getCommitRaws(log: string) {
   const branchesMatrix: Refs[] = [];
   const tagsMatrix: Refs[] = [];
   const authors: GitUser[] = [];
-  const authorDates: string[] = [];
+  const authorDates: Date[] = [];
   const committers: GitUser[] = [];
-  const commitDates: string[] = [];
+  const commitDates: Date[] = [];
   const messages: string[] = [];
   const differenceStatistics: DifferenceStatistic[] = [];
 
@@ -74,7 +74,7 @@ export function getCommitRaws(log: string) {
       }
       if (str.startsWith("Author:")) return getNameAndEmail(authors, str);
       if (str.startsWith("AuthorDate"))
-        return authorDates.push(str.split(": ")[1].trim());
+        return authorDates.push(new Date(str.split(": ")[1].trim()));
       if (str.startsWith("Commit:")) return getNameAndEmail(committers, str);
       if (str.startsWith("CommitDate")) {
         let indexCheckFileChanged = idx + 2;
@@ -86,7 +86,7 @@ export function getCommitRaws(log: string) {
           eachCommitMessage += splitByNewLine[indexCheckFileChanged].trim();
           indexCheckFileChanged += 1;
         }
-        commitDates.push(str.split(": ")[1].trim());
+        commitDates.push(new Date(str.split(": ")[1].trim()));
         messages.push(eachCommitMessage);
       }
       if (/^\d/.test(str) || /^-/.test(str)) {
