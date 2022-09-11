@@ -56,7 +56,8 @@ const drawClusterGraph = (
     .attr("transform", (d, i) => getClusterPosition(d, i, true));
   group
     .transition()
-    .duration(500)
+    .duration(300)
+    .ease(d3.easeLinear)
     .attr("transform", (d, i) => getClusterPosition(d, i));
 
   drawClusterBox(group);
@@ -81,13 +82,11 @@ const ClusterGraph = ({
   const clusterSizes = getClusterSizes(data);
   const graphHeight = getGraphHeight(clusterSizes);
   const selectedIndex = getSelectedIndex(data, selectedData);
-  const selectedPrevIndex = useRef(-1);
 
   const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
     clusterSize: clusterSizes[i],
     selected: selectedIndex,
-    prevSelected: selectedPrevIndex.current,
   }));
 
   useEffect(() => {
@@ -97,18 +96,10 @@ const ClusterGraph = ({
       );
     };
     drawClusterGraph(svgRef, clusterGraphElements, handleClickCluster);
-    selectedPrevIndex.current = selectedIndex;
     return () => {
       destroyClusterGraph(svgRef);
     };
   }, [clusterGraphElements, selectedIndex, setSelectedData]);
-
-  useEffect(() => {
-    return () => {
-      selectedPrevIndex.current = -1;
-      destroyClusterGraph(svgRef);
-    };
-  }, [data]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
