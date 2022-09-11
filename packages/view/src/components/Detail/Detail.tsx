@@ -1,24 +1,62 @@
-import type { SelectedDataProps } from "types";
+import type { CommitNode, SelectedDataProps } from "types";
 
+import "./Detail.scss";
+import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
+import { FIRST_SHOW_NUM } from "./Detail.const";
 
-const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
-  if (!selectedData) return null;
-  const commitNodeListInCluster = selectedData.commitNodeList;
+const DetailSummary = ({
+  commitNodeListInCluster,
+}: {
+  commitNodeListInCluster: CommitNode[];
+}) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } =
     getCommitListDetail({ commitNodeListInCluster });
+  return (
+    <div className="detail-summary_container">
+      Excluding merges,
+      <span className="detail-summary_impact"> {authorLength} authors </span>
+      have pushed
+      <span className="detail-summary_impact"> {commitLength} commits </span>
+      to main. On main,
+      <span className="detail-summary_impact"> {fileLength} files </span>
+      have changed and there have been
+      <span className="detail-summary_insertions"> {insertions} </span>
+      <span className="detail-summary_impact">additions </span>
+      and
+      <span className="detail-summary_deletions"> {deletions} </span>
+      <span className="detail-summary_impact">deletions.</span>
+    </div>
+  );
+};
+
+const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
+  const commitNodeListInCluster = selectedData?.commitNodeList ?? [];
+  const { commitNodeList, toggle, handleToggle } = useCommitListHide(
+    commitNodeListInCluster
+  );
+  const show = commitNodeListInCluster.length > FIRST_SHOW_NUM;
+  if (!selectedData) return null;
 
   return (
     <>
-      {commitNodeListInCluster.map((commitNode) => (
-        <div key={commitNode.commit.id}>{commitNode.commit.message}</div>
-      ))}
-      <div>
-        Excluding merges, {authorLength} authors have pushed {commitLength}
-        commits to main. On main, {fileLength} files have changed and there have
-        been
-        {insertions} additions and {deletions} deletions.
-      </div>
+      <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
+
+      <ul className="detail-commit_item_container">
+        {commitNodeList.map((commitNode) => (
+          <li key={commitNode.commit.id}>{commitNode.commit.message}</li>
+        ))}
+      </ul>
+
+      {show && (
+        <button
+          className="detail-summary_toggleButton"
+          type="button"
+          onClick={handleToggle}
+        >
+          {toggle ? "Hide ..." : "Read More ..."}
+        </button>
+      )}
     </>
   );
 };

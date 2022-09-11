@@ -48,17 +48,6 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
                       return authorArray.map((authorName: string) => (
                         <AuthorName key={authorName} authorName={authorName} />
                       ));
-                      // const colorValue = getColorValue(authorName);
-                      // return (
-                      //   <span
-                      //     key={authorName}
-                      //     className={["name"].join(" ")}
-                      //     data-tooltip-text={authorName}
-                      //     style={{ backgroundColor: colorValue }}
-                      //   >
-                      //     {authorName.slice(0, 1)}
-                      //   </span>
-                      // );
                     }
                   )}
                 </span>
@@ -81,9 +70,7 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
               </p>
             </div>
             {cluster.clusterId === clusterIds && (
-              <div
-                style={{ height: "280px", marginTop: "20px", overflow: "auto" }}
-              >
+              <div className="summary_detail_container">
                 <Detail selectedData={selectedData} />
               </div>
             )}
