@@ -1,0 +1,31 @@
+.detail-commit_item_container {
+  list-style: inside;
+}
+
+.detail-summary_container {
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  width: 90%;
+  margin-bottom: 20px;
+
+  color: #8b949e;
+  .detail-summary_impact {
+    color: #000000;
+  }
+  .detail-summary_insertions {
+    color: #3fba50;
+  }
+  .detail-summary_deletions {
+    color: #f85149;
+  }
+}
+
+.detail-summary_toggleButton {
+  border: none;
+  background: none;
+  color: #0077aa;
+  cursor: pointer;
+  margin: 10px 0px;
+}
