@@ -26,5 +26,5 @@ export type Commit = {
 export type CommitNode = {
   nodeTypeName: "COMMIT";
   commit: Commit;
-  seq: number;
+  // seq: number;
 };
