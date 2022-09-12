@@ -11,7 +11,7 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
-import { ThemeSelector } from "./ThemeSelector";
+// import { ThemeSelector } from "./ThemeSelector";
 import "./TemporalFilter.scss";
 
 type Props = GlobalProps & {
@@ -42,7 +42,7 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
           minDate={minDate}
           maxDate={maxDate}
         />
-        <ThemeSelector />
+        {/* <ThemeSelector /> */}
       </div>
       <div className="line-chart">
         <ClocLineChart data={sortedData} />
