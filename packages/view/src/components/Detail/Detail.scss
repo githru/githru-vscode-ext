@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 14px;
   
   .divider {
     margin-right: 1rem;
@@ -12,6 +13,14 @@
 
   .text {
     flex-grow: 0.1;
+  }
+
+  .insertions {
+    color: green;
+  }
+
+  .deletions {
+    color: red;
   }
 }
 
@@ -26,16 +35,6 @@
     }
     
     justify-content: space-between;
-  }
-}
-
-.detail-summary_container {
-  .insertions {
-    color: green;
-  }
-
-  .deletions {
-    color: red;
   }
 }
 

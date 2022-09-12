@@ -25,22 +25,32 @@
   .cluster {
     align-items: center;
     width: 100%;
-    border-radius: 40px;
     padding: 10px 0;
-    cursor: pointer;
-    
-    :hover {
-      border-radius: 40px;
-      background-color: $blue-light-50;
-    }
+    border-radius: 40px;
   }
-
+  
   .summary {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
     padding: 10px 15px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  .summary:hover {
+    border-radius: 40px;
+    background-color: $blue-light-50;
+  }
+
+  .text-wrapper {
+    display: flex;
+    align-items: center;
+    text-overflow: ellipsis;
+    width: 85%;
   }
 
   .collapsible-button {
@@ -49,6 +59,7 @@
     font-size: 18px;
     color: $gray-800;
     display: none;
+    cursor: pointer;
   }
 
   .collapsible-button--shown {
@@ -56,6 +67,7 @@
     border: none;
     font-size: 18px;
     color: $gray-800;
+    cursor: pointer;
   }
 
   :hover .collapsible-button {
@@ -140,7 +152,6 @@
   }
 
   .keywords {
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
