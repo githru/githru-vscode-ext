@@ -24,7 +24,7 @@ const partition = (data: FileChangesNode) => {
     // https://github.com/d3/d3-hierarchy/blob/v3.1.2/README.md#hierarchy
     // https://observablehq.com/@d3/visiting-a-d3-hierarchy#count
     .sum((d) => d?.value ?? 0)
-    .sort((a, b) => b.height - a.height || (b.value ?? 0) - (a.value ?? 0));
+    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
   return d3
     .partition<FileChangesNode>()
     .size([HEIGHT, ((root.height + 1) * WIDTH) / MAX_DEPTH])(root);
