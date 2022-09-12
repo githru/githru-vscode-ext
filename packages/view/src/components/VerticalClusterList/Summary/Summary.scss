@@ -18,6 +18,16 @@
   border-radius: $border--radius;
 }
 
+@mixin animate($animation, $duration, $method, $times) {
+  animation: $animation $duration $method $times;
+}
+
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
 .summary__entire {
   width: 85%;
   margin-left: 20px;
@@ -158,9 +168,19 @@
 .summary_detail_container {
   height: 280px;
   margin-top: 20px;
-  overflow: auto;
+  overflow: scroll;
 
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+
+  @include keyframes(open_detail) {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 280px;
+    }
+  }
+  @include animate(open_detail, 0.3s, linear, 1);
 }

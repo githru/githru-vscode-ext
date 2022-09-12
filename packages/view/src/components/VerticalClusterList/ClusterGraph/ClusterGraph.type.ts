@@ -9,7 +9,7 @@ export type ClusterGraphElement = {
 };
 
 export type SVGElementSelection<T extends BaseType> = Selection<
-  T,
+  T | BaseType,
   ClusterGraphElement,
   SVGSVGElement | null,
   unknown
