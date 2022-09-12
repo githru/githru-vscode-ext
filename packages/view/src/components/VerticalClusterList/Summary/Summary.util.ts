@@ -13,7 +13,12 @@ export function getInitData({ data }: GlobalProps) {
       clusterId: clusterNode.commitNodeList[0].clusterId,
       summary: {
         authorNames: [],
-        keywords: [],
+        content: {
+          message:
+            clusterNode.commitNodeList[clusterNode.commitNodeList.length - 1]
+              .commit.message,
+          count: clusterNode.commitNodeList.length,
+        },
       },
     };
 
@@ -26,23 +31,6 @@ export function getInitData({ data }: GlobalProps) {
       });
 
       cluster.summary.authorNames.push(Array.from(authorSet));
-
-      // set keywords
-      const keywordObject = {
-        keyword: commitNode.commit.message.split(" ")[0],
-        count: 1,
-      };
-
-      const findKeywordIndex = cluster.summary.keywords.findIndex(
-        (key) => key.keyword === commitNode.commit.message.split(" ")[0]
-      );
-
-      if (findKeywordIndex === -1) cluster.summary.keywords.push(keywordObject);
-      else {
-        cluster.summary.keywords[findKeywordIndex].count += 1;
-      }
-
-      cluster.summary.keywords.sort((a, b) => b.count - a.count);
 
       return commitNode;
     });
