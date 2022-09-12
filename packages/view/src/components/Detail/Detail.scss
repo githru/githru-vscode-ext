@@ -1,5 +1,15 @@
 .detail-commit_item_container {
-  list-style: inside;
+  li {
+    list-style-type: none;
+    display: flex;
+    margin-bottom: 4px;
+    
+    span {
+      color: grey;
+    }
+    
+    justify-content: space-between;
+  }
 }
 
 .detail-summary_container {

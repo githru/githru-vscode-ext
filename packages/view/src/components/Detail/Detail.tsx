@@ -4,6 +4,7 @@ import "./Detail.scss";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
+import { getTime } from "utils/time";
 
 const DetailSummary = ({
   commitNodeListInCluster,
@@ -43,9 +44,23 @@ const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
       <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
 
       <ul className="detail-commit_item_container">
-        {commitNodeList.map((commitNode) => (
-          <li key={commitNode.commit.id}>{commitNode.commit.message}</li>
-        ))}
+        {commitNodeList.map(({ commit }) => {
+          const { id, message, author, authorDate } = commit;
+
+          return (
+            <li key={id} className="detail-commit_item">
+              <div>
+                - {message},{" "}
+                <span>
+                  {author.names[0]}, {getTime(authorDate)}
+                </span>
+              </div>
+              <div>
+                <span>{id}</span>
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       {show && (
