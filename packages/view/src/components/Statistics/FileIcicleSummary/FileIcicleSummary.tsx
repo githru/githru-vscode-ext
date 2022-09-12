@@ -148,7 +148,6 @@ const FileIcicleSummary = ({ data }: { data: ClusterNode[] }) => {
 
   return (
     <div className="file-icicle-summary">
-      FileIcicleSummary
       <svg ref={$summary} />
     </div>
   );
