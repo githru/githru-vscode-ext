@@ -14,7 +14,12 @@ import {
   getSelectedIndex,
   getClusterPosition,
 } from "./ClusterGraph.util";
-import { CLUSTER_HEIGHT, GRAPH_WIDTH, SVG_WIDTH } from "./ClusterGraph.const";
+import {
+  CLUSTER_HEIGHT,
+  DETAIL_HEIGHT,
+  GRAPH_WIDTH,
+  SVG_WIDTH,
+} from "./ClusterGraph.const";
 import type {
   ClusterGraphElement,
   SVGElementSelection,
@@ -80,8 +85,9 @@ const ClusterGraph = ({
 }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
-  const graphHeight = getGraphHeight(clusterSizes);
   const selectedIndex = getSelectedIndex(data, selectedData);
+  const graphHeight =
+    getGraphHeight(clusterSizes) + (selectedIndex < 0 ? 0 : DETAIL_HEIGHT);
 
   const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
