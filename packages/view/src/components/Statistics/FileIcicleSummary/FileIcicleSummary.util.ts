@@ -1,6 +1,6 @@
 import type { ClusterNode } from "../../../types";
 
-import type { FileChangesMap } from "./FileIcicleSummary.type";
+import type { FileChangesMap, FileScoresMap } from "./FileIcicleSummary.type";
 
 export const getFileChangesMap = (data: ClusterNode[]): FileChangesMap => {
   if (!data.length) return {};
@@ -21,5 +21,23 @@ export const getFileChangesMap = (data: ClusterNode[]): FileChangesMap => {
           map
         ),
       {} as FileChangesMap
+    );
+};
+
+export const getFileScoresMap = (data: ClusterNode[]) => {
+  if (!data.length) return {};
+
+  return data
+    .flatMap(({ commitNodeList }) => commitNodeList)
+    .reduce(
+      (map, { commit: { diffStatistics } }) =>
+        Object.keys(diffStatistics.files).reduce(
+          (acc, path) => ({
+            ...acc,
+            [path]: 1,
+          }),
+          map
+        ),
+      {} as FileScoresMap
     );
 };

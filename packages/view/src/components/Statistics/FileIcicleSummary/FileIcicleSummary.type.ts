@@ -7,3 +7,7 @@ type FileChanges = {
 export type FileChangesMap = {
   [path: string]: FileChanges;
 };
+
+export type FileScoresMap = {
+  [path: string]: number;
+};
