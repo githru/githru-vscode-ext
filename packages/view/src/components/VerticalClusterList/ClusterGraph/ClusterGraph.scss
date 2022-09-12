@@ -1,21 +1,26 @@
-.cluster-graph_container {
-  .cluster-graph_cluster {
+.cluster-graph__container {
+  .cluster-graph__cluster {
     rx: 5;
     stroke-width: 1;
-    stroke: rgb(13, 71, 161, 0.4);
+    stroke: #0077aa;
     fill: transparent;
   }
 
-  .cluster-graph_degree {
+  .cluster-graph__degree {
     rx: 5;
-    fill: rgb(13, 71, 161, 0.4);
+    fill: #0077aa;
   }
 
   &:hover {
-    .cluster-graph_cluster {
+    .cluster-graph__cluster {
       stroke-width: 3;
     }
   }
 
   cursor: pointer;
+}
+
+.cluster-graph__link {
+  stroke: #0077aa;
+  stroke-width: 1;
 }
