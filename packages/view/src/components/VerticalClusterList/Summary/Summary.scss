@@ -31,6 +31,7 @@
 .summary__entire {
   width: 85%;
   margin-left: 20px;
+  margin-top: 5px;
 
   .cluster {
     align-items: center;
@@ -42,8 +43,7 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px 0;
   }
 
   .nameBox {
