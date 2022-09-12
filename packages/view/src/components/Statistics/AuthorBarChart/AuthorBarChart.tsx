@@ -65,7 +65,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const yAxis = d3
       .axisLeft(yScale)
       .ticks(0)
-      .tickSizeInner(3)
+      .tickSizeInner(0)
       .tickSizeOuter(0);
     yAxisGroup.call(yAxis);
 
