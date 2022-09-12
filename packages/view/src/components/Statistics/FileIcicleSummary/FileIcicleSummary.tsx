@@ -7,17 +7,15 @@ import type { ClusterNode } from "../../../types";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";
 import type { FileChangesNode } from "./FileIcicleSummary.type";
-
-const WIDTH = 600;
-const HEIGHT = 400;
-const FONT_SIZE = 10;
-const MAX_DEPTH = 4;
-const SINGLE_RECT_WIDTH = WIDTH / MAX_DEPTH;
-const LABEL_VISIBLE_HEIGHT = 16;
-const COLOR_CODE = {
-  dir: "#ffcc80",
-  file: "#ffe082",
-};
+import {
+  WIDTH,
+  MAX_DEPTH,
+  HEIGHT,
+  SINGLE_RECT_WIDTH,
+  FONT_SIZE,
+  LABEL_VISIBLE_HEIGHT,
+  COLOR_CODE,
+} from "./FileIcicleSummary.const";
 
 const partition = (data: FileChangesNode) => {
   const root = d3
