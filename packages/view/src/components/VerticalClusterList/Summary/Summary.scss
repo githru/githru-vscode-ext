@@ -24,16 +24,36 @@
 
   .cluster {
     align-items: center;
-    width: 85%;
+    width: 100%;
     padding: 10px 0;
   }
 
   .summary {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: row;
     padding-top: 10px;
     padding-bottom: 10px;
+  }
+
+  .collapsible-button {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: $gray-800;
+    display: none;
+  }
+
+  .collapsible-button--shown {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: $gray-800;
+  }
+
+  :hover .collapsible-button {
+    display: block;
   }
 
   .nameBox {

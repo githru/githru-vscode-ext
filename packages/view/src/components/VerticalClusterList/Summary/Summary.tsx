@@ -67,6 +67,15 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
                     );
                   })}
                 </span>
+                {cluster.clusterId === clusterIds ? (
+                  <button className="collapsible-button--shown" type="button">
+                    ▲
+                  </button>
+                ) : (
+                  <button className="collapsible-button" type="button">
+                    ▼
+                  </button>
+                )}
               </p>
             </div>
             {cluster.clusterId === clusterIds && (
