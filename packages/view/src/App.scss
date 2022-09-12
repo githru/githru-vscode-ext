@@ -5,11 +5,11 @@ body {
 }
 
 .head-container {
-  padding-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 .middle-container {
   display: flex;
-  padding-top: 25px;
+  justify-content: center;
   height: calc(100vh - 200px);
 }

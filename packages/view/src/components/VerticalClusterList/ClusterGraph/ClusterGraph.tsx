@@ -165,7 +165,11 @@ const ClusterGraph = ({
     };
   }, [clusterGraphElements, selectedIndex, setSelectedData]);
 
-  return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
+  return (
+    <div>
+      <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />
+    </div>
+  );
 };
 
 export default ClusterGraph;
