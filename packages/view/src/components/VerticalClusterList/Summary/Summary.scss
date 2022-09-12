@@ -54,7 +54,7 @@
 
   .summary:hover {
     border-radius: 40px;
-    background-color: $blue-light-50;
+    background-color: lighten($gray-600, 5);
   }
 
   .text-wrapper {
@@ -68,7 +68,7 @@
     background-color: transparent;
     border: none;
     font-size: 18px;
-    color: $gray-800;
+    color: $blue-light-600;
     display: none;
     cursor: pointer;
   }
@@ -77,7 +77,7 @@
     background-color: transparent;
     border: none;
     font-size: 18px;
-    color: $gray-800;
+    color: $blue-light-600;
     cursor: pointer;
   }
 
