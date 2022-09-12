@@ -6,7 +6,7 @@ import { Detail } from "components";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import { AuthorName } from "./AuthorName";
-import type { Cluster, Keyword } from "./Summary.type";
+import type { Cluster } from "./Summary.type";
 import { getClusterById, getInitData } from "./Summary.util";
 
 import "./Summary.scss";
@@ -56,21 +56,14 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                         }
                       )}
                     </span>
-                    <span className="keywords">
-                      {cluster.summary.keywords.map((keywordObj: Keyword) => {
-                        let size = "small";
-                        if (keywordObj.count > 3) size = "medium";
-                        if (keywordObj.count > 6) size = "large";
-
-                        return (
-                          <span
-                            key={`${cluster.clusterId}-${keywordObj.keyword}`}
-                            className={["keyword", size].join(" ")}
-                          >
-                            {keywordObj.keyword}
-                          </span>
-                        );
-                      })}
+                    <span className="contents">
+                      {`${cluster.summary.content.message.slice(0, 70)} ${
+                        cluster.summary.content.message.length > 70 ? "..." : ""
+                      } ${
+                        cluster.summary.content.count > 0
+                          ? `+ ${cluster.summary.content.count} more`
+                          : ""
+                      } `}
                     </span>
                   </div>
                   {cluster.clusterId === clusterIds ? (

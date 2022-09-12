@@ -7,9 +7,9 @@
 }
 
 @mixin shadow {
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-  -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-  box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+  -webkit-box-shadow: 0px 0px 3px 1px rgba(100, 100, 100, 0.4);
+  -moz-box-shadow: 0px 0px 3px 1px rgba(100, 100, 100, 0.4);
+  box-shadow: 0px 0px 3px 1px rgba(100, 100, 100, 0.4);
 }
 
 @mixin border($border--radius) {
@@ -18,27 +18,38 @@
   border-radius: $border--radius;
 }
 
+@mixin animate($animation, $duration, $method, $times) {
+  animation: $animation $duration $method $times;
+}
+
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
 .summary__entire {
   width: 85%;
   margin-left: 20px;
+  margin-top: 5px;
 
   .cluster {
     align-items: center;
-    width: 100%;
-    padding: 10px 0;
-    border-radius: 40px;
+    width: 85%;
+    padding: 5px 0;
   }
-  
+
   .summary {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-    padding: 10px 15px;
+    padding: 5px 15px;
     border: none;
     background-color: transparent;
     cursor: pointer;
+    color: $white;
   }
 
   .summary:hover {
@@ -134,7 +145,7 @@
 
       color: #ffffff;
       font-size: 12px;
-      padding: 7px 12px;
+      padding: 0px 12px;
       margin-bottom: 10px;
       width: auto;
       min-width: max-content;
@@ -146,16 +157,17 @@
 
     &:hover::after {
       left: 100%;
-      background-color: rgba(34, 34, 34, 0.8);
+      background-color: rgba(0, 119, 170, 0.8);
       opacity: 1;
     }
   }
 
-  .keywords {
+  .contents {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-left: 15px;
+    cursor: pointer;
   }
 
   .keyword {
@@ -195,8 +207,20 @@
 .summary_detail_container {
   max-height: 280px;
   overflow: auto;
-
+  // height: 280px;
+  // margin-top: 20px;
+  // overflow: scroll;
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+
+  @include keyframes(open_detail) {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 280px;
+    }
+  }
+  @include animate(open_detail, 0.3s, linear, 1);
 }

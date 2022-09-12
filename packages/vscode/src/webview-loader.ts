@@ -52,7 +52,7 @@ export default class WebviewLoader implements vscode.Disposable {
                     </script>
                 </head>
                 <body>
-                    <div id="root" style="position: absolute;width: 100%; height: 100%; overflow: auto; margin-left:80px; left: -80px;">
+                    <div id="root"/>
                     <script src="${reactAppUri}"></script>
                     <script>
                         const vscode = acquireVsCodeApi();

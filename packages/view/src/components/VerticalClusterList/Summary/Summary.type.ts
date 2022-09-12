@@ -3,9 +3,14 @@ export type Keyword = {
   count: number;
 };
 
+export type Content = {
+  message: string;
+  count: number;
+};
+
 export type Summary = {
   authorNames: Array<Array<string>>;
-  keywords: Array<Keyword>;
+  content: Content;
 };
 
 export type Cluster = {

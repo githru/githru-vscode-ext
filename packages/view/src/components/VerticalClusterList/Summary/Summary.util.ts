@@ -9,11 +9,26 @@ export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
 
   data.map((clusterNode) => {
+    const { message } =
+      clusterNode.commitNodeList[clusterNode.commitNodeList.length - 1].commit;
+
+    let resultMsg =
+      message.indexOf("/n/n", 0) > -1
+        ? message.slice(0, message.indexOf("/n/n", 0))
+        : message;
+    resultMsg =
+      resultMsg.indexOf("/n", 0) > -1
+        ? resultMsg.slice(0, message.indexOf("/n", 0))
+        : resultMsg;
+
     const cluster: Cluster = {
       clusterId: clusterNode.commitNodeList[0].clusterId,
       summary: {
         authorNames: [],
-        keywords: [],
+        content: {
+          message: resultMsg,
+          count: clusterNode.commitNodeList.length - 1,
+        },
       },
     };
 
@@ -26,23 +41,6 @@ export function getInitData({ data }: GlobalProps) {
       });
 
       cluster.summary.authorNames.push(Array.from(authorSet));
-
-      // set keywords
-      const keywordObject = {
-        keyword: commitNode.commit.message.split(" ")[0],
-        count: 1,
-      };
-
-      const findKeywordIndex = cluster.summary.keywords.findIndex(
-        (key) => key.keyword === commitNode.commit.message.split(" ")[0]
-      );
-
-      if (findKeywordIndex === -1) cluster.summary.keywords.push(keywordObject);
-      else {
-        cluster.summary.keywords[findKeywordIndex].count += 1;
-      }
-
-      cluster.summary.keywords.sort((a, b) => b.count - a.count);
 
       return commitNode;
     });

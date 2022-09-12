@@ -1,4 +1,4 @@
-import type { MouseEvent, RefObject } from "react";
+import type { RefObject } from "react";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
@@ -8,9 +8,14 @@ import "./ClusterGraph.scss";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
-import { getGraphHeight, getClusterSizes } from "./ClusterGraph.util";
 import {
-  COMMIT_HEIGHT,
+  getGraphHeight,
+  getClusterSizes,
+  getSelectedIndex,
+  getClusterPosition,
+} from "./ClusterGraph.util";
+import {
+  CLUSTER_HEIGHT,
   GRAPH_WIDTH,
   NODE_GAP,
   SVG_MARGIN,
@@ -21,78 +26,97 @@ import type {
   SVGElementSelection,
 } from "./ClusterGraph.type";
 
-const drawClusterBox = (
-  container: SVGElementSelection<SVGGElement>,
-  detailElementHeight: number
-) => {
+const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
     .append("rect")
-    .attr("class", "cluster-box ")
+    .attr("class", "cluster-graph__cluster")
     .attr("width", GRAPH_WIDTH)
-    .attr("height", COMMIT_HEIGHT)
-    .attr("x", SVG_MARGIN.left)
-    .attr("y", (d, i, prev) =>
-      i === 0
-        ? SVG_MARGIN.top
-        : prev[i - 1].y.baseVal.value +
-          prev[i - 1].height.baseVal.value +
-          NODE_GAP +
-          (d.selected === d.cluster.commitNodeList[0].clusterId
-            ? detailElementHeight
-            : 0)
-    );
+    .attr("height", CLUSTER_HEIGHT);
 };
 
-const drawDegreeBox = (
-  container: SVGElementSelection<SVGGElement>,
-  detailElementHeight: number
-) => {
+const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
   const widthScale = d3.scaleLinear().range([0, GRAPH_WIDTH]).domain([0, 10]);
   container
     .append("rect")
-    .attr("class", "degree-box")
+    .attr("class", "cluster-graph__degree")
     .attr("width", (d) => widthScale(Math.min(d.clusterSize, 10)))
-    .attr("height", COMMIT_HEIGHT)
+    .attr("height", CLUSTER_HEIGHT)
     .attr(
       "x",
-      (d) =>
-        SVG_MARGIN.left +
-        GRAPH_WIDTH / 2 -
-        widthScale(Math.min(d.clusterSize, 10)) / 2
-    )
-    .attr("y", (d, i, prev) =>
-      i === 0
-        ? SVG_MARGIN.top
-        : prev[i - 1].y.baseVal.value +
-          prev[i - 1].height.baseVal.value +
-          NODE_GAP +
-          (d.selected === d.cluster.commitNodeList[0].clusterId
-            ? detailElementHeight
-            : 0)
+      (d) => (GRAPH_WIDTH - widthScale(Math.min(d.clusterSize, 10))) / 2
     );
+};
+
+const drawLink = (
+  svgRef: RefObject<SVGSVGElement>,
+  data: ClusterGraphElement[],
+  detailElementHeight: number
+) => {
+  d3.select(svgRef.current)
+    .selectAll(".cluster-graph__link")
+    .data(data)
+    .join("line")
+    .attr("class", "cluster-graph__link")
+    .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
+    .attr(
+      "y1",
+      (_, i) =>
+        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP))
+    )
+    .attr("x2", SVG_MARGIN.left + GRAPH_WIDTH / 2)
+    .attr(
+      "y2",
+      (_, i) =>
+        SVG_MARGIN.top +
+        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP))
+    )
+    .transition()
+    .duration(300)
+    .ease(d3.easeLinear)
+    .attr("y1", (d, i) => {
+      const initPosition =
+        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP));
+      return (
+        initPosition +
+        (d.selected < i && d.selected >= 0 ? detailElementHeight : 0)
+      );
+    })
+    .attr("y2", (d, i) => {
+      const initPosition =
+        SVG_MARGIN.top +
+        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP));
+      return (
+        initPosition +
+        (d.selected <= i && d.selected >= 0 ? detailElementHeight : 0)
+      );
+    });
 };
 
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
   data: ClusterGraphElement[],
   detailElementHeight: number,
-  onClickCluster: (
-    this: SVGGElement,
-    event: MouseEvent,
-    d: ClusterGraphElement
-  ) => void
+  onClickCluster: (_: PointerEvent, d: ClusterGraphElement) => void
 ) => {
-  console.log(data);
   const group = d3
     .select(svgRef.current)
-    .selectAll(".cluster-container")
+    .selectAll(".cluster-graph__container")
     .data(data)
-    .enter()
-    .append("g")
-    .attr("class", "cluster-container")
-    .on("click", onClickCluster);
-  drawClusterBox(group, detailElementHeight);
-  drawDegreeBox(group, detailElementHeight);
+    .join("g")
+    .on("click", onClickCluster)
+    .attr("class", "cluster-graph__container")
+    .attr("transform", (d, i) =>
+      getClusterPosition(d, i, detailElementHeight, true)
+    );
+  group
+    .transition()
+    .duration(300)
+    .ease(d3.easeLinear)
+    .attr("transform", (d, i) => getClusterPosition(d, i, detailElementHeight));
+
+  drawLink(svgRef, data, detailElementHeight);
+  drawClusterBox(group);
+  drawDegreeBox(group);
 };
 
 const destroyClusterGraph = (target: RefObject<SVGElement>) =>
@@ -101,53 +125,45 @@ const destroyClusterGraph = (target: RefObject<SVGElement>) =>
 type ClusterGraphProps = {
   data: ClusterNode[];
   selectedData: SelectedDataProps;
-  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
   detailElementHeight: number;
+  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
 };
 
-const getSelectedNextId = (
-  data: ClusterNode[],
-  selectedData: SelectedDataProps
-) => {
-  const selectedId = selectedData?.commitNodeList[0].clusterId;
-  const selectedNextId =
-    data.findIndex((item) => item.commitNodeList[0].clusterId === selectedId) +
-    1;
-  return data[selectedNextId]?.commitNodeList[0]?.clusterId;
-};
 const ClusterGraph = ({
   data,
   selectedData,
-  setSelectedData,
   detailElementHeight,
+  setSelectedData,
 }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
-  const graphHeight = getGraphHeight(clusterSizes);
-  const selectedNextId = getSelectedNextId(data, selectedData);
+  const selectedIndex = getSelectedIndex(data, selectedData);
+  const graphHeight =
+    getGraphHeight(clusterSizes) +
+    (selectedIndex < 0 ? 0 : detailElementHeight);
 
   const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
     clusterSize: clusterSizes[i],
-    selected: selectedNextId,
+    selected: selectedIndex,
   }));
 
   useEffect(() => {
-    const handleClickCluster = (_: MouseEvent, d: ClusterGraphElement) =>
+    const handleClickCluster = (_: PointerEvent, d: ClusterGraphElement) => {
       setSelectedData(
         selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
       );
+    };
     drawClusterGraph(
       svgRef,
       clusterGraphElements,
       detailElementHeight,
       handleClickCluster
     );
-    console.log(detailElementHeight);
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [clusterGraphElements, setSelectedData, detailElementHeight]);
+  }, [clusterGraphElements, selectedIndex, setSelectedData]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
