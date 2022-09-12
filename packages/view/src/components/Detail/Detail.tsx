@@ -15,18 +15,14 @@ const DetailSummary = ({
     getCommitListDetail({ commitNodeListInCluster });
   return (
     <div className="detail-summary_container">
-      Excluding merges,
-      <span className="detail-summary_impact"> {authorLength} authors </span>
-      have pushed
-      <span className="detail-summary_impact"> {commitLength} commits </span>
-      to main. On main,
-      <span className="detail-summary_impact"> {fileLength} files </span>
-      have changed and there have been
-      <span className="detail-summary_insertions"> {insertions} </span>
-      <span className="detail-summary_impact">additions </span>
-      and
-      <span className="detail-summary_deletions"> {deletions} </span>
-      <span className="detail-summary_impact">deletions.</span>
+      <div className="divider" />
+      <div className="text">
+        <strong>{authorLength}</strong> authors |{" "}
+        <strong>{commitLength}</strong> commits | <strong>{fileLength}</strong>{" "}
+        changed files | <strong className="insertions">{insertions}</strong>{" "}
+        additions and <strong className="deletions">{deletions}</strong>{" "}
+        deletions codes
+      </div>
     </div>
   );
 };
