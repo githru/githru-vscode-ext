@@ -18,6 +18,8 @@ import {
   CLUSTER_HEIGHT,
   DETAIL_HEIGHT,
   GRAPH_WIDTH,
+  NODE_GAP,
+  SVG_MARGIN,
   SVG_WIDTH,
 } from "./ClusterGraph.const";
 import type {
@@ -46,6 +48,48 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
     );
 };
 
+const drawLink = (
+  svgRef: RefObject<SVGSVGElement>,
+  data: ClusterGraphElement[]
+) => {
+  d3.select(svgRef.current)
+    .selectAll(".cluster-graph_link")
+    .data(data)
+    .join("line")
+    .attr("class", "cluster-graph_link")
+    .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
+    .attr(
+      "y1",
+      (_, i) =>
+        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP))
+    )
+    .attr("x2", SVG_MARGIN.left + GRAPH_WIDTH / 2)
+    .attr(
+      "y2",
+      (_, i) =>
+        SVG_MARGIN.top +
+        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP))
+    )
+    .transition()
+    .duration(300)
+    .ease(d3.easeLinear)
+    .attr("y1", (d, i) => {
+      const initPosition =
+        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP));
+      return (
+        initPosition + (d.selected < i && d.selected >= 0 ? DETAIL_HEIGHT : 0)
+      );
+    })
+    .attr("y2", (d, i) => {
+      const initPosition =
+        SVG_MARGIN.top +
+        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP));
+      return (
+        initPosition + (d.selected <= i && d.selected >= 0 ? DETAIL_HEIGHT : 0)
+      );
+    });
+};
+
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
   data: ClusterGraphElement[],
@@ -65,6 +109,7 @@ const drawClusterGraph = (
     .ease(d3.easeLinear)
     .attr("transform", (d, i) => getClusterPosition(d, i));
 
+  drawLink(svgRef, data);
   drawClusterBox(group);
   drawDegreeBox(group);
 };

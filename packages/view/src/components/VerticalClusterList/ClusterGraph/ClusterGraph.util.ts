@@ -25,8 +25,7 @@ export function getClusterPosition(
   i: number,
   isPrev = false
 ) {
-  const curSelected = d.selected || Infinity;
-  const selected = isPrev ? Infinity : curSelected;
+  const selected = isPrev ? Infinity : d.selected;
   const margin = selected >= 0 && selected < i ? DETAIL_HEIGHT : 0;
   const x = SVG_MARGIN.left;
   const y = SVG_MARGIN.top + i * (CLUSTER_HEIGHT + NODE_GAP) + margin;

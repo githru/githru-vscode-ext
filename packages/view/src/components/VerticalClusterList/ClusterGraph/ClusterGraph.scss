@@ -2,13 +2,13 @@
   .cluster-graph_cluster {
     rx: 5;
     stroke-width: 1;
-    stroke: rgb(13, 71, 161, 0.4);
+    stroke: #0077aa;
     fill: transparent;
   }
 
   .cluster-graph_degree {
     rx: 5;
-    fill: rgb(13, 71, 161, 0.4);
+    fill: #0077aa;
   }
 
   &:hover {
@@ -18,4 +18,9 @@
   }
 
   cursor: pointer;
+}
+
+.cluster-graph_link {
+  stroke: #0077aa;
+  stroke-width: 1;
 }
