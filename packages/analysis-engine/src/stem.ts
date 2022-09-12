@@ -42,7 +42,7 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
   );
 }
 
-function getStemIdClosure() {
+function buildGetStemId() {
   let implicitBranchNumber = 0;
   return function (
     id: string,
@@ -95,7 +95,7 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  const getStemId = getStemIdClosure();
+  const getStemId = buildGetStemId();
 
   while (!q.isEmpty()) {
     const tail = q.pop();
