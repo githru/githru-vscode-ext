@@ -1,11 +1,11 @@
 import {
-  axisLeft,
+  // axisLeft,
   extent,
   scaleBand,
   scaleLinear,
   scaleTime,
   select,
-  ticks,
+  // ticks,
   // axisBottom,
 } from "d3";
 import { useEffect, useRef } from "react";
@@ -52,11 +52,11 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
-    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
+    // const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
 
     // svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
-    svg.append("g").call(yAxis).attr("transform", `translate(${width},0)`);
+    svg.append("g").attr("transform", `translate(${width},0)`);
 
     svg
       .selectAll(".cloc")
@@ -69,6 +69,14 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
       .attr("fill", "#666666");
+
+    svg
+      .append("text")
+      .text("CLOC")
+      .attr("x", "5px")
+      .attr("y", "15px")
+      .attr("font-size", "10px")
+      .attr("font-weight", "500");
   }, [data]);
 
   return (
