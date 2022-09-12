@@ -52,8 +52,13 @@ const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
                   )}
                 </span>
                 <span className="contents">
-                  {`${cluster.summary.content.message} + ${cluster.summary.content.count}`}
-                  <span className="more">{` more`}</span>
+                  {`${cluster.summary.content.message.slice(0, 70)} ${
+                    cluster.summary.content.message.length > 70 ? "..." : ""
+                  } ${
+                    cluster.summary.content.count > 0
+                      ? `+ ${cluster.summary.content.count} more`
+                      : ""
+                  } `}
                 </span>
               </p>
             </div>
