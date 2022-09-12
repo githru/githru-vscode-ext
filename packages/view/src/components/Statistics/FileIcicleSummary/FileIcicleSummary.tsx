@@ -16,6 +16,7 @@ import {
   LABEL_VISIBLE_HEIGHT,
   COLOR_CODE,
 } from "./FileIcicleSummary.const";
+import "./FileIcicleSummary.scss";
 
 const partition = (data: FileChangesNode) => {
   const root = d3
@@ -74,8 +75,8 @@ const drawIcicleTree = async (
     .append("text")
     .style("user-select", "none")
     .attr("pointer-events", "none")
-    .attr("x", 4)
-    .attr("y", 13)
+    .attr("x", 10)
+    .attr("y", 25)
     .attr("fill-opacity", (d) => +labelVisible(d));
 
   text.append("tspan").text((d) => d.data.name);
