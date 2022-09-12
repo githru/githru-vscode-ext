@@ -1,7 +1,6 @@
 import { getLeafNodes } from "./commit.util";
 import Queue from "./queue";
-import { CommitNode } from "./types/CommitNode";
-import { Stem } from "./types/Stem";
+import { CommitNode, Stem } from "./types";
 
 export function getStemNodes(
   tailId: string,
@@ -43,6 +42,28 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
   );
 }
 
+function buildGetStemId() {
+  let implicitBranchNumber = 0;
+  return function (
+    id: string,
+    branches: string[],
+    mainNode?: CommitNode,
+    headNode?: CommitNode
+  ) {
+    if (branches.length === 0) {
+      implicitBranchNumber += 1;
+      return `implicit-${implicitBranchNumber}`;
+    }
+    if (id === mainNode?.commit.id) {
+      return mainNode.commit.branches.includes("main") ? "main" : "master";
+    }
+    if (id === headNode?.commit.id) {
+      return "HEAD";
+    }
+    return branches[0];
+  };
+}
+
 export function buildStemDict(
   commitDict: Map<string, CommitNode>
 ): Map<string, Stem> {
@@ -74,17 +95,18 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  let implicitBranchNumber = 1;
+  const getStemId = buildGetStemId();
 
   while (!q.isEmpty()) {
     const tail = q.pop();
     if (!tail) continue;
 
-    const stemId =
-      tail.commit.branches[0] ?? `implicit-${implicitBranchNumber}`;
-    if (tail.commit.branches.length === 0) {
-      implicitBranchNumber += 1;
-    }
+    const stemId = getStemId(
+      tail.commit.id,
+      tail.commit.branches,
+      mainNode,
+      headNode
+    );
 
     const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
     if (nodes.length === 0) continue;
