@@ -176,7 +176,7 @@
 }
 
 .summary_detail_container {
-  height: 280px;
+  max-height: 280px;
   overflow: auto;
 
   &::-webkit-scrollbar {

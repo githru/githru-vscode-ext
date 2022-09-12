@@ -11,7 +11,6 @@ import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { getGraphHeight, getClusterSizes } from "./ClusterGraph.util";
 import {
   COMMIT_HEIGHT,
-  DETAIL_HEIGHT,
   GRAPH_WIDTH,
   NODE_GAP,
   SVG_MARGIN,
@@ -22,7 +21,10 @@ import type {
   SVGElementSelection,
 } from "./ClusterGraph.type";
 
-const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
+const drawClusterBox = (
+  container: SVGElementSelection<SVGGElement>,
+  detailElementHeight: number
+) => {
   container
     .append("rect")
     .attr("class", "cluster-box ")
@@ -36,12 +38,15 @@ const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
           prev[i - 1].height.baseVal.value +
           NODE_GAP +
           (d.selected === d.cluster.commitNodeList[0].clusterId
-            ? DETAIL_HEIGHT
+            ? detailElementHeight
             : 0)
     );
 };
 
-const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
+const drawDegreeBox = (
+  container: SVGElementSelection<SVGGElement>,
+  detailElementHeight: number
+) => {
   const widthScale = d3.scaleLinear().range([0, GRAPH_WIDTH]).domain([0, 10]);
   container
     .append("rect")
@@ -62,7 +67,7 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
           prev[i - 1].height.baseVal.value +
           NODE_GAP +
           (d.selected === d.cluster.commitNodeList[0].clusterId
-            ? DETAIL_HEIGHT
+            ? detailElementHeight
             : 0)
     );
 };
@@ -70,6 +75,7 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
   data: ClusterGraphElement[],
+  detailElementHeight: number,
   onClickCluster: (
     this: SVGGElement,
     event: MouseEvent,
@@ -85,8 +91,8 @@ const drawClusterGraph = (
     .append("g")
     .attr("class", "cluster-container")
     .on("click", onClickCluster);
-  drawClusterBox(group);
-  drawDegreeBox(group);
+  drawClusterBox(group, detailElementHeight);
+  drawDegreeBox(group, detailElementHeight);
 };
 
 const destroyClusterGraph = (target: RefObject<SVGElement>) =>
@@ -96,6 +102,7 @@ type ClusterGraphProps = {
   data: ClusterNode[];
   selectedData: SelectedDataProps;
   setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
+  detailElementHeight: number;
 };
 
 const getSelectedNextId = (
@@ -112,6 +119,7 @@ const ClusterGraph = ({
   data,
   selectedData,
   setSelectedData,
+  detailElementHeight,
 }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
@@ -129,11 +137,17 @@ const ClusterGraph = ({
       setSelectedData(
         selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
       );
-    drawClusterGraph(svgRef, clusterGraphElements, handleClickCluster);
+    drawClusterGraph(
+      svgRef,
+      clusterGraphElements,
+      detailElementHeight,
+      handleClickCluster
+    );
+    console.log(detailElementHeight);
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [clusterGraphElements, setSelectedData]);
+  }, [clusterGraphElements, setSelectedData, detailElementHeight]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
