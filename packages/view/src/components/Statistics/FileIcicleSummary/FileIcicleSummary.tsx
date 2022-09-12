@@ -1,9 +1,13 @@
 import * as d3 from "d3";
 import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-const FILE_PATH = "/fileChanges.json";
+import type { ClusterNode } from "../../../types";
+
+import { getFileChangesTree } from "./FileIcicleSummary.util";
+import type { FileChangesNode } from "./FileIcicleSummary.type";
+
 const WIDTH = 600;
 const HEIGHT = 400;
 const FONT_SIZE = 10;
@@ -15,21 +19,7 @@ const COLOR_CODE = {
   file: "#ffe082",
 };
 
-type TFileData = {
-  name: string; // Name of file/directory.
-  value?: number; // Count of changed lines.
-  authors: Record<
-    string,
-    {
-      insertion: number;
-      deletions: number;
-      count: number;
-    }
-  >;
-  children: TFileData[];
-};
-
-const partition = (data: TFileData) => {
+const partition = (data: FileChangesNode) => {
   const root = d3
     .hierarchy(data)
     // Initialize data - mutating before draw file icicle tree
@@ -38,22 +28,22 @@ const partition = (data: TFileData) => {
     .sum((d) => d?.value ?? 0)
     .sort((a, b) => b.height - a.height || (b.value ?? 0) - (a.value ?? 0));
   return d3
-    .partition<TFileData>()
+    .partition<FileChangesNode>()
     .size([HEIGHT, ((root.height + 1) * WIDTH) / MAX_DEPTH])(root);
 };
 
-const labelVisible = (d: HierarchyRectangularNode<TFileData>) =>
+const labelVisible = (d: HierarchyRectangularNode<FileChangesNode>) =>
   d.y1 <= WIDTH && d.y0 >= 0 && d.x1 - d.x0 > LABEL_VISIBLE_HEIGHT;
 
-const rectHeight = (d: HierarchyRectangularNode<TFileData>) =>
+const rectHeight = (d: HierarchyRectangularNode<FileChangesNode>) =>
   d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
 
 // Refer https://observablehq.com/@d3/zoomable-icicle
 const drawIcicleTree = async (
   $target: RefObject<SVGSVGElement>,
-  data: TFileData
+  data: FileChangesNode
 ) => {
-  let focus: HierarchyRectangularNode<TFileData> | null = null;
+  let focus: HierarchyRectangularNode<FileChangesNode> | null = null;
   const root = partition(data);
 
   const svg = d3
@@ -140,22 +130,12 @@ const destroyIcicleTree = ($target: RefObject<SVGSVGElement>) => {
   d3.select($target.current).selectAll("svg").remove();
 };
 
-const FileIcicleSummary = () => {
-  const [data, setData] = useState<TFileData>();
+const FileIcicleSummary = ({ data }: { data: ClusterNode[] }) => {
   const $summary = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    const getFileData = async () => {
-      const response = await d3.json<TFileData>(FILE_PATH);
-      setData(response);
-    };
-
-    getFileData();
-  }, []);
-
-  useEffect(() => {
     if (data) {
-      drawIcicleTree($summary, data);
+      drawIcicleTree($summary, getFileChangesTree(data));
     }
 
     // cleanup
@@ -163,6 +143,10 @@ const FileIcicleSummary = () => {
       destroyIcicleTree($summary);
     };
   }, [data]);
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <div className="file-icicle-summary">

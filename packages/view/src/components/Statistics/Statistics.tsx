@@ -8,7 +8,7 @@ const Statistics = ({ data }: StatisticsProps) => {
   return (
     <div className="statistics">
       <AuthorBarChart data={data} />
-      <FileIcicleSummary />
+      <FileIcicleSummary data={data} />
     </div>
   );
 };
