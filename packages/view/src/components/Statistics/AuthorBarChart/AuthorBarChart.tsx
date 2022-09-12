@@ -74,7 +74,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .attr("class", "x-axis-label")
       .style(
         "transform",
-        `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins}px)`
+        `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`
       )
       .text(`${metric} # / Total ${metric} # (%)`);
 
@@ -170,7 +170,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       >
         {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {option === METRIC_TYPE[0] ? `${option} #` : option}
           </option>
         ))}
       </select>
