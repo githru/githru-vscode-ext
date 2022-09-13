@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useRef, useEffect } from "react";
 
 import type { ClusterNode, SelectedDataProps } from "types";
 import { Detail } from "components";
@@ -6,7 +6,7 @@ import { Detail } from "components";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import { AuthorName } from "./AuthorName";
-import type { Cluster, Keyword } from "./Summary.type";
+import type { Cluster } from "./Summary.type";
 import { getClusterById, getInitData } from "./Summary.util";
 
 import "./Summary.scss";
@@ -17,68 +17,91 @@ type SummaryProps = {
   selectedData: SelectedDataProps;
 };
 
-const Summary = ({ data, selectedData, setSelectedData }: SummaryProps) => {
-  const clusters = getInitData({ data });
+const Summary = forwardRef<HTMLDivElement, SummaryProps>(
+  ({ data, selectedData, setSelectedData }, ref) => {
+    const clusters = getInitData({ data });
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-  const getClusterIds = (_selectedData: SelectedDataProps) => {
-    if (!_selectedData) return null;
-    return _selectedData.commitNodeList[0].clusterId;
-  };
+    const getClusterIds = (_selectedData: SelectedDataProps) => {
+      if (!_selectedData) return null;
+      return _selectedData.commitNodeList[0].clusterId;
+    };
 
-  const clusterIds = getClusterIds(selectedData);
-  const onClickClusterSummary = (clusterId: number) => () => {
-    const selected = getClusterById(data, clusterId);
-    setSelectedData(selectedDataUpdater(selected, clusterId));
-  };
+    const clusterIds = getClusterIds(selectedData);
+    const onClickClusterSummary = (clusterId: number) => {
+      const selected = getClusterById(data, clusterId);
+      setSelectedData(selectedDataUpdater(selected, clusterId));
+    };
 
-  return (
-    <div className="summary__entire">
-      {clusters.map((cluster: Cluster) => {
-        return (
-          <React.Fragment key={cluster.clusterId}>
+    useEffect(() => {
+      scrollRef.current?.scrollIntoView({ block: "center" });
+    }, [selectedData]);
+
+    return (
+      <div className="cluster-summary__container">
+        {clusters.map((cluster: Cluster) => {
+          return (
             <div
               role="presentation"
-              className="cluster"
-              onClick={onClickClusterSummary(cluster.clusterId)}
+              className="cluster-summary__cluster"
+              key={cluster.clusterId}
             >
-              <p className="summary">
-                <span className="nameBox">
-                  {cluster.summary.authorNames.map(
-                    (authorArray: Array<string>) => {
-                      return authorArray.map((authorName: string) => (
-                        <AuthorName key={authorName} authorName={authorName} />
-                      ));
-                    }
+              <button
+                type="button"
+                className="cluster-summary__toggle-contents-button"
+                onClick={() => onClickClusterSummary(cluster.clusterId)}
+              >
+                <div className="cluster-summary__toggle-contents-container">
+                  <span className="name-box">
+                    {cluster.summary.authorNames.map(
+                      (authorArray: Array<string>) => {
+                        return authorArray.map((authorName: string) => (
+                          <AuthorName
+                            key={authorName}
+                            authorName={authorName}
+                          />
+                        ));
+                      }
+                    )}
+                  </span>
+                  <div className="cluster-summary__contents">
+                    <span className="commit-message">
+                      {cluster.summary.content.message}
+                    </span>
+                    <span className="more-commit-count">
+                      {cluster.summary.content.count > 0 &&
+                        ` + ${cluster.summary.content.count} more`}
+                    </span>
+                  </div>
+                  {cluster.clusterId === clusterIds ? (
+                    <button className="collapsible-button-shown" type="button">
+                      ▲
+                    </button>
+                  ) : (
+                    <button className="collapsible-button" type="button">
+                      ▼
+                    </button>
                   )}
-                </span>
-                <span className="keywords">
-                  {cluster.summary.keywords.map((keywordObj: Keyword) => {
-                    let size = "small";
-                    if (keywordObj.count > 3) size = "medium";
-                    if (keywordObj.count > 6) size = "large";
-
-                    return (
-                      <span
-                        key={`${cluster.clusterId}-${keywordObj.keyword}`}
-                        className={["keyword", size].join(" ")}
-                      >
-                        {keywordObj.keyword}
-                      </span>
-                    );
-                  })}
-                </span>
-              </p>
+                </div>
+              </button>
+              {cluster.clusterId === clusterIds && (
+                <div
+                  className="cluster-summary__detail__container"
+                  ref={scrollRef}
+                >
+                  <div ref={ref}>
+                    <div className="summary-detail__wrapper">
+                      <Detail selectedData={selectedData} />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            {cluster.clusterId === clusterIds && (
-              <div className="summary_detail_container">
-                <Detail selectedData={selectedData} />
-              </div>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </div>
-  );
-};
+          );
+        })}
+      </div>
+    );
+  }
+);
 
 export default Summary;

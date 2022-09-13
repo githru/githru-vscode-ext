@@ -65,7 +65,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const yAxis = d3
       .axisLeft(yScale)
       .ticks(0)
-      .tickSizeInner(3)
+      .tickSizeInner(0)
       .tickSizeOuter(0);
     yAxisGroup.call(yAxis);
 
@@ -74,7 +74,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .attr("class", "x-axis-label")
       .style(
         "transform",
-        `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins}px)`
+        `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`
       )
       .text(`${metric} # / Total ${metric} # (%)`);
 
@@ -163,14 +163,14 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   };
 
   return (
-    <div className="author-bar-chart-wrap">
+    <div className="author-bar-chart__container">
       <select
         className="author-bar-chart__select-box"
         onChange={handleChangeMetric}
       >
         {METRIC_TYPE.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {option === METRIC_TYPE[0] ? `${option} #` : option}
           </option>
         ))}
       </select>

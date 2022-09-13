@@ -1,31 +1,67 @@
-.detail-commit_item_container {
-  list-style: inside;
+@import "styles/app";
+
+.detail__summary__container {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 20px;
+  align-items: center;
+  font-size: 14px;
+
+  .divider {
+    margin-right: 1rem;
+    flex-grow: 10;
+    height: 0;
+    border: 1px solid $white;
+  }
+
+  .detail__summary {
+    flex-grow: 0.1;
+  }
+
+  .insertions {
+    color: green;
+  }
+
+  .deletions {
+    color: red;
+  }
 }
 
-.detail-summary_container {
-  border-radius: 10px;
-  border: 1px solid black;
-  padding: 10px 20px;
-  box-sizing: border-box;
-  width: 90%;
-  margin-bottom: 20px;
+.detail__commit-list__container {
+  padding: 0 20px;
+  font-size: 14px;
 
-  color: #8b949e;
-  .detail-summary_impact {
-    color: #000000;
-  }
-  .detail-summary_insertions {
-    color: #3fba50;
-  }
-  .detail-summary_deletions {
-    color: #f85149;
+  .commit-item {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    color: $gray-600;
+
+    .commit-detail {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+
+      .message {
+        color: $white;
+      }
+    }
+    .commit-id {
+      padding-left: 50px;
+    }
   }
 }
 
-.detail-summary_toggleButton {
+.toggle-button {
+  display: flex;
+  margin: 20px auto 0;
   border: none;
   background: none;
   color: #0077aa;
   cursor: pointer;
-  margin: 10px 0px;
+
+  &:hover {
+    color: $gray-300;
+  }
 }

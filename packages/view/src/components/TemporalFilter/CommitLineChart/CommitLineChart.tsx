@@ -1,12 +1,12 @@
 import {
   axisBottom,
-  axisLeft,
+  // axisLeft,
   extent,
   scaleBand,
   scaleLinear,
   scaleTime,
   select,
-  ticks,
+  // ticks,
   timeFormat,
   timeTicks,
 } from "d3";
@@ -69,11 +69,11 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
       .tickFormat((d) => timeFormatter(new Date(d)));
 
-    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
+    // const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
 
     svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
-    svg.append("g").call(yAxis).attr("transform", `translate(${width},0)`);
+    svg.append("g").attr("transform", `translate(${width},0)`);
 
     svg
       .selectAll(".commit")
@@ -90,10 +90,18 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
       .attr("fill", "#666666");
+
+    svg
+      .append("text")
+      .text("COMMIT")
+      .attr("x", "5px")
+      .attr("y", "15px")
+      .attr("font-size", "10px")
+      .attr("font-weight", "500");
   }, [data]);
   return (
-    <div className="commit-linechart-wrap" ref={wrapperRef}>
-      <svg className="commit-linechart" ref={ref} />
+    <div className="commit-line-chart-wrap" ref={wrapperRef}>
+      <svg className="commit-line-chart" ref={ref} />
     </div>
   );
 };

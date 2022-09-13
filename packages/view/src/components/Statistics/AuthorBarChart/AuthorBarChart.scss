@@ -1,34 +1,36 @@
 @import "styles/app.scss";
 
-.author-bar-chart-wrap {
-  width: 500px;
-  background: $gray-900;
-  height: 100%;
+.author-bar-chart__container {
+  width: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-size: 20px;
+  align-items: flex-end;
 }
 
 .author-bar-chart__select-box {
+  font-size: 10px;
   background: transparent;
-  border: none;
-  margin: 50px;
-  width: 100px;
-  height: 30px;
+  border: 1px solid $white;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 0 10px;
+  height: 25px;
   color: $white;
-  outline: $white auto 1px;
+  outline: none;
   text-align: center;
+
+  option {
+    background: $gray-900;
+  }
 }
 
 .author-bar-chart {
   overflow: visible;
-  margin: 40px;
+  margin: 20px 40px 40px;
 
   .axis {
     color: $white;
     font-weight: bold;
-    font-size: 11px;
 
     &.y-axis {
       text {
@@ -39,7 +41,6 @@
     &.x-axis {
       .x-axis-label {
         fill: $white;
-        font-size: 15px;
       }
     }
   }
@@ -48,7 +49,7 @@
     .bar {
       &:hover {
         rect {
-          fill: $gray-900;
+          fill: transparent;
           stroke: #0077aa;
           stroke-width: 2;
         }
@@ -61,7 +62,7 @@
       .name {
         fill: $white;
         stroke: none;
-        font-size: 14px;
+        font-size: 10px;
         text-anchor: start;
         font-weight: normal;
       }
@@ -75,7 +76,7 @@
   background: $white;
   padding: 8px 16px;
   text-align: center;
-  font-size: 15px;
+  font-size: 10px;
   line-height: 1.5;
   border-radius: 5px;
   color: $gray-900;

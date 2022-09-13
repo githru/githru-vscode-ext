@@ -26,7 +26,7 @@ const App = () => {
     setSelectedData(null);
   }, [filteredData]);
 
-  if (!data.length) return null;
+  if (!data.length || !filteredData.length) return null;
 
   return (
     <div>
@@ -41,7 +41,6 @@ const App = () => {
         />
         <Statistics data={selectedData ? [selectedData] : filteredData} />
       </div>
-      {/* <Detail selectedData={selectedData} /> */}
     </div>
   );
 };
