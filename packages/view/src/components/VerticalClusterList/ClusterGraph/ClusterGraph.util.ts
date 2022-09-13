@@ -1,11 +1,6 @@
 import type { ClusterNode, SelectedDataProps } from "types";
 
-import {
-  CLUSTER_HEIGHT,
-  DETAIL_HEIGHT,
-  NODE_GAP,
-  SVG_MARGIN,
-} from "./ClusterGraph.const";
+import { CLUSTER_HEIGHT, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
 import type { ClusterGraphElement } from "./ClusterGraph.type";
 
 export function getClusterSizes(data: ClusterNode[]) {
@@ -23,10 +18,11 @@ export function getGraphHeight(clusterSizes: number[]) {
 export function getClusterPosition(
   d: ClusterGraphElement,
   i: number,
+  detailElementHeight: number,
   isPrev = false
 ) {
   const selected = isPrev ? Infinity : d.selected;
-  const margin = selected >= 0 && selected < i ? DETAIL_HEIGHT : 0;
+  const margin = selected >= 0 && selected < i ? detailElementHeight : 0;
   const x = SVG_MARGIN.left;
   const y = SVG_MARGIN.top + i * (CLUSTER_HEIGHT + NODE_GAP) + margin;
   return `translate(${x}, ${y})`;

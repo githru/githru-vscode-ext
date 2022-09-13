@@ -4,6 +4,7 @@ import "./Detail.scss";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
+import { getTime } from "utils/time";
 
 const DetailSummary = ({
   commitNodeListInCluster,
@@ -14,18 +15,14 @@ const DetailSummary = ({
     getCommitListDetail({ commitNodeListInCluster });
   return (
     <div className="detail-summary_container">
-      Excluding merges,
-      <span className="detail-summary_impact"> {authorLength} authors </span>
-      have pushed
-      <span className="detail-summary_impact"> {commitLength} commits </span>
-      to main. On main,
-      <span className="detail-summary_impact"> {fileLength} files </span>
-      have changed and there have been
-      <span className="detail-summary_insertions"> {insertions} </span>
-      <span className="detail-summary_impact">additions </span>
-      and
-      <span className="detail-summary_deletions"> {deletions} </span>
-      <span className="detail-summary_impact">deletions.</span>
+      <div className="divider" />
+      <div className="text">
+        <strong>{authorLength}</strong> authors |{" "}
+        <strong>{commitLength}</strong> commits | <strong>{fileLength}</strong>{" "}
+        changed files | <strong className="insertions">{insertions}</strong>{" "}
+        additions and <strong className="deletions">{deletions}</strong>{" "}
+        deletions codes
+      </div>
     </div>
   );
 };
@@ -43,9 +40,23 @@ const Detail = ({ selectedData }: { selectedData: SelectedDataProps }) => {
       <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
 
       <ul className="detail-commit_item_container">
-        {commitNodeList.map((commitNode) => (
-          <li key={commitNode.commit.id}>{commitNode.commit.message}</li>
-        ))}
+        {commitNodeList.map(({ commit }) => {
+          const { id, message, author, authorDate } = commit;
+
+          return (
+            <li key={id} className="detail-commit_item">
+              <div>
+                - {message},{" "}
+                <span>
+                  {author.names[0]}, {getTime(authorDate)}
+                </span>
+              </div>
+              <div>
+                <span>{id}</span>
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       {show && (

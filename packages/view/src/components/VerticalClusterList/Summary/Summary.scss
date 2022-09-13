@@ -40,10 +40,49 @@
   }
 
   .summary {
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     flex-direction: row;
-    padding: 5px 0;
+    padding: 5px 15px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: $white;
+  }
+
+  .summary:hover {
+    border-radius: 40px;
+    background-color: lighten($gray-600, 5);
+  }
+
+  .text-wrapper {
+    display: flex;
+    align-items: center;
+    text-overflow: ellipsis;
+    width: 85%;
+  }
+
+  .collapsible-button {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: $blue-light-600;
+    display: none;
+    cursor: pointer;
+  }
+
+  .collapsible-button--shown {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: $blue-light-600;
+    cursor: pointer;
+  }
+
+  :hover .collapsible-button {
+    display: block;
   }
 
   .nameBox {
@@ -124,7 +163,6 @@
   }
 
   .contents {
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -167,10 +205,11 @@
 }
 
 .summary_detail_container {
-  height: 280px;
-  margin-top: 20px;
-  overflow: scroll;
-
+  max-height: 280px;
+  overflow: auto;
+  // height: 280px;
+  // margin-top: 20px;
+  // overflow: scroll;
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
