@@ -163,7 +163,12 @@ const ClusterGraph = ({
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [clusterGraphElements, selectedIndex, setSelectedData]);
+  }, [
+    clusterGraphElements,
+    detailElementHeight,
+    selectedIndex,
+    setSelectedData,
+  ]);
 
   return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
