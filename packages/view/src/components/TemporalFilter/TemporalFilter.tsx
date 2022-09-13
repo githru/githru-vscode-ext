@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 
 import type { ClusterNode, GlobalProps } from "types";
 
-import { ClocLineChart } from "./ClocLineChart";
-import { CommitLineChart } from "./CommitLineChart";
 import { Filter } from "./Filter";
 import {
   filterDataByDate,
@@ -34,21 +32,12 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
   }, [data, fromDate, toDate, setFilteredData]);
 
   return (
-    <article className="temporal-filter">
-      <div className="data-control-container">
-        <Filter
-          setFromDate={setFromDate}
-          setToDate={setToDate}
-          minDate={minDate}
-          maxDate={maxDate}
-        />
-        {/* <ThemeSelector /> */}
-      </div>
-      <div className="line-chart">
-        <ClocLineChart data={sortedData} />
-        <CommitLineChart data={sortedData} />
-      </div>
-    </article>
+    <Filter
+      setFromDate={setFromDate}
+      setToDate={setToDate}
+      minDate={minDate}
+      maxDate={maxDate}
+    />
   );
 };
 
