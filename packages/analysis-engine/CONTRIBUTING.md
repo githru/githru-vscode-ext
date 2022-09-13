@@ -81,7 +81,7 @@ label(namespace): content
 Example:
 
 ```
-feature(engine): add function to find git path on vscode
+feat(engine): add function to find git path on vscode
 ```
 
 ### Adding New Dependencies
