@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef, useEffect } from "react";
 
 import type { ClusterNode, SelectedDataProps } from "types";
 import { Detail } from "components";
@@ -20,6 +20,7 @@ type SummaryProps = {
 const Summary = forwardRef<HTMLDivElement, SummaryProps>(
   ({ data, selectedData, setSelectedData }, ref) => {
     const clusters = getInitData({ data });
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     const getClusterIds = (_selectedData: SelectedDataProps) => {
       if (!_selectedData) return null;
@@ -31,6 +32,10 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
       const selected = getClusterById(data, clusterId);
       setSelectedData(selectedDataUpdater(selected, clusterId));
     };
+
+    useEffect(() => {
+      scrollRef.current?.scrollIntoView({ block: "center" });
+    }, [selectedData]);
 
     return (
       <div className="cluster-summary__container">
@@ -68,20 +73,27 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                         ` + ${cluster.summary.content.count} more`}
                     </span>
                   </div>
+                  {cluster.clusterId === clusterIds ? (
+                    <button className="collapsible-button-shown" type="button">
+                      ▲
+                    </button>
+                  ) : (
+                    <button className="collapsible-button" type="button">
+                      ▼
+                    </button>
+                  )}
                 </div>
-                {cluster.clusterId === clusterIds ? (
-                  <button className="collapsible-button-shown" type="button">
-                    ▲
-                  </button>
-                ) : (
-                  <button className="collapsible-button" type="button">
-                    ▼
-                  </button>
-                )}
               </button>
               {cluster.clusterId === clusterIds && (
-                <div className="cluster-summary__detail__container" ref={ref}>
-                  <Detail selectedData={selectedData} />
+                <div
+                  className="cluster-summary__detail__container"
+                  ref={scrollRef}
+                >
+                  <div ref={ref}>
+                    <div className="summary-detail__wrapper">
+                      <Detail selectedData={selectedData} />
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
