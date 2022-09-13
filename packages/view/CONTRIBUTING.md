@@ -6,15 +6,15 @@
 
 ### 설치 및 디버그
 
-* 설치방법은 [여기](https://github.com/githru/githru-vscode-ext/blob/main/CONTRIBUTING.md#installation)를 참고해주십시오.
+* 설치방법은 [여기](https://github.com/githru/githru-vscode-ext/blob/main/CONTRIBUTING.md#installation)를 참고해주세요.
 
 * 웹 브라우저로 디버그하는 방법과 vscode로 디버그하는 방법이 있습니다. 
 
-  * 다음은 웹 브라우저로 디버그하는 명령어입니다. 웹 브라우저로 디버그하는 것은 vscode에서 디버그하는 것과 차이가 있을 수 있습니다. 정확한 view는 vscode에서 확인해주십시오.
+  * 다음은 웹 브라우저로 디버그하는 명령어입니다. 웹 브라우저로 디버그하는 것은 vscode에서 디버그하는 것과 차이가 있을 수 있습니다. 정확한 view는 vscode에서 확인해주세요.
 
-  ```bash
-  cd packages/view && npm start
-  ```
+    ```bash
+    cd packages/view && npm start
+    ```
 
   * 다음은 vscode로 디버그하는 방법입니다. 이 방법은 다음에서 소개되었습니다.
     * [vscode 디버그 방법](https://github.com/githru/githru-vscode-ext/blob/main/CONTRIBUTING.md#debugging)
@@ -23,7 +23,7 @@
 
 ### 코드 리뷰
 
-프로젝트 구성원의 제출을 포함한 모든 제출은 검토가 필요합니다. 우리는 이를 위해 깃허브 풀 리퀘스트 *(이하 PR)* 를 사용합니다. 그리고 PR을 병합 *(이하 merge)* 하기 위해서는 최소 2회 이상 승인을 받아야 하며 CI를 통과해야 합니다. PR merge는 `squash and merge`를 사용해주시기 바랍니다.
+프로젝트 구성원의 제출을 포함한 모든 제출은 검토가 필요합니다. 우리는 이를 위해 깃허브 풀 리퀘스트 *(이하 PR)* 를 사용합니다. 그리고 PR을 병합 *(이하 merge)* 하기 위해서는 최소 2회 이상 approve를 받아야 하며 CI를 통과해야 합니다. PR merge는 `squash and merge`를 사용해주시기 바랍니다.
 
 다음은 PR 보내는 프로세스입니다.
 
@@ -34,20 +34,20 @@
       [namespace] content
       ```
 
-      * *namespace*는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question` 중에서 한 가지를 반드시 선택해야 합니다.
+      * *namespace*는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
 
 
-2. PR을 보내기 전에 다음이 완료되었는지 확인하시기 바랍니다.
+2. PR을 보내기 전에 다음이 완료되었는지 확인해주세요.
 
     * 저장소를 Fork하고 main 브랜치에서 새 브랜치를 만듭니다.
     
-    * 저장소 루트에서 `npm i` 이나 `npm install`을 실행하십시오.
+    * 저장소 루트에서 `npm i` 이나 `npm install`을 실행해주세요.
 
     * 코드를 작성하거나 수정합니다.
 
-    * 테스트를 통과하는지 `npm run test`로 확인해주시기 바랍니다.
+    * 테스트를 통과하는지 `npm run test`로 확인 바랍니다.
 
-    * 코드가 린트인지 `npm run lint`로 확인해주시기 바랍니다.
+    * 코드가 lint되었는지는 `npm run lint`로 확인해주세요.
 
 3. PR을 보냅니다.
 
@@ -55,7 +55,6 @@
     ```bash
     label(namespace): content
     ```
-
 
     1. *label* 은 다음 중 하나를 따릅니다.
 
@@ -81,12 +80,12 @@
 
 - 코딩 스타일은 [.eslintrc](https://github.com/githru/githru-vscode-ext/blob/main/packages/view/.eslintrc.json)에 모두 정의되어있습니다.
 
-코드 린터를 사용하기 위해서는 다음 명령어를 실행하시기 바랍니다.
+code linter를 사용하기 위해서는 다음 명령어를 실행하시기 바랍니다.
 ```bash
 npm run lint
 ```
 
-## 컨벤션
+## Conventions
 
 ### 폴더 구조
 폴더 구조는 다음을 따릅니다.
@@ -134,16 +133,27 @@ npm run lint
       ㄴ Graph.const.ts
   ```
 
-### css 이름
-css 이름은 [BEM method](https://getbem.com/naming/)을 따릅니다.
+### css
 
-  예시: 
-  ```css
-    .summary__name
-    .author-bar-chart__name
-  ```
+  * css naming은 [BEM method](https://getbem.com/naming/)을 따릅니다.
 
-### type 이름
+    예시: 
+    ```css
+      .summary__name
+      .author-bar-chart__name
+    ```
+
+  * value가 0으로 지정되어야 하는 상황이라면 0px로 기재합니다.
+    
+    좀 더 자세한 논의는 discussion [#99](https://github.com/githru/githru-vscode-ext/discussions/99)를 참고해주시기 바랍니다.
+
+    예시:
+    ```css
+    margin: 0px 0px 12px 0px;
+    padding: 10px 0px;
+    ```
+
+### type naming
 
 - Component Props 이름은 component name + `Prop` 형식을 따릅니다.
 
@@ -160,6 +170,7 @@ css 이름은 [BEM method](https://getbem.com/naming/)을 따릅니다.
     function GetData( ... ) { ... }
     ```
 
+
 # Manifesto
 
 ## 색상
@@ -170,3 +181,11 @@ css 이름은 [BEM method](https://getbem.com/naming/)을 따릅니다.
 - Main theme color
 - sub color
 - font color
+
+## 폰트
+
+- font family
+- font size
+- 각 컴포넌트에서 사용하는 font size 단위
+
+  좀 더 자세한 논의는 discussion [#99](https://github.com/githru/githru-vscode-ext/discussions/99)를 참고해주시기 바랍니다.
