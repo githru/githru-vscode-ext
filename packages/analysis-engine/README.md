@@ -34,11 +34,10 @@ Here is the first one to get you started:
 import { analyzeGit } from "@githru-vscode-ext/analysis-engine";
 
 async function getAnalyzedGit(gitLog: string) {
-  const gitDictionary = await analyzeGit({ gitLog });
+  const analyzedGitInformation = await analyzeGit({ gitLog });
 
   // Add your codes
-  const analyzedGit = gitDictionary;
-  return analyzedGit;
+  return analyzedGitInformation;
 }
 ```
 
@@ -52,7 +51,7 @@ Read our [contributing guide](https://github.com/githru/githru-vscode-ext/blob/m
 
 ### Analysis Engine Label
 
-To help you get your feet wet and get you familiar with our contribution process, we have a list of [🔍 analysis engine](https://github.com/githru/githru-vscode-ext/labels/%F0%9F%94%8D%20analysis%20engine) that contain information that have a relatively limited scope. This is a great place to get started.
+To help you get your feet wet and get you familiar with our contribution process, we have a list of [analysis engine](https://github.com/githru/githru-vscode-ext/labels/%F0%9F%94%8D%20analysis%20engine) that contain information that have a relatively limited scope. This is a great place to get started.
 
 ### License
 
