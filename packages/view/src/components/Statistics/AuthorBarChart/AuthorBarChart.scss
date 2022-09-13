@@ -18,6 +18,10 @@
   color: $white;
   outline: none;
   text-align: center;
+
+  option {
+    background: $gray-900;
+  }
 }
 
 .author-bar-chart {
