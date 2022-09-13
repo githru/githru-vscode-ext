@@ -1,10 +1,11 @@
 import type { CommitNode, SelectedDataProps } from "types";
+import { getTime } from "utils/time";
 
-import "./Detail.scss";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
-import { getTime } from "utils/time";
+
+import "./Detail.scss";
 
 const DetailSummary = ({
   commitNodeListInCluster,

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
 import type { RefObject } from "react";
+import { useEffect, useState } from "react";
+
 import type { SelectedDataProps } from "types";
 
 export const useResizeObserver = (
@@ -27,7 +28,7 @@ export const useResizeObserver = (
         RO = null;
       }
     };
-  }, [ref.current, selectedData]);
+  }, [ref, selectedData]);
 
   return [height];
 };
