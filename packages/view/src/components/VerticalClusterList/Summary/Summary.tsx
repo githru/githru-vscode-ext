@@ -68,22 +68,24 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                         ` + ${cluster.summary.content.count} more`}
                     </span>
                   </div>
+                  {cluster.clusterId === clusterIds ? (
+                    <button className="collapsible-button-shown" type="button">
+                      ▲
+                    </button>
+                  ) : (
+                    <button className="collapsible-button" type="button">
+                      ▼
+                    </button>
+                  )}
                 </div>
-                {cluster.clusterId === clusterIds ? (
-                  <button className="collapsible-button-shown" type="button">
-                    ▲
-                  </button>
-                ) : (
-                  <button className="collapsible-button" type="button">
-                    ▼
-                  </button>
+                {cluster.clusterId === clusterIds && (
+                  <div className="cluster-summary__detail__container">
+                    <div className="summary-detail__wrapper" ref={ref}>
+                      <Detail selectedData={selectedData} />
+                    </div>
+                  </div>
                 )}
               </button>
-              {cluster.clusterId === clusterIds && (
-                <div className="cluster-summary__detail__container" ref={ref}>
-                  <Detail selectedData={selectedData} />
-                </div>
-              )}
             </div>
           );
         })}

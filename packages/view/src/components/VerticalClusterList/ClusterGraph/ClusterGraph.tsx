@@ -4,6 +4,8 @@ import * as d3 from "d3";
 
 import type { ClusterNode, SelectedDataProps } from "types";
 
+import "./ClusterGraph.scss";
+
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import {
@@ -23,8 +25,6 @@ import type {
   ClusterGraphElement,
   SVGElementSelection,
 } from "./ClusterGraph.type";
-
-import "./ClusterGraph.scss";
 
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
@@ -71,7 +71,7 @@ const drawLink = (
         (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP))
     )
     .transition()
-    .duration(300)
+    .duration(100)
     .ease(d3.easeLinear)
     .attr("y1", (d, i) => {
       const initPosition =
@@ -163,18 +163,9 @@ const ClusterGraph = ({
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [
-    clusterGraphElements,
-    detailElementHeight,
-    selectedIndex,
-    setSelectedData,
-  ]);
+  }, [clusterGraphElements, selectedIndex, setSelectedData]);
 
-  return (
-    <div>
-      <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />
-    </div>
-  );
+  return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
 };
 
 export default ClusterGraph;

@@ -30,7 +30,7 @@
 
 .cluster-summary__container {
   width: 85%;
-  margin-left: 30px;
+  margin-left: 20px;
   margin-top: 5px;
 
   .cluster-summary__cluster {
@@ -217,11 +217,15 @@
 
   @include keyframes(open_detail) {
     0% {
-      height: 0;
+      max-height: 0;
     }
     100% {
-      height: 280px;
+      max-height: 280px;
     }
   }
-  @include animate(open_detail, 0.3s, linear, 1);
+  @include animate(open_detail, 0.3s, ease-in, 1);
+}
+
+.summary-detail__wrapper {
+  max-height: 280px;
 }
