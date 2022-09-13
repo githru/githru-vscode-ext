@@ -163,7 +163,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
   };
 
   return (
-    <div className="author-bar-chart-wrap">
+    <div className="author-bar-chart__container">
       <select
         className="author-bar-chart__select-box"
         onChange={handleChangeMetric}

@@ -1,4 +1,4 @@
-import type { ClusterNode } from "../../../types";
+import type { ClusterNode } from "types";
 
 import type {
   FileChanges,

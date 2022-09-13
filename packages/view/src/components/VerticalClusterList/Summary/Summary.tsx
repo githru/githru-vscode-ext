@@ -33,56 +33,58 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
     };
 
     return (
-      <div className="summary__entire">
+      <div className="cluster-summary__container">
         {clusters.map((cluster: Cluster) => {
           return (
-            <React.Fragment key={cluster.clusterId}>
-              <div role="presentation" className="cluster">
-                <button
-                  className="summary"
-                  type="button"
-                  onClick={() => onClickClusterSummary(cluster.clusterId)}
-                >
-                  <div className="text-wrapper">
-                    <span className="nameBox">
-                      {cluster.summary.authorNames.map(
-                        (authorArray: Array<string>) => {
-                          return authorArray.map((authorName: string) => (
-                            <AuthorName
-                              key={authorName}
-                              authorName={authorName}
-                            />
-                          ));
-                        }
-                      )}
+            <div
+              role="presentation"
+              className="cluster-summary__cluster"
+              key={cluster.clusterId}
+            >
+              <button
+                type="button"
+                className="cluster-summary__toggle-contents-button"
+                onClick={() => onClickClusterSummary(cluster.clusterId)}
+              >
+                <div className="cluster-summary__toggle-contents-container">
+                  <span className="name-box">
+                    {cluster.summary.authorNames.map(
+                      (authorArray: Array<string>) => {
+                        return authorArray.map((authorName: string) => (
+                          <AuthorName
+                            key={authorName}
+                            authorName={authorName}
+                          />
+                        ));
+                      }
+                    )}
+                  </span>
+                  <div className="cluster-summary__contents">
+                    <span className="commit-message">
+                      {cluster.summary.content.message}
                     </span>
-                    <span className="contents">
-                      {`${cluster.summary.content.message.slice(0, 70)} ${
-                        cluster.summary.content.message.length > 70 ? "..." : ""
-                      } ${
-                        cluster.summary.content.count > 0
-                          ? `+ ${cluster.summary.content.count} more`
-                          : ""
-                      } `}
+                    <span className="more-commit-count">
+                      {cluster.summary.content.count > 0 &&
+                        ` + ${cluster.summary.content.count} more`}
                     </span>
                   </div>
-                  {cluster.clusterId === clusterIds ? (
-                    <button className="collapsible-button--shown" type="button">
-                      ▲
-                    </button>
-                  ) : (
-                    <button className="collapsible-button" type="button">
-                      ▼
-                    </button>
-                  )}
-                </button>
-                {cluster.clusterId === clusterIds && (
-                  <div className="summary_detail_container" ref={ref}>
-                    <Detail selectedData={selectedData} />
-                  </div>
+                </div>
+                {cluster.clusterId === clusterIds ? (
+                  <button className="collapsible-button-shown" type="button">
+                    ▲
+                  </button>
+                ) : (
+                  <button className="collapsible-button" type="button">
+                    ▼
+                  </button>
                 )}
-              </div>
-            </React.Fragment>
+              </button>
+              {cluster.clusterId === clusterIds && (
+                <div className="cluster-summary__detail__container" ref={ref}>
+                  <Detail selectedData={selectedData} />
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
