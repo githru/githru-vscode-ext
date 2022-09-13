@@ -66,3 +66,37 @@ td,
 th {
   padding: 0;
 }
+
+body {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar:horizontal {
+    display: block;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(189, 189, 189, 0.2);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+
+    &:hover {
+      background-color: rgba(189, 189, 189, 0.5);
+    }
+  }
+  *::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  *:hover::-webkit-scrollbar,
+  *:hover::-webkit-scrollbar:horizontal {
+    display: block;
+  }
+
+  *::-webkit-scrollbar:horizontal {
+    display: none;
+    height: 6px;
+  }
+}
