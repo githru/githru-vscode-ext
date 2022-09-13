@@ -56,7 +56,9 @@ const drawLink = (
     .selectAll(".cluster-graph__link")
     .data(data)
     .join("line")
-    .attr("class", "cluster-graph__link")
+    .attr("class", (_, i) =>
+      data.length - 1 <= i ? "cluster-graph__last_link" : "cluster-graph__link"
+    )
     .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
     .attr(
       "y1",
@@ -71,7 +73,7 @@ const drawLink = (
         (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP))
     )
     .transition()
-    .duration(100)
+    .duration(300 * (detailElementHeight / 280))
     .ease(d3.easeLinear)
     .attr("y1", (d, i) => {
       const initPosition =

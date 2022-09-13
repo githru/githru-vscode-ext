@@ -221,7 +221,7 @@
       max-height: 280px;
     }
   }
-  @include animate(open_detail, 0.3s, ease-in, 1);
+  @include animate(open_detail, 0.3s, linear, 1);
 }
 
 .summary-detail__wrapper {
