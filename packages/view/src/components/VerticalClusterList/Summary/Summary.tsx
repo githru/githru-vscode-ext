@@ -83,17 +83,19 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                     </button>
                   )}
                 </div>
-                {cluster.clusterId === clusterIds && (
-                  <div
-                    className="cluster-summary__detail__container"
-                    ref={scrollRef}
-                  >
-                    <div className="summary-detail__wrapper" ref={ref}>
+              </button>
+              {cluster.clusterId === clusterIds && (
+                <div
+                  className="cluster-summary__detail__container"
+                  ref={scrollRef}
+                >
+                  <div ref={ref}>
+                    <div className="summary-detail__wrapper">
                       <Detail selectedData={selectedData} />
                     </div>
                   </div>
-                )}
-              </button>
+                </div>
+              )}
             </div>
           );
         })}
