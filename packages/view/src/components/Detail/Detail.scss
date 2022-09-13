@@ -1,17 +1,20 @@
-.detail-summary_container {
+@import "styles/app";
+
+.detail__summary__container {
   display: flex;
   justify-content: space-between;
+  margin: 15px 0 20px;
   align-items: center;
-  margin-top: 14px;
-  
+  font-size: 14px;
+
   .divider {
     margin-right: 1rem;
     flex-grow: 10;
     height: 0;
-    border: 1px solid rgb(255, 255, 255);
+    border: 1px solid $white;
   }
 
-  .text {
+  .detail__summary {
     flex-grow: 0.1;
   }
 
@@ -24,24 +27,41 @@
   }
 }
 
-.detail-commit_item_container {
-  li {
-    list-style-type: none;
+.detail__commit-list__container {
+  padding: 0 20px;
+  font-size: 14px;
+
+  .commit-item {
     display: flex;
-    margin-top: 4px;
-    
-    span {
-      color: rgb(177, 177, 177);
-    }
-    
     justify-content: space-between;
+    margin-top: 4px;
+    color: $gray-600;
+
+    .commit-detail {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+
+      .message {
+        color: $white;
+      }
+    }
+    .commit-id {
+      padding-left: 50px;
+    }
   }
 }
 
-.detail-summary_toggleButton {
+.toggle-button {
+  display: flex;
+  margin: 20px auto 0;
   border: none;
   background: none;
   color: #0077aa;
   cursor: pointer;
-  margin: 10px 0px;
+
+  &:hover {
+    color: $gray-300;
+  }
 }

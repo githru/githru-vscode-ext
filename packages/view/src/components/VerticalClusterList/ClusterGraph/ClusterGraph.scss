@@ -1,4 +1,12 @@
 .cluster-graph__container {
+  cursor: pointer;
+
+  &:hover {
+    .cluster-graph__cluster {
+      stroke-width: 3;
+    }
+  }
+
   .cluster-graph__cluster {
     rx: 5;
     stroke-width: 1;
@@ -10,14 +18,6 @@
     rx: 5;
     fill: #0077aa;
   }
-
-  &:hover {
-    .cluster-graph__cluster {
-      stroke-width: 3;
-    }
-  }
-
-  cursor: pointer;
 }
 
 .cluster-graph__link {

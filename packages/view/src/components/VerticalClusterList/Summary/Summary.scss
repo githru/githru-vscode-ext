@@ -1,4 +1,4 @@
-@import "styles/pallete";
+@import "styles/app";
 
 @mixin animation {
   -webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -28,18 +28,16 @@
   }
 }
 
-.summary__entire {
+.cluster-summary__container {
   width: 85%;
   margin-left: 30px;
   margin-top: 5px;
 
-  .cluster {
-    align-items: center;
-    width: 85%;
+  .cluster-summary__cluster {
     padding: 5px 0;
   }
 
-  .summary {
+  .cluster-summary__toggle-contents-button {
     width: 100%;
     display: flex;
     align-items: center;
@@ -50,18 +48,22 @@
     background-color: transparent;
     cursor: pointer;
     color: $white;
+
+    &:hover {
+      border-radius: 40px;
+      background-color: lighten($gray-800, 5);
+    }
   }
 
-  .summary:hover {
-    border-radius: 40px;
-    background-color: lighten($gray-600, 5);
-  }
-
-  .text-wrapper {
+  .cluster-summary__toggle-contents-container {
     display: flex;
     align-items: center;
     text-overflow: ellipsis;
-    width: 85%;
+    width: 100%;
+  }
+
+  :hover .collapsible-button {
+    visibility: visible;
   }
 
   .collapsible-button {
@@ -69,23 +71,17 @@
     border: none;
     font-size: 18px;
     color: $blue-light-600;
-    display: none;
-    cursor: pointer;
+    visibility: hidden;
   }
 
-  .collapsible-button--shown {
+  .collapsible-button-shown {
     background-color: transparent;
     border: none;
     font-size: 18px;
     color: $blue-light-600;
-    cursor: pointer;
   }
 
-  :hover .collapsible-button {
-    display: block;
-  }
-
-  .nameBox {
+  .name-box {
     display: flex;
     justify-content: center;
     position: relative;
@@ -143,7 +139,7 @@
       bottom: 30%;
       left: -9999px;
 
-      color: #ffffff;
+      color: $white;
       font-size: 12px;
       padding: 0px 12px;
       margin-bottom: 10px;
@@ -162,57 +158,62 @@
     }
   }
 
-  .contents {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-left: 15px;
-    cursor: pointer;
-  }
+  .cluster-summary__contents {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 
-  .keyword {
-    margin-left: 5px;
-    margin-right: 5px;
-
-    &:hover {
-      @include animation();
-      font-weight: 700;
+    .commit-message {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 15px;
       cursor: pointer;
     }
-
-    &.large {
-      font-size: 18pt;
-      font-weight: 900;
-      line-height: 28px;
-
-      &:hover {
-        @include animation();
-        cursor: pointer;
-      }
-    }
-
-    &.medium {
-      font-size: 16pt;
-      font-weight: 700;
-      line-height: 28px;
-
-      &:hover {
-        @include animation();
-        cursor: pointer;
-      }
+    .more-commit-count {
+      font-size: 12px;
     }
   }
+
+  // .keyword {
+  //   margin-left: 5px;
+  //   margin-right: 5px;
+
+  //   &:hover {
+  //     @include animation();
+  //     font-weight: 700;
+  //     cursor: pointer;
+  //   }
+
+  //   &.large {
+  //     font-size: 18pt;
+  //     font-weight: 900;
+  //     line-height: 28px;
+
+  //     &:hover {
+  //       @include animation();
+  //       cursor: pointer;
+  //     }
+  //   }
+
+  //   &.medium {
+  //     font-size: 16pt;
+  //     font-weight: 700;
+  //     line-height: 28px;
+
+  //     &:hover {
+  //       @include animation();
+  //       cursor: pointer;
+  //     }
+  //   }
+  // }
 }
 
-.summary_detail_container {
+.cluster-summary__detail__container {
+  overflow: overlay;
   max-height: 280px;
-  overflow: auto;
-  // height: 280px;
-  // margin-top: 20px;
-  // overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
+  padding: 0 30px;
+  margin-bottom: 20px;
 
   @include keyframes(open_detail) {
     0% {

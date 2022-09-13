@@ -3,7 +3,7 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
-import type { ClusterNode } from "../../../types";
+import type { ClusterNode } from "types";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";
 import type { FileChangesNode } from "./FileIcicleSummary.type";
