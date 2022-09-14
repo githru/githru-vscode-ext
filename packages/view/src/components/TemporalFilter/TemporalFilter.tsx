@@ -27,6 +27,7 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
       setFilteredData(data);
     } else {
       const filteredData = filterDataByDate({ data, fromDate, toDate });
+      filteredData.reverse();
       setFilteredData(filteredData);
     }
   }, [data, fromDate, toDate, setFilteredData]);
