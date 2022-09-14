@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   // Detail,
@@ -7,15 +7,21 @@ import {
   VerticalClusterList,
 } from "components";
 import type { SelectedDataProps } from "types";
-
-import { useGetTotalData } from "./App.hook";
+import { sortBasedOnCommitNode } from "components/TemporalFilter/TemporalFilter.util";
+import { ClocLineChart } from "components/TemporalFilter/ClocLineChart";
+import { CommitLineChart } from "components/TemporalFilter/CommitLineChart";
 
 import "./App.scss";
+import { useGetTotalData } from "./App.hook";
 
 const App = () => {
   const { data } = useGetTotalData();
   const [filteredData, setFilteredData] = useState(data);
   const [selectedData, setSelectedData] = useState<SelectedDataProps>(null);
+  const filteredCommitNodes = useMemo(
+    () => sortBasedOnCommitNode(filteredData),
+    [filteredData]
+  );
 
   // delete
   useEffect(() => {
@@ -31,7 +37,16 @@ const App = () => {
   return (
     <div>
       <div className="head-container">
-        <TemporalFilter data={data} setFilteredData={setFilteredData} />
+        <article className="temporal-filter">
+          <div className="data-control-container">
+            <TemporalFilter data={data} setFilteredData={setFilteredData} />
+            {/* <ThemeSelector /> */}
+          </div>
+          <div className="line-chart">
+            <ClocLineChart data={filteredCommitNodes} />
+            <CommitLineChart data={filteredCommitNodes} />
+          </div>
+        </article>
       </div>
       <div className="middle-container">
         <VerticalClusterList

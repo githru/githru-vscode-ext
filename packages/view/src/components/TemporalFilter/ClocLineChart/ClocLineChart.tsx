@@ -56,7 +56,7 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     // svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
-    svg.append("g").attr("transform", `translate(${width},0)`);
+    // svg.append("g").attr("transform", `translate(${width},0)`);
 
     svg
       .selectAll(".cloc")
