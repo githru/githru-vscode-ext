@@ -13,8 +13,14 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "githru" is now active!');
 
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-		const { path } = await findGit();
-		const gitLog = await getGitLog(path, extensionPath);
+		const gitPath = (await findGit()).path;
+        const currentWorkspacePath = vscode.workspace.workspaceFolders?.[0].uri.path;
+
+        if (currentWorkspacePath === undefined) {
+            throw new Error('Cannot find current workspace path');
+        }
+
+		const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const csmDict = await analyzeGit({ gitLog });
 
 		const clusterNodes = mapClusterNodesFrom(csmDict);
