@@ -55,19 +55,17 @@ export function getCommitRaws(log: string) {
         ids.push(commitInfos[0]);
         commitInfos.splice(0, 1);
         parentsMatrix.push(commitInfos);
-        let branchAndTagsInfos = splitedCommitLine[1];
-        if (typeof branchAndTagsInfos !== "undefined") {
-          if (branchAndTagsInfos.startsWith("HEAD ->")) {
-            [, branchAndTagsInfos] = branchAndTagsInfos.split("HEAD ->");
-          }
-          branchAndTagsInfos.split(",").forEach((eachInfo) => {
-            if (eachInfo.trim().startsWith("tag:"))
+        const branchAndTagInfos = splitedCommitLine[1]
+          ?.replace(")", "")
+          .replace(" -> ", ", ")
+          .split(", ");
+        if (branchAndTagInfos) {
+          branchAndTagInfos.forEach((branchAndTagInfo) => {
+            if (branchAndTagInfo.startsWith("tag:"))
               return tagsMatrix[commitIdx].push(
-                eachInfo.replace("tag: ", "").trim()
+                branchAndTagInfo.replace("tag: ", "")
               );
-            return branchesMatrix[commitIdx].push(
-              eachInfo.replace(")", "").trim()
-            );
+            return branchesMatrix[commitIdx].push(branchAndTagInfo);
           });
         }
         return false;
