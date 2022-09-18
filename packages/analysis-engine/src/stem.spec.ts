@@ -138,7 +138,7 @@ describe("stem", () => {
   });
 
   it("should make instance of Map", () => {
-    const stemDict = buildStemDict(commitDict);
+    const stemDict = buildStemDict(commitDict, "main");
     expect(stemDict).toBeInstanceOf(Map);
   });
 
@@ -148,12 +148,11 @@ describe("stem", () => {
   });
 
   it("must have main/master stem", () => {
-    const stemDict = buildStemDict(commitDict);
+    const stemDict = buildStemDict(commitDict, "main");
     expect(stemDict.has("main") || stemDict.has("master")).toBeTruthy();
   });
 
   it("should make stem", () => {
-    const stemDict = buildStemDict(commitDict);
     expect(stemDict.get("main")?.nodes.map((node) => node.commit.id)).toEqual([
       "f",
       "e",
@@ -162,6 +161,7 @@ describe("stem", () => {
       "b",
       "a",
     ]);
+    const stemDict = buildStemDict(commitDict, "main");
     expect(
       stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
     ).toEqual(["i", "h", "g"]);

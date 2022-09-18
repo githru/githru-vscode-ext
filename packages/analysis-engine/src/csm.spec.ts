@@ -1,9 +1,6 @@
 import { buildCSMDict } from "./csm";
 
-import type { CommitRaw } from "./types/CommitRaw";
-import type { CommitNode } from "./types/CommitNode";
-import type { Stem } from "./types/Stem";
-import type { CSMDictionary } from "./types/CSM";
+import type { CommitRaw, CommitNode, Stem, CSMDictionary } from "./types";
 
 describe("csm", () => {
   // master = [0, 1,              2,                 3, 4, 5]
@@ -76,7 +73,7 @@ describe("csm", () => {
     let csmDict: CSMDictionary;
 
     beforeAll(() => {
-      csmDict = buildCSMDict(fakeCommitNodeDict, fakeStemDict);
+      csmDict = buildCSMDict(fakeCommitNodeDict, fakeStemDict, "master");
     });
 
     it("should return csm-dictionary", () => {

@@ -42,7 +42,7 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
   );
 }
 
-function buildGetStemId() {
+function buildGetStemId(mainBranchName: string) {
   let implicitBranchNumber = 0;
   return function (
     id: string,
@@ -55,7 +55,7 @@ function buildGetStemId() {
       return `implicit-${implicitBranchNumber}`;
     }
     if (id === mainNode?.commit.id) {
-      return mainNode.commit.branches.includes("main") ? "main" : "master";
+      return mainBranchName;
     }
     if (id === headNode?.commit.id) {
       return "HEAD";
@@ -65,7 +65,8 @@ function buildGetStemId() {
 }
 
 export function buildStemDict(
-  commitDict: Map<string, CommitNode>
+  commitDict: Map<string, CommitNode>,
+  mainBranchName: string
 ): Map<string, Stem> {
   const q = new Queue<CommitNode>(compareCommitPriority);
 
@@ -77,10 +78,8 @@ export function buildStemDict(
    */
   const stemDict = new Map<string, Stem>();
   const leafNodes = getLeafNodes(commitDict);
-  const mainNode = leafNodes.find(
-    (node) =>
-      node.commit.branches.includes("main") ||
-      node.commit.branches.includes("master")
+  const mainNode = leafNodes.find((node) =>
+    node.commit.branches.includes(mainBranchName)
   );
   const headNode = leafNodes.find((node) =>
     node.commit.branches.includes("HEAD")
@@ -95,7 +94,7 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  const getStemId = buildGetStemId();
+  const getStemId = buildGetStemId(mainBranchName);
 
   while (!q.isEmpty()) {
     const tail = q.pop();
