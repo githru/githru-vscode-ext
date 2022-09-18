@@ -42,11 +42,12 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
   );
 }
 
-function buildGetStemId(mainBranchName: string) {
+function buildGetStemId() {
   let implicitBranchNumber = 0;
   return function (
     id: string,
     branches: string[],
+    mainBranchName: string,
     mainNode?: CommitNode,
     headNode?: CommitNode
   ) {
@@ -64,6 +65,11 @@ function buildGetStemId(mainBranchName: string) {
   };
 }
 
+/**
+ * Stem 생성
+ * @param commitDict
+ * @param mainBranchName
+ */
 export function buildStemDict(
   commitDict: Map<string, CommitNode>,
   mainBranchName: string
@@ -94,7 +100,7 @@ export function buildStemDict(
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
 
-  const getStemId = buildGetStemId(mainBranchName);
+  const getStemId = buildGetStemId();
 
   while (!q.isEmpty()) {
     const tail = q.pop();
@@ -103,6 +109,7 @@ export function buildStemDict(
     const stemId = getStemId(
       tail.commit.id,
       tail.commit.branches,
+      mainBranchName,
       mainNode,
       headNode
     );
