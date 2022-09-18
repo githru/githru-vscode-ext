@@ -46,10 +46,10 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
               className="cluster-summary__cluster"
               key={cluster.clusterId}
             >
-              <button
-                type="button"
+              <div
                 className="cluster-summary__toggle-contents-button"
                 onClick={() => onClickClusterSummary(cluster.clusterId)}
+                aria-hidden
               >
                 <div className="cluster-summary__toggle-contents-container">
                   <span className="name-box">
@@ -83,7 +83,7 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                     </button>
                   )}
                 </div>
-              </button>
+              </div>
               {cluster.clusterId === clusterIds && (
                 <div
                   className="cluster-summary__detail__container"
