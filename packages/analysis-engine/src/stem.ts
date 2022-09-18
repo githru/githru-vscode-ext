@@ -47,7 +47,7 @@ function buildGetStemId() {
   return function (
     id: string,
     branches: string[],
-    mainBranchName: string,
+    baseBranchName: string,
     mainNode?: CommitNode,
     headNode?: CommitNode
   ) {
@@ -56,7 +56,7 @@ function buildGetStemId() {
       return `implicit-${implicitBranchNumber}`;
     }
     if (id === mainNode?.commit.id) {
-      return mainBranchName;
+      return baseBranchName;
     }
     if (id === headNode?.commit.id) {
       return "HEAD";
@@ -68,11 +68,11 @@ function buildGetStemId() {
 /**
  * Stem 생성
  * @param commitDict
- * @param mainBranchName
+ * @param baseBranchName
  */
 export function buildStemDict(
   commitDict: Map<string, CommitNode>,
-  mainBranchName: string
+  baseBranchName: string
 ): Map<string, Stem> {
   const q = new Queue<CommitNode>(compareCommitPriority);
 
@@ -85,7 +85,7 @@ export function buildStemDict(
   const stemDict = new Map<string, Stem>();
   const leafNodes = getLeafNodes(commitDict);
   const mainNode = leafNodes.find((node) =>
-    node.commit.branches.includes(mainBranchName)
+    node.commit.branches.includes(baseBranchName)
   );
   const headNode = leafNodes.find((node) =>
     node.commit.branches.includes("HEAD")
@@ -109,7 +109,7 @@ export function buildStemDict(
     const stemId = getStemId(
       tail.commit.id,
       tail.commit.branches,
-      mainBranchName,
+      baseBranchName,
       mainNode,
       headNode
     );

@@ -6,13 +6,13 @@ import type { CommitNode, Stem, CSMDictionary, CSMNode } from "./types";
  *
  * @param {Map<string, CommitNode>} commitDict
  * @param {Map<string, Stem>} stemDict
- * @param mainBranchName
+ * @param baseBranchName
  * @returns {CSMDictionary}
  */
 export const buildCSMDict = (
   commitDict: Map<string, CommitNode>,
   stemDict: Map<string, Stem>,
-  mainBranchName: string
+  baseBranchName: string
 ): CSMDictionary => {
   if (stemDict.size === 0) {
     throw new Error("no stem");
@@ -22,7 +22,7 @@ export const buildCSMDict = (
   const csmDict: CSMDictionary = {};
 
   // v0.1 에서는 master STEM 으로만 CSM 생성함
-  const masterStem = stemDict.get(mainBranchName);
+  const masterStem = stemDict.get(baseBranchName);
   if (!masterStem) {
     throw new Error("no master-stem");
     // return {};
@@ -94,7 +94,7 @@ export const buildCSMDict = (
     csmNodes.push(csmNode);
   });
 
-  csmDict[mainBranchName] = csmNodes;
+  csmDict[baseBranchName] = csmNodes;
 
   return csmDict;
 };

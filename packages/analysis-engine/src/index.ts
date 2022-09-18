@@ -9,12 +9,12 @@ type AnalysisEngineArgs = {
 };
 
 export const analyzeGit = async (args: AnalysisEngineArgs) => {
-  const mainBranchName = "main";
+  const baseBranchName = "main";
 
   const commitRaws = getCommitRaws(args.gitLog);
   const commitDict = buildCommitDict(commitRaws);
-  const stemDict = buildStemDict(commitDict, mainBranchName);
-  const csmDict = buildCSMDict(commitDict, stemDict, mainBranchName);
+  const stemDict = buildStemDict(commitDict, baseBranchName);
+  const csmDict = buildCSMDict(commitDict, stemDict, baseBranchName);
 
   if (args.isDebugMode) {
     console.log(csmDict);
