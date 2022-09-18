@@ -6,6 +6,7 @@ import type { CommitNode, Stem, CSMDictionary, CSMNode } from "./types";
  *
  * @param {Map<string, CommitNode>} commitDict
  * @param {Map<string, Stem>} stemDict
+ * @param mainBranchName
  * @returns {CSMDictionary}
  */
 export const buildCSMDict = (
