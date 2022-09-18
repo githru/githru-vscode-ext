@@ -1,4 +1,8 @@
 import React, { forwardRef, useRef, useEffect } from "react";
+import {
+  IoIosArrowDropdownCircle,
+  IoIosArrowDropupCircle,
+} from "react-icons/io";
 
 import type { ClusterNode, SelectedDataProps } from "types";
 import { Detail } from "components";
@@ -74,13 +78,13 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                     </span>
                   </div>
                   {cluster.clusterId === clusterIds ? (
-                    <button className="collapsible-button-shown" type="button">
-                      ▲
-                    </button>
+                    <div className="collapsible-icon-shown">
+                      <IoIosArrowDropupCircle fontSize="1.6rem" />
+                    </div>
                   ) : (
-                    <button className="collapsible-button" type="button">
-                      ▼
-                    </button>
+                    <div className="collapsible-icon">
+                      <IoIosArrowDropdownCircle fontSize="1.6rem" />
+                    </div>
                   )}
                 </div>
               </button>
