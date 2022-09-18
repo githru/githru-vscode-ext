@@ -152,28 +152,47 @@ describe("stem", () => {
     expect(stemDict.has("main") || stemDict.has("master")).toBeTruthy();
   });
 
-  it("should make stem", () => {
-    expect(stemDict.get("main")?.nodes.map((node) => node.commit.id)).toEqual([
-      "f",
-      "e",
-      "d",
-      "c",
-      "b",
-      "a",
-    ]);
+  it("should build stem based on 'main' branch", () => {
     const stemDict = buildStemDict(commitDict, "main");
+    const expectedStemDict = {
+      main: ["f", "e", "d", "c", "b", "a"],
+      dev: ["m", "l", "k", "j"],
+      HEAD: ["o", "n"],
+      "implicit-1": ["i", "h", "g"],
+    };
+    expect(stemDict.get("main")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.main
+    );
     expect(
       stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
-    ).toEqual(["i", "h", "g"]);
-    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual([
-      "m",
-      "l",
-      "k",
-      "j",
-    ]);
-    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual([
-      "o",
-      "n",
-    ]);
+    ).toEqual(expectedStemDict["implicit-1"]);
+    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.dev
+    );
+    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.HEAD
+    );
+  });
+
+  it("builds stem based on 'dev' branch", () => {
+    const stemDict = buildStemDict(commitDict, "dev");
+    const expectedStemDict = {
+      dev: ["m", "l", "k", "j", "c", "b", "a"],
+      sub1: ["f", "e", "d"],
+      HEAD: ["o", "n"],
+      "implicit-1": ["i", "h", "g"],
+    };
+    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.dev
+    );
+    expect(stemDict.get("sub1")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.sub1
+    );
+    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(
+      expectedStemDict.HEAD
+    );
+    expect(
+      stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
+    ).toEqual(expectedStemDict["implicit-1"]);
   });
 });

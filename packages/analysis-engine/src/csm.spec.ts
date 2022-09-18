@@ -137,4 +137,49 @@ describe("csm", () => {
       });
     });
   });
+
+  describe("build CSM based on sub1 branch", () => {
+    let csmDict: CSMDictionary;
+
+    const fakeStemDictWithSub1: Map<string, Stem> = new Map([
+      makeFakeStemTuple("master", [2, 3, 4, 5].reverse().map(String)),
+      makeFakeStemTuple(
+        "sub1",
+        [0, 1, 6, 7, 8, 9, 10, 11].reverse().map(String)
+      ),
+      makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].reverse().map(String)),
+    ]);
+
+    beforeAll(() => {
+      csmDict = buildCSMDict(fakeCommitNodeDict, fakeStemDictWithSub1, "sub1");
+    });
+
+    it("has squash-commits", () => {
+      const expectedBaseCommitIds = ["0", "1", "6", "7", "8", "9", "10", "11"];
+      expect(csmDict.sub1.map((node) => node.base.commit.id)).toEqual(
+        expectedBaseCommitIds
+      );
+
+      const mergeCommitNodes = csmDict.sub1.filter(
+        (node) => node.source.length
+      );
+      const expectedMergeCommitIds = ["8", "11"];
+      expect(mergeCommitNodes.map((node) => node.base.commit.id)).toEqual(
+        expectedMergeCommitIds
+      );
+
+      const expectedSquashCommitIds = {
+        "8": ["13", "12"],
+        "11": ["16", "15", "14"],
+      };
+      mergeCommitNodes.forEach((csmNode) => {
+        const squashCommitIds = csmNode.source.map(
+          (commitNode) => commitNode.commit.id
+        );
+        expect(squashCommitIds).toEqual(
+          expectedSquashCommitIds[csmNode.base.commit.id]
+        );
+      });
+    });
+  });
 });
