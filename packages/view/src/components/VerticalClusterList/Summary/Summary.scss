@@ -62,23 +62,38 @@
     width: 100%;
   }
 
-  :hover .collapsible-button {
+  :hover .collapsible-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
     visibility: visible;
+    cursor: pointer;
   }
 
-  .collapsible-button {
+  .collapsible-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
     background-color: transparent;
     border: none;
     font-size: 18px;
     color: $blue-light-600;
     visibility: hidden;
+    cursor: pointer;
   }
 
-  .collapsible-button-shown {
+  .collapsible-icon-shown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
     background-color: transparent;
     border: none;
     font-size: 18px;
     color: $blue-light-600;
+    cursor: pointer;
   }
 
   .name-box {
