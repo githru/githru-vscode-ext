@@ -79,7 +79,7 @@ export function getCommitRaws(log: string) {
         let eachCommitMessage = "";
         while (splitByNewLine[indexCheckFileChanged] !== "") {
           if (eachCommitMessage !== "") {
-            eachCommitMessage += "/n";
+            eachCommitMessage += "\n";
           }
           eachCommitMessage += splitByNewLine[indexCheckFileChanged].trim();
           indexCheckFileChanged += 1;
