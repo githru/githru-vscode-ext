@@ -32,7 +32,7 @@
         "watch": "webpack --watch",
         "package": "webpack --mode production --devtool hidden-source-map && vsce package --no-dependencies",
         "compile-tests": "tsc -p . --outDir out",
-        "watch-tests": "tsc -p . -w --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",          
         "pretest": "npm run compile-tests && npm run compile && npm run lint",
         "lint": "eslint src --ext ts",
         "test": "node ./out/test/runTest.js"
@@ -41,7 +41,6 @@
         "@githru-vscode-ext/analysis-engine": "^0.1.0"
     },
     "devDependencies": {
-        "@types/copy-webpack-plugin": "^10.1.0",
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.1",
         "@types/node": "14.x",
