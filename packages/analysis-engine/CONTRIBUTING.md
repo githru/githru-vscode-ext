@@ -72,7 +72,7 @@ label(namespace): content
 1. _label_ is one of the following:
    - `fix` - bug fixes.
    - `feat` - features.
-   - `docs` - changes to docs, e.g. `docs(README.md): ..` to change documentation.
+   - `docs` - changes to docs, e.g. `docs(engine): README.md ...` to change documentation.
    - `test` - changes to tests infrastructure.
    - `chore` - everything that doesn't fall under previous categories
 2. _namespace_ is put in parenthesis after label and is optional. Must be one of `engine | view | vsode`.
@@ -95,9 +95,9 @@ A barrier for introducing new installation dependencies is especially high:
 
 - **Do not add** installation dependency unless it's critical to project success.
 
-Management of all node modules is managed package-lock.json in the root:
+Management of all node modules is managed `package-lock.json` in the **root**:
 
-- **Do not add** package-lock.json on packages/analysis-engine.
+- **Do not add** `package-lock.json` on `packages/analysis-engine`.
 
 ### Running & Writing Tests
 
