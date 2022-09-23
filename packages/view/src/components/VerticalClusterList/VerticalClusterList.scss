@@ -4,4 +4,9 @@
   height: 100%;
   overflow-y: scroll;
   width: 75%;
+
+  svg {
+    // SVG_WIDTH === 84
+    min-width: 84px;
+  }
 }
