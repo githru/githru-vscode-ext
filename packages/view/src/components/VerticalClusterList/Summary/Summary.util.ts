@@ -14,11 +14,11 @@ export function getInitData({ data }: GlobalProps) {
 
     let resultMsg =
       message.indexOf("\\n\\n", 0) > -1
-        ? message.slice(0, message.indexOf("/n/n", 0))
+        ? message.slice(0, message.indexOf("\\n\\n", 0))
         : message;
     resultMsg =
       resultMsg.indexOf("\\n", 0) > -1
-        ? resultMsg.slice(0, message.indexOf("/n", 0))
+        ? resultMsg.slice(0, message.indexOf("\\n", 0))
         : resultMsg;
 
     const cluster: Cluster = {
