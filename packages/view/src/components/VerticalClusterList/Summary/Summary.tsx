@@ -56,7 +56,7 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                 onClick={() => onClickClusterSummary(cluster.clusterId)}
               >
                 <div className="cluster-summary__toggle-contents-container">
-                  <span className="name-box">
+                  <div className="name-box">
                     {cluster.summary.authorNames.map(
                       (authorArray: Array<string>) => {
                         return authorArray.map((authorName: string) => (
@@ -67,25 +67,23 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                         ));
                       }
                     )}
-                  </span>
+                  </div>
                   <div className="cluster-summary__contents">
                     <span className="commit-message">
                       {cluster.summary.content.message}
                     </span>
                     <span className="more-commit-count">
                       {cluster.summary.content.count > 0 &&
-                        ` + ${cluster.summary.content.count} more`}
+                        `+ ${cluster.summary.content.count} more`}
                     </span>
                   </div>
-                  {cluster.clusterId === clusterIds ? (
-                    <div className="collapsible-icon-shown">
-                      <IoIosArrowDropupCircle fontSize="1.6rem" />
-                    </div>
-                  ) : (
-                    <div className="collapsible-icon">
-                      <IoIosArrowDropdownCircle fontSize="1.6rem" />
-                    </div>
-                  )}
+                  <div className="collapsible-icon">
+                    {cluster.clusterId === clusterIds ? (
+                      <IoIosArrowDropupCircle className="show" />
+                    ) : (
+                      <IoIosArrowDropdownCircle />
+                    )}
+                  </div>
                 </div>
               </button>
               {cluster.clusterId === clusterIds && (
