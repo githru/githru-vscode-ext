@@ -5,7 +5,11 @@ import * as d3 from "d3";
 import type { ClusterNode, StatisticsProps } from "types";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
-import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
+import {
+  convertNumberFormat,
+  getDataByAuthor,
+  sortDataByName,
+} from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
@@ -65,7 +69,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const xAxis = d3
       .axisBottom(xScale)
       .ticks(5)
-      .tickFormat(d3.format("~s"))
+      .tickFormat(convertNumberFormat)
       .tickSizeOuter(0);
     xAxisGroup.call(xAxis);
 

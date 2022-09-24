@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 import type { ClusterNode } from "types";
 
 import type { AuthorDataType } from "./AuthorBarChart.type";
@@ -37,4 +39,13 @@ export const sortDataByName = (a: string, b: string) => {
   if (nameA < nameB) return 1;
   if (nameA > nameB) return -1;
   return 0;
+};
+
+export const convertNumberFormat = (
+  d: number | { valueOf(): number }
+): string => {
+  if (d < 1 && d >= 0) {
+    return `${d}`;
+  }
+  return d3.format("~s")(d);
 };
