@@ -33,7 +33,10 @@ const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
     };
 
     useEffect(() => {
-      scrollRef.current?.scrollIntoView({ block: "center" });
+      scrollRef.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
     }, [selectedData]);
 
     return (
