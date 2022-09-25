@@ -170,6 +170,12 @@ npm run lint
     function GetData( ... ) { ... }
     ```
 
+### Props type
+
+- 모든 Component에서 사용되는 거라면 `/types/global.ts`에 작성합니다.
+
+- 각 Component에서만 사용되는 거라면 `/${COMPONENT}/${COMPONENT}.type.ts`에 작성합니다.
+
 
 # Manifesto
 
