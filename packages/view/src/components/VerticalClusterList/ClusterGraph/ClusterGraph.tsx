@@ -172,7 +172,14 @@ const ClusterGraph = ({
     setSelectedData,
   ]);
 
-  return <svg ref={svgRef} width={SVG_WIDTH} height={graphHeight} />;
+  return (
+    <svg
+      className="cluster-graph"
+      ref={svgRef}
+      width={SVG_WIDTH}
+      height={graphHeight}
+    />
+  );
 };
 
 export default ClusterGraph;
