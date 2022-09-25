@@ -2,7 +2,9 @@ import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode, StatisticsProps } from "types";
+import type { ClusterNode } from "types";
+
+import type { StatisticsProps } from "../Statistics.type";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import {

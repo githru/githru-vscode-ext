@@ -1,23 +1,17 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
-import type { GlobalProps, SelectedDataProps } from "types";
+import "./VerticalClusterList.scss";
 
 import { ClusterGraph } from "./ClusterGraph";
 import { Summary } from "./Summary";
 import { useResizeObserver } from "./VerticalClusterList.hook";
-
-import "./VerticalClusterList.scss";
-
-type Props = GlobalProps & {
-  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
-  selectedData: SelectedDataProps;
-};
+import type { VerticalClusterListProps } from "./VerticalClusterList.type";
 
 const VerticalClusterList = ({
   data,
   setSelectedData,
   selectedData,
-}: Props) => {
+}: VerticalClusterListProps) => {
   const detailRef = useRef<HTMLDivElement>(null);
   const [detailElementHeight] = useResizeObserver(detailRef, selectedData);
 

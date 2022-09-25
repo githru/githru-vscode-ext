@@ -1,13 +1,16 @@
 import type { RefObject } from "react";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-
-import type { ClusterNode, SelectedDataProps } from "types";
 
 import "./ClusterGraph.scss";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
+import type {
+  ClusterGraphProps,
+  ClusterGraphElement,
+  SVGElementSelection,
+} from "./ClusterGraph.type";
 import {
   getGraphHeight,
   getClusterSizes,
@@ -21,10 +24,6 @@ import {
   SVG_MARGIN,
   SVG_WIDTH,
 } from "./ClusterGraph.const";
-import type {
-  ClusterGraphElement,
-  SVGElementSelection,
-} from "./ClusterGraph.type";
 
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
@@ -123,13 +122,6 @@ const drawClusterGraph = (
 
 const destroyClusterGraph = (target: RefObject<SVGElement>) =>
   d3.select(target.current).selectAll("*").remove();
-
-type ClusterGraphProps = {
-  data: ClusterNode[];
-  selectedData: SelectedDataProps;
-  detailElementHeight: number;
-  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
-};
 
 const ClusterGraph = ({
   data,
