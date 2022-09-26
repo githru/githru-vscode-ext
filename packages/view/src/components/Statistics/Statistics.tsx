@@ -1,9 +1,10 @@
+import type { GlobalProps } from "types";
+
 import { AuthorBarChart } from "./AuthorBarChart";
 import { FileIcicleSummary } from "./FileIcicleSummary";
 import "./Statistics.scss";
-import type { StatisticsProps } from "./Statistics.type";
 
-const Statistics = ({ data }: StatisticsProps) => {
+const Statistics = ({ data }: GlobalProps) => {
   return (
     <div className="statistics">
       <AuthorBarChart data={data} />
