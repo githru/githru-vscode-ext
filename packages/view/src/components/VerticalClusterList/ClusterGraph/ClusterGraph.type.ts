@@ -7,7 +7,10 @@ import type { VerticalClusterListProps } from "../VerticalClusterList.type";
 export type ClusterGraphElement = {
   cluster: ClusterNode;
   clusterSize: number;
-  selected: number;
+  selected: {
+    prev: number;
+    current: number;
+  };
 };
 
 export type SVGElementSelection<T extends BaseType> = Selection<

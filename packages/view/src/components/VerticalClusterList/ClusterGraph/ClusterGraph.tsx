@@ -79,7 +79,9 @@ const drawLink = (
         SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP));
       return (
         initPosition +
-        (d.selected < i && d.selected >= 0 ? detailElementHeight : 0)
+        (d.selected.current < i && d.selected.current >= 0
+          ? detailElementHeight
+          : 0)
       );
     })
     .attr("y2", (d, i) => {
@@ -88,7 +90,9 @@ const drawLink = (
         (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP));
       return (
         initPosition +
-        (d.selected <= i && d.selected >= 0 ? detailElementHeight : 0)
+        (d.selected.current <= i && d.selected.current >= 0
+          ? detailElementHeight
+          : 0)
       );
     });
 };
@@ -135,11 +139,15 @@ const ClusterGraph = ({
   const graphHeight =
     getGraphHeight(clusterSizes) +
     (selectedIndex < 0 ? 0 : detailElementHeight);
+  const prevSelected = useRef<number>(-1);
 
   const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
     clusterSize: clusterSizes[i],
-    selected: selectedIndex,
+    selected: {
+      prev: prevSelected.current,
+      current: selectedIndex,
+    },
   }));
 
   useEffect(() => {
@@ -154,6 +162,7 @@ const ClusterGraph = ({
       detailElementHeight,
       handleClickCluster
     );
+    prevSelected.current = selectedIndex;
     return () => {
       destroyClusterGraph(svgRef);
     };
