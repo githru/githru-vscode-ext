@@ -20,6 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
             throw new Error('Cannot find current workspace path');
         }
 
+        const configuration = vscode.workspace.getConfiguration();
+        const githubToken = configuration.get('githru.github.token');
+        console.log("GitHubToken = ", githubToken);
+
 		const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const csmDict = await analyzeGit({ gitLog });
 
