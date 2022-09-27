@@ -170,7 +170,6 @@ npm run lint
     function GetData( ... ) { ... }
     ```
 
-
 # Manifesto
 
 ## 색상

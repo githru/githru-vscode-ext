@@ -1,13 +1,14 @@
-import React, { forwardRef, useRef, useEffect } from "react";
+import { forwardRef, useRef, useEffect } from "react";
 import {
   IoIosArrowDropdownCircle,
   IoIosArrowDropupCircle,
 } from "react-icons/io";
 
-import type { ClusterNode, SelectedDataProps } from "types";
+import type { SelectedDataProps } from "types";
 import { Detail } from "components";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
+import type { VerticalClusterListProps } from "../VerticalClusterList.type";
 
 import { AuthorName } from "./AuthorName";
 import type { Cluster } from "./Summary.type";
@@ -15,13 +16,7 @@ import { getClusterById, getInitData } from "./Summary.util";
 
 import "./Summary.scss";
 
-type SummaryProps = {
-  data: ClusterNode[];
-  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
-  selectedData: SelectedDataProps;
-};
-
-const Summary = forwardRef<HTMLDivElement, SummaryProps>(
+const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
   ({ data, selectedData, setSelectedData }, ref) => {
     const clusters = getInitData({ data });
     const scrollRef = useRef<HTMLDivElement>(null);
