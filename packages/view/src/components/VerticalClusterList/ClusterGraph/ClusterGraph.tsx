@@ -19,6 +19,7 @@ import {
 } from "./ClusterGraph.util";
 import {
   CLUSTER_HEIGHT,
+  DETAIL_HEIGHT,
   GRAPH_WIDTH,
   NODE_GAP,
   SVG_MARGIN,
@@ -53,48 +54,27 @@ const drawLink = (
 ) => {
   d3.select(svgRef.current)
     .selectAll(".cluster-graph__link")
-    .data(data)
+    .data([
+      {
+        start: SVG_MARGIN.top,
+        end: (CLUSTER_HEIGHT + NODE_GAP) * data.length,
+        selected: {
+          prev: data[0].selected.prev,
+          current: data[0].selected.current,
+        },
+      },
+    ])
     .join("line")
-    .attr("class", (_, i) =>
-      data.length - 1 <= i ? "cluster-graph__last_link" : "cluster-graph__link"
-    )
+    .attr("class", "cluster-graph__link")
     .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
-    .attr(
-      "y1",
-      (_, i) =>
-        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP))
-    )
+    .attr("y1", (d) => d.start)
     .attr("x2", SVG_MARGIN.left + GRAPH_WIDTH / 2)
+    .attr("y2", (d) => d.end + (d.selected.prev < 0 ? 0 : detailElementHeight))
+    .transition()
     .attr(
       "y2",
-      (_, i) =>
-        SVG_MARGIN.top +
-        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP))
-    )
-    .transition()
-    .duration(300 * (detailElementHeight / 280))
-    .ease(d3.easeLinear)
-    .attr("y1", (d, i) => {
-      const initPosition =
-        SVG_MARGIN.top + (CLUSTER_HEIGHT + i * (CLUSTER_HEIGHT + NODE_GAP));
-      return (
-        initPosition +
-        (d.selected.current < i && d.selected.current >= 0
-          ? detailElementHeight
-          : 0)
-      );
-    })
-    .attr("y2", (d, i) => {
-      const initPosition =
-        SVG_MARGIN.top +
-        (CLUSTER_HEIGHT + NODE_GAP + i * (CLUSTER_HEIGHT + NODE_GAP));
-      return (
-        initPosition +
-        (d.selected.current <= i && d.selected.current >= 0
-          ? detailElementHeight
-          : 0)
-      );
-    });
+      (d) => d.end + (d.selected.current < 0 ? 0 : detailElementHeight)
+    );
 };
 
 const drawClusterGraph = (
@@ -130,15 +110,13 @@ const destroyClusterGraph = (target: RefObject<SVGElement>) =>
 const ClusterGraph = ({
   data,
   selectedData,
-  detailElementHeight,
   setSelectedData,
 }: ClusterGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clusterSizes = getClusterSizes(data);
   const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight =
-    getGraphHeight(clusterSizes) +
-    (selectedIndex < 0 ? 0 : detailElementHeight);
+    getGraphHeight(clusterSizes) + (selectedIndex < 0 ? 0 : DETAIL_HEIGHT);
   const prevSelected = useRef<number>(-1);
 
   const clusterGraphElements = data.map((cluster, i) => ({
@@ -159,19 +137,14 @@ const ClusterGraph = ({
     drawClusterGraph(
       svgRef,
       clusterGraphElements,
-      detailElementHeight,
+      DETAIL_HEIGHT,
       handleClickCluster
     );
     prevSelected.current = selectedIndex;
     return () => {
       destroyClusterGraph(svgRef);
     };
-  }, [
-    clusterGraphElements,
-    detailElementHeight,
-    selectedIndex,
-    setSelectedData,
-  ]);
+  }, [clusterGraphElements, selectedIndex, setSelectedData]);
 
   return (
     <svg

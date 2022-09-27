@@ -20,6 +20,4 @@ export type SVGElementSelection<T extends BaseType> = Selection<
   unknown
 >;
 
-export type ClusterGraphProps = VerticalClusterListProps & {
-  detailElementHeight: number;
-};
+export type ClusterGraphProps = VerticalClusterListProps;
