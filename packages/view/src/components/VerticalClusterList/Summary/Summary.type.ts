@@ -1,6 +1,5 @@
-export type Keyword = {
-  keyword: string;
-  count: number;
+export type AuthorNameProps = {
+  authorName: string;
 };
 
 export type Content = {
@@ -9,7 +8,7 @@ export type Content = {
 };
 
 export type Summary = {
-  authorNames: Array<Array<string>>;
+  authorNames: Array<Array<AuthorNameProps["authorName"]>>;
   content: Content;
 };
 

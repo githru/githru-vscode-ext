@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import type { ClusterNode, GlobalProps } from "types";
 
-import fakeData from "./fake-assets/sampleClusterNodeList.json";
+import fakeData from "./fake-assets/cluster-nodes.json";
 
 export const useGetTotalData = (): GlobalProps => {
   const [data, setData] = useState<ClusterNode[]>([]);
@@ -14,9 +14,6 @@ export const useGetTotalData = (): GlobalProps => {
       setData(window.githruData as ClusterNode[]);
     } else {
       setData(fakeData as unknown as ClusterNode[]);
-      // fetch("./sampleClusterNodeList.json")
-      //   .then((res) => res.json())
-      //   .then(setData);
     }
   }, []);
 

@@ -1,9 +1,14 @@
-import React, { forwardRef, useRef, useEffect } from "react";
+import { forwardRef, useRef, useEffect } from "react";
+import {
+  IoIosArrowDropdownCircle,
+  IoIosArrowDropupCircle,
+} from "react-icons/io";
 
-import type { ClusterNode, SelectedDataProps } from "types";
+import type { SelectedDataProps } from "types";
 import { Detail } from "components";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
+import type { VerticalClusterListProps } from "../VerticalClusterList.type";
 
 import { AuthorName } from "./AuthorName";
 import type { Cluster } from "./Summary.type";
@@ -11,13 +16,7 @@ import { getClusterById, getInitData } from "./Summary.util";
 
 import "./Summary.scss";
 
-type SummaryProps = {
-  data: ClusterNode[];
-  setSelectedData: React.Dispatch<React.SetStateAction<SelectedDataProps>>;
-  selectedData: SelectedDataProps;
-};
-
-const Summary = forwardRef<HTMLDivElement, SummaryProps>(
+const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
   ({ data, selectedData, setSelectedData }, ref) => {
     const clusters = getInitData({ data });
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -34,7 +33,10 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
     };
 
     useEffect(() => {
-      scrollRef.current?.scrollIntoView({ block: "center" });
+      scrollRef.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
     }, [selectedData]);
 
     return (
@@ -52,7 +54,7 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                 onClick={() => onClickClusterSummary(cluster.clusterId)}
               >
                 <div className="cluster-summary__toggle-contents-container">
-                  <span className="name-box">
+                  <div className="name-box">
                     {cluster.summary.authorNames.map(
                       (authorArray: Array<string>) => {
                         return authorArray.map((authorName: string) => (
@@ -63,25 +65,23 @@ const Summary = forwardRef<HTMLDivElement, SummaryProps>(
                         ));
                       }
                     )}
-                  </span>
+                  </div>
                   <div className="cluster-summary__contents">
                     <span className="commit-message">
                       {cluster.summary.content.message}
                     </span>
                     <span className="more-commit-count">
                       {cluster.summary.content.count > 0 &&
-                        ` + ${cluster.summary.content.count} more`}
+                        `+ ${cluster.summary.content.count} more`}
                     </span>
                   </div>
-                  {cluster.clusterId === clusterIds ? (
-                    <button className="collapsible-button-shown" type="button">
-                      ▲
-                    </button>
-                  ) : (
-                    <button className="collapsible-button" type="button">
-                      ▼
-                    </button>
-                  )}
+                  <div className="collapsible-icon">
+                    {cluster.clusterId === clusterIds ? (
+                      <IoIosArrowDropupCircle className="show" />
+                    ) : (
+                      <IoIosArrowDropdownCircle />
+                    )}
+                  </div>
                 </div>
               </button>
               {cluster.clusterId === clusterIds && (
