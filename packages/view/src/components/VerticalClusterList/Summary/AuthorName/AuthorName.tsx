@@ -1,6 +1,7 @@
+import type { AuthorNameProps } from "../Summary.type";
 import { getColorValue } from "../Summary.util";
 
-const AuthorName = ({ authorName }: { authorName: string }) => {
+const AuthorName = ({ authorName }: AuthorNameProps) => {
   const colorValue = getColorValue(authorName);
   return (
     <span

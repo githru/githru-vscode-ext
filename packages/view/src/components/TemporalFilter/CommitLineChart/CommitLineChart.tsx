@@ -89,16 +89,17 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#666666");
+      .attr("fill", "#B6B6B4");
 
     svg
       .append("text")
-      .text("COMMIT")
+      .text("COMMIT #")
       .attr("x", "5px")
       .attr("y", "15px")
       .attr("font-size", "10px")
       .attr("font-weight", "500");
   }, [data]);
+
   return (
     <div className="commit-line-chart-wrap" ref={wrapperRef}>
       <svg className="commit-line-chart" ref={ref} />

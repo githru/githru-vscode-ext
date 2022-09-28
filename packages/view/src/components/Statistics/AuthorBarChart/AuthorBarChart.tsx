@@ -2,17 +2,19 @@ import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode, StatisticsProps } from "types";
+import type { ClusterNode, GlobalProps } from "types";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
-import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
+import {
+  convertNumberFormat,
+  getDataByAuthor,
+  sortDataByName,
+} from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
 
-type AuthorBarChartProps = StatisticsProps;
-
-const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
+const AuthorBarChart = ({ data: rawData }: GlobalProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +50,10 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
     const barGroup = svg.append("g").attr("class", "bars");
 
     // Scales
-    const xScale = d3.scaleLinear().domain([0, 1]).range([0, DIMENSIONS.width]);
+    const xScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(data, (d) => d[metric]) || 1])
+      .range([0, DIMENSIONS.width]);
 
     const yScale = d3
       .scaleBand()
@@ -59,7 +64,11 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .align(0.5);
 
     // Axis
-    const xAxis = d3.axisBottom(xScale).ticks(5, "%").tickSizeOuter(0);
+    const xAxis = d3
+      .axisBottom(xScale)
+      .ticks(5)
+      .tickFormat(convertNumberFormat)
+      .tickSizeOuter(0);
     xAxisGroup.call(xAxis);
 
     const yAxis = d3
@@ -126,10 +135,7 @@ const AuthorBarChart = ({ data: rawData }: AuthorBarChartProps) => {
       .on("mouseout", handleMouseOut)
       .transition()
       .duration(500)
-      .attr(
-        "width",
-        (d: AuthorDataType) => xScale(d[metric]) / totalMetricValues
-      )
+      .attr("width", (d: AuthorDataType) => xScale(d[metric]))
       .attr("height", yScale.bandwidth())
       .attr("x", 1)
       .attr("y", (d: AuthorDataType) => yScale(d.name) || 0);

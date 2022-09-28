@@ -1,4 +1,9 @@
-import type { GlobalProps, CommitNode, ClusterNode } from "types";
+import type {
+  GlobalProps,
+  CommitNode,
+  ClusterNode,
+  SelectedDataProps,
+} from "types";
 
 import { authorBgColorArray } from "./Summary.const";
 import type { Cluster } from "./Summary.type";
@@ -13,12 +18,12 @@ export function getInitData({ data }: GlobalProps) {
       clusterNode.commitNodeList[clusterNode.commitNodeList.length - 1].commit;
 
     let resultMsg =
-      message.indexOf("/n/n", 0) > -1
-        ? message.slice(0, message.indexOf("/n/n", 0))
+      message.indexOf("\n", 0) > -1
+        ? message.slice(0, message.indexOf("\n", 0))
         : message;
     resultMsg =
-      resultMsg.indexOf("/n", 0) > -1
-        ? resultMsg.slice(0, message.indexOf("/n", 0))
+      resultMsg.indexOf("\n", 0) > -1
+        ? resultMsg.slice(0, message.indexOf("\n", 0))
         : resultMsg;
 
     const cluster: Cluster = {
@@ -83,4 +88,9 @@ export function getClusterById(clusters: ClusterNode[], clusterId: number) {
   return clusters.filter(
     (cluster) => cluster.commitNodeList[0].clusterId === clusterId
   )[0];
+}
+
+export function getClusterIds(selectedData: SelectedDataProps) {
+  if (!selectedData) return null;
+  return selectedData.commitNodeList[0].clusterId;
 }

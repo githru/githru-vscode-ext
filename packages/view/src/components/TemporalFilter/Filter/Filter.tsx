@@ -12,8 +12,12 @@ type Props = {
 
 const Filter = (props: Props) => {
   const { setFromDate, setToDate, minDate, maxDate } = props;
-  const [fromDateFilter, setFromDateFilter] = useState<string>(minDate);
-  const [toDateFilter, setToDateFilter] = useState<string>(maxDate);
+  const getYYYYMMDD = (fullDateString: string) =>
+    new Date(fullDateString).toISOString().split("T")[0];
+  const minDateStr = getYYYYMMDD(minDate);
+  const maxDateStr = getYYYYMMDD(maxDate);
+  const [fromDateFilter, setFromDateFilter] = useState<string>(minDateStr);
+  const [toDateFilter, setToDateFilter] = useState<string>(maxDateStr);
 
   const fromDateChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -40,16 +44,16 @@ const Filter = (props: Props) => {
             className="date-from"
             type="date"
             value={fromDateFilter}
-            min={minDate}
-            max={maxDate}
+            min={minDateStr}
+            max={maxDateStr}
             onChange={fromDateChangeHandler}
           />
           <span>To:</span>
           <input
             className="date-to"
             type="date"
-            min={minDate}
-            max={maxDate}
+            min={minDateStr}
+            max={maxDateStr}
             value={toDateFilter}
             onChange={toDateChangeHandler}
           />
