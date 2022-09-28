@@ -1,5 +1,4 @@
-import { CommitNode } from "./types/CommitNode";
-import { CommitRaw } from "./types/CommitRaw";
+import { CommitRaw, CommitNode, CommitType } from "./types";
 
 type CommitDict = Map<string, CommitNode>;
 
@@ -15,4 +14,8 @@ export function getLeafNodes(commitDict: CommitDict): CommitNode[] {
     (node) => node.commit.branches.length && leafNodes.push(node)
   );
   return leafNodes;
+}
+
+export function getCommitType(message: string): CommitType {
+  return CommitType.FEAT;
 }
