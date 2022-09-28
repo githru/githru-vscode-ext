@@ -58,9 +58,16 @@ const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
 
     svg.append("g").attr("transform", `translate(${width},0)`);
 
+    // svg
+    //   .append("text")
+    //   .attr("text-anchor", "right")
+    //   .style("font-size", "16px")
+    //   .text("cloc");
+
     svg
       .selectAll(".cloc")
       .style("background", "gray")
+      .text("cloc chart")
       .data(data)
       .join("rect")
       .classed("cloc", true)
