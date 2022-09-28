@@ -1,7 +1,7 @@
 @import "styles/app.scss";
 
 .cloc-line-chart-wrap {
-  height: 50%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,12 +12,7 @@
 .cloc-line-chart {
   overflow: visible;
   background: $gray-300;
-<<<<<<< Updated upstream
   margin: 10px;
   padding-bottom: 5px;
+  padding-top: 20px;
 }
-=======
-  // margin: 10px;
-  // padding-bottom: 5px;
-}
->>>>>>> Stashed changes

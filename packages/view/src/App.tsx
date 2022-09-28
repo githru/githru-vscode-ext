@@ -36,8 +36,17 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        <TemporalFilter data={data} setFilteredData={setFilteredData} />
+      <div className="head-container">
+        <article className="temporal-filter">
+          <div className="data-control-container">
+            <TemporalFilter data={data} setFilteredData={setFilteredData} />
+            {/* <ThemeSelector /> */}
+          </div>
+          <div className="line-chart">
+            <ClocLineChart data={filteredCommitNodes} />
+            <CommitLineChart data={filteredCommitNodes} />
+          </div>
+        </article>
       </div>
       <div className="middle-container">
         <VerticalClusterList

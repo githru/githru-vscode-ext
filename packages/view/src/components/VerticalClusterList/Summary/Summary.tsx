@@ -1,32 +1,22 @@
 import { forwardRef, useRef, useEffect } from "react";
-import {
-  IoIosArrowDropdownCircle,
-  IoIosArrowDropupCircle,
-} from "react-icons/io";
 
-import type { SelectedDataProps } from "types";
 import { Detail } from "components";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 import type { VerticalClusterListProps } from "../VerticalClusterList.type";
 
-import { AuthorName } from "./AuthorName";
-import type { Cluster } from "./Summary.type";
-import { getClusterById, getInitData } from "./Summary.util";
-
 import "./Summary.scss";
+import type { Cluster } from "./Summary.type";
+import { AuthorName } from "./AuthorName";
+import { Content } from "./Content";
+import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
 
 const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
   ({ data, selectedData, setSelectedData }, ref) => {
     const clusters = getInitData({ data });
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const getClusterIds = (_selectedData: SelectedDataProps) => {
-      if (!_selectedData) return null;
-      return _selectedData.commitNodeList[0].clusterId;
-    };
-
-    const clusterIds = getClusterIds(selectedData);
+    const selectedClusterId = getClusterIds(selectedData);
     const onClickClusterSummary = (clusterId: number) => {
       const selected = getClusterById(data, clusterId);
       setSelectedData(selectedDataUpdater(selected, clusterId));
@@ -66,25 +56,14 @@ const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
                       }
                     )}
                   </div>
-                  <div className="cluster-summary__contents">
-                    <span className="commit-message">
-                      {cluster.summary.content.message}
-                    </span>
-                    <span className="more-commit-count">
-                      {cluster.summary.content.count > 0 &&
-                        `+ ${cluster.summary.content.count} more`}
-                    </span>
-                  </div>
-                  <div className="collapsible-icon">
-                    {cluster.clusterId === clusterIds ? (
-                      <IoIosArrowDropupCircle className="show" />
-                    ) : (
-                      <IoIosArrowDropdownCircle />
-                    )}
-                  </div>
+                  <Content
+                    content={cluster.summary.content}
+                    clusterId={cluster.clusterId}
+                    selectedClusterId={selectedClusterId}
+                  />
                 </div>
               </button>
-              {cluster.clusterId === clusterIds && (
+              {cluster.clusterId === selectedClusterId && (
                 <div
                   className="cluster-summary__detail__container"
                   ref={scrollRef}

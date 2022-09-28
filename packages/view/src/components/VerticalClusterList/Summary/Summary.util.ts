@@ -1,4 +1,9 @@
-import type { GlobalProps, CommitNode, ClusterNode } from "types";
+import type {
+  GlobalProps,
+  CommitNode,
+  ClusterNode,
+  SelectedDataProps,
+} from "types";
 
 import { authorBgColorArray } from "./Summary.const";
 import type { Cluster } from "./Summary.type";
@@ -83,4 +88,9 @@ export function getClusterById(clusters: ClusterNode[], clusterId: number) {
   return clusters.filter(
     (cluster) => cluster.commitNodeList[0].clusterId === clusterId
   )[0];
+}
+
+export function getClusterIds(selectedData: SelectedDataProps) {
+  if (!selectedData) return null;
+  return selectedData.commitNodeList[0].clusterId;
 }
