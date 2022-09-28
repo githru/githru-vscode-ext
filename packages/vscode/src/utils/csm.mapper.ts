@@ -1,6 +1,6 @@
 import type { DifferenceStatistic, CommitNode as StemCommitNode, CSMDictionary } from "@githru-vscode-ext/analysis-engine/src/types";
-import type { DiffStatistics, CommitNode, ClusterNode } from "@githru-vscode-ext/view/src/types";
- 
+import { ClusterNode, CommitNode, DiffStatistics } from "./NodeTypes.temps";
+
 /**
  * engine DifferenceStatistic → view DiffStatistics
  */

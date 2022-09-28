@@ -1,19 +1,18 @@
 /* eslint-disable import/prefer-default-export */
-
-import type { CommitNode } from "./types/CommitNode";
-import type { Stem } from "./types/Stem";
-import type { CSMDictionary, CSMNode } from "./types/CSM";
+import type { CommitNode, Stem, CSMDictionary, CSMNode } from "./types";
 
 /**
  * CSM 생성
  *
  * @param {Map<string, CommitNode>} commitDict
  * @param {Map<string, Stem>} stemDict
+ * @param baseBranchName
  * @returns {CSMDictionary}
  */
 export const buildCSMDict = (
   commitDict: Map<string, CommitNode>,
-  stemDict: Map<string, Stem>
+  stemDict: Map<string, Stem>,
+  baseBranchName: string
 ): CSMDictionary => {
   if (stemDict.size === 0) {
     throw new Error("no stem");
@@ -23,12 +22,11 @@ export const buildCSMDict = (
   const csmDict: CSMDictionary = {};
 
   // v0.1 에서는 master STEM 으로만 CSM 생성함
-  const masterStem = stemDict.get("master") ?? stemDict.get("main");
+  const masterStem = stemDict.get(baseBranchName);
   if (!masterStem) {
     throw new Error("no master-stem");
     // return {};
   }
-  const branch = "master";
   const stemNodes = masterStem.nodes.reverse(); // start on root-node
 
   const csmNodes: CSMNode[] = [];
@@ -54,7 +52,6 @@ export const buildCSMDict = (
         const squashStemId = squashStartNode.stemId!;
         const squashStem = stemDict.get(squashStemId);
         if (!squashStem) {
-          // eslint-disable-next-line no-continue
           continue;
         }
 
@@ -97,7 +94,7 @@ export const buildCSMDict = (
     csmNodes.push(csmNode);
   });
 
-  csmDict[branch] = csmNodes;
+  csmDict[baseBranchName] = csmNodes;
 
   return csmDict;
 };

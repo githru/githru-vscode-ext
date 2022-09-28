@@ -51,6 +51,7 @@
     "@types/node": "^18.7.6",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@types/vscode-webview": "^1.57.0",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "clean-webpack-plugin": "^4.0.0",
@@ -88,6 +89,7 @@
     "nanoid": "^4.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-icons": "^4.4.0",
     "react-scripts": "5.0.1"
   }
 }
