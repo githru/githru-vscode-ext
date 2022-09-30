@@ -16,6 +16,10 @@ export function getLeafNodes(commitDict: CommitDict): CommitNode[] {
   return leafNodes;
 }
 
-export function getCommitType(message: string): CommitType {
-  return CommitType.FEAT;
+export function getCommitType(message: string): typeof CommitType | string {
+  const reg = /\w*\(*.*\)*:/;
+  const result = message.match(reg)?.[0] || "";
+  const type = result.split("(")[0].split(":")[0];
+  // todo: type check
+  return CommitType.includes(type) ? type : "";
 }
