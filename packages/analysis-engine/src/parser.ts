@@ -1,5 +1,6 @@
 import { execSync } from "child_process";
-import { CommitRaw, DifferenceStatistic, GitUser } from "./types/CommitRaw";
+import { CommitRaw, DifferenceStatistic, GitUser, CommitType } from "./types";
+import { getCommitType } from "./commit.util";
 
 export function getGitLog(path: string) {
   const command = `${path} --no-pager log --all --parents --numstat --date-order --pretty=fuller --decorate -c`;
@@ -31,6 +32,7 @@ export function getCommitRaws(log: string) {
   const committers: GitUser[] = [];
   const commitDates: Date[] = [];
   const messages: string[] = [];
+  const commitTypes: CommitType[] = [];
   const differenceStatistics: DifferenceStatistic[] = [];
 
   // commit별 fileChanged를 분리시키기 위한 임시 index
@@ -86,6 +88,7 @@ export function getCommitRaws(log: string) {
         }
         commitDates.push(new Date(str.split(": ")[1].trim()));
         messages.push(eachCommitMessage);
+        commitTypes.push(getCommitType(eachCommitMessage));
       }
       if (/^\d/.test(str) || /^-/.test(str)) {
         const [addition, deletion, path] = str
@@ -122,6 +125,7 @@ export function getCommitRaws(log: string) {
       committer: committers[i],
       committerDate: commitDates[i],
       message: messages[i],
+      commitType: commitTypes[i],
       differenceStatistic: differenceStatistics[i],
     });
   }
