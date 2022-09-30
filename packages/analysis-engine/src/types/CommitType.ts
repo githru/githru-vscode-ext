@@ -1,4 +1,4 @@
-export const CommitType = [
+export const CommitTypeList = [
   "build",
   "chore",
   "ci",
@@ -10,7 +10,9 @@ export const CommitType = [
   "revert",
   "style",
   "test",
-  "",
-] as const;
+  "", // 명시된 타입이 없거나 commitLint rule을 따르지 않은 경우
+];
 
-export default CommitType;
+const COMMIT_TYPE = [...CommitTypeList] as const;
+
+export type CommitType = typeof COMMIT_TYPE[number];

@@ -8,8 +8,19 @@ describe("commit message type", () => {
       "feat(engine): build stem & CSM based on passed branch name (#198)",
       "feat",
     ], // special char in summary
-    ["chore(engine)!: update contributing.md", "chore"], // breaking changes
+    ["chore(engine)!: update contributing.md", "chore"], // breaking changes with scope
+    ["chore!: add logo image and publish info", "chore"], // breaking changes without scope
     ["chore(vscode/engine): add logo image and publish info", "chore"], // more than 2 scopes
+    ["build: some message", "build"], // 타입별 테스트
+    ["chore: some message", "chore"],
+    ["ci: some message", "ci"],
+    ["docs: some message", "docs"],
+    ["feat: some message", "feat"],
+    ["pert: some message", "pert"],
+    ["refactor: some message", "refactor"],
+    ["revert: some message", "revert"],
+    ["style: some message", "style"],
+    ["test: some message", "test"],
   ])("has commit message type", (message, expected) => {
     const commitType = getCommitType(message);
     expect(commitType).toBe(expected);
