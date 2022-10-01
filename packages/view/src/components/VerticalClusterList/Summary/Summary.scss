@@ -164,6 +164,14 @@
     }
   }
 
+  [data-text] {
+    &::before {
+      position: relative;
+      content:attr(data-text);
+      display: block;
+    }
+  }
+
   [data-tooltip-text] {
     &:hover {
       position: relative;
