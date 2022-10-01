@@ -7,6 +7,12 @@ export type Content = {
   count: number;
 };
 
+export type ContentProps = {
+  content: Content;
+  clusterId: number;
+  selectedClusterId: number | null;
+};
+
 export type Summary = {
   authorNames: Array<Array<AuthorNameProps["authorName"]>>;
   content: Content;
