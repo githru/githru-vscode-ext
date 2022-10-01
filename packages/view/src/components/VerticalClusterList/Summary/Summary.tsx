@@ -18,8 +18,7 @@ const Summary = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const selectedClusterId = getClusterIds(selectedData);
-  const onClickClusterSummary = (clusterId: number) => {
-    if (!setSelectedData) return;
+  const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
     setSelectedData(selectedDataUpdater(selected, clusterId) as any);
   };
@@ -43,7 +42,7 @@ const Summary = () => {
             <button
               type="button"
               className="cluster-summary__toggle-contents-button"
-              onClick={() => onClickClusterSummary(cluster.clusterId)}
+              onClick={onClickClusterSummary(cluster.clusterId)}
             >
               <div className="cluster-summary__toggle-contents-container">
                 <div className="name-box">
@@ -69,7 +68,7 @@ const Summary = () => {
               >
                 <div ref={ref}>
                   <div className="summary-detail__wrapper">
-                    <Detail selectedData={selectedData ?? null} />
+                    <Detail selectedData={selectedData} />
                   </div>
                 </div>
               </div>
