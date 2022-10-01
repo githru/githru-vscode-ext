@@ -38,6 +38,7 @@
     "@jest/types": "^28.1.3",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.4",
     "@rollup/plugin-url": "^7.0.0",
@@ -63,5 +64,13 @@
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@octokit/core": "^4.0.4",
+    "@octokit/plugin-retry": "^3.0.9",
+    "@octokit/plugin-throttling": "^4.1.0",
+    "@octokit/rest": "^19.0.3",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.7.0"
   }
 }

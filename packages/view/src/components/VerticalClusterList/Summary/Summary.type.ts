@@ -1,5 +1,5 @@
-export type AuthorNameProps = {
-  authorName: string;
+export type AuthorProps = {
+  name: string;
 };
 
 export type Content = {
@@ -14,7 +14,7 @@ export type ContentProps = {
 };
 
 export type Summary = {
-  authorNames: Array<Array<AuthorNameProps["authorName"]>>;
+  authorNames: Array<Array<AuthorProps["name"]>>;
   content: Content;
 };
 
