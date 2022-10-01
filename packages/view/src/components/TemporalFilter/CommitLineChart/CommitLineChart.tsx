@@ -23,7 +23,7 @@ const timeFormatter = timeFormat("%Y %m %d");
 const CommitLineChart = () => {
   const { filteredData } = useGlobalData();
   const data = useMemo(
-    () => sortBasedOnCommitNode(filteredData ?? []),
+    () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
   const wrapperRef = useRef<HTMLDivElement>(null);

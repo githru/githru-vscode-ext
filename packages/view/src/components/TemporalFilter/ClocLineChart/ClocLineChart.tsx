@@ -27,7 +27,7 @@ import { CLOC_STYLING } from "./ClocLineChart.const";
 const ClocLineChart = () => {
   const { filteredData } = useGlobalData();
   const data = useMemo(
-    () => sortBasedOnCommitNode(filteredData ?? []),
+    () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
   const wrapperRef = useRef<HTMLDivElement>(null);

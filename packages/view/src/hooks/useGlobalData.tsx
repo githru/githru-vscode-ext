@@ -7,10 +7,11 @@ import { useGetTotalData } from "../App.hook";
 type GlobalDataState = Partial<{
   data: ClusterNode[];
   filteredData: ClusterNode[];
-  setFilteredData: Dispatch<ClusterNode[]>;
   selectedData: ClusterNode | null;
+}> & {
+  setFilteredData: Dispatch<ClusterNode[]>;
   setSelectedData: Dispatch<ClusterNode | null>;
-}>;
+};
 
 export const GlobalDataContext = createContext<GlobalDataState>(
   {} as GlobalDataState
@@ -21,9 +22,6 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode | null>(null);
 
-  // useEffect(() => {
-  //   setSelectedData([]);
-  // }, [filteredData]);
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
@@ -52,5 +50,10 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
 
 export const useGlobalData = () => {
   const globalData = useContext<GlobalDataState>(GlobalDataContext);
-  return globalData;
+  return {
+    ...globalData,
+    data: globalData?.data ?? [],
+    filteredData: globalData?.filteredData ?? [],
+    selectedData: globalData?.selectedData ?? null,
+  };
 };

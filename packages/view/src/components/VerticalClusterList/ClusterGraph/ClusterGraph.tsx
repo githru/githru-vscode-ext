@@ -111,8 +111,8 @@ const destroyClusterGraph = (target: RefObject<SVGElement>) =>
 const ClusterGraph = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const svgRef = useRef<SVGSVGElement>(null);
-  const clusterSizes = getClusterSizes(data ?? []);
-  const selectedIndex = getSelectedIndex(data ?? [], selectedData ?? null);
+  const clusterSizes = getClusterSizes(data);
+  const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight =
     getGraphHeight(clusterSizes) + (selectedIndex < 0 ? 0 : DETAIL_HEIGHT);
   const prevSelected = useRef<number>(-1);
@@ -127,7 +127,6 @@ const ClusterGraph = () => {
   }));
 
   useEffect(() => {
-    if (!setSelectedData) return;
     const handleClickCluster = (_: PointerEvent, d: ClusterGraphElement) => {
       setSelectedData(
         selectedDataUpdater(
@@ -138,12 +137,11 @@ const ClusterGraph = () => {
     };
     drawClusterGraph(
       svgRef,
-      clusterGraphElements ?? [],
+      clusterGraphElements,
       DETAIL_HEIGHT,
       handleClickCluster
     );
     prevSelected.current = selectedIndex;
-    // eslint-disable-next-line consistent-return
     return () => {
       destroyClusterGraph(svgRef);
     };

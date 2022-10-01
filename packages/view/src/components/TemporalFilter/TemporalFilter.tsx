@@ -13,13 +13,12 @@ import "./TemporalFilter.scss";
 
 const TemporalFilter = () => {
   const { data, setFilteredData } = useGlobalData();
-  const sortedData = sortBasedOnCommitNode(data ?? []);
+  const sortedData = sortBasedOnCommitNode(data);
   const [minDate, maxDate] = getMinMaxDate(sortedData);
   const [fromDate, setFromDate] = useState<string>(minDate);
   const [toDate, setToDate] = useState<string>(maxDate);
 
   useEffect(() => {
-    if (!setFilteredData) return;
     if (fromDate === "" || toDate === "") {
       setFilteredData(data ?? []);
     } else {

@@ -14,13 +14,13 @@ import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const ref = useRef<HTMLDivElement>(null);
-  const clusters = getInitData({ data: data ?? [] });
+  const clusters = getInitData({ data });
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const selectedClusterId = getClusterIds(selectedData ?? null);
+  const selectedClusterId = getClusterIds(selectedData);
   const onClickClusterSummary = (clusterId: number) => {
     if (!setSelectedData) return;
-    const selected = getClusterById(data ?? [], clusterId);
+    const selected = getClusterById(data, clusterId);
     setSelectedData(selectedDataUpdater(selected, clusterId) as any);
   };
 
