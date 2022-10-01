@@ -11,7 +11,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
   private repo: string;
 
   constructor(
-    @inject("Options")
+    @inject("OctokitOptions")
     props: {
       owner: string;
       repo: string;
@@ -43,8 +43,8 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
         },
         onAbuseLimit: (retryAfter, options) => {
           const { method, url } = options as { method: string; url: string };
-          console.log(
-            `[L] - abuse detected for request ${method} ${url} ${retryAfter}`
+          throw new Error(
+            `[E] - abuse detected for request ${method} ${url} ${retryAfter}`
           );
         },
       },
@@ -80,6 +80,8 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
     const { data } = await this.rest.pulls.list({
       owner,
       repo,
+      state: "all",
+      per_page: 100,
     });
 
     const pullNumbers = data.map((item) => item.number);

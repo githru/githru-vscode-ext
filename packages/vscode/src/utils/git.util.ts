@@ -130,7 +130,7 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 	throw new Error('None of the provided paths are a Git executable');
 }
 
-export async function getGitLog(path: string, repo: string): Promise<string> {
+export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const args = [
             "--no-pager",
@@ -144,8 +144,8 @@ export async function getGitLog(path: string, repo: string): Promise<string> {
             "-c",
         ];
 
-        resolveSpawnOutput(cp.spawn(path, args, {
-            cwd: repo,
+        resolveSpawnOutput(cp.spawn(gitPath, args, {
+            cwd: currentWorkspacePath,
             env: Object.assign({}, process.env)
         })).then((values) => {
             const status = values[0], stdout = values[1], stderr = values[2];
@@ -156,4 +156,37 @@ export async function getGitLog(path: string, repo: string): Promise<string> {
             }
         });
     });
+}
+
+export async function getGitConfig(gitPath: string, currentWorkspacePath: string, remoteType: "origin" | "upstream"): Promise<string> {
+	return new Promise((resolve, reject) => {
+        const args = [
+            "config",
+            "--get",
+            `remote.${remoteType}.url`,
+        ];
+
+
+        resolveSpawnOutput(cp.spawn(gitPath, args, {
+            cwd: currentWorkspacePath,
+            env: Object.assign({}, process.env)
+        })).then((values) => {
+            const status = values[0], stdout = values[1], stderr = values[2];
+            if (status.code === 0) {
+                resolve(stdout.toString());
+            } else {
+                reject(stderr);
+            }
+        });
+    });
+}
+
+export const getRepo = (gitConfig: string) => {
+	const regex = /^(https|http):\/\/[\s\S]+.git$/g;
+	if(regex.test(gitConfig.trim())) {
+		const chunks = gitConfig.split('.git')[0].split('/');
+		return { owner: chunks.slice(-2)[0], repo: chunks.slice(-1)[0] };
+	} else {
+		throw new Error('git config should be: https|http://${domain}/${owner}/${repo}.git');
+	}
 }
