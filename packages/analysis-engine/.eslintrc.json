@@ -32,6 +32,7 @@
         "class-methods-use-this": "off",
         "import/extensions": "off",
         "import/no-unresolved": "off",
-        "no-continue": "off"
+        "no-continue": "off",
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }]
     }
 }
