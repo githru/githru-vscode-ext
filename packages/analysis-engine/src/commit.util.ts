@@ -22,7 +22,7 @@ export function getLeafNodes(commitDict: CommitDict): CommitNode[] {
 }
 
 export function getCommitMessageType(message: string): CommitMessageType {
-  let messagePrefix = message.match(/\w*\(*.*\)*:/)?.[0];
+  let messagePrefix = message.match(/\w*(\(.*\))?!?:/)?.[0];
   if (!messagePrefix) return "";
 
   /**
@@ -31,7 +31,7 @@ export function getCommitMessageType(message: string): CommitMessageType {
    * ! -> breaking change
    * : -> type과 message 구분
    */
-  const separatorIdx = message.search(/[(!:]/);
+  const separatorIdx = messagePrefix.search(/[(!:]/);
 
   if (separatorIdx > 0) messagePrefix = messagePrefix.slice(0, separatorIdx);
 

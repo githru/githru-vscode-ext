@@ -29,6 +29,10 @@ describe("commit message type", () => {
   it.each([
     "Merge pull request #209 from aa/main", // no type prefix
     "pix(vscode): add logo image and publish info", // no valid type
+    "feat : some message", // no valid type
+    "feat (vscode): some message", // space
+    "feat (vscode) : some message",
+    "feat(vscode) : some message",
   ])("has no valid commit message type", (message) => {
     const commitType = getCommitMessageType(message);
     expect(commitType).toBe("");
