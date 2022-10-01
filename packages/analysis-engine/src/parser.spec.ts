@@ -1,5 +1,4 @@
 import { getCommitMessageType } from "./commit.util";
-import { getCommitRaws, getGitLog } from "./parser";
 
 describe("commit message type", () => {
   it.each([
