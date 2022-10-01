@@ -10,8 +10,7 @@ import {
 } from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
-import { useGlobalData } from "hooks/useGlobalData";
-
+import { useGlobalData } from "../../../hooks/useGlobalData";
 import {
   getCloc,
   getMinMaxDate,

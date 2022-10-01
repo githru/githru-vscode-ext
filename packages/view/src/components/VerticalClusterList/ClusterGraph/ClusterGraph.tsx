@@ -1,6 +1,6 @@
 import "./ClusterGraph.scss";
 
-import { useGlobalData } from "hooks/useGlobalData";
+import { useGlobalData } from "../../../hooks/useGlobalData";
 
 import {
   getGraphHeight,

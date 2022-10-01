@@ -129,7 +129,7 @@ export const useHandleClusterGraph = ({
       setSelectedData(
         selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
       ),
-    []
+    [setSelectedData]
   );
   useEffect(() => {
     drawClusterGraph(
