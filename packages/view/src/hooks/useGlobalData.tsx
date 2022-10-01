@@ -8,8 +8,8 @@ type GlobalDataState = Partial<{
   data: ClusterNode[];
   filteredData: ClusterNode[];
   setFilteredData: Dispatch<ClusterNode[]>;
-  selectedData: ClusterNode[];
-  setSelectedData: Dispatch<ClusterNode[]>;
+  selectedData: ClusterNode | null;
+  setSelectedData: Dispatch<ClusterNode | null>;
 }>;
 
 export const GlobalDataContext = createContext<GlobalDataState>(
@@ -19,10 +19,17 @@ export const GlobalDataContext = createContext<GlobalDataState>(
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const { data } = useGetTotalData();
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
-  const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
+  const [selectedData, setSelectedData] = useState<ClusterNode | null>(null);
+
+  // useEffect(() => {
+  //   setSelectedData([]);
+  // }, [filteredData]);
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   useEffect(() => {
-    setSelectedData([]);
+    setSelectedData(null);
   }, [filteredData]);
 
   const value = useMemo(
@@ -35,7 +42,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     }),
     [data, filteredData, selectedData]
   );
-
+  if (!data.length || !filteredData.length) return null;
   return (
     <GlobalDataContext.Provider value={value}>
       {children}

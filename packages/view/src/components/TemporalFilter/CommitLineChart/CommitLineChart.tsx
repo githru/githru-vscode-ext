@@ -10,18 +10,22 @@ import {
   timeFormat,
   timeTicks,
 } from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
-import type { CommitNode } from "../TemporalFilter.type";
-import { getMinMaxDate } from "../TemporalFilter.util";
+import { useGlobalData } from "hooks/useGlobalData";
 
-// import { CLOC_STYLING } from "./CommitLineChart.const";
+import { getMinMaxDate, sortBasedOnCommitNode } from "../TemporalFilter.util";
 
 import "./CommitLineChart.scss";
 
 const timeFormatter = timeFormat("%Y %m %d");
 
-const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
+const CommitLineChart = () => {
+  const { filteredData } = useGlobalData();
+  const data = useMemo(
+    () => sortBasedOnCommitNode(filteredData ?? []),
+    [filteredData]
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 

@@ -4,10 +4,11 @@ import * as d3 from "d3";
 
 import "./ClusterGraph.scss";
 
+import { useGlobalData } from "hooks/useGlobalData";
+
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import type {
-  ClusterGraphProps,
   ClusterGraphElement,
   SVGElementSelection,
 } from "./ClusterGraph.type";
@@ -107,19 +108,16 @@ const drawClusterGraph = (
 const destroyClusterGraph = (target: RefObject<SVGElement>) =>
   d3.select(target.current).selectAll("*").remove();
 
-const ClusterGraph = ({
-  data,
-  selectedData,
-  setSelectedData,
-}: ClusterGraphProps) => {
+const ClusterGraph = () => {
+  const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const svgRef = useRef<SVGSVGElement>(null);
-  const clusterSizes = getClusterSizes(data);
-  const selectedIndex = getSelectedIndex(data, selectedData);
+  const clusterSizes = getClusterSizes(data ?? []);
+  const selectedIndex = getSelectedIndex(data ?? [], selectedData ?? null);
   const graphHeight =
     getGraphHeight(clusterSizes) + (selectedIndex < 0 ? 0 : DETAIL_HEIGHT);
   const prevSelected = useRef<number>(-1);
 
-  const clusterGraphElements = data.map((cluster, i) => ({
+  const clusterGraphElements = data?.map((cluster, i) => ({
     cluster,
     clusterSize: clusterSizes[i],
     selected: {
@@ -129,18 +127,23 @@ const ClusterGraph = ({
   }));
 
   useEffect(() => {
+    if (!setSelectedData) return;
     const handleClickCluster = (_: PointerEvent, d: ClusterGraphElement) => {
       setSelectedData(
-        selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
+        selectedDataUpdater(
+          d.cluster,
+          d.cluster.commitNodeList[0].clusterId
+        ) as any
       );
     };
     drawClusterGraph(
       svgRef,
-      clusterGraphElements,
+      clusterGraphElements ?? [],
       DETAIL_HEIGHT,
       handleClickCluster
     );
     prevSelected.current = selectedIndex;
+    // eslint-disable-next-line consistent-return
     return () => {
       destroyClusterGraph(svgRef);
     };
