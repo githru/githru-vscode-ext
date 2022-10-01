@@ -9,7 +9,6 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
-// import { ThemeSelector } from "./ThemeSelector";
 import "./TemporalFilter.scss";
 
 type Props = GlobalProps & {
