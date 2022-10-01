@@ -1,4 +1,5 @@
 import type { Dispatch, RefObject } from "react";
+import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
 
@@ -109,7 +110,7 @@ export const useHandleClusterGraph = ({
   data: ClusterNode[];
   clusterSizes: number[];
   selectedIndex: number;
-  setSelectedData: Dispatch<ClusterNode | null>;
+  setSelectedData: Dispatch<React.SetStateAction<ClusterNode | null>>;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const prevSelected = useRef<number>(-1);
@@ -126,10 +127,7 @@ export const useHandleClusterGraph = ({
   const handleClickCluster = useCallback(
     (_: PointerEvent, d: ClusterGraphElement) =>
       setSelectedData(
-        selectedDataUpdater(
-          d.cluster,
-          d.cluster.commitNodeList[0].clusterId
-        ) as any
+        selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
       ),
     []
   );

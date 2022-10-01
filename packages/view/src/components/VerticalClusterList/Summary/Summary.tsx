@@ -20,7 +20,7 @@ const Summary = () => {
   const selectedClusterId = getClusterIds(selectedData);
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
-    setSelectedData(selectedDataUpdater(selected, clusterId) as any);
+    setSelectedData(selectedDataUpdater(selected, clusterId));
   };
 
   useEffect(() => {

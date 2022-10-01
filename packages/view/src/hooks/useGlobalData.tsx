@@ -1,5 +1,11 @@
 import type { Dispatch, ReactNode } from "react";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import type { ClusterNode } from "../types";
 import { useGetTotalData } from "../App.hook";
@@ -9,8 +15,8 @@ type GlobalDataState = Partial<{
   filteredData: ClusterNode[];
   selectedData: ClusterNode | null;
 }> & {
-  setFilteredData: Dispatch<ClusterNode[]>;
-  setSelectedData: Dispatch<ClusterNode | null>;
+  setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
+  setSelectedData: Dispatch<React.SetStateAction<ClusterNode | null>>;
 };
 
 export const GlobalDataContext = createContext<GlobalDataState>(
