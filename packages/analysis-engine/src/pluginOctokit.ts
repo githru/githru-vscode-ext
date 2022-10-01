@@ -81,6 +81,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
       owner,
       repo,
       state: "all",
+      per_page: 100,
     });
 
     const pullNumbers = data.map((item) => item.number);
