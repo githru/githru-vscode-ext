@@ -149,7 +149,7 @@
     line-height: 30px;
     font-weight: bold;
 
-    color: $white;
+    color: $gray-50;
     justify-content: center;
     text-align: center;
     font-size: 15pt;
@@ -158,20 +158,8 @@
 
     &:hover {
       @include animation();
-      background-color: $gray-200 !important;
-      color: $black !important;
-      z-index: 9999;
-    }
-
-    &:nth-child(2n) {
-      &:hover {
-        @include animation();
-        z-index: 9999;
-      }
-    }
-
-    &:nth-child(3n):hover {
-      @include animation();
+      background: $gray-200 !important;
+      color: $gray-800 !important;
       z-index: 9999;
     }
   }

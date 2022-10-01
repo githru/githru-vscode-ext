@@ -7,7 +7,7 @@ import type { VerticalClusterListProps } from "../VerticalClusterList.type";
 
 import "./Summary.scss";
 import type { Cluster } from "./Summary.type";
-import { AuthorName } from "./AuthorName";
+import { Author } from "./Author";
 import { Content } from "./Content";
 import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
 
@@ -48,10 +48,7 @@ const Summary = forwardRef<HTMLDivElement, VerticalClusterListProps>(
                     {cluster.summary.authorNames.map(
                       (authorArray: Array<string>) => {
                         return authorArray.map((authorName: string) => (
-                          <AuthorName
-                            key={authorName}
-                            authorName={authorName}
-                          />
+                          <Author key={authorName} name={authorName} />
                         ));
                       }
                     )}
