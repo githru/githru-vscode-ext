@@ -89,7 +89,7 @@ const CommitLineChart = ({ data }: { data: CommitNode[] }) => {
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#666666");
+      .attr("fill", "#B6B6B4");
 
     svg
       .append("text")
