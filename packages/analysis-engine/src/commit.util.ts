@@ -1,4 +1,9 @@
-import { CommitRaw, CommitNode, CommitType, CommitTypeList } from "./types";
+import {
+  CommitRaw,
+  CommitNode,
+  CommitMessageType,
+  CommitMessageTypeList,
+} from "./types";
 
 type CommitDict = Map<string, CommitNode>;
 
@@ -16,7 +21,7 @@ export function getLeafNodes(commitDict: CommitDict): CommitNode[] {
   return leafNodes;
 }
 
-export function getCommitType(message: string): CommitType {
+export function getCommitMessageType(message: string): CommitMessageType {
   const prefixReg = /\w*\(*.*\)*:/;
   let result = message.match(prefixReg)?.[0];
   if (!result) return "";
@@ -32,5 +37,5 @@ export function getCommitType(message: string): CommitType {
 
   if (separatorIdx > 0) result = result.slice(0, separatorIdx);
 
-  return CommitTypeList.includes(result) ? result : "";
+  return CommitMessageTypeList.includes(result) ? result : "";
 }

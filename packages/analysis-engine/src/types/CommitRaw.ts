@@ -1,4 +1,4 @@
-import { CommitType } from "./CommitType";
+import { CommitMessageType } from "./CommitMessageType";
 
 export interface FileChanged {
   [path: string]: {
@@ -30,5 +30,5 @@ export interface CommitRaw {
   committerDate: Date;
   message: string;
   differenceStatistic: DifferenceStatistic;
-  commitType: CommitType;
+  commitMessageType: CommitMessageType;
 }

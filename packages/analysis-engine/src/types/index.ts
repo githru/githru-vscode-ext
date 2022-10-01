@@ -1,5 +1,5 @@
 export * from "./CommitRaw";
 export * from "./CommitNode";
-export * from "./CommitType";
+export * from "./CommitMessageType";
 export * from "./Stem";
 export * from "./CSM";

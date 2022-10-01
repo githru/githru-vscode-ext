@@ -1,4 +1,5 @@
-import { getCommitType } from "./commit.util";
+import { getCommitMessageType } from "./commit.util";
+import { getCommitRaws, getGitLog } from "./parser";
 
 describe("commit message type", () => {
   it.each([
@@ -22,15 +23,15 @@ describe("commit message type", () => {
     ["style: some message", "style"],
     ["test: some message", "test"],
   ])("has commit message type", (message, expected) => {
-    const commitType = getCommitType(message);
+    const commitType = getCommitMessageType(message);
     expect(commitType).toBe(expected);
   });
 
   it.each([
-    "Merge pull request #209 from jin-Pro/main", // no type prefix
+    "Merge pull request #209 from aa/main", // no type prefix
     "pix(vscode): add logo image and publish info", // no valid type
   ])("has no valid commit message type", (message) => {
-    const commitType = getCommitType(message);
+    const commitType = getCommitMessageType(message);
     expect(commitType).toBe("");
   });
 });
