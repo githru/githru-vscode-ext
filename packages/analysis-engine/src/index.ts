@@ -9,6 +9,7 @@ import { buildCSMDict } from "./csm";
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
   gitLog: string;
+  baseBranchName: string;
 };
 
 container.register("Options", {
@@ -23,7 +24,11 @@ container.register("Options", {
 
 const octokit = container.resolve(PluginOctokit);
 
-export const analyzeGit = async (args: AnalysisEngineArgs) => {
+export const analyzeGit = async ({
+  isDebugMode,
+  gitLog,
+  baseBranchName,
+}: AnalysisEngineArgs) => {
   const pullRequests = await octokit.getPullRequests();
   pullRequests.forEach((pullRequest, index) => {
     console.log(
@@ -65,14 +70,12 @@ export const analyzeGit = async (args: AnalysisEngineArgs) => {
     });
   });
 
-  const baseBranchName = "main";
-
-  const commitRaws = getCommitRaws(args.gitLog);
+  const commitRaws = getCommitRaws(gitLog);
   const commitDict = buildCommitDict(commitRaws);
   const stemDict = buildStemDict(commitDict, baseBranchName);
   const csmDict = buildCSMDict(commitDict, stemDict, baseBranchName);
 
-  if (args.isDebugMode) {
+  if (isDebugMode) {
     console.log(csmDict);
   }
 

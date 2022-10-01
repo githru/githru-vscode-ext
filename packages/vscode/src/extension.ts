@@ -1,7 +1,7 @@
 import { analyzeGit } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import { COMMAND_LAUNCH } from "./commands";
-import { findGit, getGitLog } from "./utils/git.util";
+import { findGit, getBaseBranchName, getGitLog } from "./utils/git.util";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import WebviewLoader from "./webview-loader";
 
@@ -13,22 +13,24 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "githru" is now active!');
 
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-		const gitPath = (await findGit()).path;
+        const gitPath = (await findGit()).path;
         const currentWorkspacePath = vscode.workspace.workspaceFolders?.[0].uri.path;
 
         if (currentWorkspacePath === undefined) {
-            throw new Error('Cannot find current workspace path');
+            throw new Error("Cannot find current workspace path");
         }
 
         const configuration = vscode.workspace.getConfiguration();
-        const githubToken = configuration.get('githru.github.token');
+        const githubToken = configuration.get("githru.github.token");
         console.log("GitHubToken = ", githubToken);
 
-		const gitLog = await getGitLog(gitPath, currentWorkspacePath);
-        const csmDict = await analyzeGit({ gitLog });
+        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
+        const baseBranchName = await getBaseBranchName(gitPath, currentWorkspacePath);
 
-		const clusterNodes = mapClusterNodesFrom(csmDict);
-		const data = JSON.stringify(clusterNodes);
+        const csmDict = await analyzeGit({ gitLog, baseBranchName, isDebugMode: true });
+
+        const clusterNodes = mapClusterNodesFrom(csmDict);
+        const data = JSON.stringify(clusterNodes);
 
         subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
 
