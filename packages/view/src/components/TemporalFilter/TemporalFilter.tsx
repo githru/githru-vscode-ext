@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { useGlobalData } from "hooks/useGlobalData";
-import { getYYYYMMDD } from "utils/time";
+import { useGlobalData } from "hooks";
+import { getYYYYMMDD } from "utils";
 
 import {
   filterDataByDate,

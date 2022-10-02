@@ -8,7 +8,8 @@ import React, {
 } from "react";
 
 import type { ClusterNode } from "../types";
-import { useGetTotalData } from "../App.hook";
+
+import { useGetTotalData } from "./useGetTotalData";
 
 type GlobalDataState = {
   data: ClusterNode[];

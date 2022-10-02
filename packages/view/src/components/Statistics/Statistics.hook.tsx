@@ -1,4 +1,4 @@
-import { useGlobalData } from "hooks/useGlobalData";
+import { useGlobalData } from "hooks";
 
 export const useGetSelectedData = () => {
   const { filteredData, selectedData } = useGlobalData();
