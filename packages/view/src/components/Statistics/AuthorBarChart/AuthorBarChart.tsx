@@ -2,7 +2,9 @@ import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode, GlobalProps } from "types";
+import type { ClusterNode } from "types";
+
+import { useGetSelectedData } from "../Statistics.hook";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import {
@@ -14,7 +16,8 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
 
-const AuthorBarChart = ({ data: rawData }: GlobalProps) => {
+const AuthorBarChart = () => {
+  const rawData = useGetSelectedData();
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 

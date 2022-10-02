@@ -1,14 +1,12 @@
-import type { GlobalProps } from "types";
-
 import { AuthorBarChart } from "./AuthorBarChart";
 import { FileIcicleSummary } from "./FileIcicleSummary";
 import "./Statistics.scss";
 
-const Statistics = ({ data }: GlobalProps) => {
+const Statistics = () => {
   return (
     <div className="statistics">
-      <AuthorBarChart data={data} />
-      <FileIcicleSummary data={data} />
+      <AuthorBarChart />
+      <FileIcicleSummary />
     </div>
   );
 };

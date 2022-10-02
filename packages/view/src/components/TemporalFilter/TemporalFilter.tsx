@@ -1,7 +1,6 @@
-import type { Dispatch, SetStateAction } from "react";
 import { useState, useEffect } from "react";
 
-import type { ClusterNode, GlobalProps } from "types";
+import { useGlobalData } from "../../hooks/useGlobalData";
 
 import { Filter } from "./Filter";
 import {
@@ -9,14 +8,11 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
-// import { ThemeSelector } from "./ThemeSelector";
+
 import "./TemporalFilter.scss";
 
-type Props = GlobalProps & {
-  setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
-};
-
-const TemporalFilter = ({ data, setFilteredData }: Props) => {
+const TemporalFilter = () => {
+  const { data, setFilteredData } = useGlobalData();
   const sortedData = sortBasedOnCommitNode(data);
   const [minDate, maxDate] = getMinMaxDate(sortedData);
   const [fromDate, setFromDate] = useState<string>(minDate);
@@ -26,7 +22,11 @@ const TemporalFilter = ({ data, setFilteredData }: Props) => {
     if (fromDate === "" || toDate === "") {
       setFilteredData(data);
     } else {
-      const filteredData = filterDataByDate({ data, fromDate, toDate });
+      const filteredData = filterDataByDate({
+        data,
+        fromDate,
+        toDate,
+      });
       filteredData.reverse();
       setFilteredData(filteredData);
     }

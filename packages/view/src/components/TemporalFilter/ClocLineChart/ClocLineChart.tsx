@@ -8,17 +8,27 @@ import {
   ticks,
   // axisBottom,
 } from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
-import type { CommitNode } from "../TemporalFilter.type";
-import { getCloc, getMinMaxDate } from "../TemporalFilter.util";
+import { useGlobalData } from "../../../hooks/useGlobalData";
+import {
+  getCloc,
+  getMinMaxDate,
+  sortBasedOnCommitNode,
+} from "../TemporalFilter.util";
 
 import "./ClocLineChart.scss";
 // TODO margin 추가하기
 // timeFormatter
+
 import { CLOC_STYLING } from "./ClocLineChart.const";
 
-const ClocLineChart = ({ data }: { data: CommitNode[] }) => {
+const ClocLineChart = () => {
+  const { filteredData } = useGlobalData();
+  const data = useMemo(
+    () => sortBasedOnCommitNode(filteredData),
+    [filteredData]
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
