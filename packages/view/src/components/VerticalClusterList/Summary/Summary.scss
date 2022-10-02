@@ -155,6 +155,7 @@
     font-size: 15pt;
     margin-left: -5px;
     margin-right: -5px;
+    z-index: 1;
 
     &:hover {
       @include animation();
@@ -169,6 +170,7 @@
       position: relative;
       content:attr(data-text);
       display: block;
+      z-index: -9999;
     }
   }
 
