@@ -10,11 +10,10 @@ import React, {
 import type { ClusterNode } from "../types";
 import { useGetTotalData } from "../App.hook";
 
-type GlobalDataState = Partial<{
+type GlobalDataState = {
   data: ClusterNode[];
   filteredData: ClusterNode[];
   selectedData: ClusterNode | null;
-}> & {
   setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode | null>>;
 };

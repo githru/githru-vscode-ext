@@ -20,10 +20,10 @@ const TemporalFilter = () => {
 
   useEffect(() => {
     if (fromDate === "" || toDate === "") {
-      setFilteredData(data ?? []);
+      setFilteredData(data);
     } else {
       const filteredData = filterDataByDate({
-        data: data ?? [],
+        data,
         fromDate,
         toDate,
       });
