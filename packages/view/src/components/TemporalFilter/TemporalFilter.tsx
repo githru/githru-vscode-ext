@@ -8,6 +8,8 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
+import { ClocLineChart } from "./ClocLineChart";
+import { CommitLineChart } from "./CommitLineChart";
 
 import "./TemporalFilter.scss";
 
@@ -53,30 +55,38 @@ const TemporalFilter = () => {
   };
 
   return (
-    <section className="filter">
-      <form>
-        <div>
-          <span>From:</span>
-          <input
-            className="date-from"
-            type="date"
-            min={getYYYYMMDD(minDate)}
-            max={getYYYYMMDD(maxDate)}
-            value={filteredPeriod.fromDate}
-            onChange={fromDateChangeHandler}
-          />
-          <span>To:</span>
-          <input
-            className="date-to"
-            type="date"
-            min={getYYYYMMDD(minDate)}
-            max={getYYYYMMDD(maxDate)}
-            value={filteredPeriod.toDate}
-            onChange={toDateChangeHandler}
-          />
-        </div>
-      </form>
-    </section>
+    <article className="temporal-filter">
+      <div className="data-control-container">
+        <section className="filter">
+          <form>
+            <div>
+              <span>From:</span>
+              <input
+                className="date-from"
+                type="date"
+                min={getYYYYMMDD(minDate)}
+                max={getYYYYMMDD(maxDate)}
+                value={filteredPeriod.fromDate}
+                onChange={fromDateChangeHandler}
+              />
+              <span>To:</span>
+              <input
+                className="date-to"
+                type="date"
+                min={getYYYYMMDD(minDate)}
+                max={getYYYYMMDD(maxDate)}
+                value={filteredPeriod.toDate}
+                onChange={toDateChangeHandler}
+              />
+            </div>
+          </form>
+        </section>
+      </div>
+      <div className="line-chart">
+        <ClocLineChart />
+        <CommitLineChart />
+      </div>
+    </article>
   );
 };
 
