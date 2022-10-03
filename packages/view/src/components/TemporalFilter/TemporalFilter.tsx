@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { useGlobalData } from "hooks/useGlobalData";
 
+import { getYYYYMMDD } from "utils/time";
+
 import {
   filterDataByDate,
   getMinMaxDate,
@@ -31,8 +33,6 @@ const TemporalFilter = () => {
     }
   }, [data, fromDate, toDate, setFilteredData]);
 
-  const getYYYYMMDD = (fullDateString: string) =>
-    new Date(fullDateString).toISOString().split("T")[0];
   const minDateStr = getYYYYMMDD(minDate);
   const maxDateStr = getYYYYMMDD(maxDate);
   const [fromDateFilter, setFromDateFilter] = useState<string>(minDateStr);

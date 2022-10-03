@@ -9,3 +9,6 @@ export const getTime = (utc: Date) =>
     TWO_YEAR_LENGTH,
     utcToLocalTime.length - SECOND_LENGTH_IN_TIME_FORMAT
   );
+
+export const getYYYYMMDD = (fullDateString: string) =>
+  new Date(fullDateString).toISOString().split("T")[0];
