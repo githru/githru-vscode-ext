@@ -155,12 +155,22 @@
     font-size: 15pt;
     margin-left: -5px;
     margin-right: -5px;
+    z-index: 1;
 
     &:hover {
       @include animation();
       background: $gray-200 !important;
       color: $gray-800 !important;
       z-index: 9999;
+    }
+  }
+
+  [data-text] {
+    &::before {
+      position: relative;
+      content:attr(data-text);
+      display: block;
+      z-index: -9999;
     }
   }
 
