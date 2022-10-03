@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
+import { useGlobalData } from "hooks";
 
 import { useGetSelectedData } from "../Statistics.hook";
 
@@ -10,6 +11,7 @@ import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import {
   convertNumberFormat,
   getDataByAuthor,
+  sortDataByAuthor,
   sortDataByName,
 } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
@@ -17,11 +19,14 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
+  const { data: totalData, filteredData, setFilteredData } = useGlobalData();
   const rawData = useGetSelectedData();
+
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
+  const [prevData, setPrevData] = useState<ClusterNode[]>([]);
 
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
   let data = authorData.sort((a, b) => {
@@ -103,16 +108,31 @@ const AuthorBarChart = () => {
         .style("top", `${e.pageY - 70}px`)
         .html(
           `<p class="name">${d.name}</p>
-          <p>${metric}: 
-            <span class="selected">
-              ${d[metric].toLocaleString()}
-            </span> 
-            / ${totalMetricValues.toLocaleString()} 
-            (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
-          </p>`
+              <p>${metric}: 
+                <span class="selected">
+                  ${d[metric].toLocaleString()}
+                </span> 
+                / ${totalMetricValues.toLocaleString()} 
+                (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
+              </p>`
         );
     };
     const handleMouseOut = () => {
+      tooltip.style("display", "none");
+    };
+    const handleClickBar = (
+      _: MouseEvent<SVGRectElement | SVGTextElement>,
+      d: AuthorDataType
+    ) => {
+      const isAuthorSelected = !!prevData.length;
+
+      if (isAuthorSelected) {
+        setFilteredData(prevData);
+        setPrevData([]);
+      } else {
+        setFilteredData(sortDataByAuthor(filteredData, d.name));
+        setPrevData(filteredData);
+      }
       tooltip.style("display", "none");
     };
 
@@ -136,6 +156,7 @@ const AuthorBarChart = () => {
       .on("mouseover", handleMouseOver)
       .on("mousemove", handleMouseMove)
       .on("mouseout", handleMouseOut)
+      .on("click", handleClickBar)
       .transition()
       .duration(500)
       .attr("width", (d: AuthorDataType) => xScale(d[metric]))
@@ -163,9 +184,18 @@ const AuthorBarChart = () => {
         .on("mouseover", handleMouseOver)
         .on("mousemove", handleMouseMove)
         .on("mouseout", handleMouseOut)
+        .on("click", handleClickBar)
         .html((d: AuthorDataType) => d.name);
     });
-  }, [data, metric]);
+  }, [
+    data,
+    filteredData,
+    metric,
+    prevData,
+    rawData,
+    setFilteredData,
+    totalData,
+  ]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
@@ -173,16 +203,15 @@ const AuthorBarChart = () => {
 
   return (
     <div className="author-bar-chart__container">
-      <select
-        className="author-bar-chart__select-box"
-        onChange={handleChangeMetric}
-      >
-        {METRIC_TYPE.map((option) => (
-          <option key={option} value={option}>
-            {option === METRIC_TYPE[0] ? `${option} #` : option}
-          </option>
-        ))}
-      </select>
+      <div className="author-bar-chart__header">
+        <select className="select-box" onChange={handleChangeMetric}>
+          {METRIC_TYPE.map((option) => (
+            <option key={option} value={option}>
+              {option === METRIC_TYPE[0] ? `${option} #` : option}
+            </option>
+          ))}
+        </select>
+      </div>
       <svg className="author-bar-chart" ref={svgRef} />
       <div className="author-bar-chart__tooltip" ref={tooltipRef} />
     </div>

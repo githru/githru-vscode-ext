@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import type { ClusterNode, GlobalProps } from "types";
 
-import fakeData from "./fake-assets/cluster-nodes.json";
+import fakeData from "../fake-assets/cluster-nodes.json";
 
 export const useGetTotalData = (): GlobalProps => {
   const [data, setData] = useState<ClusterNode[]>([]);

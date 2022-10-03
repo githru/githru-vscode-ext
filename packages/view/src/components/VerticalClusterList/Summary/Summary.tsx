@@ -1,16 +1,16 @@
 import { useRef, useEffect } from "react";
 
 import { Detail } from "components";
-import { useGlobalData } from "hooks/useGlobalData";
+import { useGlobalData } from "hooks";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
-
-import "./Summary.scss";
 
 import type { Cluster } from "./Summary.type";
 import { Author } from "./Author";
 import { Content } from "./Content";
 import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
+
+import "./Summary.scss";
 
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();

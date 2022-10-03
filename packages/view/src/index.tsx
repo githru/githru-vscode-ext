@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { GlobalDataProvider } from "hooks/useGlobalData";
+import { GlobalDataProvider } from "hooks";
 
 import App from "./App";
 

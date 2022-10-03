@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-import type { ClusterNode } from "types";
+import type { ClusterNode, CommitNode } from "types";
 
 import type { AuthorDataType } from "./AuthorBarChart.type";
 
@@ -48,4 +48,22 @@ export const convertNumberFormat = (
     return `${d}`;
   }
   return d3.format("~s")(d);
+};
+
+export const sortDataByAuthor = (
+  data: ClusterNode[],
+  author: string
+): ClusterNode[] => {
+  const sortedData = data.reduce((acc: ClusterNode[], cluster: ClusterNode) => {
+    const checkedCluster = cluster.commitNodeList.filter(
+      (commitNode: CommitNode) =>
+        commitNode.commit.author.names.includes(author)
+    );
+    if (!checkedCluster.length) return acc;
+    return [
+      ...acc,
+      { nodeTypeName: "CLUSTER" as const, commitNodeList: checkedCluster },
+    ];
+  }, []);
+  return sortedData;
 };

@@ -12,7 +12,7 @@ import {
 } from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
-import { useGlobalData } from "hooks/useGlobalData";
+import { useGlobalData } from "hooks";
 
 import { getMinMaxDate, sortBasedOnCommitNode } from "../TemporalFilter.util";
 
@@ -93,7 +93,7 @@ const CommitLineChart = () => {
       .attr("y", (d) => yScale(d.commit))
       .attr("height", (d) => height - yScale(d.commit))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#B6B6B4");
+      .attr("fill", "#0077aa");
 
     svg
       .append("text")
@@ -101,7 +101,8 @@ const CommitLineChart = () => {
       .attr("x", "5px")
       .attr("y", "15px")
       .attr("font-size", "10px")
-      .attr("font-weight", "500");
+      .attr("font-weight", "500")
+      .attr("fill", "white");
   }, [data]);
 
   return (

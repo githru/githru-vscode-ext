@@ -1,16 +1,7 @@
-import {
-  axisLeft,
-  extent,
-  scaleBand,
-  scaleLinear,
-  scaleTime,
-  select,
-  ticks,
-  // axisBottom,
-} from "d3";
+import { extent, scaleBand, scaleLinear, scaleTime, select } from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
-import { useGlobalData } from "hooks/useGlobalData";
+import { useGlobalData } from "hooks";
 
 import {
   getCloc,
@@ -34,7 +25,7 @@ const ClocLineChart = () => {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!wrapperRef.current || !ref.current || !data.length) return;
+    if (!wrapperRef.current || !ref.current) return;
 
     const { width, height } = wrapperRef.current.getBoundingClientRect();
     const svg = select(ref.current)
@@ -60,25 +51,14 @@ const ClocLineChart = () => {
       .range([0, width]);
 
     // const xAxis = axisBottom<Date>(xScale);
-
     const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
-    const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
-
-    svg.append("g").call(yAxis);
-
+    // const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
+    // svg.append("g").call(yAxis);
     // svg.append("g").attr("transform", `translate(${width},0)`);
-
-    // svg
-    //   .append("text")
-    //   .attr("text-anchor", "right")
-    //   .style("font-size", "16px")
-    //   .text("cloc");
 
     svg
       .selectAll(".cloc")
-      .style("background", "gray")
-      .text("cloc chart")
       .data(data)
       .join("rect")
       .classed("cloc", true)
@@ -86,7 +66,7 @@ const ClocLineChart = () => {
       .attr("y", (d) => yScale(getCloc(d)))
       .attr("height", (d) => height - yScale(getCloc(d)))
       .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#B6B6B4");
+      .attr("fill", "#0077aa");
 
     svg
       .append("text")
@@ -94,7 +74,8 @@ const ClocLineChart = () => {
       .attr("x", "5px")
       .attr("y", "15px")
       .attr("font-size", "10px")
-      .attr("font-weight", "500");
+      .attr("font-weight", "500")
+      .attr("fill", "white");
   }, [data]);
 
   return (
