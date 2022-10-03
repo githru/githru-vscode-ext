@@ -40,8 +40,10 @@ export function filterDataByDate(props: FilterDataByDateProps): ClusterNode[] {
       const filteredCommitNodeList = clusterNode.commitNodeList.filter(
         (commitNode: CommitNode) => {
           if (
-            new Date(commitNode.commit.commitDate) >= new Date(fromDate) &&
-            new Date(commitNode.commit.commitDate) <= new Date(toDate)
+            new Date(commitNode.commit.commitDate) >=
+              new Date(`${fromDate} 00:00:00`) &&
+            new Date(commitNode.commit.commitDate) <=
+              new Date(`${toDate} 23:59:59`)
           ) {
             return true;
           }
