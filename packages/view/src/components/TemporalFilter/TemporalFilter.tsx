@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { useGlobalData } from "hooks/useGlobalData";
-
 import { getYYYYMMDD } from "utils/time";
 
 import {
