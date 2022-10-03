@@ -5,7 +5,7 @@
   justify-content: space-between;
   margin: 15px 0 20px;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
 
   .divider {
     margin-right: 1rem;
@@ -17,9 +17,35 @@
   .detail__summary {
     flex-grow: 0.1;
     text-align: right;
+
+    span {
+      position: relative;
+      margin-right: 10px;
+
+      strong {
+        margin-right: 2px;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        right: -5px;
+        width: 1px;
+        height: 12px;
+        background: $white;
+      }
+      &:last-child {
+        margin-right: 0;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
   }
 
-  .insertions {
+  .additions {
     color: green;
   }
 
@@ -30,7 +56,7 @@
 
 .detail__commit-list__container {
   padding: 0 20px;
-  font-size: 14px;
+  font-size: 12px;
 
   .commit-item {
     display: flex;
@@ -46,6 +72,7 @@
 
       .message {
         color: $white;
+        margin-right: 4px;
       }
     }
     .commit-id {

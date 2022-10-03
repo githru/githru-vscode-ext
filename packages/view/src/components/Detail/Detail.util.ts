@@ -43,12 +43,13 @@ export const getCommitListDetail = ({
       deletions: 0,
     }
   );
+
   return {
-    authorLength: authorLength.toLocaleString("en"),
-    fileLength: fileLength.toLocaleString("en"),
-    commitLength: commitNodeListInCluster.length.toLocaleString("en"),
-    insertions: diffStatistics.insertions.toLocaleString("en"),
-    deletions: diffStatistics.deletions.toLocaleString("en"),
+    authorLength,
+    fileLength,
+    commitLength: commitNodeListInCluster.length,
+    insertions: diffStatistics.insertions,
+    deletions: diffStatistics.deletions,
   };
 };
 

@@ -10,15 +10,25 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } =
     getCommitListDetail({ commitNodeListInCluster });
 
+  const summaryItems = [
+    { name: "authors", count: authorLength },
+    { name: "commits", count: commitLength },
+    { name: "changed files", count: fileLength },
+    { name: "additions", count: insertions },
+    { name: "deletions", count: deletions },
+  ];
+  console.log(insertions);
+
   return (
     <div className="detail__summary__container">
       <div className="divider" />
       <div className="detail__summary">
-        <strong>{authorLength}</strong> authors |{" "}
-        <strong>{commitLength}</strong> commits | <strong>{fileLength}</strong>{" "}
-        changed files | <strong className="insertions">{insertions}</strong>{" "}
-        additions and <strong className="deletions">{deletions}</strong>{" "}
-        deletions codes
+        {summaryItems.map(({ name, count }) => (
+          <span key={name}>
+            <strong className={name}>{count.toLocaleString("en")}</strong>
+            {count <= 1 ? name.slice(0, -1) : name}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -42,9 +52,9 @@ const Detail = ({ selectedData }: DetailProps) => {
           return (
             <li key={id} className="commit-item">
               <div className="commit-detail">
-                <span className="message">{message}, </span>
-                <span>
-                  {author.names[0]}, {getTime(commitDate)}
+                <span className="message">{message} </span>
+                <span className="author-date">
+                  {author.names[0]}, {getTime(commitDate)}{" "}
                 </span>
               </div>
               <div className="commit-id">
