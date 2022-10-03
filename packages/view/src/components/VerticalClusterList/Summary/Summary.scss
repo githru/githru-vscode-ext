@@ -149,18 +149,16 @@
     line-height: 30px;
     font-weight: bold;
 
-    color: $gray-50;
     justify-content: center;
     text-align: center;
-    font-size: 15pt;
+    font-size: 15px;
     margin-left: -5px;
     margin-right: -5px;
     z-index: 1;
 
     &:hover {
       @include animation();
-      background: $gray-200 !important;
-      color: $gray-800 !important;
+      background: rgba(50, 50, 50, 0.9) !important;
       z-index: 9999;
     }
   }
@@ -182,18 +180,17 @@
     &::after {
       @include animation();
       @include shadow();
-      @include border(5px);
+      @include border(2px);
 
       content: attr(data-tooltip-text);
 
       position: absolute;
-      bottom: 30%;
-      left: -9999px;
-      color: $white;
-      font-size: 12px;
-      padding: 0px 12px;
-      margin-bottom: 10px;
-      width: auto;
+      left: 30px;
+      top: -20px;
+      color: black;
+      font-size: 10px;
+      line-height: 1.5;
+      padding: 5px 12px;
       min-width: max-content;
       word-wrap: break-word;
       opacity: 0;
@@ -201,8 +198,7 @@
     }
 
     &:hover::after {
-      left: 100%;
-      background-color: rgba(0, 119, 170, 0.8);
+      background-color: $white;
       opacity: 1;
     }
   }
@@ -211,6 +207,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    font-size: 12px;
 
     .commit-message {
       white-space: nowrap;
@@ -222,9 +219,9 @@
       cursor: pointer;
     }
     .more-commit-count {
-      font-size: 12px;
       text-align: right;
       width: 60px;
+      font-size: 10px;
     }
   }
 }
