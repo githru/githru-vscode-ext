@@ -13,6 +13,7 @@ import {
 import { useEffect, useMemo, useRef } from "react";
 
 import { useGlobalData } from "hooks/useGlobalData";
+
 import { getMinMaxDate, sortBasedOnCommitNode } from "../TemporalFilter.util";
 
 import "./CommitLineChart.scss";
