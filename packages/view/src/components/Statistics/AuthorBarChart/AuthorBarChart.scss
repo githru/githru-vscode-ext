@@ -7,20 +7,26 @@
   align-items: flex-end;
 }
 
-.author-bar-chart__select-box {
-  font-size: 10px;
-  background: transparent;
-  border: 1px solid $white;
-  border-radius: 5px;
-  width: fit-content;
-  padding: 0 10px;
-  height: 25px;
-  color: $white;
-  outline: none;
-  text-align: center;
+.author-bar-chart__header {
+  width: 100%;
+  text-align: right;
+  padding-left: 40px;
 
-  option {
-    background: $gray-900;
+  & .select-box {
+    font-size: 10px;
+    background: transparent;
+    border: 1px solid $white;
+    border-radius: 5px;
+    width: fit-content;
+    padding: 0 10px;
+    height: 25px;
+    color: $white;
+    outline: none;
+    text-align: center;
+
+    option {
+      background: $gray-900;
+    }
   }
 }
 
@@ -46,6 +52,8 @@
   }
 
   .bars {
+    cursor: pointer;
+
     .bar {
       &:hover {
         rect {

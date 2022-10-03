@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import type { ClusterNode } from "../types";
+import type { ClusterNode } from "types";
 
 import { useGetTotalData } from "./useGetTotalData";
 
@@ -47,6 +47,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     [data, filteredData, selectedData]
   );
   if (!data.length || !filteredData.length) return null;
+
   return (
     <GlobalDataContext.Provider value={value}>
       {children}
