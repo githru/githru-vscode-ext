@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useGlobalData } from "hooks/useGlobalData";
 
-import { Filter } from "./Filter";
 import {
   filterDataByDate,
   getMinMaxDate,
@@ -32,13 +31,54 @@ const TemporalFilter = () => {
     }
   }, [data, fromDate, toDate, setFilteredData]);
 
+  const getYYYYMMDD = (fullDateString: string) =>
+    new Date(fullDateString).toISOString().split("T")[0];
+  const minDateStr = getYYYYMMDD(minDate);
+  const maxDateStr = getYYYYMMDD(maxDate);
+  const [fromDateFilter, setFromDateFilter] = useState<string>(minDateStr);
+  const [toDateFilter, setToDateFilter] = useState<string>(maxDateStr);
+
+  const fromDateChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setFromDateFilter(e.target.value);
+  };
+  const toDateChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setToDateFilter(e.target.value);
+  };
+
+  useEffect(() => {
+    setFromDate(fromDateFilter);
+    setToDate(toDateFilter);
+  }, [fromDateFilter, toDateFilter, setFromDate, setToDate]);
+
   return (
-    <Filter
-      setFromDate={setFromDate}
-      setToDate={setToDate}
-      minDate={minDate}
-      maxDate={maxDate}
-    />
+    <section className="filter">
+      <form>
+        <div>
+          <span>From:</span>
+          <input
+            className="date-from"
+            type="date"
+            value={fromDateFilter}
+            min={minDateStr}
+            max={maxDateStr}
+            onChange={fromDateChangeHandler}
+          />
+          <span>To:</span>
+          <input
+            className="date-to"
+            type="date"
+            min={minDateStr}
+            max={maxDateStr}
+            value={toDateFilter}
+            onChange={toDateChangeHandler}
+          />
+        </div>
+      </form>
+    </section>
   );
 };
 
