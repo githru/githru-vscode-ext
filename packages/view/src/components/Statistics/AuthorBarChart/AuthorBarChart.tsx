@@ -130,8 +130,8 @@ const AuthorBarChart = () => {
         setFilteredData(prevData);
         setPrevData([]);
       } else {
-        setFilteredData(sortDataByAuthor(filteredData.reverse(), d.name));
-        setPrevData(filteredData.reverse());
+        setFilteredData(sortDataByAuthor(filteredData, d.name));
+        setPrevData(filteredData);
       }
       tooltip.style("display", "none");
     };

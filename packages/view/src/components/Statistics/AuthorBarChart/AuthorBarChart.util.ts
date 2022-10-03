@@ -65,5 +65,5 @@ export const sortDataByAuthor = (
       { nodeTypeName: "CLUSTER" as const, commitNodeList: checkedCluster },
     ];
   }, []);
-  return sortedData.reverse();
+  return sortedData;
 };
