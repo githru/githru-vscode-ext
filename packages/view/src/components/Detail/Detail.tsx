@@ -38,13 +38,13 @@ const Detail = ({ selectedData }: DetailProps) => {
       <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
       <ul className="detail__commit-list__container">
         {commitNodeList.map(({ commit }) => {
-          const { id, message, author, authorDate } = commit;
+          const { id, message, author, commitDate } = commit;
           return (
             <li key={id} className="commit-item">
               <div className="commit-detail">
                 <span className="message">{message}, </span>
                 <span>
-                  {author.names[0]}, {getTime(authorDate)}
+                  {author.names[0]}, {getTime(commitDate)}
                 </span>
               </div>
               <div className="commit-id">
