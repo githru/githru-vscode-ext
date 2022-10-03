@@ -28,7 +28,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [selectedData, setSelectedData] = useState<ClusterNode | null>(null);
 
   useEffect(() => {
-    setFilteredData(data);
+    setFilteredData(data.reverse());
   }, [data]);
 
   useEffect(() => {
