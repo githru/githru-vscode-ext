@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { useGlobalData } from "hooks/useGlobalData";
 import { getYYYYMMDD } from "utils/time";
@@ -15,43 +15,42 @@ const TemporalFilter = () => {
   const { data, setFilteredData } = useGlobalData();
   const sortedData = sortBasedOnCommitNode(data);
   const [minDate, maxDate] = getMinMaxDate(sortedData);
-  const [fromDate, setFromDate] = useState<string>(minDate);
-  const [toDate, setToDate] = useState<string>(maxDate);
+  const [filteredPeriod, setFilteredPeriod] = useState({
+    fromDate: getYYYYMMDD(minDate),
+    toDate: getYYYYMMDD(maxDate),
+  });
 
-  useEffect(() => {
+  const fromDateChangeHandler = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void => {
+    const { toDate } = filteredPeriod;
+    const fromDate = target.value;
+
+    setFilteredPeriod({ fromDate, toDate });
+
     if (fromDate === "" || toDate === "") {
       setFilteredData(data);
     } else {
-      const filteredData = filterDataByDate({
-        data,
-        fromDate,
-        toDate,
-      });
-      filteredData.reverse();
+      const filteredData = filterDataByDate({ data, fromDate, toDate });
       setFilteredData(filteredData);
     }
-  }, [data, fromDate, toDate, setFilteredData]);
-
-  const minDateStr = getYYYYMMDD(minDate);
-  const maxDateStr = getYYYYMMDD(maxDate);
-  const [fromDateFilter, setFromDateFilter] = useState<string>(minDateStr);
-  const [toDateFilter, setToDateFilter] = useState<string>(maxDateStr);
-
-  const fromDateChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setFromDateFilter(e.target.value);
-  };
-  const toDateChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setToDateFilter(e.target.value);
   };
 
-  useEffect(() => {
-    setFromDate(fromDateFilter);
-    setToDate(toDateFilter);
-  }, [fromDateFilter, toDateFilter, setFromDate, setToDate]);
+  const toDateChangeHandler = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void => {
+    const { fromDate } = filteredPeriod;
+    const toDate = target.value;
+
+    setFilteredPeriod({ fromDate, toDate });
+
+    if (fromDate === "" || toDate === "") {
+      setFilteredData(data);
+    } else {
+      const filteredData = filterDataByDate({ data, fromDate, toDate });
+      setFilteredData(filteredData);
+    }
+  };
 
   return (
     <section className="filter">
@@ -61,18 +60,18 @@ const TemporalFilter = () => {
           <input
             className="date-from"
             type="date"
-            value={fromDateFilter}
-            min={minDateStr}
-            max={maxDateStr}
+            min={getYYYYMMDD(minDate)}
+            max={getYYYYMMDD(maxDate)}
+            value={filteredPeriod.fromDate}
             onChange={fromDateChangeHandler}
           />
           <span>To:</span>
           <input
             className="date-to"
             type="date"
-            min={minDateStr}
-            max={maxDateStr}
-            value={toDateFilter}
+            min={getYYYYMMDD(minDate)}
+            max={getYYYYMMDD(maxDate)}
+            value={filteredPeriod.toDate}
             onChange={toDateChangeHandler}
           />
         </div>
