@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 
 import { Detail } from "components";
 
-import { useGlobalData } from "../../../hooks/useGlobalData";
+import { useGlobalData } from "hooks/useGlobalData";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import "./Summary.scss";

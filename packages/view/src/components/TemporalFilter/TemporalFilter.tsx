@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useGlobalData } from "../../hooks/useGlobalData";
+import { useGlobalData } from "hooks/useGlobalData";
 
 import { Filter } from "./Filter";
 import {
