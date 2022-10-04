@@ -5,10 +5,7 @@ import type {
   SelectedDataProps,
 } from "types";
 
-import { authorBgColorArray } from "./Summary.const";
 import type { Cluster } from "./Summary.type";
-
-const colorName = [...authorBgColorArray];
 
 export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
@@ -62,26 +59,12 @@ export function getInitData({ data }: GlobalProps) {
     );
 
     cluster.summary.authorNames = [];
-
-    cluster.summary.authorNames.push(Array.from(authorsSet) as Array<string>);
-
+    cluster.summary.authorNames.push(Array.from(authorsSet) as string[]);
     clusters.push(cluster);
-
     return cluster;
   });
 
   return clusters;
-}
-
-export function getColorValue(name: string) {
-  let result = "";
-
-  const index =
-    (name[0].charCodeAt(0) + name[1].charCodeAt(0)) % colorName.length;
-  result = `#${colorName[index]}`;
-  colorName.slice(0 + index, index + 1);
-
-  return result;
 }
 
 export function getClusterById(clusters: ClusterNode[], clusterId: number) {

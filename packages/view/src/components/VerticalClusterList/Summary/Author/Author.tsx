@@ -1,27 +1,20 @@
-import React from "react";
+import { useState } from "react";
+import md5 from "md5";
 
 import type { AuthorProps } from "../Summary.type";
-import { getColorValue } from "../Summary.util";
+import { GITHUB_URL, GRAVATA_URL } from "../Summary.const";
 
 const Author = ({ name }: AuthorProps) => {
-  const colorValue = getColorValue(name);
+  const src = `${GITHUB_URL}/${name}.png`;
+  const fallback = `${GRAVATA_URL}/${md5(name)}?d=identicon&f=y`;
 
-  const url = `https://github.com/${name}.png`;
+  const [imgSrc, setImgSrc] = useState<string>(src);
+  const onError = () => setImgSrc(fallback);
 
   return (
-    <span className="name" data-tooltip-text={name}>
-      <img
-        className={["name"].join(" ")}
-        data-text={name.slice(0, 1)}
-        src={url}
-        alt=""
-        onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-          e.currentTarget.style.filter = "none";
-          e.currentTarget.style.overflow = "hidden";
-          e.currentTarget.style.background = colorValue;
-        }}
-      />
-    </span>
+    <div className="name" data-tooltip-text={name}>
+      <img src={imgSrc} onError={onError} alt="" />
+    </div>
   );
 };
 
