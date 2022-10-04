@@ -1,4 +1,4 @@
-@import "styles/app";
+@import "styles/_pallete";
 
 @mixin animation {
   -webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -166,7 +166,7 @@
   [data-text] {
     &::before {
       position: relative;
-      content:attr(data-text);
+      content: attr(data-text);
       display: block;
       z-index: -9999;
     }
