@@ -11,7 +11,7 @@
     "engines": {
         "vscode": "^1.67.0"
     },
-    "icon": "images/githru_logo_temp.png",
+    "icon": "images/githru_logo_v0.2.png",
     "author": {
         "name": "team githru"
     },
