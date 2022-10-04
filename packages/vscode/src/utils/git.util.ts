@@ -181,12 +181,17 @@ export async function getGitConfig(gitPath: string, currentWorkspacePath: string
     });
 }
 
-export const getRepo = (gitConfig: string) => {
-	const regex = /^(https|http):\/\/[\s\S]+.git$/g;
-	if(regex.test(gitConfig.trim())) {
-		const chunks = gitConfig.split('.git')[0].split('/');
-		return { owner: chunks.slice(-2)[0], repo: chunks.slice(-1)[0] };
-	} else {
-		throw new Error('git config should be: https|http://${domain}/${owner}/${repo}.git');
+export const getRepo = (gitRemoteConfig: string) => {
+	const gitRemoteConfigPattern = /(?:https?|git)(?::\/\/(?:\w+@)?|@)(?:github\.com)(?:\/|:)(?:(?<owner>.+?)\/(?<repo>.+?))(?:\.git|\/)?$/m;
+  const gitRemote = gitRemoteConfig.match(gitRemoteConfigPattern)?.groups;
+	if (!gitRemote) {
+		throw new Error('git remote config should be: [https?://|git@]${domain}/${owner}/${repo}.git');
 	}
+
+	const { owner, repo } = gitRemote;
+	if (!owner || !repo) {
+		throw new Error('no owner/repo');
+	}
+
+	return { owner, repo };
 }
