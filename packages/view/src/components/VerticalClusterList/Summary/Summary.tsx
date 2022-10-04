@@ -14,7 +14,6 @@ import "./Summary.scss";
 
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
-  const ref = useRef<HTMLDivElement>(null);
   const clusters = getInitData({ data });
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -42,10 +41,10 @@ const Summary = () => {
           >
             <button
               type="button"
-              className="cluster-summary__toggle-contents-button"
+              className="toggle-contents-button"
               onClick={onClickClusterSummary(cluster.clusterId)}
             >
-              <div className="cluster-summary__toggle-contents-container">
+              <div className="toggle-contents-container">
                 <div className="name-box">
                   {cluster.summary.authorNames.map(
                     (authorArray: Array<string>) => {
@@ -63,15 +62,8 @@ const Summary = () => {
               </div>
             </button>
             {cluster.clusterId === selectedClusterId && (
-              <div
-                className="cluster-summary__detail__container"
-                ref={scrollRef}
-              >
-                <div ref={ref}>
-                  <div className="summary-detail__wrapper">
-                    <Detail selectedData={selectedData} />
-                  </div>
-                </div>
+              <div className="detail__container" ref={scrollRef}>
+                <Detail selectedData={selectedData} />
               </div>
             )}
           </div>

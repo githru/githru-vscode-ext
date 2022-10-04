@@ -55,7 +55,7 @@ const Detail = ({ selectedData }: DetailProps) => {
                 <span className="message">{message} </span>
                 <span className="author-date">
                   {author.names[0]},{" "}
-                  {dayjs(commitDate).format("YY. M. DD. a h:mm")}{" "}
+                  {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>
               </div>
               <div className="commit-id">

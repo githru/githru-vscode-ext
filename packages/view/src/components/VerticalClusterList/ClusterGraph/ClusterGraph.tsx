@@ -1,5 +1,3 @@
-import "./ClusterGraph.scss";
-
 import { useGlobalData } from "hooks";
 
 import {
@@ -9,6 +7,8 @@ import {
 } from "./ClusterGraph.util";
 import { DETAIL_HEIGHT, SVG_WIDTH } from "./ClusterGraph.const";
 import { useHandleClusterGraph } from "./ClusterGraph.hook";
+
+import "./ClusterGraph.scss";
 
 const ClusterGraph = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();

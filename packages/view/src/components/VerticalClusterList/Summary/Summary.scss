@@ -147,8 +147,6 @@
 
       img {
         border-radius: 50px;
-        width: 30px;
-        height: 30px;
       }
 
       &:hover {
@@ -214,14 +212,9 @@
   }
 }
 
-.cluster-summary__detail__container {
+.detail__container {
   overflow: overlay;
   max-height: 280px;
-}
-
-.detail__container {
   height: 220px;
-  padding: 0 30px;
-  padding-top: 5px;
-  padding-bottom: 20px;
+  padding: 5px 30px 20px;
 }

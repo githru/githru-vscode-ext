@@ -5,8 +5,6 @@ import {
 
 import type { ContentProps } from "../Summary.type";
 
-import "../Summary.scss";
-
 const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
   return (
     <>
