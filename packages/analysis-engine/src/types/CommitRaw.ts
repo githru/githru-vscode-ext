@@ -1,3 +1,5 @@
+import { CommitMessageType } from "./CommitMessageType";
+
 export interface FileChanged {
   [path: string]: {
     insertionCount: number;
@@ -28,4 +30,5 @@ export interface CommitRaw {
   committerDate: Date;
   message: string;
   differenceStatistic: DifferenceStatistic;
+  commitMessageType: CommitMessageType;
 }

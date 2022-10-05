@@ -121,6 +121,7 @@ function createTestCommit(
       totalDeletionCount: 0,
       fileDictionary: {},
     },
+    commitMessageType: "",
     sequence,
     ...fakeCommitData,
   } as CommitRaw;
