@@ -1,0 +1,62 @@
+[
+  {
+    "id": "111",
+    "parents": ["222"],
+    "stemId": "main"
+  },
+  {
+    "id": "222",
+    "parents": ["444"],
+    "stemId": "main"
+  },
+  {
+    "id": "333",
+    "parents": ["666"],
+    "stemId": "fix/git-remote-url-regex"
+  },
+  {
+    "id": "444",
+    "parents": ["666"],
+    "stemId": "main"
+  },
+  {
+    "id": "555",
+    "parents": ["666"],
+    "stemId": "feat/csm-with-pr"
+  },
+  {
+    "id": "666",
+    "parents": ["777"],
+    "stemId": "main"
+  },
+  {
+    "id": "777",
+    "parents": ["888"],
+    "stemId": "main"
+  },
+  {
+    "id": "888",
+    "parents": ["999", "1111"],
+    "stemId": "main"
+  },
+  {
+    "id": "999",
+    "parents": ["2222"],
+    "stemId": "main"
+  },
+  {
+    "id": "1111",
+    "parents": ["2222"],
+    "stemId": "implicit-1"
+  },
+  {
+    "id": "2222",
+    "parents": ["3333"],
+    "stemId": "main"
+  },
+  {
+    "id": "3333",
+    "parents": [],
+    "stemId": "main"
+  }
+]

@@ -7,12 +7,14 @@ import React, {
   useState,
 } from "react";
 
+import type { CommitGraphNode } from "components/VerticalClusterList/CommitGraph/CommitGraph.type";
 import type { ClusterNode } from "types";
 
 import { useGetTotalData } from "./useGetTotalData";
 
 type GlobalDataState = {
   data: ClusterNode[];
+  commitGraphNodes: CommitGraphNode[];
   filteredData: ClusterNode[];
   selectedData: ClusterNode | null;
   setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
@@ -24,7 +26,7 @@ export const GlobalDataContext = createContext<GlobalDataState>(
 );
 
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
-  const { data } = useGetTotalData();
+  const { data, commitGraphNodes } = useGetTotalData();
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode | null>(null);
 
@@ -39,6 +41,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       data,
+      commitGraphNodes,
       filteredData,
       setFilteredData,
       selectedData,
@@ -60,6 +63,7 @@ export const useGlobalData = () => {
   return {
     ...globalData,
     data: globalData?.data ?? [],
+    commitGraphNodes: globalData?.commitGraphNodes ?? [],
     filteredData: globalData?.filteredData ?? [],
     selectedData: globalData?.selectedData ?? null,
   };

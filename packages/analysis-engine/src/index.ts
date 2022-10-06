@@ -59,7 +59,7 @@ export class AnalysisEngine {
     );
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
 
-    return csmDict;
+    return { csmDict, stemDict };
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {

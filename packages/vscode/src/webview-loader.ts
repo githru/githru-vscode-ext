@@ -1,10 +1,19 @@
 import * as vscode from "vscode";
 import * as path from "path";
+
+type WebviewContentData = {
+    clusterNodes: string;
+    commitGraphNodes: string;
+};
 export default class WebviewLoader implements vscode.Disposable {
     private readonly _panel: vscode.WebviewPanel | undefined;
     private fsPath: string;
 
-    constructor(private readonly fileUri: vscode.Uri, private readonly extensionPath: string, data: string) {
+    constructor(
+        private readonly fileUri: vscode.Uri,
+        private readonly extensionPath: string,
+        data: WebviewContentData
+    ) {
         const viewColumn = vscode.ViewColumn.One;
         this.fsPath = fileUri.fsPath;
 
@@ -35,7 +44,9 @@ export default class WebviewLoader implements vscode.Disposable {
         }
     }
 
-    private getWebviewContent(data: string): string {
+    private getWebviewContent(data: WebviewContentData): string {
+        const { clusterNodes, commitGraphNodes } = data;
+
         const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
         const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
@@ -48,7 +59,8 @@ export default class WebviewLoader implements vscode.Disposable {
                     <title>githru-vscode-ext webview</title>
                     <script>
                         window.isProduction = true;
-                        window.githruData = ${data};
+                        window.githruData = ${clusterNodes};
+                        window.commitGraphNodes = ${commitGraphNodes};
                     </script>
                 </head>
                 <body>

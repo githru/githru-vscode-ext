@@ -28,9 +28,30 @@ export function activate(context: vscode.ExtensionContext) {
         const { owner, repo } = getRepo(gitConfig);
 
         const engine = new AnalysisEngine({ isDebugMode: true, gitLog, owner, repo, auth: githubToken });
-        const csmDict = await engine.analyzeGit();
+        const { csmDict, stemDict } = await engine.analyzeGit();
+
         const clusterNodes = mapClusterNodesFrom(csmDict);
-        const data = JSON.stringify(clusterNodes);
+        const commitGraphNodes = Array.from(stemDict.values())
+            .reduce((acc, stem) => {
+                return [
+                    ...acc,
+                    ...stem.nodes.map((node) => ({
+                        stemId: node.stemId,
+                        id: node.commit.id,
+                        parents: node.commit.parents,
+                        sequence: node.commit.sequence,
+                    })),
+                ];
+            }, [] as any)
+            .sort((a: any, b: any) => a.sequence - b.sequence);
+
+        console.log("CommitGraphNodes: ", commitGraphNodes);
+
+        // todo: serialize 최적화 필요
+        const data = {
+            clusterNodes: JSON.stringify(clusterNodes),
+            commitGraphNodes: JSON.stringify(commitGraphNodes),
+        };
 
         subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
 
