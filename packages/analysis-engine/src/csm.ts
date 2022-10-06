@@ -61,6 +61,7 @@ const buildCSMSourceFromPRCommits = (baseCSMNode: CSMNode, pr: PullRequest) =>
         totalInsertionCount,
         totalDeletionCount,
       },
+      commitMessageType: "",
     };
 
     return { commit: prCommitRaw };
