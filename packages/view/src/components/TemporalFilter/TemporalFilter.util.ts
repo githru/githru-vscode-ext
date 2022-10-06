@@ -1,4 +1,5 @@
 import { timeFormat } from "d3";
+import dayjs from "dayjs";
 
 import type { ClusterNode } from "types/NodeTypes.temp";
 import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
@@ -68,8 +69,8 @@ export const getCloc = (d: CommitNode) =>
 export const timeFormatter = timeFormat("%y-%m-%d");
 
 export const getMinMaxDate = (data: CommitNode[]) => [
-  data[0].commit.commitDate,
-  data[data.length - 1].commit.commitDate,
+  dayjs(data[0].commit.commitDate).format("YYYY-MM-DD"),
+  dayjs(data[data.length - 1].commit.commitDate).format("YYYY-MM-DD"),
 ];
 
 export const getCommitDate = (data: CommitNode[]) => data;

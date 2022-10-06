@@ -1,4 +1,4 @@
-import { getTime } from "utils";
+import dayjs from "dayjs";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -18,7 +18,6 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
     { name: "additions", count: insertions },
     { name: "deletions", count: deletions },
   ];
-  console.log(insertions);
 
   return (
     <div className="detail__summary__container">
@@ -55,7 +54,8 @@ const Detail = ({ selectedData }: DetailProps) => {
               <div className="commit-detail">
                 <span className="message">{message} </span>
                 <span className="author-date">
-                  {author.names[0]}, {getTime(commitDate)}{" "}
+                  {author.names[0]},{" "}
+                  {dayjs(commitDate).format("YY. M. DD. a h:mm")}{" "}
                 </span>
               </div>
               <div className="commit-id">

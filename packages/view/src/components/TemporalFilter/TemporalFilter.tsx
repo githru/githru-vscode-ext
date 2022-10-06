@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { useGlobalData } from "hooks";
-import { getYYYYMMDD } from "utils";
 
 import {
   filterDataByDate,
@@ -18,8 +17,8 @@ const TemporalFilter = () => {
   const sortedData = sortBasedOnCommitNode(data);
   const [minDate, maxDate] = getMinMaxDate(sortedData);
   const [filteredPeriod, setFilteredPeriod] = useState({
-    fromDate: getYYYYMMDD(minDate),
-    toDate: getYYYYMMDD(maxDate),
+    fromDate: minDate,
+    toDate: maxDate,
   });
 
   const fromDateChangeHandler = ({
@@ -64,8 +63,8 @@ const TemporalFilter = () => {
               <input
                 className="date-from"
                 type="date"
-                min={getYYYYMMDD(minDate)}
-                max={getYYYYMMDD(maxDate)}
+                min={minDate}
+                max={maxDate}
                 value={filteredPeriod.fromDate}
                 onChange={fromDateChangeHandler}
               />
@@ -73,8 +72,8 @@ const TemporalFilter = () => {
               <input
                 className="date-to"
                 type="date"
-                min={getYYYYMMDD(minDate)}
-                max={getYYYYMMDD(maxDate)}
+                min={minDate}
+                max={maxDate}
                 value={filteredPeriod.toDate}
                 onChange={toDateChangeHandler}
               />
