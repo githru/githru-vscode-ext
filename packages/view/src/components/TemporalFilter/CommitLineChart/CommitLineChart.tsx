@@ -3,9 +3,11 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { useGlobalData } from "hooks";
 
+import "./CommitLineChart.scss";
+import { useWindowResize } from "../TemporalFilter.hook";
 import { getMinMaxDate, sortBasedOnCommitNode } from "../TemporalFilter.util";
 
-import "./CommitLineChart.scss";
+import { COMMIT_STYLING } from "./CommitLineChart.const";
 
 const timeFormatter = d3.timeFormat("%Y %m %d");
 
@@ -15,13 +17,18 @@ const CommitLineChart = () => {
     () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
+  const windowSize = useWindowResize();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current || !data) return;
 
-    const { width, height } = wrapperRef.current.getBoundingClientRect();
+    const width =
+      windowSize.width -
+      COMMIT_STYLING.margin.left -
+      COMMIT_STYLING.margin.right;
+    const { height } = wrapperRef.current.getBoundingClientRect();
 
     const svg = d3
       .select(ref.current)
@@ -80,7 +87,7 @@ const CommitLineChart = () => {
       .attr("class", "temporal-filter__label")
       .attr("x", 5)
       .attr("y", 15);
-  }, [data]);
+  }, [data, windowSize]);
 
   return (
     <div className="commit-line-chart-wrap" ref={wrapperRef}>

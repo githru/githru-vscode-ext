@@ -13,6 +13,8 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "../TemporalFilter.util";
+import { useWindowResize } from "../TemporalFilter.hook";
+import { COMMIT_STYLING } from "../CommitLineChart/CommitLineChart.const";
 
 import { CLOC_STYLING } from "./ClocLineChart.const";
 
@@ -22,13 +24,18 @@ const ClocLineChart = () => {
     () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
+  const windowSize = useWindowResize();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current) return;
 
-    const { width, height } = wrapperRef.current.getBoundingClientRect();
+    const width =
+      windowSize.width -
+      COMMIT_STYLING.margin.left -
+      COMMIT_STYLING.margin.right;
+    const { height } = wrapperRef.current.getBoundingClientRect();
     const svg = d3
       .select(ref.current)
       .attr("width", width - CLOC_STYLING.padding.left)
@@ -60,7 +67,6 @@ const ClocLineChart = () => {
       .y1((d) => yScale(getCloc(d)));
 
     svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
-    svg.append("g").attr("transform", `translate(${width},0)`);
 
     svg
       .append("path")
@@ -74,7 +80,7 @@ const ClocLineChart = () => {
       .attr("class", "temporal-filter__label")
       .attr("x", 5)
       .attr("y", 15);
-  }, [data]);
+  }, [data, windowSize]);
 
   return (
     <div className="cloc-line-chart-wrap " ref={wrapperRef}>
