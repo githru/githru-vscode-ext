@@ -1,19 +1,55 @@
 // TODO: Entire types will be imported from analysis-engine
+export const CommitMessageTypeList = [
+  "build",
+  "chore",
+  "ci",
+  "docs",
+  "feat",
+  "fix",
+  "pert",
+  "refactor",
+  "revert",
+  "style",
+  "test",
+  "", // default - 명시된 타입이 없거나 commitLint rule을 따르지 않은 경우
+];
 
-// todo: engine ComitRaw 와 통일
+const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
+
+export type CommitMessageType = typeof COMMIT_MESSAGE_TYPE[number];
+
+export interface FileChanged {
+  [path: string]: {
+    insertionCount: number;
+    deletionCount: number;
+  };
+}
+
+export interface DifferenceStatistic {
+  totalInsertionCount: number;
+  totalDeletionCount: number;
+  fileDictionary: FileChanged;
+}
+
+export interface GitUser {
+  name: string;
+  email: string;
+}
+// todo: engine CommitRaw 와 통일
 // Holds just commit log raw data
 export type CommitRaw = {
+  sequence: number;
   id: string;
   parents: string[];
-  message: string;
-  author: string;
-  authorDate: string;
-  committer: string;
-  date: string;
-  tags: string[];
   branches: string[];
-
-  // fill necessary properties...
+  tags: string[];
+  author: GitUser;
+  authorDate: Date;
+  committer: GitUser;
+  committerDate: Date;
+  message: string;
+  differenceStatistic: DifferenceStatistic;
+  commitMessageType: CommitMessageType;
 };
 
 // todo: engine DifferenceStatistic 와 통일
