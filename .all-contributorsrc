@@ -145,6 +145,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "momomingzhi",
+      "name": "mong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47150127?v=4",
+      "profile": "https://github.com/momomingzhi",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "commitConvention": "angular"
 }
