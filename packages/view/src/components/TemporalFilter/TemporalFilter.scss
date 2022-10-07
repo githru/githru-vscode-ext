@@ -30,6 +30,8 @@
     height: 120px;
     width: 100%;
     align-content: space-around;
+    position: relative;
+    top: 30px;
   }
 }
 
@@ -48,4 +50,10 @@
     font-weight: 300;
     font-size: 0.825rem;
   }
+}
+
+.temporal-filter__label {
+  font-size: 10px;
+  font-weight: 500;
+  fill: white;
 }

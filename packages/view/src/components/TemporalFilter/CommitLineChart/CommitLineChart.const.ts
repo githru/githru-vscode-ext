@@ -12,10 +12,10 @@ export const COMMIT_STYLING = {
     bottom: 0.1,
     left: 0.5,
   },
-  //   margin: {
-  //     top: 50,
-  //     right: 15,
-  //     bottom: 15,
-  //     left: 10,
-  //   },
+  margin: {
+    top: 50,
+    right: 15,
+    bottom: 15,
+    left: 10,
+  },
 };

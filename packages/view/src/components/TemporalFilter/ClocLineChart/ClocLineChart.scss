@@ -1,7 +1,7 @@
 @import "styles/_pallete";
 
 .cloc-line-chart-wrap {
-  height: 100%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,8 +11,5 @@
 
 .cloc-line-chart {
   overflow: visible;
-  background: #212121;
-  margin: 10px;
-  padding-bottom: 5px;
-  padding-top: 20px;
+  fill: #0077aa;
 }

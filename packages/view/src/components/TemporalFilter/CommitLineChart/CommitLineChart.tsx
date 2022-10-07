@@ -1,24 +1,15 @@
-import {
-  axisBottom,
-  // axisLeft,
-  extent,
-  scaleBand,
-  scaleLinear,
-  scaleTime,
-  select,
-  // ticks,
-  timeFormat,
-  timeTicks,
-} from "d3";
+import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
 import { useGlobalData } from "hooks";
 
+import "./CommitLineChart.scss";
+import { useWindowResize } from "../TemporalFilter.hook";
 import { getMinMaxDate, sortBasedOnCommitNode } from "../TemporalFilter.util";
 
-import "./CommitLineChart.scss";
+import { COMMIT_STYLING } from "./CommitLineChart.const";
 
-const timeFormatter = timeFormat("%Y %m %d");
+const timeFormatter = d3.timeFormat("%Y %m %d");
 
 const CommitLineChart = () => {
   const { filteredData } = useGlobalData();
@@ -26,15 +17,23 @@ const CommitLineChart = () => {
     () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
+  const windowSize = useWindowResize();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current || !data) return;
 
-    const { width, height } = wrapperRef.current.getBoundingClientRect();
+    const width =
+      windowSize.width -
+      COMMIT_STYLING.margin.left -
+      COMMIT_STYLING.margin.right;
+    const { height } = wrapperRef.current.getBoundingClientRect();
 
-    const svg = select(ref.current).attr("width", width).attr("height", height);
+    const svg = d3
+      .select(ref.current)
+      .attr("width", width)
+      .attr("height", height);
 
     // TODO cleanup으로 옮기기
     svg.selectAll("*").remove();
@@ -42,7 +41,6 @@ const CommitLineChart = () => {
 
     data.forEach(({ commit }) => {
       const formattedDate = timeFormatter(new Date(commit.commitDate));
-
       const mapItem = map.get(formattedDate);
 
       map.set(formattedDate, mapItem ? mapItem + 1 : 1);
@@ -53,57 +51,43 @@ const CommitLineChart = () => {
     }));
 
     const [xMin, xMax] = getMinMaxDate(data);
+    const [yMin, yMax] = d3.extent(
+      commitData.map((commit) => commit.commit)
+    ) as [number, number];
 
-    const [yMin, yMax] = extent(commitData.map((commit) => commit.commit)) as [
-      number,
-      number
-    ];
-
-    const xScaleBand = scaleBand<Date>()
-      .domain(commitData.map(({ date }) => new Date(date)))
-      .range([0, width]);
-
-    const xScale = scaleTime()
+    const xScale = d3
+      .scaleTime()
       .domain([new Date(xMin), new Date(xMax)])
       .range([0, width]);
+    const yScale = d3.scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
-    const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
-
-    const xAxis = axisBottom<Date>(xScale)
-      .tickValues(timeTicks(new Date(xMin), new Date(xMax), 7))
+    const xAxis = d3
+      .axisBottom<Date>(xScale)
+      .tickValues(d3.timeTicks(new Date(xMin), new Date(xMax), 7))
       .tickFormat((d) => timeFormatter(new Date(d)));
 
-    // const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
+    const area = d3
+      .area<{ date: string; commit: number }>()
+      .curve(d3.curveBasis)
+      .x((d) => xScale(new Date(d.date)))
+      .y0(yScale(1))
+      .y1((d) => yScale(d.commit));
 
     svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
-    svg.append("g").attr("transform", `translate(${width},0)`);
-
     svg
-      .selectAll(".commit")
-      .data(commitData)
-      .join("rect")
-      .classed("commit", true)
-      // .attr("x", (d) => {
-      //   console.log(xScale(new Date(d.date)));
-      //   return xScale(new Date(d.date));
-      // })
-      .attr("x", (d) => xScale(new Date(d.date)))
-      // .attr("x", (d) => xScale(new Date(d.commit.commitDate)))
-      .attr("y", (d) => yScale(d.commit))
-      .attr("height", (d) => height - yScale(d.commit))
-      .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#0077aa");
+      .append("path")
+      .datum(commitData)
+      .attr("class", "commit-line-chart")
+      .attr("d", area);
 
     svg
       .append("text")
       .text("COMMIT #")
-      .attr("x", "5px")
-      .attr("y", "15px")
-      .attr("font-size", "10px")
-      .attr("font-weight", "500")
-      .attr("fill", "white");
-  }, [data]);
+      .attr("class", "temporal-filter__label")
+      .attr("x", 5)
+      .attr("y", 15);
+  }, [data, windowSize]);
 
   return (
     <div className="commit-line-chart-wrap" ref={wrapperRef}>

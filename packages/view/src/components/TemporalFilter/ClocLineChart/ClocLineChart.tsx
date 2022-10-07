@@ -1,17 +1,20 @@
-import { extent, scaleBand, scaleLinear, scaleTime, select } from "d3";
+import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
 import { useGlobalData } from "hooks";
 
+import "./ClocLineChart.scss";
+// TODO margin 추가하기
+// timeFormatter
+
+import type { CommitNode } from "../TemporalFilter.type";
 import {
   getCloc,
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "../TemporalFilter.util";
-
-import "./ClocLineChart.scss";
-// TODO margin 추가하기
-// timeFormatter
+import { useWindowResize } from "../TemporalFilter.hook";
+import { COMMIT_STYLING } from "../CommitLineChart/CommitLineChart.const";
 
 import { CLOC_STYLING } from "./ClocLineChart.const";
 
@@ -21,14 +24,20 @@ const ClocLineChart = () => {
     () => sortBasedOnCommitNode(filteredData),
     [filteredData]
   );
+  const windowSize = useWindowResize();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current) return;
 
-    const { width, height } = wrapperRef.current.getBoundingClientRect();
-    const svg = select(ref.current)
+    const width =
+      windowSize.width -
+      COMMIT_STYLING.margin.left -
+      COMMIT_STYLING.margin.right;
+    const { height } = wrapperRef.current.getBoundingClientRect();
+    const svg = d3
+      .select(ref.current)
       .attr("width", width - CLOC_STYLING.padding.left)
       .attr(
         "height",
@@ -39,44 +48,39 @@ const ClocLineChart = () => {
     svg.selectAll("*").remove();
 
     const [xMin, xMax] = getMinMaxDate(data);
+    const [yMin, yMax] = d3.extent(data, (d) => getCloc(d)) as [number, number];
 
-    const [yMin, yMax] = extent(data, (d) => getCloc(d)) as [number, number];
-
-    const xScale = scaleTime()
+    const xScale = d3
+      .scaleTime()
       .domain([new Date(xMin), new Date(xMax)])
       .range([0, width]);
 
-    const xScaleBand = scaleBand<string>()
-      .domain(data.map((commitNode) => commitNode.commit.commitDate))
-      .range([0, width]);
+    const yScale = d3.scaleLinear().domain([yMin, yMax]).range([height, 0]);
 
-    // const xAxis = axisBottom<Date>(xScale);
-    const yScale = scaleLinear().domain([yMin, yMax]).range([height, 0]);
+    const xAxis = d3.axisBottom<Date>(xScale).tickSize(0).ticks(0);
 
-    // const yAxis = axisLeft(yScale).tickValues(ticks(yMin, yMax, 5));
-    // svg.append("g").call(yAxis);
-    // svg.append("g").attr("transform", `translate(${width},0)`);
+    const area = d3
+      .area<CommitNode>()
+      .curve(d3.curveBasis)
+      .x((d) => xScale(new Date(d.commit.commitDate)))
+      .y0(yScale(1))
+      .y1((d) => yScale(getCloc(d)));
+
+    svg.append("g").call(xAxis).attr("transform", `translate(0,${height})`);
 
     svg
-      .selectAll(".cloc")
-      .data(data)
-      .join("rect")
-      .classed("cloc", true)
-      .attr("x", (d) => xScale(new Date(d.commit.commitDate)))
-      .attr("y", (d) => yScale(getCloc(d)))
-      .attr("height", (d) => height - yScale(getCloc(d)))
-      .attr("width", xScaleBand.bandwidth())
-      .attr("fill", "#0077aa");
+      .append("path")
+      .datum(data)
+      .attr("class", "cloc-line-chart")
+      .attr("d", area);
 
     svg
       .append("text")
       .text("CLOC #")
-      .attr("x", "5px")
-      .attr("y", "15px")
-      .attr("font-size", "10px")
-      .attr("font-weight", "500")
-      .attr("fill", "white");
-  }, [data]);
+      .attr("class", "temporal-filter__label")
+      .attr("x", 5)
+      .attr("y", 15);
+  }, [data, windowSize]);
 
   return (
     <div className="cloc-line-chart-wrap " ref={wrapperRef}>
