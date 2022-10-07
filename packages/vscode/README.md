@@ -33,16 +33,13 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 
-
-
 ### 0.1.0
 
 Initial release.
 
-<!-- ### 1.0.1
+### 0.2.0
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z. -->
+- New Logo!
+- GitHub User Avatar
+- GitHub Pull Request Association
+- Author Filtering
