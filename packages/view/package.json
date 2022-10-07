@@ -1,6 +1,6 @@
 {
   "name": "@githru-vscode-ext/view",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "view module for githru",
   "engines": {
     "node": ">=16",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/runtime": "^7.18.9",
-    "@githru-vscode-ext/analysis-engine": "^0.1.0",
+    "@githru-vscode-ext/analysis-engine": "^0.2.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@types/d3": "^7.4.0",
     "@types/jest": "^28.1.7",
