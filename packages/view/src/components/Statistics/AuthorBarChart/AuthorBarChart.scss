@@ -58,13 +58,13 @@
       &:hover {
         rect {
           fill: transparent;
-          stroke: #0077aa;
+          stroke: #ff8272;
           stroke-width: 2;
         }
       }
 
       rect {
-        fill: #0077aa;
+        fill: #ff8272;
       }
 
       .name {
@@ -90,7 +90,7 @@
   color: $gray-900;
 
   .selected {
-    color: #0077aa;
+    color: #ff8272;
     font-weight: bold;
   }
   .name {
