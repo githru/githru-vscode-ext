@@ -56,8 +56,13 @@ export const getCommitListDetail = ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const take = (l: number, arr: any[]) => {
   const res = [];
-  for (const item of arr) {
-    if (res.length < l) res.push(item);
+  for (
+    let item = arr.length - 1;
+    arr.length >= 5 ? item > arr.length - 1 - l : item >= 0;
+    item -= 1
+  ) {
+    res.push(arr[item]);
   }
+
   return res;
 };
