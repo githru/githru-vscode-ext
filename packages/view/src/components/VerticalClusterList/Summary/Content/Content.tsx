@@ -15,7 +15,7 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
         </span>
       </div>
       <div className="collapsible-icon">
-        {clusterId === selectedClusterId ? (
+        {selectedClusterId.includes(clusterId) ? (
           <IoIosArrowDropupCircle className="show" />
         ) : (
           <IoIosArrowDropdownCircle />

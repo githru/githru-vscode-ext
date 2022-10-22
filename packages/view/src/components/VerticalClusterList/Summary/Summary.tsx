@@ -61,9 +61,12 @@ const Summary = () => {
                 />
               </div>
             </button>
-            {cluster.clusterId === selectedClusterId && (
+            {selectedClusterId.includes(cluster.clusterId) && (
               <div className="detail__container" ref={scrollRef}>
-                <Detail selectedData={selectedData} />
+                <Detail
+                  selectedData={selectedData}
+                  clusterId={cluster.clusterId}
+                />
               </div>
             )}
           </div>
