@@ -8,8 +8,8 @@ export type ClusterGraphElement = {
   cluster: ClusterNode;
   clusterSize: number;
   selected: {
-    prev: number;
-    current: number;
+    prev: number[];
+    current: number[];
   };
 };
 

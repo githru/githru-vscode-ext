@@ -22,7 +22,10 @@ export function getClusterPosition(
   isPrev = false
 ) {
   const selected = isPrev ? d.selected.prev : d.selected.current;
-  const margin = selected >= 0 && selected < i ? detailElementHeight : 0;
+  const selectedLength = selected.filter(
+    (selectedIdx) => selectedIdx < i
+  ).length;
+  const margin = selectedLength * detailElementHeight;
   const x = SVG_MARGIN.left;
   const y = SVG_MARGIN.top + i * (CLUSTER_HEIGHT + NODE_GAP) + margin;
   return `translate(${x}, ${y})`;
@@ -32,9 +35,11 @@ export function getSelectedIndex(
   data: ClusterNode[],
   selectedData: SelectedDataProps
 ) {
-  const selectedId = selectedData?.commitNodeList[0].clusterId;
-  const selectedIndex = data.findIndex(
-    (item) => item.commitNodeList[0].clusterId === selectedId
-  );
-  return selectedIndex;
+  const selectedClusterIds = selectedData
+    .map((selected) => selected.commitNodeList[0].clusterId)
+    .map((clusterId) =>
+      data.findIndex((item) => item.commitNodeList[0].clusterId === clusterId)
+    )
+    .filter((idx) => idx !== -1);
+  return selectedClusterIds;
 }

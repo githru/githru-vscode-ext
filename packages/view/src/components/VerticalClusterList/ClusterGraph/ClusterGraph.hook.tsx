@@ -63,12 +63,9 @@ const drawLink = (
     .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
     .attr("y1", (d) => d.start)
     .attr("x2", SVG_MARGIN.left + GRAPH_WIDTH / 2)
-    .attr("y2", (d) => d.end + (d.selected.prev < 0 ? 0 : detailElementHeight))
+    .attr("y2", (d) => d.end + d.selected.prev.length * detailElementHeight)
     .transition()
-    .attr(
-      "y2",
-      (d) => d.end + (d.selected.current < 0 ? 0 : detailElementHeight)
-    );
+    .attr("y2", (d) => d.end + d.selected.current.length * detailElementHeight);
 };
 
 const drawClusterGraph = (
@@ -109,11 +106,11 @@ export const useHandleClusterGraph = ({
 }: {
   data: ClusterNode[];
   clusterSizes: number[];
-  selectedIndex: number;
-  setSelectedData: Dispatch<React.SetStateAction<ClusterNode | null>>;
+  selectedIndex: number[];
+  setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const prevSelected = useRef<number>(-1);
+  const prevSelected = useRef<number[]>([-1]);
 
   const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
