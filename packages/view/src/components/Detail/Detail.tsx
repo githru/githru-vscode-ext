@@ -34,8 +34,11 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   );
 };
 
-const Detail = ({ selectedData }: DetailProps) => {
-  const commitNodeListInCluster = selectedData?.commitNodeList ?? [];
+const Detail = ({ selectedData, clusterId }: DetailProps) => {
+  const commitNodeListInCluster =
+    selectedData?.filter(
+      (selected) => selected.commitNodeList[0].clusterId === clusterId
+    )[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(
     commitNodeListInCluster
   );

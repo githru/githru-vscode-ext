@@ -14,9 +14,9 @@ import { useGetTotalData } from "./useGetTotalData";
 type GlobalDataState = {
   data: ClusterNode[];
   filteredData: ClusterNode[];
-  selectedData: ClusterNode | null;
+  selectedData: ClusterNode[];
   setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
-  setSelectedData: Dispatch<React.SetStateAction<ClusterNode | null>>;
+  setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
 };
 
 export const GlobalDataContext = createContext<GlobalDataState>(
@@ -26,14 +26,14 @@ export const GlobalDataContext = createContext<GlobalDataState>(
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const { data } = useGetTotalData();
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
-  const [selectedData, setSelectedData] = useState<ClusterNode | null>(null);
+  const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
 
   useEffect(() => {
     setFilteredData(data.reverse());
   }, [data]);
 
   useEffect(() => {
-    setSelectedData(null);
+    setSelectedData([]);
   }, [filteredData]);
 
   const value = useMemo(

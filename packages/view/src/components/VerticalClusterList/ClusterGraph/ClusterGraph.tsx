@@ -15,7 +15,7 @@ const ClusterGraph = () => {
   const clusterSizes = getClusterSizes(data);
   const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight =
-    getGraphHeight(clusterSizes) + (selectedIndex < 0 ? 0 : DETAIL_HEIGHT);
+    getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
 
   const svgRef = useHandleClusterGraph({
     data,

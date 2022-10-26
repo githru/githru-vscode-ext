@@ -74,6 +74,6 @@ export function getClusterById(clusters: ClusterNode[], clusterId: number) {
 }
 
 export function getClusterIds(selectedData: SelectedDataProps) {
-  if (!selectedData) return null;
-  return selectedData.commitNodeList[0].clusterId;
+  if (selectedData.length === 0) return [];
+  return selectedData.map((selected) => selected.commitNodeList[0].clusterId);
 }
