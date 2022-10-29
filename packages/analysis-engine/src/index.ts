@@ -11,6 +11,7 @@ type AnalysisEngineArgs = {
   gitLog: string;
   owner: string;
   repo: string;
+  baseBranchName: string;
   auth?: string;
 };
 
@@ -21,15 +22,16 @@ export class AnalysisEngine {
 
   private octokit!: PluginOctokit;
 
-  private baseBranchName = "main";
+  private baseBranchName!: string;
 
   constructor(args: AnalysisEngineArgs) {
     this.insertArgs(args);
   }
 
   private insertArgs = (args: AnalysisEngineArgs) => {
-    const { isDebugMode, gitLog, owner, repo, auth } = args;
+    const { isDebugMode, gitLog, owner, repo, auth, baseBranchName } = args;
     this.gitLog = gitLog;
+    this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
     container.register("OctokitOptions", {
       useValue: {
@@ -44,6 +46,7 @@ export class AnalysisEngine {
   };
 
   public analyzeGit = async () => {
+    if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
     const commitRaws = getCommitRaws(this.gitLog);
     if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
     const commitDict = buildCommitDict(commitRaws);
