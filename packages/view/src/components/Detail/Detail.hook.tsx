@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import type { CommitNode } from "types";
 
-import { take } from "./Detail.util";
+import { getSummaryCommitList } from "./Detail.util";
 
 type UseToggleHook = [boolean, () => void];
 const useToggleHook = (init = false): UseToggleHook => {
@@ -12,7 +12,7 @@ const useToggleHook = (init = false): UseToggleHook => {
 };
 
 export const useCommitListHide = (commitNodeListInCluster: CommitNode[]) => {
-  const list = take(5, commitNodeListInCluster);
+  const list = getSummaryCommitList(5, commitNodeListInCluster);
   const strech = commitNodeListInCluster
     .slice(0, commitNodeListInCluster.length - 5)
     .reverse();

@@ -53,8 +53,7 @@ export const getCommitListDetail = ({
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const take = (l: number, arr: any[]) => {
+export const getSummaryCommitList = (l: number, arr: CommitNode[]) => {
   const res = [];
   for (
     let item = arr.length - 1;
