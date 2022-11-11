@@ -1,7 +1,7 @@
 import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 import { COMMAND_LAUNCH } from "./commands";
-import { findGit, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
+import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import WebviewLoader from "./webview-loader";
 
@@ -26,8 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
         const { owner, repo } = getRepo(gitConfig);
+        const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
+        const baseBranchName = getBaseBranchName(branchNames);
 
-        const engine = new AnalysisEngine({ isDebugMode: true, gitLog, owner, repo, auth: githubToken });
+        const engine = new AnalysisEngine({ isDebugMode: true, gitLog, owner, repo, auth: githubToken, baseBranchName });
         const csmDict = await engine.analyzeGit();
         const clusterNodes = mapClusterNodesFrom(csmDict);
         const data = JSON.stringify(clusterNodes);

@@ -195,3 +195,36 @@ export const getRepo = (gitRemoteConfig: string) => {
 
 	return { owner, repo };
 }
+
+export async function getBranchNames(path: string, repo: string): Promise<string[]> {
+	return new Promise((resolve, reject) => {
+		resolveSpawnOutput(
+			cp.spawn(path, ["branch"], {
+				cwd: repo,
+				env: Object.assign({}, process.env),
+			})
+		).then((values) => {
+			const status = values[0], stdout = values[1], stderr = values[2];
+			if (status.code === 0) {
+				const branches = stdout
+					.toString()
+					.split("\n")
+					.map((name) => name.replace("*", "").trim());
+				resolve(branches);
+			} else {
+				reject(stderr);
+			}
+		});
+	});
+}
+
+export function getBaseBranchName(branchNames: string[]): string {
+	for (const name of branchNames) {
+		if (name === "main") {
+			return "main";
+		} else if (name === "master") {
+			return "master";
+		}
+	}
+	return branchNames[0];
+}
