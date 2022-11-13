@@ -84,6 +84,9 @@ const drawClusterGraph = (
     .attr("transform", (d, i) =>
       getClusterPosition(d, i, detailElementHeight, true)
     );
+
+  group.append("title").text((d) => d.clusterSize);
+
   group
     .transition()
     .duration(300)
