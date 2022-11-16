@@ -72,6 +72,7 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
                   onKeyDown={handleHashCodeCopy(id)}
                 >
                   {id.slice(0, 6)}
+                  <span className="commit-id__tooltip">{id}</span>
                 </span>
               </div>
             </li>
