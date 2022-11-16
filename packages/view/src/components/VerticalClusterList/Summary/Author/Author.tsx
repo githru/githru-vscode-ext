@@ -15,7 +15,7 @@ const Author = ({ name }: AuthorProps) => {
 
   return (
     <div className="name" data-tooltip-text={name}>
-      <img ref={imgRef} src={src} onError={onError} alt="profileImage" />
+      <img ref={imgRef} src={src} onError={onError} alt="" />
     </div>
   );
 };
