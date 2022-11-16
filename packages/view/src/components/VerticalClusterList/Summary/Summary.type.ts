@@ -1,5 +1,6 @@
 export type AuthorProps = {
   name: string;
+  src: string;
 };
 
 export type Content = {
@@ -21,4 +22,9 @@ export type Summary = {
 export type Cluster = {
   clusterId: number;
   summary: Summary;
+};
+
+export type SrcInfo = {
+  key: string;
+  value: string;
 };
