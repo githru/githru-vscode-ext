@@ -1,4 +1,3 @@
-import { timeFormat } from "d3";
 import dayjs from "dayjs";
 
 import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
@@ -27,6 +26,7 @@ type FilterDataByDateProps = {
   fromDate: string;
   toDate: string;
 };
+
 /**
  * Note: 날짜 범위에 따라 필터링
  */
@@ -40,12 +40,13 @@ export function filterDataByDate({
       return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
         return (
           new Date(commitNode.commit.commitDate) >=
+            new Date(`${fromDate} 00:00:00`) &&
+          new Date(commitNode.commit.commitDate) <=
             new Date(`${toDate} 23:59:59`)
         );
       });
     })
     .filter((commitNodeList) => commitNodeList.length > 0)
-    .map((commitNodeList): ClusterNode => {
     .map(
       (commitNodeList): ClusterNode => ({
         nodeTypeName: NODE_TYPE_NAME[1],
@@ -57,11 +58,7 @@ export function filterDataByDate({
 export const getCloc = (d: CommitNode) =>
   d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
 
-export const timeFormatter = timeFormat("%y-%m-%d");
-
 export const getMinMaxDate = (data: CommitNode[]) => [
   dayjs(data[0].commit.commitDate).format("YYYY-MM-DD"),
   dayjs(data[data.length - 1].commit.commitDate).format("YYYY-MM-DD"),
 ];
-
-export const getCommitDate = (data: CommitNode[]) => data;

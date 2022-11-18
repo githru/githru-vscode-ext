@@ -18,40 +18,6 @@ const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
 
 export type CommitMessageType = typeof COMMIT_MESSAGE_TYPE[number];
 
-export interface FileChanged {
-  [path: string]: {
-    insertionCount: number;
-    deletionCount: number;
-  };
-}
-
-export interface DifferenceStatistic {
-  totalInsertionCount: number;
-  totalDeletionCount: number;
-  fileDictionary: FileChanged;
-}
-
-export interface GitUser {
-  name: string;
-  email: string;
-}
-// todo: engine CommitRaw 와 통일
-// Holds just commit log raw data
-export type CommitRaw = {
-  sequence: number;
-  id: string;
-  parents: string[];
-  branches: string[];
-  tags: string[];
-  author: GitUser;
-  authorDate: Date;
-  committer: GitUser;
-  committerDate: Date;
-  message: string;
-  differenceStatistic: DifferenceStatistic;
-  commitMessageType: CommitMessageType;
-};
-
 // todo: engine DifferenceStatistic 와 통일
 export type DiffStatistics = {
   changedFileCount: number;
@@ -89,10 +55,6 @@ export type NodeTypeName = typeof NODE_TYPE_NAME[number];
 
 export type NodeBase = {
   nodeTypeName: NodeTypeName;
-  // isRootNode: boolean;
-  // isLeafNode: boolean;
-
-  // getParents: () => NodeType[];
 };
 
 export type NodeType = CommitNode | ClusterNode;
@@ -101,11 +63,8 @@ export type NodeType = CommitNode | ClusterNode;
 export type CommitNode = NodeBase & {
   nodeTypeName: "COMMIT";
   commit: Commit;
-  // seq: number;
+  seq: number;
   clusterId: number; // 동일한 Cluster 내부 commit 참조 id
-  // hasMajorTag: boolean;
-  // hasMinorTag: boolean;
-  // isMergeCommit: boolean;
 };
 
 export type ClusterNode = NodeBase & {
