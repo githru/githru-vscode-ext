@@ -33,34 +33,28 @@ type FilterDataByDateProps = {
 /**
  * Note: 날짜 범위에 따라 필터링
  */
-export function filterDataByDate(props: FilterDataByDateProps): ClusterNode[] {
-  const { data, fromDate, toDate } = props;
-
-  const filteredData = data
+export function filterDataByDate({
+  data,
+  fromDate,
+  toDate,
+}: FilterDataByDateProps): ClusterNode[] {
+  return data
     .map((clusterNode) => {
-      const filteredCommitNodeList = clusterNode.commitNodeList.filter(
-        (commitNode: CommitNode) => {
-          if (
-            new Date(commitNode.commit.commitDate) >=
-              new Date(`${fromDate} 00:00:00`) &&
-            new Date(commitNode.commit.commitDate) <=
-              new Date(`${toDate} 23:59:59`)
-          ) {
-            return true;
-          }
-          return false;
-        }
-      );
-      return filteredCommitNodeList;
+      return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
+        return (
+          new Date(commitNode.commit.commitDate) >=
+            new Date(`${toDate} 23:59:59`)
+        );
+      });
     })
     .filter((commitNodeList) => commitNodeList.length > 0)
     .map((commitNodeList): ClusterNode => {
-      return {
+    .map(
+      (commitNodeList): ClusterNode => ({
         nodeTypeName: NODE_TYPE_NAME[1],
         commitNodeList,
-      };
-    });
-  return filteredData;
+      })
+    );
 }
 
 export const getCloc = (d: CommitNode) =>
