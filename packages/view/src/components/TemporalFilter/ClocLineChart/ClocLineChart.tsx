@@ -7,7 +7,7 @@ import "./ClocLineChart.scss";
 // TODO margin 추가하기
 // timeFormatter
 
-import type { CommitNode } from "../TemporalFilter.type";
+import type { CommitNode } from "types/NodeTypes.temp";
 import {
   getCloc,
   getMinMaxDate,

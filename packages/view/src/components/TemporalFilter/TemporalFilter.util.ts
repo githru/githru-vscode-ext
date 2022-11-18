@@ -1,11 +1,8 @@
 import { timeFormat } from "d3";
 import dayjs from "dayjs";
 
-import type { ClusterNode } from "types/NodeTypes.temp";
+import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
 import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
-
-import type { CommitNode } from "./TemporalFilter.type";
-// import { CommitH } from "./CommitLineChart/CommitLineChart.const";
 
 /**
  * Note: Line Chart를 위한 시간순 CommitNode 정렬
