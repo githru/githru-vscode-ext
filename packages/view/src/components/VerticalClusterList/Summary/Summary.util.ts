@@ -1,3 +1,5 @@
+import md5 from "md5";
+
 import type {
   GlobalProps,
   CommitNode,
@@ -5,7 +7,8 @@ import type {
   SelectedDataProps,
 } from "types";
 
-import type { Cluster } from "./Summary.type";
+import { GITHUB_URL, GRAVATA_URL } from "./Summary.const";
+import type { Cluster, SrcInfo } from "./Summary.type";
 
 export function getInitData({ data }: GlobalProps) {
   const clusters: Cluster[] = [];
@@ -67,4 +70,48 @@ export function getClusterById(clusters: ClusterNode[], clusterId: number) {
 export function getClusterIds(selectedData: SelectedDataProps) {
   if (selectedData.length === 0) return [];
   return selectedData.map((selected) => selected.commitNodeList[0].clusterId);
+}
+
+function getAuthorNames(data: ClusterNode[]) {
+  const clusterNodes = getInitData({ data });
+  const authorNames = clusterNodes
+    .map((clusterNode) => clusterNode.summary.authorNames.flat())
+    .flat();
+  const setAuthorNames = new Set(authorNames);
+  return Array.from(setAuthorNames);
+}
+
+function getAuthorProfileImgSrc(authorName: string) {
+  return new Promise((resolve) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const { src } = img;
+      const srcInfo: SrcInfo = {
+        key: authorName,
+        value: src,
+      };
+      resolve(srcInfo);
+    };
+
+    img.onerror = () => {
+      const fallback = `${GRAVATA_URL}/${md5(authorName)}}?d=identicon&f=y`;
+      img.src = fallback;
+    };
+
+    const src = `${GITHUB_URL}/${authorName}.png?size=30`;
+    img.src = src;
+  });
+}
+
+export async function getAuthSrcMap(data: ClusterNode[]) {
+  const authSrcMap = {};
+  const authorNames = getAuthorNames(data);
+  const promiseAuthSrc = authorNames.map(getAuthorProfileImgSrc);
+  const authSrcs = await Promise.all(promiseAuthSrc);
+  authSrcs.forEach((srcInfo) => {
+    const { key, value } = srcInfo as SrcInfo;
+    authSrcMap[key] = value;
+  });
+  return authSrcMap;
 }

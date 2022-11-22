@@ -5,18 +5,18 @@ import { useGlobalData } from "hooks";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
-import type { Cluster } from "./Summary.type";
-import { Author } from "./Author";
-import { Content } from "./Content";
-import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
-
 import "./Summary.scss";
+import { usePreLoadAuthorImg } from "./Summary.hook";
+import { getInitData, getClusterIds, getClusterById } from "./Summary.util";
+import { Content } from "./Content";
+import { Author } from "./Author";
+import type { Cluster } from "./Summary.type";
 
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const clusters = getInitData({ data });
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const authSrcMap = usePreLoadAuthorImg();
   const selectedClusterId = getClusterIds(selectedData);
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
@@ -49,7 +49,11 @@ const Summary = () => {
                   {cluster.summary.authorNames.map(
                     (authorArray: Array<string>) => {
                       return authorArray.map((authorName: string) => (
-                        <Author key={authorName} name={authorName} />
+                        <Author
+                          key={authorName}
+                          name={authorName}
+                          src={authSrcMap[authorName]}
+                        />
                       ));
                     }
                   )}
