@@ -43,7 +43,7 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
     commitNodeListInCluster
   );
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
-  const handleHashCodeCopy = (id: string) => async () => {
+  const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
 
@@ -66,10 +66,10 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
               </div>
               <div className="commit-id">
                 <span
-                  onClick={handleHashCodeCopy(id)}
+                  onClick={handleCommitIdCopy(id)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={handleHashCodeCopy(id)}
+                  onKeyDown={handleCommitIdCopy(id)}
                 >
                   {id.slice(0, 6)}
                   <span className="commit-id__tooltip">{id}</span>
