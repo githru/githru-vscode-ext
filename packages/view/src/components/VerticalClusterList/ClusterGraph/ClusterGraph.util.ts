@@ -35,11 +35,10 @@ export function getSelectedIndex(
   data: ClusterNode[],
   selectedData: SelectedDataProps
 ) {
-  const selectedClusterIds = selectedData
+  return selectedData
     .map((selected) => selected.commitNodeList[0].clusterId)
     .map((clusterId) =>
       data.findIndex((item) => item.commitNodeList[0].clusterId === clusterId)
     )
     .filter((idx) => idx !== -1);
-  return selectedClusterIds;
 }

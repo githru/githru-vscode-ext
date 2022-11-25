@@ -2,12 +2,10 @@ import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
 import { useGlobalData } from "hooks";
+import type { CommitNode } from "types/NodeTypes.temp";
 
 import "./ClocLineChart.scss";
-// TODO margin 추가하기
-// timeFormatter
 
-import type { CommitNode } from "../TemporalFilter.type";
 import {
   getCloc,
   getMinMaxDate,
@@ -18,6 +16,8 @@ import { COMMIT_STYLING } from "../CommitLineChart/CommitLineChart.const";
 
 import { CLOC_STYLING } from "./ClocLineChart.const";
 
+// TODO margin 추가하기
+// timeFormatter
 const ClocLineChart = () => {
   const { filteredData } = useGlobalData();
   const data = useMemo(

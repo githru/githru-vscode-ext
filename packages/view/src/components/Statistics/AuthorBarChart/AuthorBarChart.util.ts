@@ -54,7 +54,7 @@ export const sortDataByAuthor = (
   data: ClusterNode[],
   author: string
 ): ClusterNode[] => {
-  const sortedData = data.reduce((acc: ClusterNode[], cluster: ClusterNode) => {
+  return data.reduce((acc: ClusterNode[], cluster: ClusterNode) => {
     const checkedCluster = cluster.commitNodeList.filter(
       (commitNode: CommitNode) =>
         commitNode.commit.author.names.includes(author)
@@ -65,5 +65,4 @@ export const sortDataByAuthor = (
       { nodeTypeName: "CLUSTER" as const, commitNodeList: checkedCluster },
     ];
   }, []);
-  return sortedData;
 };

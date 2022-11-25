@@ -1,11 +1,7 @@
-import { timeFormat } from "d3";
 import dayjs from "dayjs";
 
-import type { ClusterNode } from "types/NodeTypes.temp";
+import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
 import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
-
-import type { CommitNode } from "./TemporalFilter.type";
-// import { CommitH } from "./CommitLineChart/CommitLineChart.const";
 
 /**
  * Note: Line Chart를 위한 시간순 CommitNode 정렬
@@ -30,47 +26,39 @@ type FilterDataByDateProps = {
   fromDate: string;
   toDate: string;
 };
+
 /**
  * Note: 날짜 범위에 따라 필터링
  */
-export function filterDataByDate(props: FilterDataByDateProps): ClusterNode[] {
-  const { data, fromDate, toDate } = props;
-
-  const filteredData = data
+export function filterDataByDate({
+  data,
+  fromDate,
+  toDate,
+}: FilterDataByDateProps): ClusterNode[] {
+  return data
     .map((clusterNode) => {
-      const filteredCommitNodeList = clusterNode.commitNodeList.filter(
-        (commitNode: CommitNode) => {
-          if (
-            new Date(commitNode.commit.commitDate) >=
-              new Date(`${fromDate} 00:00:00`) &&
-            new Date(commitNode.commit.commitDate) <=
-              new Date(`${toDate} 23:59:59`)
-          ) {
-            return true;
-          }
-          return false;
-        }
-      );
-      return filteredCommitNodeList;
+      return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
+        return (
+          new Date(commitNode.commit.commitDate) >=
+            new Date(`${fromDate} 00:00:00`) &&
+          new Date(commitNode.commit.commitDate) <=
+            new Date(`${toDate} 23:59:59`)
+        );
+      });
     })
     .filter((commitNodeList) => commitNodeList.length > 0)
-    .map((commitNodeList): ClusterNode => {
-      return {
+    .map(
+      (commitNodeList): ClusterNode => ({
         nodeTypeName: NODE_TYPE_NAME[1],
         commitNodeList,
-      };
-    });
-  return filteredData;
+      })
+    );
 }
 
 export const getCloc = (d: CommitNode) =>
   d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
 
-export const timeFormatter = timeFormat("%y-%m-%d");
-
 export const getMinMaxDate = (data: CommitNode[]) => [
   dayjs(data[0].commit.commitDate).format("YYYY-MM-DD"),
   dayjs(data[data.length - 1].commit.commitDate).format("YYYY-MM-DD"),
 ];
-
-export const getCommitDate = (data: CommitNode[]) => data;
