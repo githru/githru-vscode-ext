@@ -18,7 +18,7 @@ export default class WebviewLoader implements vscode.Disposable {
             this.respondToMessage(message)
         );
 
-        this._panel.webview.html = this.getWebviewContent(data);
+        this._panel.webview.html = this.getWebviewContent(this._panel.webview, data);
     }
 
     dispose() {
@@ -35,9 +35,10 @@ export default class WebviewLoader implements vscode.Disposable {
         }
     }
 
-    private getWebviewContent(data: string): string {
+    private getWebviewContent(webview:vscode.Webview, data: string): string {
         const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
-        const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
+        const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
+        // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
         const returnString = `
             <!DOCTYPE html>
