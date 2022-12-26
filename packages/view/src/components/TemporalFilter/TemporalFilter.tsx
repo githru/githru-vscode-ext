@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import * as d3 from "d3";
 
 import { useGlobalData } from "hooks";
 
@@ -7,19 +8,60 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
-import { ClocLineChart } from "./ClocLineChart";
-import { CommitLineChart } from "./CommitLineChart";
 
 import "./TemporalFilter.scss";
+import drawLineChart from "./LineChart";
+import type { LineChartData } from "./LineChart";
+import { useWindowResize } from "./TemporalFilter.hook";
 
 const TemporalFilter = () => {
-  const { data, setFilteredData } = useGlobalData();
+  const { data, filteredData, setFilteredData } = useGlobalData();
+  const sortedFilteredData = useMemo(
+    () => sortBasedOnCommitNode(filteredData),
+    [filteredData]
+  );
   const sortedData = sortBasedOnCommitNode(data);
   const [minDate, maxDate] = getMinMaxDate(sortedData);
   const [filteredPeriod, setFilteredPeriod] = useState({
     fromDate: minDate,
     toDate: maxDate,
   });
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<SVGSVGElement>(null);
+
+  const clocLineChartData: LineChartData[] = useMemo(
+    () =>
+      sortedFilteredData.map((datum) => {
+        return {
+          dateString: datum.commit.commitDate,
+          value:
+            datum.commit.diffStatistics.insertions +
+            datum.commit.diffStatistics.deletions,
+        };
+      }),
+    [sortedFilteredData]
+  );
+
+  const commitLineChartData: LineChartData[] = useMemo(() => {
+    const sortedCommitData = sortBasedOnCommitNode(filteredData);
+    const map: Map<string, number> = new Map();
+    const timeFormatter = d3.timeFormat("%Y %m %d");
+
+    sortedCommitData.forEach(({ commit }) => {
+      const formattedDate = timeFormatter(new Date(commit.commitDate));
+      const mapItem = map.get(formattedDate);
+
+      map.set(formattedDate, mapItem ? mapItem + 1 : 1);
+    });
+
+    return Array.from(map.entries()).map(([key, value]) => {
+      return {
+        dateString: key,
+        value: value,
+      };
+    });
+  }, [filteredData]);
 
   const fromDateChangeHandler = ({
     target,
@@ -32,8 +74,7 @@ const TemporalFilter = () => {
     if (fromDate === "" || toDate === "") {
       setFilteredData(data);
     } else {
-      const filteredData = filterDataByDate({ data, fromDate, toDate });
-      setFilteredData(filteredData);
+      setFilteredData(filterDataByDate({ data, fromDate, toDate }));
     }
   };
 
@@ -48,10 +89,49 @@ const TemporalFilter = () => {
     if (fromDate === "" || toDate === "") {
       setFilteredData(data);
     } else {
-      const filteredData = filterDataByDate({ data, fromDate, toDate });
-      setFilteredData(filteredData);
+      setFilteredData(filterDataByDate({ data, fromDate, toDate }));
     }
   };
+
+  const windowSize = useWindowResize();
+
+  useEffect(() => {
+    if (!wrapperRef.current || !ref.current) return undefined;
+
+    // d3.select(ref.current)
+    //   .attr("width", windowSize.width - CLOC_STYLING.padding.left)
+    //   .attr("height", windowSize.height);
+
+    const axisHeight = 20;
+    const chartHeight =
+      (wrapperRef.current.getBoundingClientRect().height - axisHeight) / 2;
+
+    // CLOC
+    drawLineChart(
+      ref.current,
+      clocLineChartData,
+      windowSize.width,
+      chartHeight,
+      0,
+      false,
+      "CLOC #"
+    );
+
+    // COMMIT
+    drawLineChart(
+      ref.current,
+      commitLineChartData,
+      windowSize.width,
+      chartHeight,
+      chartHeight,
+      true,
+      "COMMIT #"
+    );
+
+    return () => {
+      d3.select(ref.current).selectAll("g").remove();
+    };
+  }, [sortedFilteredData, windowSize]);
 
   return (
     <article className="temporal-filter">
@@ -81,9 +161,8 @@ const TemporalFilter = () => {
           </form>
         </section>
       </div>
-      <div className="line-chart">
-        <ClocLineChart />
-        <CommitLineChart />
+      <div className="line-charts" ref={wrapperRef}>
+        <svg className="line-charts-svg" ref={ref} />
       </div>
     </article>
   );
