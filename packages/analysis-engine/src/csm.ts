@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 import type {
-  CommitRaw,
   CommitNode,
   StemDict,
   CSMDictionary,
@@ -9,99 +8,10 @@ import type {
   PullRequest,
   PullRequestDict,
 } from "./types";
-
-/**
- * PR 기반 CSM-Source 생성
- */
-const buildCSMSourceFromPRCommits = (baseCSMNode: CSMNode, pr: PullRequest) =>
-  pr.commitDetails.data.map((commitDetail) => {
-    const {
-      sha,
-      parents,
-      commit: { author, committer, message },
-      files,
-    } = commitDetail;
-
-    let totalInsertionCount = 0;
-    let totalDeletionCount = 0;
-    const fileDictionary =
-      files?.reduce((dict, f) => {
-        totalInsertionCount += f.additions;
-        totalDeletionCount += f.deletions;
-        return {
-          ...dict,
-          [f.filename]: {
-            insertionCount: f.additions,
-            deletionCount: f.deletions,
-          },
-        };
-      }, {}) ?? {};
-
-    const prCommitRaw: CommitRaw = {
-      sequence: -1, // ignore
-      id: sha,
-      parents: parents.map((p) => p.sha),
-      branches: [], // ignore
-      tags: [], // ignore
-      author: {
-        name: author?.name ?? "",
-        email: author?.email ?? "",
-      },
-      authorDate: author?.date
-        ? new Date(author.date)
-        : baseCSMNode.base.commit.authorDate,
-      committer: {
-        name: committer?.name ?? "",
-        email: committer?.email ?? "",
-      },
-      committerDate: committer?.date
-        ? new Date(committer.date)
-        : baseCSMNode.base.commit.committerDate,
-      message,
-      differenceStatistic: {
-        fileDictionary,
-        totalInsertionCount,
-        totalDeletionCount,
-      },
-      commitMessageType: "",
-    };
-
-    return { commit: prCommitRaw };
-  });
-
-const buildCSMNodeFromPr = (
-  csmNode: CSMNode,
-  prDict: PullRequestDict
-): CSMNode => {
-  // check pr based merged-commit
-  const pr = prDict.get(csmNode.base.commit.id);
-  if (!pr) {
-    return csmNode;
-  }
-
-  const {
-    data: { title, body, additions, deletions },
-  } = pr.detail;
-
-  const newCommit = {
-    ...csmNode.base,
-    commit: {
-      ...csmNode.base.commit,
-      message: `${title}\n\n${body}`,
-      differenceStatistic: {
-        totalInsertionCount: additions,
-        totalDeletionCount: deletions,
-      },
-    },
-  } as CommitNode;
-
-  return {
-    base: newCommit,
-    source: csmNode.source.length
-      ? csmNode.source
-      : buildCSMSourceFromPRCommits(csmNode, pr),
-  };
-};
+import {
+  convertPRCommitsToCommitNodes,
+  convertPRInfoToCommitRaw,
+} from "./pullRequest";
 
 const buildCSMNode = (
   baseCommitNode: CommitNode,
@@ -170,6 +80,29 @@ const buildCSMNode = (
   };
 };
 
+const buildCSMNodeWithPullRequest = (
+  csmNode: CSMNode,
+  prDict: PullRequestDict
+): CSMNode => {
+  // check pr based merged-commit
+  const pr = prDict.get(csmNode.base.commit.id);
+  if (!pr) {
+    return csmNode;
+  }
+
+  const convertedCommit = convertPRInfoToCommitRaw(csmNode.base.commit, pr);
+
+  return {
+    base: {
+      stemId: csmNode.base.stemId,
+      commit: convertedCommit,
+    },
+    source: csmNode.source.length
+      ? csmNode.source
+      : convertPRCommitsToCommitNodes(convertedCommit, pr),
+  };
+};
+
 /**
  * CSM 생성
  *
@@ -190,24 +123,23 @@ export const buildCSMDict = (
     // return {};
   }
 
-  const prDictByMergedCommitSha = pullRequests.reduce(
-    (dict, pr) => dict.set(`${pr.detail.data.merge_commit_sha}`, pr),
-    new Map<string, PullRequest>() as PullRequestDict
-  );
-
-  const csmDict: CSMDictionary = {};
-
   // v0.1 에서는 master STEM 으로만 CSM 생성함
   const masterStem = stemDict.get(baseBranchName);
   if (!masterStem) {
     throw new Error("no master-stem");
     // return {};
   }
-  const stemNodes = masterStem.nodes.reverse(); // start on root-node
 
+  const prDictByMergedCommitSha = pullRequests.reduce(
+    (dict, pr) => dict.set(`${pr.detail.data.merge_commit_sha}`, pr),
+    new Map<string, PullRequest>() as PullRequestDict
+  );
+
+  const csmDict: CSMDictionary = {};
+  const stemNodes = masterStem.nodes.reverse(); // start on root-node
   csmDict[baseBranchName] = stemNodes.map((commitNode) => {
     const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    return buildCSMNodeFromPr(csmNode, prDictByMergedCommitSha);
+    return buildCSMNodeWithPullRequest(csmNode, prDictByMergedCommitSha);
   });
 
   return csmDict;
