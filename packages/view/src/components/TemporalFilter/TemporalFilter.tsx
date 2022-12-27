@@ -8,7 +8,6 @@ import {
   getMinMaxDate,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
-
 import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartData } from "./LineChart";
@@ -98,17 +97,14 @@ const TemporalFilter = () => {
   useEffect(() => {
     if (!wrapperRef.current || !ref.current) return undefined;
 
-    // d3.select(ref.current)
-    //   .attr("width", windowSize.width - CLOC_STYLING.padding.left)
-    //   .attr("height", windowSize.height);
-
     const axisHeight = 20;
     const chartHeight =
       (wrapperRef.current.getBoundingClientRect().height - axisHeight) / 2;
+    const svgElement = ref.current;
 
     // CLOC
     drawLineChart(
-      ref.current,
+      svgElement,
       clocLineChartData,
       windowSize.width,
       chartHeight,
@@ -119,7 +115,7 @@ const TemporalFilter = () => {
 
     // COMMIT
     drawLineChart(
-      ref.current,
+      svgElement,
       commitLineChartData,
       windowSize.width,
       chartHeight,
@@ -129,9 +125,9 @@ const TemporalFilter = () => {
     );
 
     return () => {
-      d3.select(ref.current).selectAll("g").remove();
+      d3.select(svgElement).selectAll("g").remove();
     };
-  }, [sortedFilteredData, windowSize]);
+  }, [clocLineChartData, commitLineChartData, sortedFilteredData, windowSize]);
 
   return (
     <article className="temporal-filter">
