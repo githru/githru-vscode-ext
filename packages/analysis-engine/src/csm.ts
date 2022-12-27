@@ -2,11 +2,13 @@
 import type {
   CommitRaw,
   CommitNode,
-  Stem,
+  StemDict,
   CSMDictionary,
   CSMNode,
+  CommitDict,
+  PullRequest,
+  PullRequestDict,
 } from "./types";
-import type { PullRequest } from "./types/Github";
 
 /**
  * PR 기반 CSM-Source 생성
@@ -69,7 +71,7 @@ const buildCSMSourceFromPRCommits = (baseCSMNode: CSMNode, pr: PullRequest) =>
 
 const buildCSMNodeFromPr = (
   csmNode: CSMNode,
-  prDict: Map<string, PullRequest>
+  prDict: PullRequestDict
 ): CSMNode => {
   // check pr based merged-commit
   const pr = prDict.get(csmNode.base.commit.id);
@@ -103,8 +105,8 @@ const buildCSMNodeFromPr = (
 
 const buildCSMNode = (
   baseCommitNode: CommitNode,
-  commitDict: Map<string, CommitNode>,
-  stemDict: Map<string, Stem>
+  commitDict: CommitDict,
+  stemDict: StemDict
 ): CSMNode => {
   const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
   if (!mergeParentCommit) {
@@ -178,8 +180,8 @@ const buildCSMNode = (
  * @returns {CSMDictionary}
  */
 export const buildCSMDict = (
-  commitDict: Map<string, CommitNode>,
-  stemDict: Map<string, Stem>,
+  commitDict: CommitDict,
+  stemDict: StemDict,
   baseBranchName: string,
   pullRequests: Array<PullRequest> = []
 ): CSMDictionary => {
@@ -190,7 +192,7 @@ export const buildCSMDict = (
 
   const prDictByMergedCommitSha = pullRequests.reduce(
     (dict, pr) => dict.set(`${pr.detail.data.merge_commit_sha}`, pr),
-    new Map<string, PullRequest>()
+    new Map<string, PullRequest>() as PullRequestDict
   );
 
   const csmDict: CSMDictionary = {};
