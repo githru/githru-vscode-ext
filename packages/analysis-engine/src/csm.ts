@@ -203,15 +203,10 @@ export const buildCSMDict = (
   }
   const stemNodes = masterStem.nodes.reverse(); // start on root-node
 
-  const csmNodes: CSMNode[] = [];
-
-  stemNodes.forEach((commitNode) => {
+  csmDict[baseBranchName] = stemNodes.map((commitNode) => {
     const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    const csmNodeWithPr = buildCSMNodeFromPr(csmNode, prDictByMergedCommitSha);
-    csmNodes.push(csmNodeWithPr);
+    return buildCSMNodeFromPr(csmNode, prDictByMergedCommitSha);
   });
-
-  csmDict[baseBranchName] = csmNodes;
 
   return csmDict;
 };
