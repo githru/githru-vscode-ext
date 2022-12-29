@@ -10,7 +10,7 @@ import type {
 } from "./types";
 import {
   convertPRCommitsToCommitNodes,
-  convertPRInfoToCommitRaw,
+  convertPRDetailToCommitRaw,
 } from "./pullRequest";
 
 const buildCSMNode = (
@@ -90,7 +90,7 @@ const buildCSMNodeWithPullRequest = (
     return csmNode;
   }
 
-  const convertedCommit = convertPRInfoToCommitRaw(csmNode.base.commit, pr);
+  const convertedCommit = convertPRDetailToCommitRaw(csmNode.base.commit, pr);
 
   return {
     base: {

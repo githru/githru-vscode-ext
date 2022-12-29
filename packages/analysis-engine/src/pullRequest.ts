@@ -58,7 +58,7 @@ export const convertPRCommitsToCommitNodes = (
     return { commit: prCommitRaw } as CommitNode;
   });
 
-export const convertPRInfoToCommitRaw = (
+export const convertPRDetailToCommitRaw = (
   baseCommit: CommitRaw,
   pr: PullRequest
 ): CommitRaw => {
