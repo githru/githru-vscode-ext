@@ -82,14 +82,8 @@ const buildCSMNode = (
 
 const buildCSMNodeWithPullRequest = (
   csmNode: CSMNode,
-  prDict: PullRequestDict
+  pr: PullRequest
 ): CSMNode => {
-  // check pr based merged-commit
-  const pr = prDict.get(csmNode.base.commit.id);
-  if (!pr) {
-    return csmNode;
-  }
-
   const convertedCommit = convertPRDetailToCommitRaw(csmNode.base.commit, pr);
 
   return {
@@ -139,7 +133,8 @@ export const buildCSMDict = (
   const stemNodes = masterStem.nodes.reverse(); // start on root-node
   csmDict[baseBranchName] = stemNodes.map((commitNode) => {
     const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    return buildCSMNodeWithPullRequest(csmNode, prDictByMergedCommitSha);
+    const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
+    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
   });
 
   return csmDict;
