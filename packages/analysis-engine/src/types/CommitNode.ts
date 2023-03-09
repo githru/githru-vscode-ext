@@ -5,3 +5,5 @@ export interface CommitNode {
   stemId?: string;
   commit: CommitRaw;
 }
+
+export type CommitDict = Map<string, CommitNode>;

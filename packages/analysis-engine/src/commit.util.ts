@@ -3,9 +3,8 @@ import {
   CommitNode,
   CommitMessageType,
   CommitMessageTypeList,
+  CommitDict,
 } from "./types";
-
-type CommitDict = Map<string, CommitNode>;
 
 export function buildCommitDict(commits: CommitRaw[]): CommitDict {
   return new Map(

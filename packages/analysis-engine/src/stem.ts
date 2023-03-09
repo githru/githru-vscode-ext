@@ -1,10 +1,10 @@
 import { getLeafNodes } from "./commit.util";
 import Queue from "./queue";
-import { CommitNode, Stem } from "./types";
+import { CommitDict, CommitNode, Stem, StemDict } from "./types";
 
 export function getStemNodes(
   tailId: string,
-  commitDict: Map<string, CommitNode>,
+  commitDict: CommitDict,
   q: Queue<CommitNode>,
   stemId: string
 ): CommitNode[] {
@@ -71,9 +71,9 @@ function buildGetStemId() {
  * @param baseBranchName
  */
 export function buildStemDict(
-  commitDict: Map<string, CommitNode>,
+  commitDict: CommitDict,
   baseBranchName: string
-): Map<string, Stem> {
+): StemDict {
   const q = new Queue<CommitNode>(compareCommitPriority);
 
   /**

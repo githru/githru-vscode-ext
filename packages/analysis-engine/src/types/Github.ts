@@ -5,6 +5,4 @@ export interface PullRequest {
   commitDetails: RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
 }
 
-export interface PullRequestDictionary {
-  [prNumber: string]: PullRequest;
-}
+export type PullRequestDict = Map<string, PullRequest>;
