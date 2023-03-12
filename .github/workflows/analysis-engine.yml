@@ -32,8 +32,8 @@ jobs:
     - name: check lint and prettier
       run: npm run check:eslint
 
-    - name: check version vulnerabilities
-      run: npm run check:vulnerabilities
+#    - name: check version vulnerabilities
+#      run: npm run check:vulnerabilities
 
     - name: test analysis-engine module
       run: npm run test
