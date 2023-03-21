@@ -4,6 +4,9 @@ Lightweight but robust Githru for VSCode Extension
 
 ## Getting Started
 
+https://github.com/githru/githru-vscode-ext/blob/main/doc/getting-started-ko.md
+
+
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contributing](https://github.com/githru/githru-vscode-ext/blob/main/CONTRIBUTING.md)]
