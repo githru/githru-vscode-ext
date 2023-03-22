@@ -1,8 +1,9 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
 
+import { COMMIT_STYLING } from "./LineChart.const";
+
 import "./LineChart.scss";
-import { COMMIT_STYLING } from "./CommitLineChart/CommitLineChart.const";
 
 export type LineChartData = {
   dateString: string;
