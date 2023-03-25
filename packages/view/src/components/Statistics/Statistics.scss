@@ -5,3 +5,9 @@
   padding: 0 20px;
   width: 300px;
 }
+
+@media (max-width: 850px) {
+  .statistics {
+    display: none;
+  }
+}
