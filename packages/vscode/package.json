@@ -35,7 +35,13 @@
         "commands": [
             {
                 "command": "githru.command.launch",
-                "title": "Open Githru View"
+                "title": "Open Githru View",
+                "category": "Githru"
+            },
+            {
+                "command": "githru.command.get.accessToken",
+                "title": "Get access token from user",
+                "category": "Githru"
             }
         ],
         "configuration": {
