@@ -7,11 +7,9 @@ import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
 
-const getGithubToken = async () => {
+const getGithubToken = () : string | undefined => {
     const configuration = vscode.workspace.getConfiguration();
-    const githubToken: string | undefined = configuration.get("githru.github.token");
-    
-    return githubToken;
+    return configuration.get("githru.github.token");
 }
 
 export function activate(context: vscode.ExtensionContext) {
