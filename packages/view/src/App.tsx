@@ -1,11 +1,15 @@
-import { Statistics, TemporalFilter, VerticalClusterList } from "components";
-import { Header } from "components/BranchSelector";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  VerticalClusterList,
+} from "components";
 import "./App.scss";
 
 const App = () => {
   return (
     <>
-      <Header />
+      <BranchSelector />
       <div className="head-container">
         <TemporalFilter />
       </div>

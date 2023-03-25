@@ -1,1 +1,1 @@
-export { default as Header } from "./BranchSelector";
+export { default as BranchSelector } from "./BranchSelector";
