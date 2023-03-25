@@ -4,7 +4,12 @@ export default class WebviewLoader implements vscode.Disposable {
     private readonly _panel: vscode.WebviewPanel | undefined;
     private fsPath: string;
 
-    constructor(private readonly fileUri: vscode.Uri, private readonly extensionPath: string, data: string) {
+    constructor(
+        private readonly fileUri: vscode.Uri,
+        private readonly extensionPath: string,
+        data: string,
+        parseCommit: () => Promise<string>
+    ) {
         const viewColumn = vscode.ViewColumn.One;
         this.fsPath = fileUri.fsPath;
 
@@ -14,9 +19,15 @@ export default class WebviewLoader implements vscode.Disposable {
             localResourceRoots: [vscode.Uri.file(path.join(this.extensionPath, "dist"))],
         });
 
-        this._panel.webview.onDidReceiveMessage((message: { command: string; payload: unknown }) =>
-            this.respondToMessage(message)
-        );
+        this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
+            switch (message.command) {
+                case "refresh":
+                    const data = await parseCommit();
+                    const resMessage = { ...message, payload: data };
+                    await this.respondToMessage(resMessage);
+                    break;
+            }
+        });
 
         this._panel.webview.html = this.getWebviewContent(this._panel.webview, data);
     }
@@ -26,16 +37,14 @@ export default class WebviewLoader implements vscode.Disposable {
     }
 
     private async respondToMessage(message: { command: string; payload: unknown }) {
-        if (message.command === "changeClusterOption") {
-            this._panel?.webview.postMessage({
-                command: message.command,
-                // TODO v2: need to re-fetch git data on behalf of cluster option
-                payload: {},
-            });
-        }
+        this._panel?.webview.postMessage({
+            command: message.command,
+            // TODO v2: need to re-fetch git data on behalf of cluster option
+            payload: message.payload,
+        });
     }
 
-    private getWebviewContent(webview:vscode.Webview, data: string): string {
+    private getWebviewContent(webview: vscode.Webview, data: string): string {
         const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
         const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
         // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });

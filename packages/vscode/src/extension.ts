@@ -29,12 +29,24 @@ export function activate(context: vscode.ExtensionContext) {
         const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
         const baseBranchName = getBaseBranchName(branchNames);
 
-        const engine = new AnalysisEngine({ isDebugMode: true, gitLog, owner, repo, auth: githubToken, baseBranchName });
-        const csmDict = await engine.analyzeGit();
-        const clusterNodes = mapClusterNodesFrom(csmDict);
-        const data = JSON.stringify(clusterNodes);
+        const commitParse = async () => {
+            const engine = new AnalysisEngine({
+                isDebugMode: true,
+                gitLog,
+                owner,
+                repo,
+                auth: githubToken,
+                baseBranchName,
+            });
+            const csmDict = await engine.analyzeGit();
+            const clusterNodes = mapClusterNodesFrom(csmDict);
+            const data = JSON.stringify(clusterNodes);
+            return data;
+        };
+        const initialData = await commitParse();
+        const webLoader = new WebviewLoader(extensionUri, extensionPath, initialData, commitParse);
 
-        subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
+        subscriptions.push(webLoader);
 
         vscode.window.showInformationMessage("Hello Githru");
     });
