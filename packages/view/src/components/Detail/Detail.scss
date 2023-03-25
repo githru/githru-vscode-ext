@@ -61,16 +61,16 @@
   .commit-item {
     display: flex;
     justify-content: space-between;
-    margin-top: 4px;
+    margin: 7px 0px;
     color: $gray-600;
 
     .commit-detail {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
       overflow: hidden;
-
       .message {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
         color: $white;
         margin-right: 4px;
       }
