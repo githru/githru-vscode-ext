@@ -27,19 +27,30 @@ export function activate(context: vscode.ExtensionContext) {
 
         const githubToken: string | undefined = await getGithubToken();
         console.log("GitHubToken: ", githubToken);
-        
-        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
-        const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-        const { owner, repo } = getRepo(gitConfig);
-        const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
-        const baseBranchName = getBaseBranchName(branchNames);
 
-        const engine = new AnalysisEngine({ isDebugMode: true, gitLog, owner, repo, auth: githubToken, baseBranchName });
-        const csmDict = await engine.analyzeGit();
-        const clusterNodes = mapClusterNodesFrom(csmDict);
-        const data = JSON.stringify(clusterNodes);
+        const fetchClusterNodes = async () => {
+            const gitLog = await getGitLog(gitPath, currentWorkspacePath);
+            const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
+            const { owner, repo } = getRepo(gitConfig);
+            const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
+            const baseBranchName = getBaseBranchName(branchNames);
+            const engine = new AnalysisEngine({
+                isDebugMode: true,
+                gitLog,
+                owner,
+                repo,
+                auth: githubToken,
+                baseBranchName,
+            });
+            const csmDict = await engine.analyzeGit();
+            const clusterNodes = mapClusterNodesFrom(csmDict);
+            const data = JSON.stringify(clusterNodes);
+            return data;
+        };
+        const initialData = await fetchClusterNodes();
+        const webLoader = new WebviewLoader(extensionUri, extensionPath, initialData, fetchClusterNodes);
 
-        subscriptions.push(new WebviewLoader(extensionUri, extensionPath, data));
+        subscriptions.push(webLoader);
 
         vscode.window.showInformationMessage("Hello Githru");
     });
