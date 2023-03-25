@@ -45,7 +45,13 @@
             {
                 "command": "githru.command.launch",
                 "title": "Open Githru View",
-                "icon": "images/logo.png"
+                "icon": "images/logo.png",
+                "category": "Githru"
+            },
+            {
+                "command": "githru.command.get.accessToken",
+                "title": "Set access token",
+                "category": "Githru"
             }
         ],
         "configuration": {
