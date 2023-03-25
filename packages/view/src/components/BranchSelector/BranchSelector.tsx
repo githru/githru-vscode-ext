@@ -13,7 +13,7 @@ const BranchSelector = () => {
       <select className="select-box">
         {arr.map((option) => (
           <option key={option} value={option}>
-            {option === arr[0] ? `${option} #` : option}
+            {option}
           </option>
         ))}
       </select>

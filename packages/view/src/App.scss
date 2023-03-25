@@ -4,19 +4,12 @@ body {
   color: #fff;
 }
 
-.head-container {
-  display: flex;
-  height: 80px;
-  justify-content: center;
-  align-items: center;
+.top-container {
+  margin-bottom: 30px;
+  height: 240px;
 }
 
 .middle-container {
-  margin-bottom: 30px;
-  height: 200px;
-}
-
-.bottom-container {
   display: flex;
   justify-content: center;
   height: calc(100vh - 200px);

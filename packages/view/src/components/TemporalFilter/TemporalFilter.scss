@@ -4,12 +4,12 @@
 
   .data-control-container {
     display: flex;
+    position: fixed;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
     z-index: 10;
     width: 100%;
-    padding: 3px;
+    padding-top: 20px;
     background: #212121;
     color: white;
     .filter {
@@ -30,7 +30,7 @@
     width: 100%;
     align-content: space-around;
     position: relative;
-    top: 30px;
+    top: 50px;
   }
 
   .line-charts-svg {
