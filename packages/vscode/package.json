@@ -32,10 +32,20 @@
     ],
     "main": "./dist/extension.js",
     "contributes": {
+        "menus": {
+            "scm/title": [
+                {
+                    "command": "githru.command.launch",
+                    "when": "scmProvider == git",
+                    "group": "navigation@2"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "githru.command.launch",
                 "title": "Open Githru View",
+                "icon": "images/logo.png",
                 "category": "Githru"
             },
             {
