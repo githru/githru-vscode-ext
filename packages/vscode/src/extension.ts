@@ -49,19 +49,19 @@ export function activate(context: vscode.ExtensionContext) {
     const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
         const config = vscode.workspace.getConfiguration()
 
-        let githubToken = await getGithubToken();
+        const defaultGithubToken = await getGithubToken();
 
-        githubToken = await vscode.window.showInputBox({
+        const newGithubToken = await vscode.window.showInputBox({
             title: "Type or paste your Github access token value.",
             placeHolder: "Type valid token here!",
             prompt: "If you don't know how to get access token, check this link underneath.\nhttps://docs.github.com/ko/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token",
-            value: githubToken ?? ''
+            value: defaultGithubToken ?? ''
         });
 
-        if (!githubToken) 
+        if (!newGithubToken) 
             throw new Error("Cannot get users' access token properly");
 
-        config.update('githru.github.token',githubToken, vscode.ConfigurationTarget.Global);
+        config.update('githru.github.token',newGithubToken, vscode.ConfigurationTarget.Global);
     });
 
     subscriptions.concat([disposable, getAccessToken]);
