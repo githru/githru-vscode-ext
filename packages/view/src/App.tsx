@@ -9,11 +9,13 @@ import "./App.scss";
 const App = () => {
   return (
     <>
-      <BranchSelector />
       <div className="head-container">
-        <TemporalFilter />
+        <BranchSelector />
       </div>
       <div className="middle-container">
+        <TemporalFilter />
+      </div>
+      <div className="bottom-container">
         <VerticalClusterList />
         <Statistics />
       </div>

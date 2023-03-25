@@ -5,11 +5,18 @@ body {
 }
 
 .head-container {
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+}
+
+.middle-container {
   margin-bottom: 30px;
   height: 200px;
 }
 
-.middle-container {
+.bottom-container {
   display: flex;
   justify-content: center;
   height: calc(100vh - 200px);

@@ -9,16 +9,14 @@ const BranchSelector = () => {
   const arr = getDataList();
   return (
     <section className="branch-seletor">
-      <div className="branch-seletor-container">
-        <span>Branches:</span>
-        <select className="select-box">
-          {arr.map((option) => (
-            <option key={option} value={option}>
-              {option === arr[0] ? `${option} #` : option}
-            </option>
-          ))}
-        </select>
-      </div>
+      <span>Branches:</span>
+      <select className="select-box">
+        {arr.map((option) => (
+          <option key={option} value={option}>
+            {option === arr[0] ? `${option} #` : option}
+          </option>
+        ))}
+      </select>
     </section>
   );
 };

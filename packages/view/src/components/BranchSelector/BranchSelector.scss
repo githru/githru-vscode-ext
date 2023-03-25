@@ -1,21 +1,11 @@
 .branch-seletor {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80px;
-  width: 100%;
-  user-select: none;
-  background: #212121;
-  z-index: 10;
-}
-
-.branch-seletor-container {
-  display: flex;
   align-items: center;
   font-weight: 600;
   font-size: 0.825rem;
   max-width: 328.34px;
   width: 100%;
+  user-select: none;
 
   .select-box {
     text-align: center;
