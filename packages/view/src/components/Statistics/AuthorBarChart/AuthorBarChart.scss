@@ -38,14 +38,14 @@
     color: $white;
     font-weight: bold;
 
-    &.y-axis {
+    &.x-axis {
       text {
         display: none;
       }
     }
 
-    &.x-axis {
-      .x-axis-label {
+    &.y-axis {
+      .y-axis-label {
         fill: $white;
       }
     }
