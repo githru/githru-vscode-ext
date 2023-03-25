@@ -12,6 +12,11 @@ import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartData } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
+import { drawBrush } from "./LineChartBrush";
+import {
+  BRUSH_MARGIN,
+  TEMPORAL_FILTER_LINE_CHART_STYLES,
+} from "./LineChart.const";
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData } = useGlobalData();
@@ -29,38 +34,69 @@ const TemporalFilter = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
-  const clocLineChartData: LineChartData[] = useMemo(
-    () =>
-      sortedFilteredData.map((datum) => {
-        return {
-          dateString: datum.commit.commitDate,
-          value:
-            datum.commit.diffStatistics.insertions +
-            datum.commit.diffStatistics.deletions,
-        };
-      }),
-    [sortedFilteredData]
-  );
+  // const clocLineChartData: LineChartData[] = useMemo(() => {
+  //   sortedFilteredData.map((datum) => {
+  //     return {
+  //       dateString: datum.commit.commitDate,
+  //       value:
+  //         datum.commit.diffStatistics.insertions +
+  //         datum.commit.diffStatistics.deletions,
+  //     };
+  //   });
+  //   [sortedFilteredData]
+  // );
 
-  const commitLineChartData: LineChartData[] = useMemo(() => {
-    const sortedCommitData = sortBasedOnCommitNode(filteredData);
-    const map: Map<string, number> = new Map();
+  const sortedCommitData = sortBasedOnCommitNode(filteredData);
+
+  const lineChartDataList: LineChartData[][] = useMemo(() => {
+    const clocMap: Map<string, number> = new Map();
+    const commitMap: Map<string, number> = new Map();
     const timeFormatter = d3.timeFormat("%Y %m %d");
 
     sortedCommitData.forEach(({ commit }) => {
       const formattedDate = timeFormatter(new Date(commit.commitDate));
-      const mapItem = map.get(formattedDate);
+      const clocMapItem = clocMap.get(formattedDate);
+      const commitMapItem = commitMap.get(formattedDate);
 
-      map.set(formattedDate, mapItem ? mapItem + 1 : 1);
+      const clocValue =
+        commit.diffStatistics.insertions + commit.diffStatistics.deletions;
+
+      commitMap.set(formattedDate, clocMapItem ? clocMapItem + 1 : 1);
+      clocMap.set(
+        formattedDate,
+        commitMapItem ? commitMapItem + clocValue : clocValue
+      );
     });
 
-    return Array.from(map.entries()).map(([key, value]) => {
-      return {
-        dateString: key,
-        value: value,
-      };
-    });
-  }, [filteredData]);
+    const buildReturnArray = (map: Map<string, number>) =>
+      Array.from(map.entries()).map(([key, value]) => {
+        return {
+          dateString: key,
+          value: value,
+        };
+      });
+
+    return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
+  }, [sortedCommitData]);
+
+  // const commitLineChartData: LineChartData[] = useMemo(() => {
+  //   const map: Map<string, number> = new Map();
+  //   const timeFormatter = d3.timeFormat("%Y %m %d");
+
+  //   sortedCommitData.forEach(({ commit }) => {
+  //     const formattedDate = timeFormatter(new Date(commit.commitDate));
+  //     const mapItem = map.get(formattedDate);
+
+  //     map.set(formattedDate, mapItem ? mapItem + 1 : 1);
+  //   });
+
+  //   return Array.from(map.entries()).map(([key, value]) => {
+  //     return {
+  //       dateString: key,
+  //       value: value,
+  //     };
+  //   });
+  // }, [filteredData]);
 
   const fromDateChangeHandler = ({
     target,
@@ -105,7 +141,8 @@ const TemporalFilter = () => {
     // CLOC
     drawLineChart(
       svgElement,
-      clocLineChartData,
+      lineChartDataList[0],
+      TEMPORAL_FILTER_LINE_CHART_STYLES.margin,
       windowSize.width,
       chartHeight,
       0,
@@ -116,7 +153,8 @@ const TemporalFilter = () => {
     // COMMIT
     drawLineChart(
       svgElement,
-      commitLineChartData,
+      lineChartDataList[1],
+      TEMPORAL_FILTER_LINE_CHART_STYLES.margin,
       windowSize.width,
       chartHeight,
       chartHeight,
@@ -124,10 +162,12 @@ const TemporalFilter = () => {
       "COMMIT #"
     );
 
+    drawBrush(svgElement, BRUSH_MARGIN, windowSize.width, chartHeight * 2);
+
     return () => {
       d3.select(svgElement).selectAll("g").remove();
     };
-  }, [clocLineChartData, commitLineChartData, sortedFilteredData, windowSize]);
+  }, [lineChartDataList, sortedFilteredData, windowSize]);
 
   return (
     <article className="temporal-filter">
