@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
-import { getCommitRaws } from "./parser";
+import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildCommitDict } from "./commit.util";
 import { buildStemDict } from "./stem";
