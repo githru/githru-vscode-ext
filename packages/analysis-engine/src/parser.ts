@@ -1,4 +1,3 @@
-import { execSync } from "child_process";
 import {
   CommitRaw,
   DifferenceStatistic,
@@ -7,11 +6,6 @@ import {
 } from "./types";
 import { getCommitMessageType } from "./commit.util";
 
-export function getGitLog(path: string) {
-  const command = `${path} --no-pager log --all --parents --numstat --date-order --pretty=fuller --decorate -c`;
-  return execSync(command, { encoding: "utf8" });
-}
-
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   category.push({
     name: preParsedInfo.split(": ")[1].split("<")[0].trim(),
@@ -19,7 +13,7 @@ function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   });
 }
 
-export function getCommitRaws(log: string) {
+export default function getCommitRaws(log: string) {
   if (!log) return [];
 
   // line 별로 분리하기
