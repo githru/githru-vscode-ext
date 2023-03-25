@@ -52,7 +52,6 @@ export function activate(context: vscode.ExtensionContext) {
         const newGithubToken = await vscode.window.showInputBox({
             title: "Type or paste your Github access token value.",
             placeHolder: "Type valid token here!",
-            prompt: "If you don't know how to get access token, check this link underneath.\nhttps://docs.github.com/ko/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token",
             value: defaultGithubToken ?? ''
         });
 

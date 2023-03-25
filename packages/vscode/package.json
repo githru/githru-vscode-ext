@@ -40,7 +40,7 @@
             },
             {
                 "command": "githru.command.get.accessToken",
-                "title": "Get access token from user",
+                "title": "Set access token",
                 "category": "Githru"
             }
         ],
