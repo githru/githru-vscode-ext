@@ -181,7 +181,6 @@ const AuthorBarChart = () => {
       bar
         .append("text")
         .attr("class", "name")
-        .style("white-space", "nowrap")
         .attr("height", (d: AuthorDataType) => yScale(d[metric]))
         .attr("width", xScale.bandwidth())
         .attr("y", 3)

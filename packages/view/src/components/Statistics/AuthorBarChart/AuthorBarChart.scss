@@ -39,13 +39,13 @@
     font-weight: bold;
 
     &.x-axis {
-      text {
+      .tick {
         display: none;
       }
     }
 
-    &.y-axis {
-      .y-axis-label {
+    &.x-axis {
+      .x-axis-label {
         fill: $white;
       }
     }
