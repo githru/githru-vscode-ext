@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { FiRefreshCcw } from "react-icons/fi";
 
 import { useGlobalData } from "hooks";
+import { throttle } from "utils";
 
 import { vscode } from "../../ide/VSCodeAPIWrapper";
 
@@ -95,12 +96,12 @@ const TemporalFilter = () => {
     }
   };
 
-  const refreshHandler = (): void => {
+  const refreshHandler = throttle(() => {
     const message = {
       command: "refresh",
     };
     vscode.postMessage(message);
-  };
+  }, 3000);
 
   const windowSize = useWindowResize();
 
