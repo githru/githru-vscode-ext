@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import type { ClusterNode, GlobalProps } from "types";
+import type { ClusterNode, GlobalProps, VSMessageEvent } from "types";
 
 import fakeData from "../fake-assets/cluster-nodes.json";
 
@@ -8,7 +8,7 @@ export const useGetTotalData = (): GlobalProps => {
   const [data, setData] = useState<ClusterNode[]>([]);
 
   useEffect(() => {
-    const onReceiveClusterNodes = (e: MessageEvent): void => {
+    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
       if (e.data.command !== "refresh") return;
       setData(JSON.parse(e.data.payload));
     };
