@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { timeFormat } from "d3";
 
 import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
 import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
@@ -62,3 +63,5 @@ export const getMinMaxDate = (data: CommitNode[]) => [
   dayjs(data[0].commit.commitDate).format("YYYY-MM-DD"),
   dayjs(data[data.length - 1].commit.commitDate).format("YYYY-MM-DD"),
 ];
+
+export const lineChartTimeFormatter = timeFormat("%Y %m %d");

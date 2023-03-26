@@ -19,8 +19,6 @@ export const getMinMaxDate = (data: LineChartData[]) => [
   dayjs(data[data.length - 1].dateString).format("YYYY-MM-DD"),
 ];
 
-// TODO margin 추가하기
-// timeFormatter
 const drawLineChart = (
   refTarget: SVGSVGElement,
   data: LineChartData[],
@@ -52,21 +50,18 @@ const drawLineChart = (
 
   const area = d3
     .area<LineChartData>()
-    .curve(d3.curveBasis)
+    .curve(d3.curveLinear)
     .x((d) => xScale(new Date(d.dateString)))
     .y0(yScale(1))
     .y1((d) => yScale(d.value));
 
   if (showXAxis) {
-    // const timeFormatter = d3.timeFormat("%y-%m");
-
-    const tickCount = Math.round(width / 75);
+    const tickCount = Math.min(Math.round(width / 75), data.length);
 
     const xAxis = d3
       .axisBottom<Date>(xScale)
+      .tickFormat(d3.timeFormat("%y-%m-%d"))
       .tickValues(d3.timeTicks(new Date(xMin), new Date(xMax), tickCount))
-      // .tickFormat((d) => timeFormatter(new Date(d)))
-      // .tickPadding(0);
       .tickSizeOuter(-5);
 
     d3.select(refTarget)
@@ -90,6 +85,8 @@ const drawLineChart = (
     .attr("class", "temporal-filter__label")
     .attr("x", 0)
     .attr("y", 15);
+
+  return xScale;
 };
 
 export default drawLineChart;
