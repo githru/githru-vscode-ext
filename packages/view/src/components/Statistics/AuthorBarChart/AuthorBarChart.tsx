@@ -172,36 +172,10 @@ const AuthorBarChart = () => {
       .attr("x", (d: AuthorDataType) => xScale(d.name) || 0)
       .attr("y", (d: AuthorDataType) => yScale(d[metric]));
 
-    //  Draw author names
+    // Draw author thumbnails
     const barElements = d3.selectAll(".bar").nodes();
     if (!barElements.length) return;
 
-    barElements.forEach((barElement, i) => {
-      const bar = d3.select(barElement).datum(data[i]);
-      bar
-        .append("text")
-        .attr("class", "name")
-        .attr("height", (d: AuthorDataType) => yScale(d[metric]))
-        .attr("width", xScale.bandwidth())
-        .attr("y", 3)
-        .attr(
-          "x",
-          (d: AuthorDataType) =>
-            (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 + 5
-        )
-        .attr(
-          "transform",
-          (d: AuthorDataType) =>
-            `rotate(90 ${(xScale(d.name) ?? 0) + xScale.bandwidth() / 2}, 0)`
-        )
-        .on("mouseover", handleMouseOver)
-        .on("mousemove", handleMouseMove)
-        .on("mouseout", handleMouseOut)
-        .on("click", handleClickBar)
-        .html((d: AuthorDataType) => d.name);
-    });
-
-    // Draw author thumbnails
     barElements.forEach(async (barElement, i) => {
       const bar = d3.select(barElement).datum(data[i]);
       const profileImgSrc: string = await getAuthorProfileImgSrc(
