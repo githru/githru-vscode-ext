@@ -15,14 +15,14 @@ export const getFileChangesMap = (data: ClusterNode[]): FileChangesMap => {
     .reduce(
       (map, { commit: { diffStatistics } }) =>
         Object.entries(diffStatistics.files).reduce(
-          (acc, [path, { insertions, deletions }]) => ({
-            ...acc,
-            [path]: {
+          (acc, [path, { insertions, deletions }]) => {
+            acc[path] = {
               insertions: (acc[path]?.insertions ?? 0) + insertions,
               deletions: (acc[path]?.deletions ?? 0) + deletions,
               commits: (acc[path]?.commits ?? 0) + 1,
-            },
-          }),
+            };
+            return acc;
+          },
           map
         ),
       {} as FileChangesMap
@@ -36,13 +36,10 @@ export const getFileScoresMap = (data: ClusterNode[]) => {
     .flatMap(({ commitNodeList }) => commitNodeList)
     .reduce(
       (map, { commit: { diffStatistics } }) =>
-        Object.keys(diffStatistics.files).reduce(
-          (acc, path) => ({
-            ...acc,
-            [path]: 1,
-          }),
-          map
-        ),
+        Object.keys(diffStatistics.files).reduce((acc, path) => {
+          acc[path] = 1;
+          return acc;
+        }, map),
       {} as FileScoresMap
     );
 };
