@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
-import { useGlobalData } from "hooks";
 import { FiRefreshCcw } from "react-icons/fi";
+
+import { useGlobalData } from "hooks";
+
+import { vscode } from "../../ide/VSCodeAPIWrapper";
+
 import {
   filterDataByDate,
   getMinMaxDate,
@@ -11,7 +15,6 @@ import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartData } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
-import { vscode } from "../../ide/VSCodeAPIWrapper";
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData } = useGlobalData();
