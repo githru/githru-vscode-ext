@@ -95,7 +95,7 @@ const TemporalFilter = () => {
     }
   };
 
-  const clickRefreshHandler = (): void => {
+  const refreshHandler = (): void => {
     const message = {
       command: "refresh",
     };
@@ -145,7 +145,7 @@ const TemporalFilter = () => {
         <button
           type="button"
           className="refresh-button"
-          onClick={clickRefreshHandler}
+          onClick={refreshHandler}
         >
           <FiRefreshCcw />
         </button>
