@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
+import { FiRefreshCcw } from "react-icons/fi";
 
 import { useGlobalData } from "hooks";
+import { throttle } from "utils";
+
+import { vscode } from "../../ide/VSCodeAPIWrapper";
 
 import {
   filterDataByDate,
@@ -128,6 +132,13 @@ const TemporalFilter = () => {
     }
   };
 
+  const refreshHandler = throttle(() => {
+    const message = {
+      command: "refresh",
+    };
+    vscode.postMessage(message);
+  }, 3000);
+
   const windowSize = useWindowResize();
 
   useEffect(() => {
@@ -172,6 +183,13 @@ const TemporalFilter = () => {
   return (
     <article className="temporal-filter">
       <div className="data-control-container">
+        <button
+          type="button"
+          className="refresh-button"
+          onClick={refreshHandler}
+        >
+          <FiRefreshCcw />
+        </button>
         <section className="filter">
           <form>
             <div>
