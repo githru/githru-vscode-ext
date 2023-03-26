@@ -4,7 +4,7 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
-  width: 75%;
+  flex-grow: 1;
 
   svg.cluster-graph {
     min-width: 84px;
