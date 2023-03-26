@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
-
 import { useGlobalData } from "hooks";
-
+import { FiRefreshCcw } from "react-icons/fi";
 import {
   filterDataByDate,
   getMinMaxDate,
@@ -132,6 +131,9 @@ const TemporalFilter = () => {
   return (
     <article className="temporal-filter">
       <div className="data-control-container">
+        <button type="button" className="refresh-button">
+          <FiRefreshCcw />
+        </button>
         <section className="filter">
           <form>
             <div>
