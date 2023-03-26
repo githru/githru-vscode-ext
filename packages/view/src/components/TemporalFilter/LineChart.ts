@@ -1,13 +1,17 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
-
-import { COMMIT_STYLING } from "./LineChart.const";
-
 import "./LineChart.scss";
 
 export type LineChartData = {
   dateString: string;
   value: number;
+};
+
+export type Margin = {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
 };
 
 export const getMinMaxDate = (data: LineChartData[]) => [
@@ -20,25 +24,23 @@ export const getMinMaxDate = (data: LineChartData[]) => [
 const drawLineChart = (
   refTarget: SVGSVGElement,
   data: LineChartData[],
+  margin: Margin,
   chartWidth: number,
   chartHeight: number,
   startHeight: number,
   showXAxis: boolean,
   chartTitle: string
 ) => {
-  const width =
-    chartWidth - COMMIT_STYLING.margin.left - COMMIT_STYLING.margin.right;
-
+  const width = chartWidth - margin.left - margin.right;
   const svg = d3
     .select(refTarget)
     .append("g")
-    .attr("transform", `translate(0, ${startHeight})`);
+    .attr("transform", `translate(${margin.left}, ${startHeight})`);
 
   // TODO cleanup으로 옮기기
   svg.selectAll("*").remove();
 
   const [xMin, xMax] = getMinMaxDate(data);
-  // const [yMin, yMax] = d3.extent(data, (d) => getCloc(d)) as [number, number];
   const [yMin, yMax] = d3.extent(data, (d) => d.value) as [number, number];
 
   const xScale = d3
@@ -56,17 +58,24 @@ const drawLineChart = (
     .y1((d) => yScale(d.value));
 
   if (showXAxis) {
-    const timeFormatter = d3.timeFormat("%y-%m");
+    // const timeFormatter = d3.timeFormat("%y-%m");
+
+    const tickCount = Math.round(width / 75);
 
     const xAxis = d3
       .axisBottom<Date>(xScale)
-      .tickValues(d3.timeTicks(new Date(xMin), new Date(xMax), 10))
-      .tickFormat((d) => timeFormatter(new Date(d)));
+      .tickValues(d3.timeTicks(new Date(xMin), new Date(xMax), tickCount))
+      // .tickFormat((d) => timeFormatter(new Date(d)))
+      // .tickPadding(0);
+      .tickSizeOuter(-5);
 
     d3.select(refTarget)
       .append("g")
-      .call(xAxis)
-      .attr("transform", `translate(0, ${startHeight + chartHeight})`);
+      .attr(
+        "transform",
+        `translate(${margin.left / 2}, ${startHeight + chartHeight})`
+      )
+      .call(xAxis);
   }
 
   svg
@@ -79,7 +88,7 @@ const drawLineChart = (
     .append("text")
     .text(chartTitle)
     .attr("class", "temporal-filter__label")
-    .attr("x", 5)
+    .attr("x", 0)
     .attr("y", 15);
 };
 
