@@ -4,12 +4,13 @@
 
   .data-control-container {
     display: flex;
-    position: fixed;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    position: fixed;
     z-index: 10;
     width: 100%;
-    padding-top: 20px;
+    padding: 3px;
     background: #212121;
     color: white;
     .filter {
@@ -26,12 +27,11 @@
   .line-charts {
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     height: 140px;
     width: 100%;
     align-content: space-around;
     position: relative;
-    top: 50px;
+    top: 30px;
   }
 
   .line-charts-svg {

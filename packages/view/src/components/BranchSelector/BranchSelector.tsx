@@ -6,12 +6,12 @@ const getDataList = () => {
 };
 
 const BranchSelector = () => {
-  const arr = getDataList();
+  const branchList = getDataList();
   return (
     <section className="branch-seletor">
       <span>Branches:</span>
       <select className="select-box">
-        {arr.map((option) => (
+        {branchList.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

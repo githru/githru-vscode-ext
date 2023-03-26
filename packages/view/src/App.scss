@@ -4,6 +4,13 @@ body {
   color: #fff;
 }
 
+.header-container {
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
 .top-container {
   margin-bottom: 20px;
   height: 220px;
