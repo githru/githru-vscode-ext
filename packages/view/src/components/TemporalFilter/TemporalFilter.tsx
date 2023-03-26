@@ -10,6 +10,7 @@ import { vscode } from "../../ide/VSCodeAPIWrapper";
 import {
   filterDataByDate,
   getMinMaxDate,
+  lineChartTimeFormatter,
   sortBasedOnCommitNode,
 } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -38,27 +39,14 @@ const TemporalFilter = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
-  // const clocLineChartData: LineChartData[] = useMemo(() => {
-  //   sortedFilteredData.map((datum) => {
-  //     return {
-  //       dateString: datum.commit.commitDate,
-  //       value:
-  //         datum.commit.diffStatistics.insertions +
-  //         datum.commit.diffStatistics.deletions,
-  //     };
-  //   });
-  //   [sortedFilteredData]
-  // );
-
   const sortedCommitData = sortBasedOnCommitNode(filteredData);
 
   const lineChartDataList: LineChartData[][] = useMemo(() => {
     const clocMap: Map<string, number> = new Map();
     const commitMap: Map<string, number> = new Map();
-    const timeFormatter = d3.timeFormat("%Y %m %d");
 
     sortedCommitData.forEach(({ commit }) => {
-      const formattedDate = timeFormatter(new Date(commit.commitDate));
+      const formattedDate = lineChartTimeFormatter(new Date(commit.commitDate));
       const clocMapItem = clocMap.get(formattedDate);
       const commitMapItem = commitMap.get(formattedDate);
 
@@ -82,25 +70,6 @@ const TemporalFilter = () => {
 
     return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
   }, [sortedCommitData]);
-
-  // const commitLineChartData: LineChartData[] = useMemo(() => {
-  //   const map: Map<string, number> = new Map();
-  //   const timeFormatter = d3.timeFormat("%Y %m %d");
-
-  //   sortedCommitData.forEach(({ commit }) => {
-  //     const formattedDate = timeFormatter(new Date(commit.commitDate));
-  //     const mapItem = map.get(formattedDate);
-
-  //     map.set(formattedDate, mapItem ? mapItem + 1 : 1);
-  //   });
-
-  //   return Array.from(map.entries()).map(([key, value]) => {
-  //     return {
-  //       dateString: key,
-  //       value: value,
-  //     };
-  //   });
-  // }, [filteredData]);
 
   const fromDateChangeHandler = ({
     target,
@@ -150,7 +119,7 @@ const TemporalFilter = () => {
     const svgElement = ref.current;
 
     // CLOC
-    drawLineChart(
+    const xScale = drawLineChart(
       svgElement,
       lineChartDataList[0],
       TEMPORAL_FILTER_LINE_CHART_STYLES.margin,
@@ -173,12 +142,29 @@ const TemporalFilter = () => {
       "COMMIT #"
     );
 
-    drawBrush(svgElement, BRUSH_MARGIN, windowSize.width, chartHeight * 2);
+    const dateChangeHandler = (fromDate: string, toDate: string) => {
+      setFilteredData(filterDataByDate({ data, fromDate, toDate }));
+    };
+
+    drawBrush(
+      xScale,
+      svgElement,
+      BRUSH_MARGIN,
+      windowSize.width,
+      chartHeight * 2,
+      dateChangeHandler
+    );
 
     return () => {
       d3.select(svgElement).selectAll("g").remove();
     };
-  }, [lineChartDataList, sortedFilteredData, windowSize]);
+  }, [
+    data,
+    lineChartDataList,
+    setFilteredData,
+    sortedFilteredData,
+    windowSize,
+  ]);
 
   return (
     <article className="temporal-filter">
