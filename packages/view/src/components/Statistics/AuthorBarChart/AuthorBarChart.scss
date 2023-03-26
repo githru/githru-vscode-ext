@@ -38,8 +38,8 @@
     color: $white;
     font-weight: bold;
 
-    &.y-axis {
-      text {
+    &.x-axis {
+      .tick {
         display: none;
       }
     }

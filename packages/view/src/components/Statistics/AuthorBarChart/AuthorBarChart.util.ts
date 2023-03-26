@@ -1,8 +1,11 @@
 import * as d3 from "d3";
+import md5 from "md5";
 
 import type { ClusterNode, CommitNode } from "types";
 
-import type { AuthorDataType } from "./AuthorBarChart.type";
+import { GITHUB_URL, GRAVATA_URL } from "../../../constants/constants";
+
+import type { AuthorDataType, SrcInfo } from "./AuthorBarChart.type";
 
 export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
   if (!data.length) return [];
@@ -66,3 +69,30 @@ export const sortDataByAuthor = (
     ];
   }, []);
 };
+
+export function getAuthorProfileImgSrc(authorName: string): Promise<SrcInfo> {
+  return new Promise((resolve) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const { src } = img;
+      const srcInfo: SrcInfo = {
+        key: authorName,
+        value: src,
+      };
+      resolve(srcInfo);
+    };
+
+    img.onerror = () => {
+      const fallback = `${GRAVATA_URL}/${md5(authorName)}}?d=identicon&f=y`;
+
+      resolve({
+        key: authorName,
+        value: fallback,
+      });
+    };
+
+    const src = `${GITHUB_URL}/${authorName}.png?size=30`;
+    img.src = src;
+  });
+}

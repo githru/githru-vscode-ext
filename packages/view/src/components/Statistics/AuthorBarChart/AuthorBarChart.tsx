@@ -7,12 +7,17 @@ import { useGlobalData } from "hooks";
 
 import { useGetSelectedData } from "../Statistics.hook";
 
-import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
+import type {
+  AuthorDataType,
+  MetricType,
+  SrcInfo,
+} from "./AuthorBarChart.type";
 import {
   convertNumberFormat,
   getDataByAuthor,
   sortDataByAuthor,
   sortDataByName,
+  getAuthorProfileImgSrc,
 } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
@@ -59,30 +64,30 @@ const AuthorBarChart = () => {
 
     // Scales
     const xScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(data, (d) => d[metric]) || 1])
-      .range([0, DIMENSIONS.width]);
-
-    const yScale = d3
       .scaleBand()
       .domain(data.map((d) => d.name))
-      .range([0, DIMENSIONS.height])
+      .range([0, DIMENSIONS.width])
       .paddingInner(0.3)
       .paddingOuter(data.length > 5 ? 0.2 : 0.4)
       .align(0.5);
 
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(data, (d) => d[metric]) || 1])
+      .range([DIMENSIONS.height, 0]);
+
     // Axis
     const xAxis = d3
       .axisBottom(xScale)
-      .ticks(5)
-      .tickFormat(convertNumberFormat)
+      .ticks(0)
+      .tickSizeInner(0)
       .tickSizeOuter(0);
     xAxisGroup.call(xAxis);
 
     const yAxis = d3
       .axisLeft(yScale)
-      .ticks(0)
-      .tickSizeInner(0)
+      .ticks(10)
+      .tickFormat(convertNumberFormat)
       .tickSizeOuter(0);
     yAxisGroup.call(yAxis);
 
@@ -146,12 +151,12 @@ const AuthorBarChart = () => {
             .append("g")
             .attr("class", "bar")
             .append("rect")
-            .attr("width", 0)
-            .attr("height", yScale.bandwidth())
-            .attr("x", 1)
-            .attr("y", (d) => yScale(d.name) || 0),
+            .attr("width", xScale.bandwidth())
+            .attr("height", 0)
+            .attr("x", (d) => xScale(d.name) || 0)
+            .attr("y", DIMENSIONS.height),
         (update) => update,
-        (exit) => exit.attr("width", 0).attr("x", DIMENSIONS.width).remove()
+        (exit) => exit.attr("height", 0).attr("y", 0).remove()
       )
       .on("mouseover", handleMouseOver)
       .on("mousemove", handleMouseMove)
@@ -159,33 +164,35 @@ const AuthorBarChart = () => {
       .on("click", handleClickBar)
       .transition()
       .duration(500)
-      .attr("width", (d: AuthorDataType) => xScale(d[metric]))
-      .attr("height", yScale.bandwidth())
-      .attr("x", 1)
-      .attr("y", (d: AuthorDataType) => yScale(d.name) || 0);
+      .attr("width", xScale.bandwidth())
+      .attr(
+        "height",
+        (d: AuthorDataType) => DIMENSIONS.height - yScale(d[metric])
+      )
+      .attr("x", (d: AuthorDataType) => xScale(d.name) || 0)
+      .attr("y", (d: AuthorDataType) => yScale(d[metric]));
 
-    // Draw author names
+    // Draw author thumbnails
     const barElements = d3.selectAll(".bar").nodes();
     if (!barElements.length) return;
 
-    barElements.forEach((barElement, i) => {
+    barElements.forEach(async (barElement, i) => {
       const bar = d3.select(barElement).datum(data[i]);
+      const profileImgSrc: string = await getAuthorProfileImgSrc(
+        data[i].name
+      ).then((res: SrcInfo) => res.value);
       bar
-        .append("text")
-        .attr("class", "name")
-        .attr("width", (d: AuthorDataType) => xScale(d[metric]))
-        .attr("height", yScale.bandwidth())
-        .attr("x", 3)
+        .append("image")
+        .attr("class", "profile-image")
+        .attr("xlink:href", profileImgSrc ?? "")
         .attr(
-          "y",
+          "x",
           (d: AuthorDataType) =>
-            (yScale(d.name) ?? 0) + yScale.bandwidth() / 2 + 5
+            (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7
         )
-        .on("mouseover", handleMouseOver)
-        .on("mousemove", handleMouseMove)
-        .on("mouseout", handleMouseOut)
-        .on("click", handleClickBar)
-        .html((d: AuthorDataType) => d.name);
+        .attr("y", 204)
+        .attr("width", 14)
+        .attr("height", 14);
     });
   }, [
     data,
