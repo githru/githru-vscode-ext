@@ -11,6 +11,7 @@ import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartData } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
+import { vscode } from "../../ide/VSCodeAPIWrapper";
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData } = useGlobalData();
@@ -91,6 +92,13 @@ const TemporalFilter = () => {
     }
   };
 
+  const clickRefreshHandler = (): void => {
+    const message = {
+      command: "refresh",
+    };
+    vscode.postMessage(message);
+  };
+
   const windowSize = useWindowResize();
 
   useEffect(() => {
@@ -131,7 +139,11 @@ const TemporalFilter = () => {
   return (
     <article className="temporal-filter">
       <div className="data-control-container">
-        <button type="button" className="refresh-button">
+        <button
+          type="button"
+          className="refresh-button"
+          onClick={clickRefreshHandler}
+        >
           <FiRefreshCcw />
         </button>
         <section className="filter">
