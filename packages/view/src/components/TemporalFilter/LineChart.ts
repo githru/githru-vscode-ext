@@ -1,8 +1,10 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
+
+import type { DateFilterRange } from "hooks";
 import "./LineChart.scss";
 
-export type LineChartData = {
+export type LineChartDatum = {
   dateString: string;
   value: number;
 };
@@ -14,14 +16,32 @@ export type Margin = {
   left: number;
 };
 
-export const getMinMaxDate = (data: LineChartData[]) => [
-  dayjs(data[0].dateString).format("YYYY-MM-DD"),
-  dayjs(data[data.length - 1].dateString).format("YYYY-MM-DD"),
-];
+const getMinMaxDate = (
+  lineChartData: LineChartDatum[],
+  dateRange: DateFilterRange
+) => {
+  if (lineChartData.length === 0 && dateRange !== undefined)
+    return [dateRange.fromDate, dateRange.toDate];
+
+  const minDate = dayjs(lineChartData[0].dateString).format("YYYY-MM-DD");
+  const maxDate = dayjs(
+    lineChartData[lineChartData.length - 1].dateString
+  ).format("YYYY-MM-DD");
+
+  if (dateRange === undefined) return [minDate, maxDate];
+
+  const { fromDate, toDate } = dateRange;
+
+  return [
+    minDate < fromDate ? minDate : fromDate,
+    maxDate > toDate ? maxDate : toDate,
+  ];
+};
 
 const drawLineChart = (
   refTarget: SVGSVGElement,
-  data: LineChartData[],
+  lineChartData: LineChartDatum[],
+  dateRange: DateFilterRange,
   margin: Margin,
   chartWidth: number,
   chartHeight: number,
@@ -29,6 +49,8 @@ const drawLineChart = (
   showXAxis: boolean,
   chartTitle: string
 ) => {
+  console.log("linechartdata", lineChartData);
+
   const width = chartWidth - margin.left - margin.right;
   const svg = d3
     .select(refTarget)
@@ -38,8 +60,11 @@ const drawLineChart = (
   // TODO cleanup으로 옮기기
   svg.selectAll("*").remove();
 
-  const [xMin, xMax] = getMinMaxDate(data);
-  const [yMin, yMax] = d3.extent(data, (d) => d.value) as [number, number];
+  const [xMin, xMax] = getMinMaxDate(lineChartData, dateRange);
+  const [yMin, yMax] = d3.extent(lineChartData, (d) => d.value) as [
+    number,
+    number
+  ];
 
   const xScale = d3
     .scaleTime()
@@ -49,14 +74,14 @@ const drawLineChart = (
   const yScale = d3.scaleLinear().domain([yMin, yMax]).range([chartHeight, 0]);
 
   const area = d3
-    .area<LineChartData>()
-    .curve(d3.curveLinear)
+    .area<LineChartDatum>()
+    .curve(d3.curveBasis)
     .x((d) => xScale(new Date(d.dateString)))
     .y0(yScale(1))
     .y1((d) => yScale(d.value));
 
   if (showXAxis) {
-    const tickCount = Math.min(Math.round(width / 75), data.length);
+    const tickCount = Math.min(Math.round(width / 75), lineChartData.length);
 
     const xAxis = d3
       .axisBottom<Date>(xScale)
@@ -75,7 +100,7 @@ const drawLineChart = (
 
   svg
     .append("path")
-    .datum(data)
+    .datum(lineChartData)
     .attr("class", "cloc-line-chart")
     .attr("d", area);
 

@@ -15,4 +15,4 @@ export const CommitMessageTypeList = [
 
 const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
 
-export type CommitMessageType = typeof COMMIT_MESSAGE_TYPE[number];
+export type CommitMessageType = (typeof COMMIT_MESSAGE_TYPE)[number];

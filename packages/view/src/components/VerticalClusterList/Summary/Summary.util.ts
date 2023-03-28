@@ -10,7 +10,7 @@ import type {
 import { GITHUB_URL, GRAVATA_URL } from "./Summary.const";
 import type { Cluster, SrcInfo } from "./Summary.type";
 
-export function getInitData({ data }: GlobalProps) {
+export function getInitData(data: GlobalProps["data"]) {
   const clusters: Cluster[] = [];
 
   data.map((clusterNode) => {
@@ -73,7 +73,7 @@ export function getClusterIds(selectedData: SelectedDataProps) {
 }
 
 function getAuthorNames(data: ClusterNode[]) {
-  const clusterNodes = getInitData({ data });
+  const clusterNodes = getInitData(data);
   const authorNames = clusterNodes
     .map((clusterNode) => clusterNode.summary.authorNames.flat())
     .flat();

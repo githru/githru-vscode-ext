@@ -14,7 +14,7 @@ import type { Cluster } from "./Summary.type";
 
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
-  const clusters = getInitData({ data });
+  const clusters = getInitData(data);
   const scrollRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusterId = getClusterIds(selectedData);

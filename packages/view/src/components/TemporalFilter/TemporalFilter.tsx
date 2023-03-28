@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -15,8 +15,9 @@ import {
 } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
-import type { LineChartData } from "./LineChart";
+import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
+import type { BrushXSelection } from "./LineChartBrush";
 import { drawBrush } from "./LineChartBrush";
 import {
   BRUSH_MARGIN,
@@ -24,24 +25,24 @@ import {
 } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const { data, filteredData, setFilteredData } = useGlobalData();
-  const sortedFilteredData = useMemo(
-    () => sortBasedOnCommitNode(filteredData),
-    [filteredData]
-  );
+  const {
+    data,
+    setData,
+    filteredData,
+    setFilteredData,
+    filteredRange,
+    setFilteredRange,
+  } = useGlobalData();
+
   const sortedData = sortBasedOnCommitNode(data);
-  const [minDate, maxDate] = getMinMaxDate(sortedData);
-  const [filteredPeriod, setFilteredPeriod] = useState({
-    fromDate: minDate,
-    toDate: maxDate,
-  });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
-  const sortedCommitData = sortBasedOnCommitNode(filteredData);
+  // TODO - Need to Refactor for reducing # of sorting tries.
+  const lineChartDataList: LineChartDatum[][] = useMemo(() => {
+    const sortedCommitData = sortBasedOnCommitNode(filteredData);
 
-  const lineChartDataList: LineChartData[][] = useMemo(() => {
     const clocMap: Map<string, number> = new Map();
     const commitMap: Map<string, number> = new Map();
 
@@ -69,49 +70,30 @@ const TemporalFilter = () => {
       });
 
     return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
-  }, [sortedCommitData]);
-
-  const fromDateChangeHandler = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>): void => {
-    const { toDate } = filteredPeriod;
-    const fromDate = target.value;
-
-    setFilteredPeriod({ fromDate, toDate });
-
-    if (fromDate === "" || toDate === "") {
-      setFilteredData(data);
-    } else {
-      setFilteredData(filterDataByDate({ data, fromDate, toDate }));
-    }
-  };
-
-  const toDateChangeHandler = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>): void => {
-    const { fromDate } = filteredPeriod;
-    const toDate = target.value;
-
-    setFilteredPeriod({ fromDate, toDate });
-
-    if (fromDate === "" || toDate === "") {
-      setFilteredData(data);
-    } else {
-      setFilteredData(filterDataByDate({ data, fromDate, toDate }));
-    }
-  };
+  }, [filteredData]);
 
   const refreshHandler = throttle(() => {
-    const message = {
-      command: "refresh",
-    };
-    vscode.postMessage(message);
+    // NEED to be refactored
+    if (window.isProduction) {
+      const message = {
+        command: "refresh",
+      };
+      vscode.postMessage(message);
+    } else {
+      const newData = [...data];
+      setData(newData);
+    }
   }, 3000);
 
   const windowSize = useWindowResize();
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current) return undefined;
+    let dateRange = filteredRange;
+    if (lineChartDataList[0].length === 0 && filteredRange === undefined)
+      dateRange = getMinMaxDate(sortedData);
+
+    console.log("dateRange ", filteredRange, dateRange);
 
     const axisHeight = 20;
     const chartHeight =
@@ -122,6 +104,7 @@ const TemporalFilter = () => {
     const xScale = drawLineChart(
       svgElement,
       lineChartDataList[0],
+      dateRange,
       TEMPORAL_FILTER_LINE_CHART_STYLES.margin,
       windowSize.width,
       chartHeight,
@@ -134,6 +117,7 @@ const TemporalFilter = () => {
     drawLineChart(
       svgElement,
       lineChartDataList[1],
+      dateRange,
       TEMPORAL_FILTER_LINE_CHART_STYLES.margin,
       windowSize.width,
       chartHeight,
@@ -142,12 +126,20 @@ const TemporalFilter = () => {
       "COMMIT #"
     );
 
-    const dateChangeHandler = (fromDate: string, toDate: string) => {
+    const dateChangeHandler = (selection: BrushXSelection) => {
+      if (selection === null) {
+        setFilteredRange(undefined);
+        setFilteredData(data);
+        return;
+      }
+
+      const fromDate = lineChartTimeFormatter(xScale.invert(selection[0]));
+      const toDate = lineChartTimeFormatter(xScale.invert(selection[1]));
+      setFilteredRange({ fromDate, toDate });
       setFilteredData(filterDataByDate({ data, fromDate, toDate }));
     };
 
     drawBrush(
-      xScale,
       svgElement,
       BRUSH_MARGIN,
       windowSize.width,
@@ -162,8 +154,11 @@ const TemporalFilter = () => {
     data,
     lineChartDataList,
     setFilteredData,
-    sortedFilteredData,
+    filteredData,
     windowSize,
+    filteredRange,
+    setFilteredRange,
+    sortedData,
   ]);
 
   return (
@@ -176,30 +171,6 @@ const TemporalFilter = () => {
         >
           <FiRefreshCcw />
         </button>
-        <section className="filter">
-          <form>
-            <div>
-              <span>From:</span>
-              <input
-                className="date-from"
-                type="date"
-                min={minDate}
-                max={maxDate}
-                value={filteredPeriod.fromDate}
-                onChange={fromDateChangeHandler}
-              />
-              <span>To:</span>
-              <input
-                className="date-to"
-                type="date"
-                min={minDate}
-                max={maxDate}
-                value={filteredPeriod.toDate}
-                onChange={toDateChangeHandler}
-              />
-            </div>
-          </form>
-        </section>
       </div>
       <div className="line-charts" ref={wrapperRef}>
         <svg className="line-charts-svg" ref={ref} />
