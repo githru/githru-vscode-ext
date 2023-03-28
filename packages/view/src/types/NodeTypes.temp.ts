@@ -16,7 +16,7 @@ export const CommitMessageTypeList = [
 
 const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
 
-export type CommitMessageType = typeof COMMIT_MESSAGE_TYPE[number];
+export type CommitMessageType = (typeof COMMIT_MESSAGE_TYPE)[number];
 
 // todo: engine DifferenceStatistic 와 통일
 export type DiffStatistics = {
@@ -51,7 +51,7 @@ export type Commit = {
 };
 
 export const NODE_TYPE_NAME = ["COMMIT", "CLUSTER"] as const;
-export type NodeTypeName = typeof NODE_TYPE_NAME[number];
+export type NodeTypeName = (typeof NODE_TYPE_NAME)[number];
 
 export type NodeBase = {
   nodeTypeName: NodeTypeName;
