@@ -8,6 +8,7 @@ import App from "./App";
 import "styles/app.scss";
 
 const container = document.getElementById("root") as HTMLElement;
+console.log("isProduction = ", window.isProduction);
 
 ReactDOM.createRoot(container).render(
   <React.StrictMode>

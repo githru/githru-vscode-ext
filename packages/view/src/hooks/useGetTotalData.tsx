@@ -8,22 +8,19 @@ export const useGetTotalData = (): GlobalProps => {
   const [data, setData] = useState<ClusterNode[]>([]);
 
   useEffect(() => {
-    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
-      if (e.data.command !== "refresh") return;
-      setData(JSON.parse(e.data.payload));
-    };
-    window.addEventListener("message", onReceiveClusterNodes);
-    return () => window.removeEventListener("message", onReceiveClusterNodes);
-  }, []);
-
-  useEffect(() => {
-    console.log("isProduction = ", window.isProduction);
-
     if (window.isProduction) {
       setData(window.githruData as ClusterNode[]);
     } else {
       setData(fakeData as unknown as ClusterNode[]);
     }
+
+    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
+      if (e.data.command !== "refresh") return;
+      setData(JSON.parse(e.data.payload));
+    };
+    window.addEventListener("message", onReceiveClusterNodes);
+
+    return () => window.removeEventListener("message", onReceiveClusterNodes);
   }, []);
 
   return { data };
