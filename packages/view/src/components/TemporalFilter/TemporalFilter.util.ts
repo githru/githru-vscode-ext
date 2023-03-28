@@ -28,15 +28,12 @@ type FilterDataByDateProps = {
   toDate: string;
 };
 
-/**
- * Note: 날짜 범위에 따라 필터링
- */
 export function filterDataByDate({
   data,
   fromDate,
   toDate,
 }: FilterDataByDateProps): ClusterNode[] {
-  return data
+  const filteredData = data
     .map((clusterNode) => {
       return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
         return (
@@ -54,14 +51,22 @@ export function filterDataByDate({
         commitNodeList,
       })
     );
+
+  return filteredData;
 }
 
 export const getCloc = (d: CommitNode) =>
   d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
 
-export const getMinMaxDate = (data: CommitNode[]) => [
-  dayjs(data[0].commit.commitDate).format("YYYY-MM-DD"),
-  dayjs(data[data.length - 1].commit.commitDate).format("YYYY-MM-DD"),
-];
+export const getMinMaxDate = (data: CommitNode[]) => {
+  const minMaxDateFormat = "YYYY-MM-DD";
+
+  return {
+    fromDate: dayjs(data[0].commit.commitDate).format(minMaxDateFormat),
+    toDate: dayjs(data[data.length - 1].commit.commitDate).format(
+      minMaxDateFormat
+    ),
+  };
+};
 
 export const lineChartTimeFormatter = timeFormat("%Y %m %d");

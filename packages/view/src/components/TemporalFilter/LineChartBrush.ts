@@ -2,28 +2,23 @@ import * as d3 from "d3";
 import type { D3BrushEvent } from "d3";
 
 import type { Margin } from "./LineChart";
-import { lineChartTimeFormatter } from "./TemporalFilter.util";
+
+export type BrushXSelection = [number, number] | null;
 
 export const drawBrush = (
-  xScale: d3.ScaleTime<number, number, never>,
   refTarget: SVGSVGElement,
   margin: Margin,
   chartWidth: number,
   chartHeight: number,
-  brushHandler: (fromDate: string, toDate: string) => void
+  brushHandler: (selection: BrushXSelection) => void
 ) => {
   const width = chartWidth - margin.left - margin.right;
 
   const brushed = (event: D3BrushEvent<String>) => {
-    const selection = event.selection as [number, number];
-
-    brushHandler(
-      lineChartTimeFormatter(xScale.invert(selection[0])),
-      lineChartTimeFormatter(xScale.invert(selection[1]))
-    );
+    console.log("brush sel ", event.selection);
+    brushHandler(event.selection as BrushXSelection);
   };
 
-  console.log(margin, chartWidth, chartHeight);
   const svg = d3.select(refTarget);
   const brush = d3
     .brushX()

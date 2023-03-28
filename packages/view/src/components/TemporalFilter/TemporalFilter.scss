@@ -10,9 +10,10 @@
     position: fixed;
     z-index: 10;
     width: 100%;
-    padding: 3px;
+    padding: 1px;
     background: #212121;
     color: white;
+    height: 30px;
     .filter {
       display: flex;
       flex: 1;
@@ -82,7 +83,7 @@
   height: 1.2rem;
   position: absolute;
   right: 0;
-  border: 1px solid white;
+  border: 0px solid white;
   border-radius: 5px;
   color: white;
   background-color: transparent;
