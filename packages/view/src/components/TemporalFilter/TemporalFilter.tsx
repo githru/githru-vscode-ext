@@ -27,19 +27,12 @@ import {
 const TemporalFilter = () => {
   const {
     data,
+    setData,
     filteredData,
     setFilteredData,
     filteredRange,
     setFilteredRange,
   } = useGlobalData();
-
-  console.log("템포럺 필터");
-  console.log("filteredData", filteredData.length, data.length);
-
-  // const sortedFilteredData = useMemo(
-  //   () => sortBasedOnCommitNode(filteredData),
-  //   [filteredData]
-  // );
 
   const sortedData = sortBasedOnCommitNode(data);
 
@@ -80,10 +73,16 @@ const TemporalFilter = () => {
   }, [filteredData]);
 
   const refreshHandler = throttle(() => {
-    const message = {
-      command: "refresh",
-    };
-    vscode.postMessage(message);
+    // NEED to be refactored
+    if (window.isProduction) {
+      const message = {
+        command: "refresh",
+      };
+      vscode.postMessage(message);
+    } else {
+      const newData = [...data];
+      setData(newData);
+    }
   }, 3000);
 
   const windowSize = useWindowResize();
@@ -94,7 +93,7 @@ const TemporalFilter = () => {
     if (lineChartDataList[0].length === 0 && filteredRange === undefined)
       dateRange = getMinMaxDate(sortedData);
 
-    console.log("dateRange ", dateRange);
+    console.log("dateRange ", filteredRange, dateRange);
 
     const axisHeight = 20;
     const chartHeight =
@@ -136,8 +135,6 @@ const TemporalFilter = () => {
 
       const fromDate = lineChartTimeFormatter(xScale.invert(selection[0]));
       const toDate = lineChartTimeFormatter(xScale.invert(selection[1]));
-      // eslint-disable-next-line prettier/prettier
-      console.log("dateChangeHandler222", fromDate, toDate, filteredData.length);
       setFilteredRange({ fromDate, toDate });
       setFilteredData(filterDataByDate({ data, fromDate, toDate }));
     };
@@ -163,8 +160,6 @@ const TemporalFilter = () => {
     setFilteredRange,
     sortedData,
   ]);
-
-  console.log("filteredData", filteredData.length, data.length);
 
   return (
     <article className="temporal-filter">

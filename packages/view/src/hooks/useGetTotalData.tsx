@@ -7,6 +7,8 @@ import fakeData from "../fake-assets/cluster-nodes.json";
 export const useGetTotalData = (): GlobalProps => {
   const [data, setData] = useState<ClusterNode[]>([]);
 
+  // TODO - NEED to move to independent area
+
   useEffect(() => {
     if (window.isProduction) {
       setData(window.githruData as ClusterNode[]);
@@ -23,5 +25,5 @@ export const useGetTotalData = (): GlobalProps => {
     return () => window.removeEventListener("message", onReceiveClusterNodes);
   }, []);
 
-  return { data };
+  return { data, setData };
 };

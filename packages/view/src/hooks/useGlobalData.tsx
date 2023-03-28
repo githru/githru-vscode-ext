@@ -20,6 +20,7 @@ export type DateFilterRange =
 
 type GlobalDataState = {
   data: ClusterNode[];
+  setData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   filteredRange: DateFilterRange;
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
@@ -33,7 +34,7 @@ export const GlobalDataContext = createContext<GlobalDataState>(
 );
 
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
-  const { data } = useGetTotalData();
+  const { data, setData } = useGetTotalData();
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
   const [filteredRange, setFilteredRange] =
@@ -41,6 +42,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     console.log("data changed", data.length);
+    setFilteredRange(undefined);
     setFilteredData(data.reverse());
   }, [data]);
 
@@ -51,6 +53,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       data,
+      setData,
       filteredRange,
       setFilteredRange,
       filteredData,
@@ -58,7 +61,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
       selectedData,
       setSelectedData,
     }),
-    [data, filteredData, filteredRange, selectedData]
+    [data, setData, filteredData, filteredRange, selectedData]
   );
 
   // if (!data.length || !filteredData.length) {
