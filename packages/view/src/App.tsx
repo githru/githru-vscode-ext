@@ -4,6 +4,7 @@ import {
   TemporalFilter,
   VerticalClusterList,
 } from "components";
+import { useGlobalData } from "hooks";
 
 import "./App.scss";
 
