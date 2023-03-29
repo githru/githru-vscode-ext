@@ -1,4 +1,9 @@
-import { Statistics, TemporalFilter, VerticalClusterList } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  VerticalClusterList,
+} from "components";
 import { useGlobalData } from "hooks";
 
 import "./App.scss";
@@ -12,10 +17,11 @@ const App = () => {
 
   return (
     <>
-      <div className="head-container">
-        <div>
-          <TemporalFilter />
-        </div>
+      <div className="header-container">
+        <BranchSelector />
+      </div>
+      <div className="top-container">
+        <TemporalFilter />
       </div>
       <div className="middle-container">
         {filteredData.length !== 0 ? (

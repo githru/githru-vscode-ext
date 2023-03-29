@@ -4,9 +4,16 @@ body {
   color: #fff;
 }
 
-.head-container {
-  margin-bottom: 30px;
-  height: 200px;
+.header-container {
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-container {
+  margin-bottom: 20px;
+  height: 220px;
 }
 
 .middle-container {
