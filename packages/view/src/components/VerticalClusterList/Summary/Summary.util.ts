@@ -8,7 +8,7 @@ import type {
 } from "types";
 
 import { GITHUB_URL, GRAVATA_URL } from "./Summary.const";
-import type { Cluster, SrcInfo } from "./Summary.type";
+import type { AuthSrcMap, Cluster, SrcInfo } from "./Summary.type";
 
 export function getInitData(data: GlobalProps["data"]) {
   const clusters: Cluster[] = [];
@@ -105,12 +105,12 @@ function getAuthorProfileImgSrc(authorName: string) {
 }
 
 export async function getAuthSrcMap(data: ClusterNode[]) {
-  const authSrcMap = {};
   const authorNames = getAuthorNames(data);
   const promiseAuthSrc = authorNames.map(getAuthorProfileImgSrc);
   const authSrcs = await Promise.all(promiseAuthSrc);
+  const authSrcMap: AuthSrcMap = {};
   authSrcs.forEach((srcInfo) => {
-    const { key, value } = srcInfo as SrcInfo;
+    const { key, value } = srcInfo;
     authSrcMap[key] = value;
   });
   return authSrcMap;
