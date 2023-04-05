@@ -28,3 +28,7 @@ export type SrcInfo = {
   key: string;
   value: string;
 };
+
+export type AuthSrcMap = {
+  [key: string]: string;
+} | null;
