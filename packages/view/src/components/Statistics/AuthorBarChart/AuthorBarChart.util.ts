@@ -5,12 +5,16 @@ import type { ClusterNode, CommitNode } from "types";
 
 import { GITHUB_URL, GRAVATA_URL } from "../../../constants/constants";
 
-import type { AuthorDataType, SrcInfo } from "./AuthorBarChart.type";
+import type {
+  AuthorDataObj,
+  AuthorDataType,
+  SrcInfo,
+} from "./AuthorBarChart.type";
 
 export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
   if (!data.length) return [];
 
-  const authorDataObj = {};
+  const authorDataObj: AuthorDataObj = {};
 
   data.forEach(({ commitNodeList }) => {
     commitNodeList.reduce((acc, { commit }) => {

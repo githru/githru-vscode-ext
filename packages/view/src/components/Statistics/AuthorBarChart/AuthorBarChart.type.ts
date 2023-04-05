@@ -13,3 +13,12 @@ export type SrcInfo = {
   key: string;
   value: string;
 };
+
+export type AuthorDataObj = {
+  [key: string]: {
+    name: string;
+    commit: number;
+    insertion: number;
+    deletion: number;
+  };
+};
