@@ -81,13 +81,13 @@ function getAuthorNames(data: ClusterNode[]) {
   return Array.from(setAuthorNames);
 }
 
-function getAuthorProfileImgSrc(authorName: string) {
+function getAuthorProfileImgSrc(authorName: string): Promise<SrcInfo> {
   return new Promise((resolve) => {
     const img = new Image();
 
     img.onload = () => {
       const { src } = img;
-      const srcInfo: SrcInfo = {
+      const srcInfo = {
         key: authorName,
         value: src,
       };
@@ -95,12 +95,10 @@ function getAuthorProfileImgSrc(authorName: string) {
     };
 
     img.onerror = () => {
-      const fallback = `${GRAVATA_URL}/${md5(authorName)}}?d=identicon&f=y`;
-      img.src = fallback;
+      img.src = `${GRAVATA_URL}/${md5(authorName)}}?d=identicon&f=y`;
     };
 
-    const src = `${GITHUB_URL}/${authorName}.png?size=30`;
-    img.src = src;
+    img.src = `${GITHUB_URL}/${authorName}.png?size=30`;
   });
 }
 
