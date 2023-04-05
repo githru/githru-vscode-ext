@@ -130,8 +130,9 @@ describe("csm", () => {
           const squashCommitIds = csmNode.source.map(
             (commitNode) => commitNode.commit.id
           );
+
           expect(squashCommitIds).toEqual(
-            expectedSquashCommitIds[csmNode.base.commit.id]
+            expectedSquashCommitIds[csmNode.base.commit.id as "2" | "3"]
           );
         });
       });
@@ -177,7 +178,7 @@ describe("csm", () => {
           (commitNode) => commitNode.commit.id
         );
         expect(squashCommitIds).toEqual(
-          expectedSquashCommitIds[csmNode.base.commit.id]
+          expectedSquashCommitIds[csmNode.base.commit.id as "8" | "11"]
         );
       });
     });
