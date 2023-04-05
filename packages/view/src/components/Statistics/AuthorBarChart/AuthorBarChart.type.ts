@@ -7,7 +7,7 @@ export type AuthorDataType = {
   deletion: number;
 };
 
-export type MetricType = typeof METRIC_TYPE[number];
+export type MetricType = (typeof METRIC_TYPE)[0 | 1 | 2];
 
 export type SrcInfo = {
   key: string;
