@@ -51,7 +51,7 @@ export const sortDataByName = (a: string, b: string) => {
 export const convertNumberFormat = (
   d: number | { valueOf(): number }
 ): string => {
-  if (d < 1 && d >= 0) {
+  if (typeof d === "number" && d < 1 && d >= 0) {
     return `${d}`;
   }
   return d3.format("~s")(d);
