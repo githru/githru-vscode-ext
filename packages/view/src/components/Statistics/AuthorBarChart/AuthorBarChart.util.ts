@@ -22,15 +22,20 @@ export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
       const { insertions, deletions } = commit.diffStatistics;
 
       if (!acc[author]) {
-        acc[author] = { name: author };
+        acc[author] = {
+          name: author,
+          commit: 1,
+          insertion: insertions,
+          deletion: deletions,
+        };
+      } else {
+        acc[author] = {
+          ...acc[author],
+          commit: (acc[author].commit || 0) + 1,
+          insertion: (acc[author].insertion || 0) + insertions,
+          deletion: (acc[author].deletion || 0) + deletions,
+        };
       }
-
-      acc[author] = {
-        ...acc[author],
-        commit: (acc[author].commit || 0) + 1,
-        insertion: (acc[author].insertion || 0) + insertions,
-        deletion: (acc[author].deletion || 0) + deletions,
-      };
 
       return acc;
     }, authorDataObj);
