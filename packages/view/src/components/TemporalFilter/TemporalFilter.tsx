@@ -27,11 +27,11 @@ import {
 const TemporalFilter = () => {
   const {
     data,
-    setData,
     filteredData,
     setFilteredData,
     filteredRange,
     setFilteredRange,
+    setSelectedData,
   } = useGlobalData();
 
   const sortedData = sortBasedOnCommitNode(data);
@@ -80,8 +80,9 @@ const TemporalFilter = () => {
       };
       vscode.postMessage(message);
     } else {
-      const newData = [...data];
-      setData(newData);
+      setFilteredRange(undefined);
+      setFilteredData([...data].reverse());
+      setSelectedData([]);
     }
   }, 3000);
 
@@ -129,7 +130,8 @@ const TemporalFilter = () => {
     const dateChangeHandler = (selection: BrushXSelection) => {
       if (selection === null) {
         setFilteredRange(undefined);
-        setFilteredData(data);
+        setFilteredData([...data]);
+        setSelectedData([]);
         return;
       }
 
@@ -137,6 +139,7 @@ const TemporalFilter = () => {
       const toDate = lineChartTimeFormatter(xScale.invert(selection[1]));
       setFilteredRange({ fromDate, toDate });
       setFilteredData(filterDataByDate({ data, fromDate, toDate }));
+      setSelectedData([]);
     };
 
     drawBrush(
@@ -159,6 +162,7 @@ const TemporalFilter = () => {
     filteredRange,
     setFilteredRange,
     sortedData,
+    setSelectedData,
   ]);
 
   return (
