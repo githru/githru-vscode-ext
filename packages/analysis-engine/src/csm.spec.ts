@@ -122,7 +122,7 @@ describe("csm", () => {
 
         // 2 commit has squash-commits(8,13,12,7,6)
         // 3 commit has squash-commits(11,16,15,14,10,9)
-        const expectedSquashCommitIds = {
+        const expectedSquashCommitIds: Record<string, string[]> = {
           "2": ["8", "13", "12", "7", "6"],
           "3": ["11", "16", "15", "14", "10", "9"],
         };
@@ -132,7 +132,7 @@ describe("csm", () => {
           );
 
           expect(squashCommitIds).toEqual(
-            expectedSquashCommitIds[csmNode.base.commit.id as "2" | "3"]
+            expectedSquashCommitIds[csmNode.base.commit.id]
           );
         });
       });
@@ -169,7 +169,7 @@ describe("csm", () => {
         expectedMergeCommitIds
       );
 
-      const expectedSquashCommitIds = {
+      const expectedSquashCommitIds: Record<string, string[]> = {
         "8": ["13", "12"],
         "11": ["16", "15", "14"],
       };
@@ -178,7 +178,7 @@ describe("csm", () => {
           (commitNode) => commitNode.commit.id
         );
         expect(squashCommitIds).toEqual(
-          expectedSquashCommitIds[csmNode.base.commit.id as "8" | "11"]
+          expectedSquashCommitIds[csmNode.base.commit.id]
         );
       });
     });
