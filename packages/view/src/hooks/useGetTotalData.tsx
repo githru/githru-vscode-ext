@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
+import { container } from "tsyringe";
 
-import type { ClusterNode, GlobalProps, VSMessageEvent } from "types";
-
-import fakeData from "../fake-assets/cluster-nodes.json";
+import type { ClusterNode, GlobalProps } from "types";
+import type IDEPort from "ide/IDEPort";
 
 export const useGetTotalData = (): GlobalProps => {
+  console.log("useGetTotalData loaded");
   const [data, setData] = useState<ClusterNode[]>([]);
-
-  // TODO - NEED to move to independent area
+  const ide: IDEPort = container.resolve("IDEPort");
 
   useEffect(() => {
-    if (window.isProduction) {
-      setData(window.githruData as ClusterNode[]);
-    } else {
-      setData(fakeData as unknown as ClusterNode[]);
-    }
-
-    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
-      if (e.data.command !== "refresh") return;
-      setData(JSON.parse(e.data.payload));
-    };
-    window.addEventListener("message", onReceiveClusterNodes);
-
-    return () => window.removeEventListener("message", onReceiveClusterNodes);
-  }, []);
+    ide.sendFetchAnalyzedDataCommand();
+    // if (window.isProduction) {
+    //   setData(window.githruData as ClusterNode[]);
+    // } else {
+    //   setData(fakeData as unknown as ClusterNode[]);
+    // }
+    // const onReceiveClusterNodes = (e: EngineVSCodeMessageEvent): void => {
+    //   if (e.data.command !== "refresh") return;
+    //   setData(JSON.parse(e.data.message));
+    // };
+    // window.addEventListener("message", onReceiveClusterNodes);
+    // return () => window.removeEventListener("message", onReceiveClusterNodes);
+  }, [ide]);
 
   return { data, setData };
 };

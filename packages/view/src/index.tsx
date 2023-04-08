@@ -1,19 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+// THIS index.tsx is only for development (CRA npm start)
 
-import { GlobalDataProvider } from "hooks";
+import "reflect-metadata";
+import { container } from "tsyringe";
 
-import App from "./App";
+import FakeIDEAdapter from "ide/FakeIDEAdapter";
+import { initRender } from "index.common";
 
-import "styles/app.scss";
+import type IDEPort from "./ide/IDEPort";
 
-const container = document.getElementById("root") as HTMLElement;
+container.register<IDEPort>("IDEPort", { useClass: FakeIDEAdapter });
 console.log("isProduction = ", window.isProduction);
 
-ReactDOM.createRoot(container).render(
-  <React.StrictMode>
-    <GlobalDataProvider>
-      <App />
-    </GlobalDataProvider>
-  </React.StrictMode>
-);
+initRender();

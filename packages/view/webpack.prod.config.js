@@ -12,7 +12,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const config = {
   mode: "production",
   entry: {
-    webviewApp: "./src/index.tsx",
+    webviewApp: "./src/index.prod.tsx",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
