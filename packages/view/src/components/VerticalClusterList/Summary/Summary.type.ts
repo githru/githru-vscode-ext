@@ -29,6 +29,4 @@ export type SrcInfo = {
   value: string;
 };
 
-export type AuthSrcMap = {
-  [key: string]: string;
-} | null;
+export type AuthSrcMap = Record<string, string>;

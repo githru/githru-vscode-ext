@@ -7,7 +7,7 @@ import type { AuthSrcMap } from "./Summary.type";
 
 export const usePreLoadAuthorImg = () => {
   const { data } = useGlobalData();
-  const [authSrcMap, setAuthSrcMap] = useState<AuthSrcMap>(null);
+  const [authSrcMap, setAuthSrcMap] = useState<AuthSrcMap | null>(null);
 
   useEffect(() => {
     getAuthSrcMap(data)
