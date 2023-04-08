@@ -24,7 +24,12 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
-  const { data: totalData, filteredData, setFilteredData } = useGlobalData();
+  const {
+    data: totalData,
+    filteredData,
+    setSelectedData,
+    setFilteredData,
+  } = useGlobalData();
   const rawData = useGetSelectedData();
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -138,6 +143,8 @@ const AuthorBarChart = () => {
         setFilteredData(sortDataByAuthor(filteredData, d.name));
         setPrevData(filteredData);
       }
+
+      setSelectedData([]);
       tooltip.style("display", "none");
     };
 
@@ -201,6 +208,7 @@ const AuthorBarChart = () => {
     prevData,
     rawData,
     setFilteredData,
+    setSelectedData,
     totalData,
   ]);
 

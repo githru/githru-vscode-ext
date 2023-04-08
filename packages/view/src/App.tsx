@@ -1,6 +1,9 @@
-// import { container } from "tsyringe";
-
-import { Statistics, TemporalFilter, VerticalClusterList } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  VerticalClusterList,
+} from "components";
 import { useGlobalData } from "hooks";
 
 import "./App.scss";
@@ -10,11 +13,7 @@ import "./App.scss";
 console.log("(Outside of App) called only once? ... maybe called before index.js");
 
 const App = () => {
-  console.log("App Component loaded");
-
   const { data, filteredData } = useGlobalData();
-  // const ide: IDEPort = container.resolve("IDEPort");
-  // ide.addAllEventListener(setData);
 
   if (!data?.length) {
     return <div>NO COMMIT EXISTS YET</div>;
@@ -22,10 +21,11 @@ const App = () => {
 
   return (
     <>
-      <div className="head-container">
-        <div>
-          <TemporalFilter />
-        </div>
+      <div className="header-container">
+        <BranchSelector />
+      </div>
+      <div className="top-container">
+        <TemporalFilter />
       </div>
       <div className="middle-container">
         {filteredData.length !== 0 ? (
