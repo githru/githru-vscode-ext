@@ -17,28 +17,26 @@ export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
   const authorDataObj: AuthorDataObj = {};
 
   data.forEach(({ commitNodeList }) => {
-    commitNodeList.reduce((acc, { commit }) => {
+    commitNodeList.forEach(({ commit }) => {
       const author = commit.author.names[0];
       const { insertions, deletions } = commit.diffStatistics;
 
-      if (!acc[author]) {
-        acc[author] = {
+      if (!authorDataObj[author]) {
+        authorDataObj[author] = {
           name: author,
           commit: 1,
           insertion: insertions,
           deletion: deletions,
         };
       } else {
-        acc[author] = {
-          ...acc[author],
-          commit: (acc[author].commit || 0) + 1,
-          insertion: (acc[author].insertion || 0) + insertions,
-          deletion: (acc[author].deletion || 0) + deletions,
+        authorDataObj[author] = {
+          ...authorDataObj[author],
+          commit: (authorDataObj[author].commit || 0) + 1,
+          insertion: (authorDataObj[author].insertion || 0) + insertions,
+          deletion: (authorDataObj[author].deletion || 0) + deletions,
         };
       }
-
-      return acc;
-    }, authorDataObj);
+    });
   });
 
   return Object.values(authorDataObj);
