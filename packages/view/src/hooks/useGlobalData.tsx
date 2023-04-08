@@ -7,9 +7,9 @@ import React, {
   useState,
 } from "react";
 
-import type { ClusterNode } from "types";
+import type { ClusterNode, VSMessageEvent } from "types";
 
-import { useGetTotalData } from "./useGetTotalData";
+import fakeData from "../fake-assets/cluster-nodes.json";
 
 export type DateFilterRange =
   | {
@@ -34,21 +34,34 @@ export const GlobalDataContext = createContext<GlobalDataState>(
 );
 
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
-  const { data, setData } = useGetTotalData();
+  const [data, setData] = useState<ClusterNode[]>([]);
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
   const [filteredRange, setFilteredRange] =
     useState<DateFilterRange>(undefined);
 
   useEffect(() => {
-    console.log("data changed", data.length);
-    setFilteredRange(undefined);
-    setFilteredData(data.reverse());
-  }, [data]);
+    if (window.isProduction) {
+      setData(window.githruData as ClusterNode[]);
+      setFilteredData([...(window.githruData as ClusterNode[])]);
+    } else {
+      setData(fakeData as unknown as ClusterNode[]);
+      setFilteredData(([...fakeData] as unknown as ClusterNode[]).reverse());
+    }
 
-  useEffect(() => {
-    setSelectedData([]);
-  }, [filteredData]);
+    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
+      if (e.data.command !== "refresh") return;
+
+      const newData = JSON.parse(e.data.payload);
+      setData(newData);
+      setFilteredRange(undefined);
+      setFilteredData([...newData].reverse());
+      setSelectedData([]);
+    };
+    window.addEventListener("message", onReceiveClusterNodes);
+
+    return () => window.removeEventListener("message", onReceiveClusterNodes);
+  }, []);
 
   const value = useMemo(
     () => ({
