@@ -46,8 +46,8 @@ const Summary = () => {
             >
               <div className="toggle-contents-container">
                 <div className="name-box">
-                  {cluster.summary.authorNames.map(
-                    (authorArray: Array<string>) => {
+                  {authSrcMap &&
+                    cluster.summary.authorNames.map((authorArray: string[]) => {
                       return authorArray.map((authorName: string) => (
                         <Author
                           key={authorName}
@@ -55,8 +55,7 @@ const Summary = () => {
                           src={authSrcMap[authorName]}
                         />
                       ));
-                    }
-                  )}
+                    })}
                 </div>
                 <Content
                   content={cluster.summary.content}
