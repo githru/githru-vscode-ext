@@ -18,6 +18,6 @@
     ],
     "dependencies": {
         "generator-code": "^1.6.10",
-        "yo": "^4.3.0"
+        "yo": "^1.4.5"
     }
 }
