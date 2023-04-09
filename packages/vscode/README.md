@@ -33,9 +33,11 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 
-### 0.1.0
-
-Initial release.
+### 0.3.0
+- added temporal filter by brushing
+= added refresh feature.
+- put avatar in author bar chart
+- improved some UX.
 
 ### 0.2.0
 
@@ -43,3 +45,8 @@ Initial release.
 - GitHub User Avatar
 - GitHub Pull Request Association
 - Author Filtering
+
+### 0.1.0
+
+Initial release.
+

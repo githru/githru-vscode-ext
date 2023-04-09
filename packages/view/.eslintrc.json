@@ -37,6 +37,7 @@
         "tsx": "never"
       }
     ],
+    "import/no-extraneous-dependencies": "off",
     "import/no-useless-path-segments": [
       "error",
       {

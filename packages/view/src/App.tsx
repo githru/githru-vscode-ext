@@ -1,15 +1,29 @@
+import "reflect-metadata";
+import { container } from "tsyringe";
+import { useRef } from "react";
+
 import {
   BranchSelector,
   Statistics,
   TemporalFilter,
   VerticalClusterList,
 } from "components";
+import "./App.scss";
+import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
 
-import "./App.scss";
-
 const App = () => {
-  const { data, filteredData } = useGlobalData();
+  const initRef = useRef<boolean>(false);
+
+  const { data, filteredData, fetchAnalyzedData } = useGlobalData();
+
+  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+
+  if (initRef.current === false) {
+    ideAdapter.addAllEventListener(fetchAnalyzedData);
+    ideAdapter.sendFetchAnalyzedDataCommand();
+    initRef.current = true;
+  }
 
   if (!data?.length) {
     return <div>NO COMMIT EXISTS YET</div>;
