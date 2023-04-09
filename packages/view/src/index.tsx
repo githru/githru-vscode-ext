@@ -3,12 +3,10 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
 
-import FakeIDEAdapter from "ide/FakeIDEAdapter";
-import { initRender } from "index.common";
-
+import FakeIDEAdapter from "./ide/FakeIDEAdapter";
+import { initRender } from "./index.common";
 import type IDEPort from "./ide/IDEPort";
 
-container.register<IDEPort>("IDEPort", { useClass: FakeIDEAdapter });
-console.log("isProduction = ", window.isProduction);
+container.register<IDEPort>("IDEAdapter", { useClass: FakeIDEAdapter });
 
 initRender();

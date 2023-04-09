@@ -1,15 +1,7 @@
 import type { Dispatch, ReactNode } from "react";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 
-import type { ClusterNode, VSMessageEvent } from "types";
-
-import fakeData from "../fake-assets/cluster-nodes.json";
+import type { ClusterNode } from "types";
 
 export type DateFilterRange =
   | {
@@ -20,13 +12,13 @@ export type DateFilterRange =
 
 type GlobalDataState = {
   data: ClusterNode[];
-  setData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   filteredRange: DateFilterRange;
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
   setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   setFilteredRange: Dispatch<React.SetStateAction<DateFilterRange>>;
+  fetchAnalyzedData: (analyzedData: ClusterNode[]) => void;
 };
 
 export const GlobalDataContext = createContext<GlobalDataState>(
@@ -40,52 +32,25 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [filteredRange, setFilteredRange] =
     useState<DateFilterRange>(undefined);
 
-  useEffect(() => {
-    if (window.isProduction) {
-      setData(window.githruData as ClusterNode[]);
-      setFilteredData([...(window.githruData as ClusterNode[])]);
-    } else {
-      setData(fakeData as unknown as ClusterNode[]);
-      setFilteredData(([...fakeData] as unknown as ClusterNode[]).reverse());
-    }
-
-    const onReceiveClusterNodes = (e: VSMessageEvent): void => {
-      if (e.data.command !== "refresh") return;
-
-      const newData = JSON.parse(e.data.payload);
-      setData(newData);
-      setFilteredRange(undefined);
-      setFilteredData([...newData].reverse());
-      setSelectedData([]);
-    };
-    window.addEventListener("message", onReceiveClusterNodes);
-
-    return () => window.removeEventListener("message", onReceiveClusterNodes);
-  }, []);
+  const fetchAnalyzedData = (analyzedData: ClusterNode[]) => {
+    setData(analyzedData);
+    setFilteredData([...analyzedData]);
+    setSelectedData([]);
+  };
 
   const value = useMemo(
     () => ({
       data,
-      setData,
       filteredRange,
       setFilteredRange,
       filteredData,
       setFilteredData,
       selectedData,
       setSelectedData,
+      fetchAnalyzedData,
     }),
-    [data, setData, filteredData, filteredRange, selectedData]
+    [data, filteredRange, filteredData, selectedData]
   );
-
-  // if (!data.length || !filteredData.length) {
-  //   console.log("???????");
-  //   return null;
-  // }
-
-  // if (!data.length) {
-  //   console.log("???????");
-  //   return null;
-  // }
 
   return (
     <GlobalDataContext.Provider value={value}>

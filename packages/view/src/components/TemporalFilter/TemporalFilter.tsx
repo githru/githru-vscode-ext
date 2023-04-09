@@ -1,11 +1,12 @@
+import "reflect-metadata";
+import { container } from "tsyringe";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { FiRefreshCcw } from "react-icons/fi";
 
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
-
-import { vscode } from "../../ide/VSCodeAPIWrapper";
+import type IDEPort from "ide/IDEPort";
 
 import {
   filterDataByDate,
@@ -73,25 +74,15 @@ const TemporalFilter = () => {
   }, [filteredData]);
 
   const refreshHandler = throttle(() => {
-    // NEED to be refactored
-    if (window.isProduction) {
-      const message = {
-        command: "refresh",
-      };
-      vscode.postMessage(message);
-    } else {
-      const newData = [...data];
-      setData(newData);
-      setFilteredRange(undefined);
-      setFilteredData([...data].reverse());
-      setSelectedData([]);
-    }
+    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+    ideAdapter.sendFetchAnalyzedDataCommand();
   }, 3000);
 
   const windowSize = useWindowResize();
 
   useEffect(() => {
     if (!wrapperRef.current || !ref.current) return undefined;
+
     let dateRange = filteredRange;
     if (lineChartDataList[0].length === 0 && filteredRange === undefined)
       dateRange = getMinMaxDate(sortedData);

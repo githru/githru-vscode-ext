@@ -1,7 +1,4 @@
-﻿import type { Dispatch } from "react";
-import type React from "react";
-
-import type { ClusterNode } from "types";
+﻿import type { ClusterNode } from "types";
 
 export type IDEMessage = {
   command: string;
@@ -10,7 +7,7 @@ export type IDEMessage = {
 
 export default interface IDEPort {
   addAllEventListener: (
-    setData: Dispatch<React.SetStateAction<ClusterNode[]>>
+    fetchAnalyzedData: (analyzedData: ClusterNode[]) => void
   ) => void;
   sendFetchAnalyzedDataCommand: () => void;
 }
