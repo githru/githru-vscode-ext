@@ -5,31 +5,38 @@ import type { ClusterNode, CommitNode } from "types";
 
 import { GITHUB_URL, GRAVATA_URL } from "../../../constants/constants";
 
-import type { AuthorDataType, SrcInfo } from "./AuthorBarChart.type";
+import type {
+  AuthorDataObj,
+  AuthorDataType,
+  SrcInfo,
+} from "./AuthorBarChart.type";
 
 export const getDataByAuthor = (data: ClusterNode[]): AuthorDataType[] => {
   if (!data.length) return [];
 
-  const authorDataObj = {};
+  const authorDataObj: AuthorDataObj = {};
 
   data.forEach(({ commitNodeList }) => {
-    commitNodeList.reduce((acc, { commit }) => {
+    commitNodeList.forEach(({ commit }) => {
       const author = commit.author.names[0];
       const { insertions, deletions } = commit.diffStatistics;
 
-      if (!acc[author]) {
-        acc[author] = { name: author };
+      if (!authorDataObj[author]) {
+        authorDataObj[author] = {
+          name: author,
+          commit: 1,
+          insertion: insertions,
+          deletion: deletions,
+        };
+      } else {
+        authorDataObj[author] = {
+          ...authorDataObj[author],
+          commit: (authorDataObj[author].commit || 0) + 1,
+          insertion: (authorDataObj[author].insertion || 0) + insertions,
+          deletion: (authorDataObj[author].deletion || 0) + deletions,
+        };
       }
-
-      acc[author] = {
-        ...acc[author],
-        commit: (acc[author].commit || 0) + 1,
-        insertion: (acc[author].insertion || 0) + insertions,
-        deletion: (acc[author].deletion || 0) + deletions,
-      };
-
-      return acc;
-    }, authorDataObj);
+    });
   });
 
   return Object.values(authorDataObj);
@@ -47,7 +54,7 @@ export const sortDataByName = (a: string, b: string) => {
 export const convertNumberFormat = (
   d: number | { valueOf(): number }
 ): string => {
-  if (d < 1 && d >= 0) {
+  if (typeof d === "number" && d < 1 && d >= 0) {
     return `${d}`;
   }
   return d3.format("~s")(d);
