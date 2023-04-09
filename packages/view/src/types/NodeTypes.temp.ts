@@ -57,8 +57,6 @@ export type NodeBase = {
   nodeTypeName: NodeTypeName;
 };
 
-export type NodeType = CommitNode | ClusterNode;
-
 // Node = Commit + analyzed Data as node
 export type CommitNode = NodeBase & {
   nodeTypeName: "COMMIT";

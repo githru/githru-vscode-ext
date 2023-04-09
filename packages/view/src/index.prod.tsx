@@ -2,8 +2,7 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
 
-import VSCodeIDEAdapter from "ide/VSCodeIDEAdapter";
-
+import VSCodeIDEAdapter from "./ide/VSCodeIDEAdapter";
 import type IDEPort from "./ide/IDEPort";
 import { initRender } from "./index.common";
 
