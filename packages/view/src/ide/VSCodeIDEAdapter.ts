@@ -19,7 +19,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
             JSON.parse(response.payload || "") as unknown as ClusterNode[]
           );
           break;
-        case "changeBranchOption":
+        case "getBranchList":
         default:
             console.log("Unknown Message");
 
@@ -30,7 +30,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
 
   public sendFetchAnalyzedDataCommand() {
     const command: EngineCommand = {
-      command: "fetchAnalyzedData" || "changeBranchOption"
+      command: "fetchAnalyzedData"
     };
     this.executeCommand(command);
   }

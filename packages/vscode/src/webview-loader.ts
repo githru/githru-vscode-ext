@@ -8,8 +8,8 @@ export default class WebviewLoader implements vscode.Disposable {
     constructor(
         private readonly fileUri: vscode.Uri,
         private readonly extensionPath: string,
-        branches: string,
-        parseCommit: () => Promise<string>
+        parseCommit: () => Promise<string>,
+        getAllBranches: () => string,
     ) {
         const viewColumn = vscode.ViewColumn.One;
         this.fsPath = fileUri.fsPath;
@@ -28,7 +28,8 @@ export default class WebviewLoader implements vscode.Disposable {
                     const resMessage = {...message, payload: data};
                     await this.respondToMessage(resMessage);
                     break;
-                case "changeBranchOption":
+                case "getBranchList":
+                    const branches = getAllBranches();
                     await this.respondToMessage({
                         ...message,
                         payload: branches
@@ -38,7 +39,7 @@ export default class WebviewLoader implements vscode.Disposable {
             }
         });
 
-        this._panel.webview.html = this.getWebviewContent(this._panel.webview, branches);
+        this._panel.webview.html = this.getWebviewContent(this._panel.webview);
     }
 
     dispose() {
@@ -53,7 +54,7 @@ export default class WebviewLoader implements vscode.Disposable {
         });
     }
 
-    private getWebviewContent(webview: vscode.Webview, branches: string): string {
+    private getWebviewContent(webview: vscode.Webview): string {
         const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
         const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
         // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
