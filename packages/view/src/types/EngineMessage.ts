@@ -1,7 +1,7 @@
 import type { EngineCommandNames } from "./EngineCommand";
 
 export type EngineMessage = {
-  commandName: EngineMessageCommandNames;
+  command: EngineMessageCommandNames;
   payload?: string;
 };
 
