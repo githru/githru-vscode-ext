@@ -12,6 +12,10 @@ const getGithubToken = (): string | undefined => {
     return configuration.get("githru.github.token");
 }
 
+function normalizeFsPath(fsPath: string) {
+	return fsPath.replace(/\\/g, '/');
+}
+
 export function activate(context: vscode.ExtensionContext) {
     const { subscriptions, extensionUri, extensionPath } = context;
 
@@ -19,11 +23,16 @@ export function activate(context: vscode.ExtensionContext) {
 
     const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
         const gitPath = (await findGit()).path;
-        const currentWorkspacePath = vscode.workspace.workspaceFolders?.[0].uri.path;
 
-        if (currentWorkspacePath === undefined) {
+        const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
+        if (currentWorkspaceUri === undefined) {
             throw new Error("Cannot find current workspace path");
         }
+
+
+        const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
+        console.debug(vscode.workspace.workspaceFolders);
+        console.debug(currentWorkspacePath);
 
         const githubToken: string | undefined = await getGithubToken();
         console.log("GitHubToken: ", githubToken);
