@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
+
 export default class WebviewLoader implements vscode.Disposable {
     private readonly _panel: vscode.WebviewPanel | undefined;
     private fsPath: string;
@@ -22,8 +23,9 @@ export default class WebviewLoader implements vscode.Disposable {
         this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
             switch (message.command) {
                 case "refresh":
+                case "fetchAnalyzedData":
                     const data = await parseCommit();
-                    const resMessage = { ...message, payload: data };
+                    const resMessage = {...message, payload: data};
                     await this.respondToMessage(resMessage);
                     break;
             }
