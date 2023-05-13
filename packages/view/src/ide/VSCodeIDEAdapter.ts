@@ -14,7 +14,9 @@ export default class VSCodeIDEAdapter implements IDEPort {
     const onReceiveMessage = (e: EngineMessageEvent): void => {
       const response = e.data;
       if (response.command === "fetchAnalyzedData") {
-        fetchAnalyzedData(response.payload as unknown as ClusterNode[]);
+        fetchAnalyzedData(
+          JSON.parse(response.payload || "") as unknown as ClusterNode[]
+        );
       }
     };
     window.addEventListener("message", onReceiveMessage);
