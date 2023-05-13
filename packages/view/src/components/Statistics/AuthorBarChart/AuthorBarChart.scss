@@ -58,13 +58,13 @@
       &:hover {
         rect {
           fill: transparent;
-          stroke: #ff8272;
+          stroke: var(--graph-color);
           stroke-width: 2;
         }
       }
 
       rect {
-        fill: #ff8272;
+        fill: var(--graph-color);
       }
 
       .name {
@@ -90,7 +90,7 @@
   color: $gray-900;
 
   .selected {
-    color: #ff8272;
+    color: var(--graph-color);
     font-weight: bold;
   }
   .name {

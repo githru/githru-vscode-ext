@@ -18,6 +18,7 @@ import {
 } from "./FileIcicleSummary.const";
 
 import "./FileIcicleSummary.scss";
+import { PRIMARY_COLOR_VARIABLE_NAME } from "constants/constants";
 
 const partition = (data: FileChangesNode) => {
   const root = d3
@@ -65,9 +66,11 @@ const drawIcicleTree = async (
     .attr("width", (d) => d.y1 - d.y0 - 1)
     .attr("height", (d) => rectHeight(d))
     // directory don't have value field
-    .style(
-      "fill",
-      (d) => COLOR_CODE[d.data.value !== undefined ? "file" : "dir"]
+    .style("fill", `var(${PRIMARY_COLOR_VARIABLE_NAME})`)
+    .style("opacity", (d) =>
+      d.data.value !== undefined
+        ? COLOR_CODE.fileOpacity
+        : COLOR_CODE.dirOpacity
     )
     .style("cursor", "pointer");
 
