@@ -11,9 +11,10 @@
     z-index: 10;
     width: 100%;
     padding: 1px;
-    background: #212121;
+    // background: #212121;
     color: white;
     height: 30px;
+    backdrop-filter: blur(8px);
 
     .filter {
       display: flex;
