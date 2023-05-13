@@ -1,13 +1,13 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
+import {AnalysisEngine} from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
-import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
-import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
-import { mapClusterNodesFrom } from "./utils/csm.mapper";
+import {COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH} from "./commands";
+import {findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo} from "./utils/git.util";
+import {mapClusterNodesFrom} from "./utils/csm.mapper";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
 
-const getGithubToken = () : string | undefined => {
+const getGithubToken = (): string | undefined => {
     const configuration = vscode.workspace.getConfiguration();
     return configuration.get("githru.github.token");
 }
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
         const fetchClusterNodes = async () => {
             const gitLog = await getGitLog(gitPath, currentWorkspacePath);
             const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-            const { owner, repo } = getRepo(gitConfig);
+            const {owner, repo} = getRepo(gitConfig);
             const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
             const baseBranchName = getBaseBranchName(branchNames);
             const engine = new AnalysisEngine({
@@ -47,8 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
             const data = JSON.stringify(clusterNodes);
             return data;
         };
-        const initialData = await fetchClusterNodes();
-        const webLoader = new WebviewLoader(extensionUri, extensionPath, initialData, fetchClusterNodes);
+        const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes);
 
         subscriptions.push(webLoader);
 
@@ -66,10 +65,10 @@ export function activate(context: vscode.ExtensionContext) {
             value: defaultGithubToken ?? ''
         });
 
-        if (!newGithubToken) 
+        if (!newGithubToken)
             throw new Error("Cannot get users' access token properly");
 
-        config.update('githru.github.token',newGithubToken, vscode.ConfigurationTarget.Global);
+        config.update('githru.github.token', newGithubToken, vscode.ConfigurationTarget.Global);
     });
 
     subscriptions.concat([disposable, getAccessToken]);
