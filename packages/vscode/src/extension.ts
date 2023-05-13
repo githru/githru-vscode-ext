@@ -47,9 +47,8 @@ export function activate(context: vscode.ExtensionContext) {
             const data = JSON.stringify(clusterNodes);
             return data;
         };
-        const nodes = await fetchClusterNodes();
         const branches = JSON.stringify(branchNames);
-        const webLoader = new WebviewLoader(extensionUri, extensionPath, nodes, branches, fetchClusterNodes);
+        const webLoader = new WebviewLoader(extensionUri, extensionPath, branches, fetchClusterNodes);
 
         subscriptions.push(webLoader);
 
