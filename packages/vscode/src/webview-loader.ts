@@ -8,7 +8,6 @@ export default class WebviewLoader implements vscode.Disposable {
     constructor(
         private readonly fileUri: vscode.Uri,
         private readonly extensionPath: string,
-        data: string,
         parseCommit: () => Promise<string>
     ) {
         const viewColumn = vscode.ViewColumn.One;
@@ -31,7 +30,7 @@ export default class WebviewLoader implements vscode.Disposable {
             }
         });
 
-        this._panel.webview.html = this.getWebviewContent(this._panel.webview, data);
+        this._panel.webview.html = this.getWebviewContent(this._panel.webview);
     }
 
     dispose() {
@@ -46,7 +45,7 @@ export default class WebviewLoader implements vscode.Disposable {
         });
     }
 
-    private getWebviewContent(webview: vscode.Webview, data: string): string {
+    private getWebviewContent(webview: vscode.Webview): string {
         const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
         const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
         // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
@@ -60,7 +59,6 @@ export default class WebviewLoader implements vscode.Disposable {
                     <title>githru-vscode-ext webview</title>
                     <script>
                         window.isProduction = true;
-                        window.githruData = ${data};
                     </script>
                 </head>
                 <body>
