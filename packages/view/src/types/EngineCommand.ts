@@ -3,4 +3,4 @@ export type EngineCommand = {
   message?: string;
 };
 
-export type EngineCommandNames = "fetchAnalyzedData" | "changeBranchOption";
+export type EngineCommandNames = "fetchAnalyzedData" | "getBranchList";
