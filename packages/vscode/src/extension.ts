@@ -24,7 +24,8 @@ export function activate(context: vscode.ExtensionContext) {
         if (currentWorkspacePath === undefined) {
             throw new Error("Cannot find current workspace path");
         }
-
+        
+        const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
         const githubToken: string | undefined = await getGithubToken();
         console.log("GitHubToken: ", githubToken);
 
@@ -32,7 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
             const gitLog = await getGitLog(gitPath, currentWorkspacePath);
             const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
             const {owner, repo} = getRepo(gitConfig);
-            const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
             const baseBranchName = getBaseBranchName(branchNames);
             const engine = new AnalysisEngine({
                 isDebugMode: true,
@@ -47,7 +47,9 @@ export function activate(context: vscode.ExtensionContext) {
             const data = JSON.stringify(clusterNodes);
             return data;
         };
-        const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes);
+        const nodes = await fetchClusterNodes();
+        const branches = JSON.stringify(branchNames);
+        const webLoader = new WebviewLoader(extensionUri, extensionPath, nodes, branches, fetchClusterNodes);
 
         subscriptions.push(webLoader);
 
