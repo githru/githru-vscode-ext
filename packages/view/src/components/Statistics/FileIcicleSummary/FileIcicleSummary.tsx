@@ -15,7 +15,7 @@ import {
   SINGLE_RECT_WIDTH,
   FONT_SIZE,
   LABEL_VISIBLE_HEIGHT,
-  COLOR_CODE,
+  OPACITY_CODE,
 } from "./FileIcicleSummary.const";
 
 import "./FileIcicleSummary.scss";
@@ -68,9 +68,7 @@ const drawIcicleTree = async (
     // directory don't have value field
     .style("fill", `var(${PRIMARY_COLOR_VARIABLE_NAME})`)
     .style("opacity", (d) =>
-      d.data.value !== undefined
-        ? COLOR_CODE.fileOpacity
-        : COLOR_CODE.dirOpacity
+      d.data.value !== undefined ? OPACITY_CODE.file : OPACITY_CODE.dir
     )
     .style("cursor", "pointer");
 
