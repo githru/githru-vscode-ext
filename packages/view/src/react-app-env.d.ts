@@ -2,6 +2,7 @@
 
 interface Window {
   acquireVsCodeApi: () => unknown;
-  githruData: unknown;
+  githruNodesData: unknown;
+  githruBranchesData: unknown;
   isProduction: boolean;
 }

@@ -8,7 +8,8 @@ export default class WebviewLoader implements vscode.Disposable {
     constructor(
         private readonly fileUri: vscode.Uri,
         private readonly extensionPath: string,
-        parseCommit: () => Promise<string>
+        parseCommit: () => Promise<string>,
+        getAllBranches: () => string,
     ) {
         const viewColumn = vscode.ViewColumn.One;
         this.fsPath = fileUri.fsPath;
@@ -30,6 +31,14 @@ export default class WebviewLoader implements vscode.Disposable {
                     const resMessage = {...message, payload: data};
                     await this.respondToMessage(resMessage);
                     break;
+                case "getBranchList":
+                    const branches = getAllBranches();
+                    await this.respondToMessage({
+                        ...message,
+                        payload: branches
+                    })
+                default:
+                    console.log("Unknown Message");
             }
         });
 
