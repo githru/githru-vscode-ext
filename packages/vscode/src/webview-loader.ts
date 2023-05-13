@@ -19,8 +19,8 @@ export default class WebviewLoader implements vscode.Disposable {
             localResourceRoots: [vscode.Uri.file(path.join(this.extensionPath, "dist"))],
         });
 
-        const onDiskPath = vscode.Uri.file( path.join(this.extensionPath, "images", "logo.png"));
-        this._panel.iconPath = onDiskPath;
+        const icon_path = vscode.Uri.file( path.join(this.extensionPath, "images", "logo.png"));
+        this._panel.iconPath = icon_path;
 
         this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
             switch (message.command) {
