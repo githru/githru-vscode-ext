@@ -14,12 +14,14 @@
     background: #212121;
     color: white;
     height: 30px;
+
     .filter {
       display: flex;
       flex: 1;
       justify-content: center;
       align-items: center;
     }
+
     .theme-selector {
       margin-right: 3px;
     }
@@ -88,10 +90,13 @@
   color: white;
   background-color: transparent;
   cursor: pointer;
+  padding-right: 2.6rem;
+
   &:active {
     background-color: black;
     color: white;
   }
+
   &:hover {
     background-color: white;
     color: black;
