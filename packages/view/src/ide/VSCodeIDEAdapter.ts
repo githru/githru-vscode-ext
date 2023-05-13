@@ -13,10 +13,16 @@ export default class VSCodeIDEAdapter implements IDEPort {
   ) {
     const onReceiveMessage = (e: EngineMessageEvent): void => {
       const response = e.data;
-      if (response.command === "fetchAnalyzedData") {
-        fetchAnalyzedData(
-          JSON.parse(response.payload || "") as unknown as ClusterNode[]
-        );
+      switch (response.command) {
+        case "fetchAnalyzedData":
+          fetchAnalyzedData(
+            JSON.parse(response.payload || "") as unknown as ClusterNode[]
+          );
+          break;
+        case "getBranchList":
+        default:
+            console.log("Unknown Message");
+
       }
     };
     window.addEventListener("message", onReceiveMessage);
@@ -24,7 +30,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
 
   public sendFetchAnalyzedDataCommand() {
     const command: EngineCommand = {
-      command: "fetchAnalyzedData",
+      command: "fetchAnalyzedData"
     };
     this.executeCommand(command);
   }
