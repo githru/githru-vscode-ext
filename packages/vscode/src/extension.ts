@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
         const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes, fetchBranchList);
 
         subscriptions.push(webLoader);
-
+        
         vscode.window.showInformationMessage("Hello Githru");
     });
 
@@ -90,6 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // update status bar item once at start
     myStatusBarItem.show();
+    
 }
 
 // this method is called when your extension is deactivated
