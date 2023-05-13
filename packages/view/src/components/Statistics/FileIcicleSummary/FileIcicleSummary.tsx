@@ -3,8 +3,7 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
-import { PRIMARY_COLOR_VARIABLE_NAME } from "constants/constants";
-
+import { PRIMARY_COLOR_VARIABLE_NAME } from "../../../constants/constants";
 import { useGetSelectedData } from "../Statistics.hook";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";

@@ -2,7 +2,7 @@ import type { ChangeEvent } from "react";
 import { useState } from "react";
 
 import "./ThemeSelector.scss";
-import { PRIMARY_COLOR_VARIABLE_NAME } from "constants/constants";
+import { PRIMARY_COLOR_VARIABLE_NAME } from "../../constants/constants";
 
 const ThemeSelector = () => {
   const [color, setColor] = useState("#ff8272");
