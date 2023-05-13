@@ -3,6 +3,8 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
+import { PRIMARY_COLOR_VARIABLE_NAME } from "constants/constants";
+
 import { useGetSelectedData } from "../Statistics.hook";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";
@@ -18,7 +20,6 @@ import {
 } from "./FileIcicleSummary.const";
 
 import "./FileIcicleSummary.scss";
-import { PRIMARY_COLOR_VARIABLE_NAME } from "constants/constants";
 
 const partition = (data: FileChangesNode) => {
   const root = d3
