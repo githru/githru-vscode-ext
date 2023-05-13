@@ -14,7 +14,7 @@ export default class FakeIDEAdapter implements IDEPort {
   ) {
     const onReceiveMessage = (e: EngineMessageEvent): void => {
       const response = e.data;
-      if (response.commandName === "fetchAnalyzedData") {
+      if (response.command === "fetchAnalyzedData") {
         const fetchedData = response.payload as unknown as ClusterNode[];
         fetchAnalyzedData(fetchedData);
       }
@@ -25,15 +25,15 @@ export default class FakeIDEAdapter implements IDEPort {
 
   public sendFetchAnalyzedDataCommand() {
     const command: EngineCommand = {
-      commandName: "fetchAnalyzedData",
+      command: "fetchAnalyzedData",
     };
     this.executeCommand(command);
   }
 
   private executeCommand(command: EngineCommand) {
-    if (command.commandName === "fetchAnalyzedData") {
+    if (command.command === "fetchAnalyzedData") {
       const message: EngineMessage = {
-        commandName: command.commandName,
+        command: command.command,
         payload: fakeData as unknown as string,
       };
 

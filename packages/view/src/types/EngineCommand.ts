@@ -1,5 +1,5 @@
 export type EngineCommand = {
-  commandName: EngineCommandNames;
+  command: EngineCommandNames;
   message?: string;
 };
 
