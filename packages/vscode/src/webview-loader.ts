@@ -44,7 +44,6 @@ export default class WebviewLoader implements vscode.Disposable {
 
         this._panel.webview.html = this.getWebviewContent(this._panel.webview);
     }
-
     dispose() {
         this._panel?.dispose();
     }
