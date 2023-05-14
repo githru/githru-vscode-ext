@@ -25,7 +25,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
       <div className="detail__summary">
         {summaryItems.map(({ name, count }) => (
           <span key={name}>
-            <strong className={name}>{count.toLocaleString("en")}</strong>
+            <strong className={name}>{count.toLocaleString("en")} </strong>
             {count <= 1 ? name.slice(0, -1) : name}
           </span>
         ))}
@@ -55,17 +55,10 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
       <ul className="detail__commit-list__container">
         {commitNodeList.map(({ commit }) => {
           const { id, message, author, commitDate } = commit;
-          let startIndex : number= message.indexOf("(")+2;
-          let endIndex : number = message.indexOf(")");
-
-          if(startIndex){
-            let text : string = "https://github.com/githru/githru-vscode-ext/issues/"+message.substring(startIndex, endIndex);
-          }
-          
           return (
             <li key={id} className="commit-item">
               <div className="commit-detail">
-                <span className="message">{message} sdfasf</span>
+                <span className="message">{message} </span>
                 <span className="author-date">
                   {author.names[0]},{" "}
                   {dayjs(commitDate).format("YY. M. DD. a h:mm")}
