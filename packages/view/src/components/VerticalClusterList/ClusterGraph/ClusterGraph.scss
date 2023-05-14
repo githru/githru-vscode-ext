@@ -10,17 +10,17 @@
   .cluster-graph__cluster {
     rx: 5;
     stroke-width: 1;
-    stroke: var(--graph-color);
+    stroke: var(--primary-color);
     fill: transparent;
   }
 
   .cluster-graph__degree {
     rx: 5;
-    fill: var(--graph-color);
+    fill: var(--primary-color);
   }
 }
 
 .cluster-graph__link {
-  stroke: var(--graph-color);
+  stroke: var(--primary-color);
   stroke-width: 1;
 }
