@@ -66,6 +66,7 @@
 
     .commit-detail {
       overflow: hidden;
+      color: $white;
       .message {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -73,6 +74,11 @@
         overflow: hidden;
         color: $white;
         margin-right: 4px;
+        &:hover {
+          display: block;
+          cursor: pointer;
+          overflow: visible;
+        }
       }
     }
     .commit-id {

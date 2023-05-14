@@ -27,7 +27,9 @@ export default class FakeIDEAdapter implements IDEPort {
     const command: EngineCommand = {
       command: "fetchAnalyzedData",
     };
-    this.executeCommand(command);
+    setTimeout(() => {
+      this.executeCommand(command);
+    }, 3000);
   }
 
   private executeCommand(command: EngineCommand) {
