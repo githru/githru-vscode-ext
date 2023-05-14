@@ -30,7 +30,7 @@ const App = () => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   if (initRef.current === false) {
-    setLoading(!loading);
+    setLoading(true);
     ideAdapter.addAllEventListener(fetchAnalyzedData);
     ideAdapter.sendFetchAnalyzedDataCommand();
     initRef.current = true;
