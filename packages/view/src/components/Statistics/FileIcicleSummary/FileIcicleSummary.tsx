@@ -3,6 +3,7 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
+import { PRIMARY_COLOR_VARIABLE_NAME } from "../../../constants/constants";
 import { useGetSelectedData } from "../Statistics.hook";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";
@@ -14,7 +15,7 @@ import {
   SINGLE_RECT_WIDTH,
   FONT_SIZE,
   LABEL_VISIBLE_HEIGHT,
-  COLOR_CODE,
+  OPACITY_CODE,
 } from "./FileIcicleSummary.const";
 
 import "./FileIcicleSummary.scss";
@@ -65,9 +66,9 @@ const drawIcicleTree = async (
     .attr("width", (d) => d.y1 - d.y0 - 1)
     .attr("height", (d) => rectHeight(d))
     // directory don't have value field
-    .style(
-      "fill",
-      (d) => COLOR_CODE[d.data.value !== undefined ? "file" : "dir"]
+    .style("fill", `var(${PRIMARY_COLOR_VARIABLE_NAME})`)
+    .style("opacity", (d) =>
+      d.data.value !== undefined ? OPACITY_CODE.file : OPACITY_CODE.dir
     )
     .style("cursor", "pointer");
 

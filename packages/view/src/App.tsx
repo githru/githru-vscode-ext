@@ -8,6 +8,7 @@ import {
   BranchSelector,
   Statistics,
   TemporalFilter,
+  ThemeSelector,
   VerticalClusterList,
 } from "components";
 import "./App.scss";
@@ -50,6 +51,7 @@ const App = () => {
     <>
       <div className="header-container">
         <BranchSelector />
+        <ThemeSelector />
       </div>
       <div className="top-container">
         <TemporalFilter />
