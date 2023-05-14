@@ -19,6 +19,8 @@ type GlobalDataState = {
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
   setFilteredRange: Dispatch<React.SetStateAction<DateFilterRange>>;
   fetchAnalyzedData: (analyzedData: ClusterNode[]) => void;
+  loading: boolean;
+  setLoading: Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GlobalDataContext = createContext<GlobalDataState>(
@@ -31,11 +33,13 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
   const [filteredRange, setFilteredRange] =
     useState<DateFilterRange>(undefined);
+  const [loading, setLoading] = useState(false);
 
   const fetchAnalyzedData = (analyzedData: ClusterNode[]) => {
     setData(analyzedData);
     setFilteredData([...analyzedData]);
     setSelectedData([]);
+    setLoading(false);
   };
 
   const value = useMemo(
@@ -48,8 +52,10 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
       selectedData,
       setSelectedData,
       fetchAnalyzedData,
+      loading,
+      setLoading,
     }),
-    [data, filteredRange, filteredData, selectedData]
+    [data, filteredRange, filteredData, selectedData, loading]
   );
 
   return (

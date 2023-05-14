@@ -25,7 +25,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
       <div className="detail__summary">
         {summaryItems.map(({ name, count }) => (
           <span key={name}>
-            <strong className={name}>{count.toLocaleString("en")}</strong>
+            <strong className={name}>{count.toLocaleString("en")} </strong>
             {count <= 1 ? name.slice(0, -1) : name}
           </span>
         ))}
