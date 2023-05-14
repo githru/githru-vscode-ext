@@ -8,7 +8,7 @@ const getDataList = () => {
 const BranchSelector = () => {
   const branchList = getDataList();
   return (
-    <section className="branch-seletor">
+    <section className="branch-selector">
       <span>Branches:</span>
       <select className="select-box">
         {branchList.map((option) => (
