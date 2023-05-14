@@ -22,7 +22,7 @@ export const getPrimaryColor = () => {
     const configuration = vscode.workspace.getConfiguration();
     const primaryColor = configuration.get(SETTING_PROPERTY_NAMES.PRIMARY_COLOR);
 
-    if(primaryColor === null) {
+    if (primaryColor === null) {
         configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, "#ff8272");
     }
 

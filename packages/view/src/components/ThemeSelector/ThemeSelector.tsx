@@ -12,7 +12,6 @@ const ThemeSelector = () => {
   const [color, setColor] = useState<string>(window.primaryColor);
 
   useEffect(() => {
-    console.log((window as any).primaryColor);
     document.documentElement.style.setProperty(
       PRIMARY_COLOR_VARIABLE_NAME,
       window.primaryColor
@@ -34,7 +33,6 @@ const ThemeSelector = () => {
   };
   return (
     <div className="theme-selector">
-      {`${window.primaryColor} ${window.isProduction}`}
       <input
         type="color"
         value={color}
