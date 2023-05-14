@@ -39,7 +39,7 @@ const App = () => {
   if (!data?.length) {
     return (
       <BounceLoader
-        color="#ff8272"
+        color="var(--primary-color)"
         loading={loading}
         cssOverride={loaderStyle}
       />

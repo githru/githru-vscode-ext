@@ -174,7 +174,7 @@ const TemporalFilter = () => {
   return (
     <article className="temporal-filter">
       <BounceLoader
-        color="#ff8272"
+        color="var(--graph-color)"
         loading={loading}
         cssOverride={loaderStyle}
       />
