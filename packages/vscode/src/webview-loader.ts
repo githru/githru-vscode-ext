@@ -41,7 +41,7 @@ export default class WebviewLoader implements vscode.Disposable {
                 case "updatePrimaryColor":
                     console.debug(message.payload);
                     const colorCode = JSON.parse(message.payload as string);
-                    setPrimaryColor(colorCode);
+                    setPrimaryColor(colorCode.primary);
                     break;
             } 
         });

@@ -61,6 +61,11 @@
                     "type": "string",
                     "default": "",
                     "description": "Insert your GitHub Token for GitHub API."
+                },
+                "githru.color.primary": {
+                    "type": "string",
+                    "default": "#ff8272",
+                    "description": "Insert your primary color."
                 }
             }
         }
