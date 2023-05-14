@@ -35,6 +35,14 @@ export default class VSCodeIDEAdapter implements IDEPort {
     this.executeCommand(command);
   }
 
+  public setPrimaryColor(color: string) {
+    const command: EngineCommand = {
+      command: "updatePrimaryColor",
+      payload: JSON.stringify({ primary: color }),
+    };
+    this.executeCommand(command);
+  }
+
   private executeCommand(command: EngineCommand) {
     vscode.postMessage(command);
   }
