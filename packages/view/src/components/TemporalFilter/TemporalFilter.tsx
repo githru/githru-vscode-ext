@@ -1,8 +1,10 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { FiRefreshCcw } from "react-icons/fi";
+import BounceLoader from "react-spinners/BounceLoader";
 
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
@@ -33,7 +35,16 @@ const TemporalFilter = () => {
     filteredRange,
     setFilteredRange,
     setSelectedData,
+    loading,
+    setLoading,
   } = useGlobalData();
+
+  const loaderStyle: CSSProperties = {
+    position: "fixed",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, 0)",
+  };
 
   const sortedData = sortBasedOnCommitNode(data);
 
@@ -74,6 +85,8 @@ const TemporalFilter = () => {
   }, [filteredData]);
 
   const refreshHandler = throttle(() => {
+    setLoading(true);
+
     const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
     ideAdapter.sendFetchAnalyzedDataCommand();
   }, 3000);
@@ -160,6 +173,12 @@ const TemporalFilter = () => {
 
   return (
     <article className="temporal-filter">
+      <BounceLoader
+        color="#ff8272"
+        loading={loading}
+        cssOverride={loaderStyle}
+      />
+
       <div className="data-control-container">
         <button
           type="button"
