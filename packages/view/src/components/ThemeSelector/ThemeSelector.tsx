@@ -18,14 +18,14 @@ const ThemeSelector = () => {
     );
   }, []);
 
-  const refreshHandler = throttle(() => {
+  const storeColorHandler = throttle(() => {
     const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
     ideAdapter.setPrimaryColor(color);
   }, 3000);
 
-  const handleGraphColor = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePrimaryColor = (e: ChangeEvent<HTMLInputElement>) => {
     setColor(e.target.value);
-    refreshHandler();
+    storeColorHandler();
     document.documentElement.style.setProperty(
       PRIMARY_COLOR_VARIABLE_NAME,
       e.target.value
@@ -37,7 +37,7 @@ const ThemeSelector = () => {
         type="color"
         value={color}
         onChange={(e) => {
-          handleGraphColor(e);
+          handlePrimaryColor(e);
         }}
       />
     </div>
