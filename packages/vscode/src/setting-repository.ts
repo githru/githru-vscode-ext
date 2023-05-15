@@ -18,13 +18,14 @@ export const setPrimaryColor = (color : string) => {
     configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, color);
 }
 
-export const getPrimaryColor = () => {
+export const getPrimaryColor = (): string => {
     const configuration = vscode.workspace.getConfiguration();
-    const primaryColor = configuration.get(SETTING_PROPERTY_NAMES.PRIMARY_COLOR);
+    const primaryColor = configuration.get(SETTING_PROPERTY_NAMES.PRIMARY_COLOR) as string;
 
-    if (primaryColor === null) {
+    if (!primaryColor) {
         configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, "#ff8272");
+        return "#ff8272";
+    } else {
+        return primaryColor;
     }
-
-    return primaryColor;
 }

@@ -21,8 +21,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
           break;
         case "getBranchList":
         default:
-            console.log("Unknown Message");
-
+          console.log("Unknown Message");
       }
     };
     window.addEventListener("message", onReceiveMessage);
@@ -30,7 +29,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
 
   public sendFetchAnalyzedDataCommand() {
     const command: EngineCommand = {
-      command: "fetchAnalyzedData"
+      command: "fetchAnalyzedData",
     };
     this.executeCommand(command);
   }
