@@ -24,6 +24,7 @@ const ThemeSelector = () => {
 
   const handlePrimaryColor = useCallback(
     (colorCode: string) => storeColorHandler(colorCode),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
