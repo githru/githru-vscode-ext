@@ -8,13 +8,11 @@
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    z-index: 10;
     width: 100%;
     padding: 1px;
     // background: #212121;
     color: white;
     height: 30px;
-    backdrop-filter: blur(8px);
 
     .filter {
       display: flex;
@@ -92,6 +90,7 @@
   background-color: transparent;
   cursor: pointer;
   padding-right: 2.6rem;
+  z-index: 10;
 
   &:active {
     background-color: black;
