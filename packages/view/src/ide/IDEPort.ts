@@ -10,4 +10,5 @@ export default interface IDEPort {
     fetchAnalyzedData: (analyzedData: ClusterNode[]) => void
   ) => void;
   sendFetchAnalyzedDataCommand: () => void;
+  setPrimaryColor: (color: string) => void;
 }

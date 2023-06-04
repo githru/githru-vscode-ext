@@ -1,6 +1,6 @@
 ﻿import { injectable } from "tsyringe";
 
-import type { ClusterNode, EngineCommand } from "types";
+import type { ClusterNode, EngineCommand, EngineCommandNames } from "types";
 import type { EngineMessage, EngineMessageEvent } from "types/EngineMessage";
 
 import fakeData from "../fake-assets/cluster-nodes.json";
@@ -32,14 +32,35 @@ export default class FakeIDEAdapter implements IDEPort {
     }, 3000);
   }
 
-  private executeCommand(command: EngineCommand) {
-    if (command.command === "fetchAnalyzedData") {
-      const message: EngineMessage = {
-        command: command.command,
-        payload: fakeData as unknown as string,
-      };
+  public setPrimaryColor(color: string) {
+    sessionStorage.setItem("PRIMARY_COLOR", color);
+    const command: EngineCommand = {
+      command: "updatePrimaryColor",
+    };
+    this.executeCommand(command);
+  }
 
-      window.postMessage(message);
+  private getResponseMessage(commandName: EngineCommandNames) {
+    switch (commandName) {
+      case "fetchAnalyzedData":
+        return {
+          command: commandName,
+          payload: fakeData as unknown as string,
+        };
+      case "updatePrimaryColor":
+        return {
+          command: commandName,
+          payload: sessionStorage.getItem("PRIMARY_COLOR") as string,
+        };
+      default:
+        return {
+          command: commandName,
+        };
     }
+  }
+
+  private executeCommand(command: EngineCommand) {
+    const message: EngineMessage = this.getResponseMessage(command.command);
+    window.postMessage(message);
   }
 }

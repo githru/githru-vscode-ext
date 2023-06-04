@@ -1,6 +1,9 @@
 export type EngineCommand = {
   command: EngineCommandNames;
-  message?: string;
+  payload?: string;
 };
 
-export type EngineCommandNames = "fetchAnalyzedData" | "getBranchList";
+export type EngineCommandNames =
+  | "fetchAnalyzedData"
+  | "getBranchList"
+  | "updatePrimaryColor";

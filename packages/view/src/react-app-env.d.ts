@@ -5,4 +5,5 @@ interface Window {
   githruNodesData: unknown;
   githruBranchesData: unknown;
   isProduction: boolean;
+  primaryColor: string;
 }
