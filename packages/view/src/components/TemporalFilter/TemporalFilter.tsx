@@ -11,6 +11,7 @@ import { throttle } from "utils";
 import type IDEPort from "ide/IDEPort";
 import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
 import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
+import { Author } from "components/VerticalClusterList/Summary/Author";
 
 import {
   filterDataByDate,
@@ -24,7 +25,6 @@ import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
 import { drawBrush } from "./LineChartBrush";
-import { Author } from "components/VerticalClusterList/Summary/Author";
 import {
   BRUSH_MARGIN,
   TEMPORAL_FILTER_LINE_CHART_STYLES,
