@@ -102,3 +102,12 @@
     color: black;
   }
 }
+
+.selected-cluster {
+  position: relative;
+  top: 30px;
+  display: flex;
+  width: 100%;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}

@@ -9,6 +9,8 @@ import BounceLoader from "react-spinners/BounceLoader";
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
 import type IDEPort from "ide/IDEPort";
+import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
+import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
 
 import {
   filterDataByDate,
@@ -22,6 +24,7 @@ import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
 import { drawBrush } from "./LineChartBrush";
+import { Author } from "components/VerticalClusterList/Summary/Author";
 import {
   BRUSH_MARGIN,
   TEMPORAL_FILTER_LINE_CHART_STYLES,
@@ -31,6 +34,7 @@ const TemporalFilter = () => {
   const {
     data,
     filteredData,
+    selectedData,
     setFilteredData,
     filteredRange,
     setFilteredRange,
@@ -38,6 +42,8 @@ const TemporalFilter = () => {
     loading,
     setLoading,
   } = useGlobalData();
+  const authSrcMap = usePreLoadAuthorImg();
+  const selectedClusters = getInitData(selectedData);
 
   const loaderStyle: CSSProperties = {
     position: "fixed",
@@ -99,8 +105,6 @@ const TemporalFilter = () => {
     let dateRange = filteredRange;
     if (lineChartDataList[0].length === 0 && filteredRange === undefined)
       dateRange = getMinMaxDate(sortedData);
-
-    console.log("dateRange ", filteredRange, dateRange);
 
     const axisHeight = 20;
     const chartHeight =
@@ -190,6 +194,23 @@ const TemporalFilter = () => {
       </div>
       <div className="line-charts" ref={wrapperRef}>
         <svg className="line-charts-svg" ref={ref} />
+      </div>
+
+      <div className="selected-cluster">
+        {authSrcMap &&
+          selectedClusters.map((selectedCluster) => {
+            return selectedCluster.summary.authorNames.map(
+              (authorArray: string[]) => {
+                return authorArray.map((authorName: string) => (
+                  <Author
+                    key={authorName}
+                    name={authorName}
+                    src={authSrcMap[authorName]}
+                  />
+                ));
+              }
+            );
+          })}
       </div>
     </article>
   );
