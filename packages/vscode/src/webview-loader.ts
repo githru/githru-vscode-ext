@@ -1,5 +1,6 @@
-import * as vscode from "vscode";
 import * as path from "path";
+import * as vscode from "vscode";
+
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
 
 export default class WebviewLoader implements vscode.Disposable {
