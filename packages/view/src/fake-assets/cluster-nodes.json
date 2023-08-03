@@ -330,10 +330,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "bb4d3dda6bcf41f91039ec0cc5f78c0c4b7daa83",
-          "parentIds": [
-            "32035db240171944ba8b90c40e1b97855c8c2cec",
-            "1887e642bc176d7279058b6a85def88672042926"
-          ],
+          "parentIds": ["32035db240171944ba8b90c40e1b97855c8c2cec", "1887e642bc176d7279058b6a85def88672042926"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -747,10 +744,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "00ff228a790fb60f61d076a3d2a9e10b96444e65",
-          "parentIds": [
-            "aa4b04d2fac243441a8549a7cddc51951628210e",
-            "5781ae0bc1aa8f6a542e91ce642328fb9fc19fc0"
-          ],
+          "parentIds": ["aa4b04d2fac243441a8549a7cddc51951628210e", "5781ae0bc1aa8f6a542e91ce642328fb9fc19fc0"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -786,10 +780,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "5781ae0bc1aa8f6a542e91ce642328fb9fc19fc0",
-          "parentIds": [
-            "7a64eaea42d0817cdc2dc62c50a2161ff1178948",
-            "aa4b04d2fac243441a8549a7cddc51951628210e"
-          ],
+          "parentIds": ["7a64eaea42d0817cdc2dc62c50a2161ff1178948", "aa4b04d2fac243441a8549a7cddc51951628210e"],
           "author": {
             "id": "no-id",
             "names": ["snowy"],
@@ -970,10 +961,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "c64ec22141ce8e831faa86c9f3b739b884afa3c9",
-          "parentIds": [
-            "00ff228a790fb60f61d076a3d2a9e10b96444e65",
-            "72f32b89528765e08cf8c2a366038dab82eb82a0"
-          ],
+          "parentIds": ["00ff228a790fb60f61d076a3d2a9e10b96444e65", "72f32b89528765e08cf8c2a366038dab82eb82a0"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -1134,10 +1122,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "1e49063b318725799c96afb18df300598c9821b5",
-          "parentIds": [
-            "c64ec22141ce8e831faa86c9f3b739b884afa3c9",
-            "ce578c47c5b8b7f7f601a5940b978b8f3d5bc76f"
-          ],
+          "parentIds": ["c64ec22141ce8e831faa86c9f3b739b884afa3c9", "ce578c47c5b8b7f7f601a5940b978b8f3d5bc76f"],
           "author": {
             "id": "no-id",
             "names": ["Jeonghye Choi"],
@@ -1250,10 +1235,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "5fa0e63b7d44c9e7a1ef0755971b1c0f2106af48",
-          "parentIds": [
-            "1e49063b318725799c96afb18df300598c9821b5",
-            "beadc5c7b25ae29284bcc0786b6d54a3b3567e12"
-          ],
+          "parentIds": ["1e49063b318725799c96afb18df300598c9821b5", "beadc5c7b25ae29284bcc0786b6d54a3b3567e12"],
           "author": {
             "id": "no-id",
             "names": ["Hanseul Lee"],
@@ -1610,10 +1592,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "8a03e6567417f741adf4d8e274ce6805deea38c1",
-          "parentIds": [
-            "5fa0e63b7d44c9e7a1ef0755971b1c0f2106af48",
-            "21dc04dc4908b27b08feff62d933bd09b2e6dfca"
-          ],
+          "parentIds": ["5fa0e63b7d44c9e7a1ef0755971b1c0f2106af48", "21dc04dc4908b27b08feff62d933bd09b2e6dfca"],
           "author": {
             "id": "no-id",
             "names": ["Jeonghye Choi"],
@@ -1922,10 +1901,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "8166c2136b848fa120d8f115fe2d951f2f6e2072",
-          "parentIds": [
-            "8a03e6567417f741adf4d8e274ce6805deea38c1",
-            "6d4b186144e582f78511c0f6828f21c0c1ff68af"
-          ],
+          "parentIds": ["8a03e6567417f741adf4d8e274ce6805deea38c1", "6d4b186144e582f78511c0f6828f21c0c1ff68af"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -1973,10 +1949,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "6d4b186144e582f78511c0f6828f21c0c1ff68af",
-          "parentIds": [
-            "013a4761a52cd29b41df32c5c5036232a361d363",
-            "8a03e6567417f741adf4d8e274ce6805deea38c1"
-          ],
+          "parentIds": ["013a4761a52cd29b41df32c5c5036232a361d363", "8a03e6567417f741adf4d8e274ce6805deea38c1"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -2310,10 +2283,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "9d8b235e58c66d5288ecba7ce4a5e8d7a4a30157",
-          "parentIds": [
-            "6aa207c74c520f4b1951168eafacd77b754206cc",
-            "9e2ab626600d28302409567ab0589b6b1d0a7ba6"
-          ],
+          "parentIds": ["6aa207c74c520f4b1951168eafacd77b754206cc", "9e2ab626600d28302409567ab0589b6b1d0a7ba6"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -2473,10 +2443,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "507c94d89c50436b6382f90fe91480c4a9d08a4f",
-          "parentIds": [
-            "778b4782ae21883bfd2582a64f34975b776cdb18",
-            "8166c2136b848fa120d8f115fe2d951f2f6e2072"
-          ],
+          "parentIds": ["778b4782ae21883bfd2582a64f34975b776cdb18", "8166c2136b848fa120d8f115fe2d951f2f6e2072"],
           "author": {
             "id": "no-id",
             "names": ["vgihan"],
@@ -2722,10 +2689,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "da272b0dc9f5baa197eadef750f859533390ddd8",
-          "parentIds": [
-            "632e3a4152e10e619a342ff259f366e396cb5488",
-            "6696c8ad0f08a3dcd0efdf90e4b8faadb8fd9471"
-          ],
+          "parentIds": ["632e3a4152e10e619a342ff259f366e396cb5488", "6696c8ad0f08a3dcd0efdf90e4b8faadb8fd9471"],
           "author": {
             "id": "no-id",
             "names": ["Chaejung Kim"],
@@ -3246,10 +3210,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "7915aaf47f39febfaaa003329eaaa819e33d7e54",
-          "parentIds": [
-            "da272b0dc9f5baa197eadef750f859533390ddd8",
-            "3499d64d23dde8775d1793d05b13fa1ab46b28ba"
-          ],
+          "parentIds": ["da272b0dc9f5baa197eadef750f859533390ddd8", "3499d64d23dde8775d1793d05b13fa1ab46b28ba"],
           "author": {
             "id": "no-id",
             "names": ["Hanseul Lee"],
@@ -3482,10 +3443,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "b0a0d41c4375518445abfa477a31ecf17e2c7d7c",
-          "parentIds": [
-            "7915aaf47f39febfaaa003329eaaa819e33d7e54",
-            "5b847f3699d9b909155f19d85066f9092807b4ca"
-          ],
+          "parentIds": ["7915aaf47f39febfaaa003329eaaa819e33d7e54", "5b847f3699d9b909155f19d85066f9092807b4ca"],
           "author": {
             "id": "no-id",
             "names": ["HyojinKim"],
@@ -3557,10 +3515,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "baf36e48d6d920ac0f945df6524314060662b169",
-          "parentIds": [
-            "ff500b59ea3071bce4465794626445bd1c71d5c9",
-            "7915aaf47f39febfaaa003329eaaa819e33d7e54"
-          ],
+          "parentIds": ["ff500b59ea3071bce4465794626445bd1c71d5c9", "7915aaf47f39febfaaa003329eaaa819e33d7e54"],
           "author": {
             "id": "no-id",
             "names": ["HyojinKim"],
@@ -3673,10 +3628,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "e257b00b4a7465d55261f7777c68f47977271348",
-          "parentIds": [
-            "b0a0d41c4375518445abfa477a31ecf17e2c7d7c",
-            "edafe5575497ee1f121a45dfbc692adb94a65152"
-          ],
+          "parentIds": ["b0a0d41c4375518445abfa477a31ecf17e2c7d7c", "edafe5575497ee1f121a45dfbc692adb94a65152"],
           "author": {
             "id": "no-id",
             "names": ["HyojinKim"],
@@ -3781,10 +3733,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "ea18f46c78b2d0327361c8d0fb90d925c480040e",
-          "parentIds": [
-            "e257b00b4a7465d55261f7777c68f47977271348",
-            "14033f049b39132c359a169627ee59e71f348193"
-          ],
+          "parentIds": ["e257b00b4a7465d55261f7777c68f47977271348", "14033f049b39132c359a169627ee59e71f348193"],
           "author": {
             "id": "no-id",
             "names": ["kmin-jeong"],
@@ -3889,10 +3838,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "27dc9d43d9d6026c4dd27dc0a54b06ebd3b035a7",
-          "parentIds": [
-            "ea18f46c78b2d0327361c8d0fb90d925c480040e",
-            "c64e66f5f5ace03ae81eae8d4444481a63141adf"
-          ],
+          "parentIds": ["ea18f46c78b2d0327361c8d0fb90d925c480040e", "c64e66f5f5ace03ae81eae8d4444481a63141adf"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -3969,10 +3915,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "90f6577dcea21d0a42973adce4269fd0aca4005b",
-          "parentIds": [
-            "27dc9d43d9d6026c4dd27dc0a54b06ebd3b035a7",
-            "f44a32001e0970ec5a44c14fcdace6a974212b41"
-          ],
+          "parentIds": ["27dc9d43d9d6026c4dd27dc0a54b06ebd3b035a7", "f44a32001e0970ec5a44c14fcdace6a974212b41"],
           "author": {
             "id": "no-id",
             "names": ["Hanseul Lee"],
@@ -4409,10 +4352,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "2495cefba7644ce82bb7c357babb4c4e06d66cd0",
-          "parentIds": [
-            "a6aca38ef0330042f6e76b984dd6c71267ef2a5d",
-            "71ff1361d6e2de371b689406af544df1075c0982"
-          ],
+          "parentIds": ["a6aca38ef0330042f6e76b984dd6c71267ef2a5d", "71ff1361d6e2de371b689406af544df1075c0982"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -4613,10 +4553,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "ac57011deda2a8b7b20e75d3799cf850e2478996",
-          "parentIds": [
-            "2495cefba7644ce82bb7c357babb4c4e06d66cd0",
-            "dcc0971cbed76e2957a9580edda883ca4077fa07"
-          ],
+          "parentIds": ["2495cefba7644ce82bb7c357babb4c4e06d66cd0", "dcc0971cbed76e2957a9580edda883ca4077fa07"],
           "author": {
             "id": "no-id",
             "names": ["Hanseul Lee"],
@@ -4721,10 +4658,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "c5e1b668fdb5f88a415fab62bc5e3c7cc068baf5",
-          "parentIds": [
-            "ac57011deda2a8b7b20e75d3799cf850e2478996",
-            "b981fc555ee388efea27d0453d8ad3cbe5fdcfd1"
-          ],
+          "parentIds": ["ac57011deda2a8b7b20e75d3799cf850e2478996", "b981fc555ee388efea27d0453d8ad3cbe5fdcfd1"],
           "author": {
             "id": "no-id",
             "names": ["Hanseul Lee"],
@@ -4829,10 +4763,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "2337e8f864179eed625b1222d14d86d67b3e635d",
-          "parentIds": [
-            "c5e1b668fdb5f88a415fab62bc5e3c7cc068baf5",
-            "7c5dd1efa11f34c841ec2aca0b8552f6eb6aef0f"
-          ],
+          "parentIds": ["c5e1b668fdb5f88a415fab62bc5e3c7cc068baf5", "7c5dd1efa11f34c841ec2aca0b8552f6eb6aef0f"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -5145,10 +5076,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "d9483784b6b946ee6fb4e2c83f4b554c753ab632",
-          "parentIds": [
-            "2337e8f864179eed625b1222d14d86d67b3e635d",
-            "d12d059d577666585fee1e25b646a3848bff4752"
-          ],
+          "parentIds": ["2337e8f864179eed625b1222d14d86d67b3e635d", "d12d059d577666585fee1e25b646a3848bff4752"],
           "author": {
             "id": "no-id",
             "names": ["Parksunghyeon"],
@@ -5253,10 +5181,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "fd46b07926bce8745ebe83d0a66dd05fb1b4613a",
-          "parentIds": [
-            "d9483784b6b946ee6fb4e2c83f4b554c753ab632",
-            "3af7bc61a73bd044d5b9be7d8252ab3e21489284"
-          ],
+          "parentIds": ["d9483784b6b946ee6fb4e2c83f4b554c753ab632", "3af7bc61a73bd044d5b9be7d8252ab3e21489284"],
           "author": {
             "id": "no-id",
             "names": ["Parksunghyeon"],
@@ -5292,10 +5217,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "3af7bc61a73bd044d5b9be7d8252ab3e21489284",
-          "parentIds": [
-            "851519b1cf18c512813b86f3fbcb094c4b7c821a",
-            "d9483784b6b946ee6fb4e2c83f4b554c753ab632"
-          ],
+          "parentIds": ["851519b1cf18c512813b86f3fbcb094c4b7c821a", "d9483784b6b946ee6fb4e2c83f4b554c753ab632"],
           "author": {
             "id": "no-id",
             "names": ["Parksunghyeon"],
@@ -5400,10 +5322,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "6068366d332e15aa5d474d9f918d32aea25bc002",
-          "parentIds": [
-            "fd46b07926bce8745ebe83d0a66dd05fb1b4613a",
-            "e7f5becff53e0782138492642b44afec74d53f17"
-          ],
+          "parentIds": ["fd46b07926bce8745ebe83d0a66dd05fb1b4613a", "e7f5becff53e0782138492642b44afec74d53f17"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -5488,10 +5407,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "8ce1ca6c148714f573548d4acd13c895f1b3eaee",
-          "parentIds": [
-            "6068366d332e15aa5d474d9f918d32aea25bc002",
-            "fc14125fb98d9d4ca9e1db647afd8b2a0ce80e45"
-          ],
+          "parentIds": ["6068366d332e15aa5d474d9f918d32aea25bc002", "fc14125fb98d9d4ca9e1db647afd8b2a0ce80e45"],
           "author": {
             "id": "no-id",
             "names": ["제제jeje"],
@@ -6207,10 +6123,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "8d50adfb87ce1f188626d32f60ff2be883454b0c",
-          "parentIds": [
-            "3a4d760f1b0cc7fc63b98f690d27cdf439588938",
-            "6e90d995f8e00ff3264bea7ce6d0b43dd43cd948"
-          ],
+          "parentIds": ["3a4d760f1b0cc7fc63b98f690d27cdf439588938", "6e90d995f8e00ff3264bea7ce6d0b43dd43cd948"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -6565,10 +6478,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "77875c2d5343fc209bcdf918ca87f833bbee5b28",
-          "parentIds": [
-            "c25126095df7152a7cba256cc5650b9a6758993b",
-            "a059b37de29c11ecb25055b0c35fce6d8feb489d"
-          ],
+          "parentIds": ["c25126095df7152a7cba256cc5650b9a6758993b", "a059b37de29c11ecb25055b0c35fce6d8feb489d"],
           "author": {
             "id": "no-id",
             "names": ["Jeonghye Choi"],
@@ -6767,10 +6677,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "2106c291d855693cdf39a657b8dd1bcd5943ea86",
-          "parentIds": [
-            "5ba005a75179dd6feb3a534579a712f1109bc571",
-            "1a92442e52f7263a3f29f9581dde742fd35a35ab"
-          ],
+          "parentIds": ["5ba005a75179dd6feb3a534579a712f1109bc571", "1a92442e52f7263a3f29f9581dde742fd35a35ab"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -6931,10 +6838,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "d07704b71d399cdef7f6f5b710df2b2a9be0da00",
-          "parentIds": [
-            "2106c291d855693cdf39a657b8dd1bcd5943ea86",
-            "318cf3c06feaf5244ed3fea1c7d21465e8aef907"
-          ],
+          "parentIds": ["2106c291d855693cdf39a657b8dd1bcd5943ea86", "318cf3c06feaf5244ed3fea1c7d21465e8aef907"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -7153,10 +7057,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "3240fdea033437bbfb7374853abc856be89c2968",
-          "parentIds": [
-            "9077c992b64ec3f3d97b24d79106fe11332c4e2d",
-            "314acbef67f5ae9fff957fac7278653416069809"
-          ],
+          "parentIds": ["9077c992b64ec3f3d97b24d79106fe11332c4e2d", "314acbef67f5ae9fff957fac7278653416069809"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -7688,10 +7589,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "26cb5d7c9d224dae74d3f2140c66a17a96ea1a02",
-          "parentIds": [
-            "a86548414a15ec2b1ca63ab39f7b60b9743550e1",
-            "f3bf5604dd301ccfd4e505c1621f70de3a6cb900"
-          ],
+          "parentIds": ["a86548414a15ec2b1ca63ab39f7b60b9743550e1", "f3bf5604dd301ccfd4e505c1621f70de3a6cb900"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -8101,10 +7999,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "97d694c21050aa38ee4b22c59f0a8ede6365b458",
-          "parentIds": [
-            "7f0aa6179a6b6d058670d753fb55211315415593",
-            "d30aa68db65dfa967f04c0c7881cb89e851fa443"
-          ],
+          "parentIds": ["7f0aa6179a6b6d058670d753fb55211315415593", "d30aa68db65dfa967f04c0c7881cb89e851fa443"],
           "author": {
             "id": "no-id",
             "names": ["ytaek"],
@@ -9012,10 +8907,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "ab7f798a86fd8ab1b07c10f629ba6bf9c826bb8a",
-          "parentIds": [
-            "4265e1e1f3218d78d0ff827a401a8825bec2e0b0",
-            "f06ee669582fa2968cb14f6e703d1012acd5fb19"
-          ],
+          "parentIds": ["4265e1e1f3218d78d0ff827a401a8825bec2e0b0", "f06ee669582fa2968cb14f6e703d1012acd5fb19"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -9240,10 +9132,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "562f61c03abb0eb0cc78554e3035c9a83a075ae2",
-          "parentIds": [
-            "ab7f798a86fd8ab1b07c10f629ba6bf9c826bb8a",
-            "09922c16cebefcc0c9398d7c54ca4bfd6061672f"
-          ],
+          "parentIds": ["ab7f798a86fd8ab1b07c10f629ba6bf9c826bb8a", "09922c16cebefcc0c9398d7c54ca4bfd6061672f"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -9797,10 +9686,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "be0a8d67df2da4a123f9eb3be3d5374e7c8f0eaf",
-          "parentIds": [
-            "c7f560dbb416605fdbec8b7d9eeab62221b38710",
-            "7466762ecedaed3369a65b76951a1d0871a07cc2"
-          ],
+          "parentIds": ["c7f560dbb416605fdbec8b7d9eeab62221b38710", "7466762ecedaed3369a65b76951a1d0871a07cc2"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -10013,10 +9899,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "7a4af15bea3b452e2ab3ac78b55fd9c3645d0815",
-          "parentIds": [
-            "be0a8d67df2da4a123f9eb3be3d5374e7c8f0eaf",
-            "af6a9f2534193f60f2e8e3c90517c143b37d4294"
-          ],
+          "parentIds": ["be0a8d67df2da4a123f9eb3be3d5374e7c8f0eaf", "af6a9f2534193f60f2e8e3c90517c143b37d4294"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -10138,10 +10021,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "d992c3801c126da5abb55edfeb2cb2c06772a644",
-          "parentIds": [
-            "454088936e3f73d88bded223a3fcea28f3ec0ec8",
-            "c6cad1699f0d751bb82d9489b8746d0edfe4f222"
-          ],
+          "parentIds": ["454088936e3f73d88bded223a3fcea28f3ec0ec8", "c6cad1699f0d751bb82d9489b8746d0edfe4f222"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
@@ -10623,10 +10503,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "dbb3beec12a66788b126101d5b2e6c0b4bb86379",
-          "parentIds": [
-            "0dca5a0e77c9c3cf99f55544721078141a551670",
-            "b3caa9b6c71f72bec6fe44cad13e92555de3f54c"
-          ],
+          "parentIds": ["0dca5a0e77c9c3cf99f55544721078141a551670", "b3caa9b6c71f72bec6fe44cad13e92555de3f54c"],
           "author": {
             "id": "no-id",
             "names": ["jin-Pro"],
@@ -10736,10 +10613,7 @@
         "nodeTypeName": "COMMIT",
         "commit": {
           "id": "4f3908d48a93e063613e2894087ccb01c1ea48c6",
-          "parentIds": [
-            "912083f37ffc696732b1f5de856021067b9890b9",
-            "487be7e1a7faa40d7fb54a7c13ddf059cd6ac8d6"
-          ],
+          "parentIds": ["912083f37ffc696732b1f5de856021067b9890b9", "487be7e1a7faa40d7fb54a7c13ddf059cd6ac8d6"],
           "author": {
             "id": "no-id",
             "names": ["김기한"],
