@@ -1,8 +1,8 @@
-import {AnalysisEngine} from "@githru-vscode-ext/analysis-engine";
+import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine/src";
 import * as vscode from "vscode";
-import {COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH} from "./commands";
-import {findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo} from "./utils/git.util";
-import {mapClusterNodesFrom} from "./utils/csm.mapper";
+import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
+import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
+import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
@@ -10,10 +10,10 @@ let myStatusBarItem: vscode.StatusBarItem;
 const getGithubToken = (): string | undefined => {
     const configuration = vscode.workspace.getConfiguration();
     return configuration.get("githru.github.token");
-}
+};
 
 function normalizeFsPath(fsPath: string) {
-	return fsPath.replace(/\\/g, '/');
+    return fsPath.replace(/\\/g, "/");
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
         const fetchClusterNodes = async () => {
             const gitLog = await getGitLog(gitPath, currentWorkspacePath);
             const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-            const {owner, repo} = getRepo(gitConfig);
+            const { owner, repo } = getRepo(gitConfig);
             const baseBranchName = getBaseBranchName(branchNames);
             const engine = new AnalysisEngine({
                 isDebugMode: true,
@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
             const data = JSON.stringify(clusterNodes);
             return data;
         };
-        const fetchBranchList = () => JSON.stringify(branchNames)
+        const fetchBranchList = () => JSON.stringify(branchNames);
         const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes, fetchBranchList);
 
         subscriptions.push(webLoader);
@@ -64,20 +64,19 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
-        const config = vscode.workspace.getConfiguration()
+        const config = vscode.workspace.getConfiguration();
 
         const defaultGithubToken = await getGithubToken();
 
         const newGithubToken = await vscode.window.showInputBox({
             title: "Type or paste your Github access token value.",
             placeHolder: "Type valid token here!",
-            value: defaultGithubToken ?? ''
+            value: defaultGithubToken ?? "",
         });
 
-        if (!newGithubToken)
-            throw new Error("Cannot get users' access token properly");
+        if (!newGithubToken) throw new Error("Cannot get users' access token properly");
 
-        config.update('githru.github.token', newGithubToken, vscode.ConfigurationTarget.Global);
+        config.update("githru.github.token", newGithubToken, vscode.ConfigurationTarget.Global);
     });
 
     subscriptions.concat([disposable, getAccessToken]);
