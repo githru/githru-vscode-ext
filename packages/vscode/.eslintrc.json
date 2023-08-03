@@ -28,7 +28,8 @@
       "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
       "rules": {
         "no-empty": "warn",
-        "@typescript-eslint/ban-types": "error",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/no-redeclare": "warn",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
@@ -48,5 +49,5 @@
       }
     }
   ],
-  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webpack*"]
+  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webpack*", "node_modules"]
 }

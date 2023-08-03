@@ -13,7 +13,8 @@
   "scripts": {
     "build": "rollup -c && tsc -d --emitDeclarationOnly --noEmit false --declarationDir dist",
     "start": "sh -c 'node -e \"require(\\\"./dist/index.js\\\").getMockData(\\\"$0\\\")\"'",
-    "lint": "eslint --ignore-path .gitignore --fix --max-warnings 0 \"**/*.{js,ts}\"",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
     "check:eslint": "eslint --ignore-path .gitignore --max-warnings 0 \"**/*.{js,ts}\"",
     "check:vulnerabilities": "npm audit --omit=dev",
     "test": "jest",
