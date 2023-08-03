@@ -1,6 +1,6 @@
 import { getLeafNodes } from "./commit.util";
 import Queue from "./queue";
-import { CommitDict, CommitNode, Stem, StemDict } from "./types";
+import type { CommitDict, CommitNode, Stem, StemDict } from "./types";
 
 export function getStemNodes(
   tailId: string,

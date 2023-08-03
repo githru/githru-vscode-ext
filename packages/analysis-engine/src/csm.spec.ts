@@ -1,6 +1,5 @@
 import { buildCSMDict } from "./csm";
-
-import type { CommitRaw, CommitNode, Stem, CSMDictionary } from "./types";
+import type { CommitNode, CommitRaw, CSMDictionary,Stem } from "./types";
 
 describe("csm", () => {
   // master = [0, 1,              2,                 3, 4, 5]

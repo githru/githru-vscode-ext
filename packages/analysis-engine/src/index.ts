@@ -1,10 +1,12 @@
 import "reflect-metadata";
+
 import { container } from "tsyringe";
+
+import { buildCommitDict } from "./commit.util";
+import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
-import { buildCommitDict } from "./commit.util";
 import { buildStemDict } from "./stem";
-import { buildCSMDict } from "./csm";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;

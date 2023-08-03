@@ -1,9 +1,9 @@
 import {
-  CommitRaw,
-  CommitNode,
-  CommitMessageType,
+  type CommitDict,
+  type CommitMessageType,
   CommitMessageTypeList,
-  CommitDict,
+  type CommitNode,
+  type CommitRaw,
 } from "./types";
 
 export function buildCommitDict(commits: CommitRaw[]): CommitDict {

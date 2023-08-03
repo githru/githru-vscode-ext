@@ -1,8 +1,8 @@
-import { singleton, inject } from "tsyringe";
-import { OctokitOptions } from "@octokit/core/dist-types/types";
-import { Octokit } from "@octokit/rest";
+import type { OctokitOptions } from "@octokit/core/dist-types/types";
 import { throttling } from "@octokit/plugin-throttling";
-import { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
+import type { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
+import { Octokit } from "@octokit/rest";
+import { inject,singleton } from "tsyringe";
 
 @singleton()
 export class PluginOctokit extends Octokit.plugin(throttling) {

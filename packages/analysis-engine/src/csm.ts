@@ -1,23 +1,7 @@
-/* eslint-disable import/prefer-default-export */
-import type {
-  CommitNode,
-  StemDict,
-  CSMDictionary,
-  CSMNode,
-  CommitDict,
-  PullRequest,
-  PullRequestDict,
-} from "./types";
-import {
-  convertPRCommitsToCommitNodes,
-  convertPRDetailToCommitRaw,
-} from "./pullRequest";
+import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
+import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
-const buildCSMNode = (
-  baseCommitNode: CommitNode,
-  commitDict: CommitDict,
-  stemDict: StemDict
-): CSMNode => {
+const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
   const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
   if (!mergeParentCommit) {
     return {
@@ -44,16 +28,11 @@ const buildCSMNode = (
 
     // prepare squash
     const squashStemLastIndex = squashStem.nodes.length - 1;
-    const squashStartNodeIndex = squashStem.nodes.findIndex(
-      ({ commit: { id } }) => id === squashStartNode.commit.id
-    );
+    const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
     const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
 
     // squash
-    const spliceCommitNodes = squashStem.nodes.splice(
-      squashStartNodeIndex,
-      spliceCount
-    );
+    const spliceCommitNodes = squashStem.nodes.splice(squashStartNodeIndex, spliceCount);
     squashCommitNodes.push(...spliceCommitNodes);
 
     // check nested-merge
@@ -64,10 +43,7 @@ const buildCSMNode = (
     const nestedMergeParentCommits = nestedMergeParentCommitIds
       .map((commitId) => commitDict.get(commitId))
       .filter((node): node is CommitNode => node !== undefined)
-      .filter(
-        (node) =>
-          node.stemId !== baseCommitNode.stemId && node.stemId !== squashStemId
-      );
+      .filter((node) => node.stemId !== baseCommitNode.stemId && node.stemId !== squashStemId);
 
     squashTaskQueue.push(...nestedMergeParentCommits);
   }
@@ -80,10 +56,7 @@ const buildCSMNode = (
   };
 };
 
-const buildCSMNodeWithPullRequest = (
-  csmNode: CSMNode,
-  pr: PullRequest
-): CSMNode => {
+const buildCSMNodeWithPullRequest = (csmNode: CSMNode, pr: PullRequest): CSMNode => {
   const convertedCommit = convertPRDetailToCommitRaw(csmNode.base.commit, pr);
 
   return {
@@ -91,9 +64,7 @@ const buildCSMNodeWithPullRequest = (
       stemId: csmNode.base.stemId,
       commit: convertedCommit,
     },
-    source: csmNode.source.length
-      ? csmNode.source
-      : convertPRCommitsToCommitNodes(convertedCommit, pr),
+    source: csmNode.source.length ? csmNode.source : convertPRCommitsToCommitNodes(convertedCommit, pr),
   };
 };
 

@@ -1,10 +1,10 @@
-import {
+import { getCommitMessageType } from "./commit.util";
+import type {
+  CommitMessageType,
   CommitRaw,
   DifferenceStatistic,
   GitUser,
-  CommitMessageType,
 } from "./types";
-import { getCommitMessageType } from "./commit.util";
 
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   category.push({
