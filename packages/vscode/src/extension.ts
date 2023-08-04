@@ -1,4 +1,4 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine/src";
+import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";

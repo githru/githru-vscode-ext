@@ -56,12 +56,7 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("pullRequests: ", pullRequests);
     const stemDict = buildStemDict(commitDict, this.baseBranchName);
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
-    const csmDict = buildCSMDict(
-      commitDict,
-      stemDict,
-      this.baseBranchName,
-      pullRequests
-    );
+    const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
 
     return csmDict;

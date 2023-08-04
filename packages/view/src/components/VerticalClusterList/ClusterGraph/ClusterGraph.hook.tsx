@@ -7,17 +7,8 @@ import type { ClusterNode } from "types";
 
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
-import {
-  CLUSTER_HEIGHT,
-  DETAIL_HEIGHT,
-  GRAPH_WIDTH,
-  NODE_GAP,
-  SVG_MARGIN,
-} from "./ClusterGraph.const";
-import type {
-  ClusterGraphElement,
-  SVGElementSelection,
-} from "./ClusterGraph.type";
+import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
+import type { ClusterGraphElement, SVGElementSelection } from "./ClusterGraph.type";
 import { getClusterPosition } from "./ClusterGraph.util";
 
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
@@ -35,17 +26,10 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
     .attr("class", "cluster-graph__degree")
     .attr("width", (d) => widthScale(Math.min(d.clusterSize, 10)))
     .attr("height", CLUSTER_HEIGHT)
-    .attr(
-      "x",
-      (d) => (GRAPH_WIDTH - widthScale(Math.min(d.clusterSize, 10))) / 2
-    );
+    .attr("x", (d) => (GRAPH_WIDTH - widthScale(Math.min(d.clusterSize, 10))) / 2);
 };
 
-const drawLink = (
-  svgRef: RefObject<SVGSVGElement>,
-  data: ClusterGraphElement[],
-  detailElementHeight: number
-) => {
+const drawLink = (svgRef: RefObject<SVGSVGElement>, data: ClusterGraphElement[], detailElementHeight: number) => {
   d3.select(svgRef.current)
     .selectAll(".cluster-graph__link")
     .data([
@@ -81,9 +65,7 @@ const drawClusterGraph = (
     .join("g")
     .on("click", onClickCluster)
     .attr("class", "cluster-graph__container")
-    .attr("transform", (d, i) =>
-      getClusterPosition(d, i, detailElementHeight, true)
-    );
+    .attr("transform", (d, i) => getClusterPosition(d, i, detailElementHeight, true));
 
   group.append("title").text((d) => d.clusterSize);
 
@@ -98,8 +80,7 @@ const drawClusterGraph = (
   drawDegreeBox(group);
 };
 
-const destroyClusterGraph = (target: RefObject<SVGElement>) =>
-  d3.select(target.current).selectAll("*").remove();
+const destroyClusterGraph = (target: RefObject<SVGElement>) => d3.select(target.current).selectAll("*").remove();
 
 export const useHandleClusterGraph = ({
   clusterSizes,
@@ -126,18 +107,11 @@ export const useHandleClusterGraph = ({
 
   const handleClickCluster = useCallback(
     (_: PointerEvent, d: ClusterGraphElement) =>
-      setSelectedData(
-        selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)
-      ),
+      setSelectedData(selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)),
     [setSelectedData]
   );
   useEffect(() => {
-    drawClusterGraph(
-      svgRef,
-      clusterGraphElements,
-      DETAIL_HEIGHT,
-      handleClickCluster
-    );
+    drawClusterGraph(svgRef, clusterGraphElements, DETAIL_HEIGHT, handleClickCluster);
     prevSelected.current = selectedIndex;
     return () => {
       destroyClusterGraph(svgRef);

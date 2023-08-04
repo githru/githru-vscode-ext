@@ -12,7 +12,10 @@ const BranchSelector = () => {
       <span>Branches:</span>
       <select className="select-box">
         {branchList.map((option) => (
-          <option key={option} value={option}>
+          <option
+            key={option}
+            value={option}
+          >
             {option}
           </option>
         ))}

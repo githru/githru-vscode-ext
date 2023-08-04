@@ -4,13 +4,7 @@ import { useRef } from "react";
 import type { CSSProperties } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
-import {
-  BranchSelector,
-  Statistics,
-  TemporalFilter,
-  ThemeSelector,
-  VerticalClusterList,
-} from "components";
+import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
@@ -18,8 +12,7 @@ import { useGlobalData } from "hooks";
 const App = () => {
   const initRef = useRef<boolean>(false);
 
-  const { data, filteredData, fetchAnalyzedData, loading, setLoading } =
-    useGlobalData();
+  const { data, filteredData, fetchAnalyzedData, loading, setLoading } = useGlobalData();
 
   const loaderStyle: CSSProperties = {
     position: "fixed",

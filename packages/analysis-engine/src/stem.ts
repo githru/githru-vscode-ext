@@ -36,10 +36,7 @@ function compareCommitPriority(a: CommitNode, b: CommitNode): number {
     return 0;
   }
   // 나중에 커밋된 것을 먼저 담기
-  return (
-    new Date(b.commit.committerDate).getTime() -
-    new Date(a.commit.committerDate).getTime()
-  );
+  return new Date(b.commit.committerDate).getTime() - new Date(a.commit.committerDate).getTime();
 }
 
 function buildGetStemId() {
@@ -70,10 +67,7 @@ function buildGetStemId() {
  * @param commitDict
  * @param baseBranchName
  */
-export function buildStemDict(
-  commitDict: CommitDict,
-  baseBranchName: string
-): StemDict {
+export function buildStemDict(commitDict: CommitDict, baseBranchName: string): StemDict {
   const q = new Queue<CommitNode>(compareCommitPriority);
 
   /**
@@ -84,18 +78,10 @@ export function buildStemDict(
    */
   const stemDict = new Map<string, Stem>();
   const leafNodes = getLeafNodes(commitDict);
-  const mainNode = leafNodes.find((node) =>
-    node.commit.branches.includes(baseBranchName)
-  );
-  const headNode = leafNodes.find((node) =>
-    node.commit.branches.includes("HEAD")
-  );
+  const mainNode = leafNodes.find((node) => node.commit.branches.includes(baseBranchName));
+  const headNode = leafNodes.find((node) => node.commit.branches.includes("HEAD"));
   leafNodes
-    .filter(
-      (node) =>
-        node.commit.id !== mainNode?.commit.id &&
-        node.commit.id !== headNode?.commit.id
-    )
+    .filter((node) => node.commit.id !== mainNode?.commit.id && node.commit.id !== headNode?.commit.id)
     .forEach((node) => q.push(node), q);
   if (mainNode) q.pushFront(mainNode);
   if (headNode) q.pushBack(headNode);
@@ -106,13 +92,7 @@ export function buildStemDict(
     const tail = q.pop();
     if (!tail) continue;
 
-    const stemId = getStemId(
-      tail.commit.id,
-      tail.commit.branches,
-      baseBranchName,
-      mainNode,
-      headNode
-    );
+    const stemId = getStemId(tail.commit.id, tail.commit.branches, baseBranchName, mainNode, headNode);
 
     const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
     if (nodes.length === 0) continue;

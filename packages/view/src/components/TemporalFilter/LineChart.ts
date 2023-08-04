@@ -16,26 +16,17 @@ export type Margin = {
   left: number;
 };
 
-const getMinMaxDate = (
-  lineChartData: LineChartDatum[],
-  dateRange: DateFilterRange
-) => {
-  if (lineChartData.length === 0 && dateRange !== undefined)
-    return [dateRange.fromDate, dateRange.toDate];
+const getMinMaxDate = (lineChartData: LineChartDatum[], dateRange: DateFilterRange) => {
+  if (lineChartData.length === 0 && dateRange !== undefined) return [dateRange.fromDate, dateRange.toDate];
 
   const minDate = dayjs(lineChartData[0].dateString).format("YYYY-MM-DD");
-  const maxDate = dayjs(
-    lineChartData[lineChartData.length - 1].dateString
-  ).format("YYYY-MM-DD");
+  const maxDate = dayjs(lineChartData[lineChartData.length - 1].dateString).format("YYYY-MM-DD");
 
   if (dateRange === undefined) return [minDate, maxDate];
 
   const { fromDate, toDate } = dateRange;
 
-  return [
-    minDate < fromDate ? minDate : fromDate,
-    maxDate > toDate ? maxDate : toDate,
-  ];
+  return [minDate < fromDate ? minDate : fromDate, maxDate > toDate ? maxDate : toDate];
 };
 
 const drawLineChart = (
@@ -52,19 +43,13 @@ const drawLineChart = (
   console.log("linechartdata", lineChartData);
 
   const width = chartWidth - margin.left - margin.right;
-  const svg = d3
-    .select(refTarget)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${startHeight})`);
+  const svg = d3.select(refTarget).append("g").attr("transform", `translate(${margin.left}, ${startHeight})`);
 
   // TODO cleanup으로 옮기기
   svg.selectAll("*").remove();
 
   const [xMin, xMax] = getMinMaxDate(lineChartData, dateRange);
-  const [yMin, yMax] = d3.extent(lineChartData, (d) => d.value) as [
-    number,
-    number
-  ];
+  const [yMin, yMax] = d3.extent(lineChartData, (d) => d.value) as [number, number];
 
   const xScale = d3
     .scaleTime()
@@ -91,25 +76,13 @@ const drawLineChart = (
 
     d3.select(refTarget)
       .append("g")
-      .attr(
-        "transform",
-        `translate(${margin.left / 2}, ${startHeight + chartHeight})`
-      )
+      .attr("transform", `translate(${margin.left / 2}, ${startHeight + chartHeight})`)
       .call(xAxis);
   }
 
-  svg
-    .append("path")
-    .datum(lineChartData)
-    .attr("class", "cloc-line-chart")
-    .attr("d", area);
+  svg.append("path").datum(lineChartData).attr("class", "cloc-line-chart").attr("d", area);
 
-  svg
-    .append("text")
-    .text(chartTitle)
-    .attr("class", "temporal-filter__label")
-    .attr("x", 0)
-    .attr("y", 15);
+  svg.append("text").text(chartTitle).attr("class", "temporal-filter__label").attr("x", 0).attr("y", 15);
 
   return xScale;
 };

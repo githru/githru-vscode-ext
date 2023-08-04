@@ -10,16 +10,10 @@ import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
 export function sortBasedOnCommitNode(data: ClusterNode[]): CommitNode[] {
   const sortedData: CommitNode[] = [];
   data.forEach((cluster) => {
-    cluster.commitNodeList.map((commitNode: CommitNode) =>
-      sortedData.push(commitNode)
-    );
+    cluster.commitNodeList.map((commitNode: CommitNode) => sortedData.push(commitNode));
   });
 
-  return sortedData.sort(
-    (a, b) =>
-      Number(new Date(a.commit.commitDate)) -
-      Number(new Date(b.commit.commitDate))
-  );
+  return sortedData.sort((a, b) => Number(new Date(a.commit.commitDate)) - Number(new Date(b.commit.commitDate)));
 }
 
 type FilterDataByDateProps = {
@@ -28,19 +22,13 @@ type FilterDataByDateProps = {
   toDate: string;
 };
 
-export function filterDataByDate({
-  data,
-  fromDate,
-  toDate,
-}: FilterDataByDateProps): ClusterNode[] {
+export function filterDataByDate({ data, fromDate, toDate }: FilterDataByDateProps): ClusterNode[] {
   const filteredData = data
     .map((clusterNode) => {
       return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
         return (
-          new Date(commitNode.commit.commitDate) >=
-            new Date(`${fromDate} 00:00:00`) &&
-          new Date(commitNode.commit.commitDate) <=
-            new Date(`${toDate} 23:59:59`)
+          new Date(commitNode.commit.commitDate) >= new Date(`${fromDate} 00:00:00`) &&
+          new Date(commitNode.commit.commitDate) <= new Date(`${toDate} 23:59:59`)
         );
       });
     })
@@ -55,17 +43,14 @@ export function filterDataByDate({
   return filteredData;
 }
 
-export const getCloc = (d: CommitNode) =>
-  d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
+export const getCloc = (d: CommitNode) => d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
 
 export const getMinMaxDate = (data: CommitNode[]) => {
   const minMaxDateFormat = "YYYY-MM-DD";
 
   return {
     fromDate: dayjs(data[0].commit.commitDate).format(minMaxDateFormat),
-    toDate: dayjs(data[data.length - 1].commit.commitDate).format(
-      minMaxDateFormat
-    ),
+    toDate: dayjs(data[data.length - 1].commit.commitDate).format(minMaxDateFormat),
   };
 };
 
