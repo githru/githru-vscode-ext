@@ -68,5 +68,5 @@
       }
     }
   ],
-  "ignorePatterns": ["node_modules"]
+  "ignorePatterns": ["node_modules", "*.config.ts", "*.config.js"]
 }
