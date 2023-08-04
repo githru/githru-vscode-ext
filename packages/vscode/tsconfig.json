@@ -8,10 +8,8 @@
     "rootDir": "src",
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "noEmit": true,
     "moduleResolution": "node"
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */

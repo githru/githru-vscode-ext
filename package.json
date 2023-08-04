@@ -7,9 +7,9 @@
     "deploy:all": "npm run deploy --workspaces",
     "test:all": "npm run test --workspaces",
     "lint": "eslint '**/*.{js,ts,tsx}'",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier '**/*.{json,yaml,md}' --check",
-    "prettier:fix": "prettier '**/*.{json,yaml,md}' --write"
+    "lint:fix": "npm run lint --fix",
+    "prettier": "prettier '**/*.{ts,tsx,json,yaml,md}' --check",
+    "prettier:fix": "prettier '**/*.{ts,tsx,json,yaml,md}' --write"
   },
   "author": "githru team",
   "license": "MIT",
@@ -19,8 +19,5 @@
   "dependencies": {
     "generator-code": "^1.6.10",
     "yo": "^1.4.5"
-  },
-  "devDependencies": {
-    "prettier": "^3.0.1"
   }
 }
