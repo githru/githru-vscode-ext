@@ -1,10 +1,6 @@
 import { useGlobalData } from "hooks";
 
-import {
-  getGraphHeight,
-  getClusterSizes,
-  getSelectedIndex,
-} from "./ClusterGraph.util";
+import { getGraphHeight, getClusterSizes, getSelectedIndex } from "./ClusterGraph.util";
 import { DETAIL_HEIGHT, SVG_WIDTH } from "./ClusterGraph.const";
 import { useHandleClusterGraph } from "./ClusterGraph.hook";
 
@@ -14,8 +10,7 @@ const ClusterGraph = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const clusterSizes = getClusterSizes(data);
   const selectedIndex = getSelectedIndex(data, selectedData);
-  const graphHeight =
-    getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
+  const graphHeight = getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
 
   const svgRef = useHandleClusterGraph({
     data,

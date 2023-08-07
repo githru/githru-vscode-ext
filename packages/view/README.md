@@ -6,26 +6,25 @@ Githru view에서는 Githru vscode extension에서 Githru analysis engine의 결
 
 ## 기능
 
-* Temporal Filter
+- Temporal Filter
 
-    * 저장소의 전체 commit과 cloc를 라인차트로 보여주고, 날짜 구간을 선택하여 확인할 수 있습니다.
+  - 저장소의 전체 commit과 cloc를 라인차트로 보여주고, 날짜 구간을 선택하여 확인할 수 있습니다.
 
-    * 구간을 선택하면 해당 구간의 데이터를 기반으로 Vertical Cluster List, Statistics에서 데이터가 보여집니다.
+  - 구간을 선택하면 해당 구간의 데이터를 기반으로 Vertical Cluster List, Statistics에서 데이터가 보여집니다.
 
-* Vertical Cluster List
-    
-    * cluster별로 얼마나 많은 commit을 가지고 있는지 그래프로 확인할 수 있고, 해당 cluster에 어떤 author가 있고, 어떤 내용의 변화가 있는지 간접적으로 알 수 있습니다. 클릭하면 자세한 commit list를 확인할 수 있습니다.
+- Vertical Cluster List
 
-* Detail
+  - cluster별로 얼마나 많은 commit을 가지고 있는지 그래프로 확인할 수 있고, 해당 cluster에 어떤 author가 있고, 어떤 내용의 변화가 있는지 간접적으로 알 수 있습니다. 클릭하면 자세한 commit list를 확인할 수 있습니다.
 
-    * 선택한 cluster의 commit list와 cluster에서의 몇 명의 author가 작업했는지, 몇 개의 commit이 등록되었는지, 총 몇 개의 file이 change되었는지, code의 additions과 deletions는 얼마나 되는지 보여줍니다.
+- Detail
 
-* Statistics
+  - 선택한 cluster의 commit list와 cluster에서의 몇 명의 author가 작업했는지, 몇 개의 commit이 등록되었는지, 총 몇 개의 file이 change되었는지, code의 additions과 deletions는 얼마나 되는지 보여줍니다.
 
-    * author별로 commit을 얼마나 했는지, insertions은 얼마나 되었는지, deletions는 얼마나 되었는지 bar chart로 보여줍니다.
+- Statistics
 
-    * 파일 경로마다 어느 정도의 변화가 있었는지 인터랙션과 함께 icicle chart에서 확인할 수 있습니다.
+  - author별로 commit을 얼마나 했는지, insertions은 얼마나 되었는지, deletions는 얼마나 되었는지 bar chart로 보여줍니다.
 
+  - 파일 경로마다 어느 정도의 변화가 있었는지 인터랙션과 함께 icicle chart에서 확인할 수 있습니다.
 
 ## 문서
 

@@ -44,28 +44,19 @@ export const sortDataByName = (a: string, b: string) => {
   return 0;
 };
 
-export const convertNumberFormat = (
-  d: number | { valueOf(): number }
-): string => {
+export const convertNumberFormat = (d: number | { valueOf(): number }): string => {
   if (typeof d === "number" && d < 1 && d >= 0) {
     return `${d}`;
   }
   return d3.format("~s")(d);
 };
 
-export const sortDataByAuthor = (
-  data: ClusterNode[],
-  author: string
-): ClusterNode[] => {
+export const sortDataByAuthor = (data: ClusterNode[], author: string): ClusterNode[] => {
   return data.reduce((acc: ClusterNode[], cluster: ClusterNode) => {
-    const checkedCluster = cluster.commitNodeList.filter(
-      (commitNode: CommitNode) =>
-        commitNode.commit.author.names.includes(author)
+    const checkedCluster = cluster.commitNodeList.filter((commitNode: CommitNode) =>
+      commitNode.commit.author.names.includes(author)
     );
     if (!checkedCluster.length) return acc;
-    return [
-      ...acc,
-      { nodeTypeName: "CLUSTER" as const, commitNodeList: checkedCluster },
-    ];
+    return [...acc, { nodeTypeName: "CLUSTER" as const, commitNodeList: checkedCluster }];
   }, []);
 };

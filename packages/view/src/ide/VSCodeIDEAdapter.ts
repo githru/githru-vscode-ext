@@ -8,16 +8,12 @@ import { vscode } from "./VSCodeAPIWrapper";
 
 @injectable()
 export default class VSCodeIDEAdapter implements IDEPort {
-  public addAllEventListener(
-    fetchAnalyzedData: (analyzedData: ClusterNode[]) => void
-  ) {
+  public addAllEventListener(fetchAnalyzedData: (analyzedData: ClusterNode[]) => void) {
     const onReceiveMessage = (e: EngineMessageEvent): void => {
       const response = e.data;
       switch (response.command) {
         case "fetchAnalyzedData":
-          fetchAnalyzedData(
-            JSON.parse(response.payload || "") as unknown as ClusterNode[]
-          );
+          fetchAnalyzedData(JSON.parse(response.payload || "") as unknown as ClusterNode[]);
           break;
         case "getBranchList":
         default:

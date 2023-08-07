@@ -9,23 +9,13 @@ import { getAuthorProfileImgSrc } from "utils/author";
 import { useGetSelectedData } from "../Statistics.hook";
 
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
-import {
-  convertNumberFormat,
-  getDataByAuthor,
-  sortDataByAuthor,
-  sortDataByName,
-} from "./AuthorBarChart.util";
+import { convertNumberFormat, getDataByAuthor, sortDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
-  const {
-    data: totalData,
-    filteredData,
-    setSelectedData,
-    setFilteredData,
-  } = useGlobalData();
+  const { data: totalData, filteredData, setSelectedData, setFilteredData } = useGlobalData();
   const rawData = useGetSelectedData();
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -46,10 +36,7 @@ const AuthorBarChart = () => {
   }
 
   useEffect(() => {
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", DIMENSIONS.width)
-      .attr("height", DIMENSIONS.height);
+    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", DIMENSIONS.height);
     const tooltip = d3.select(tooltipRef.current);
 
     svg.selectAll("*").remove();
@@ -78,37 +65,23 @@ const AuthorBarChart = () => {
       .range([DIMENSIONS.height, 0]);
 
     // Axis
-    const xAxis = d3
-      .axisBottom(xScale)
-      .ticks(0)
-      .tickSizeInner(0)
-      .tickSizeOuter(0);
+    const xAxis = d3.axisBottom(xScale).ticks(0).tickSizeInner(0).tickSizeOuter(0);
     xAxisGroup.call(xAxis);
 
-    const yAxis = d3
-      .axisLeft(yScale)
-      .ticks(10)
-      .tickFormat(convertNumberFormat)
-      .tickSizeOuter(0);
+    const yAxis = d3.axisLeft(yScale).ticks(10).tickFormat(convertNumberFormat).tickSizeOuter(0);
     yAxisGroup.call(yAxis);
 
     xAxisGroup
       .append("text")
       .attr("class", "x-axis-label")
-      .style(
-        "transform",
-        `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`
-      )
+      .style("transform", `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`)
       .text(`${metric} # / Total ${metric} # (%)`);
 
     // Event handler
     const handleMouseOver = () => {
       tooltip.style("display", "inline-block");
     };
-    const handleMouseMove = (
-      e: MouseEvent<SVGRectElement | SVGTextElement>,
-      d: AuthorDataType
-    ) => {
+    const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
       tooltip
         .style("left", `${e.pageX - 70}px`)
         .style("top", `${e.pageY - 70}px`)
@@ -126,10 +99,7 @@ const AuthorBarChart = () => {
     const handleMouseOut = () => {
       tooltip.style("display", "none");
     };
-    const handleClickBar = (
-      _: MouseEvent<SVGRectElement | SVGTextElement>,
-      d: AuthorDataType
-    ) => {
+    const handleClickBar = (_: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
       const isAuthorSelected = !!prevData.length;
 
       if (isAuthorSelected) {
@@ -168,10 +138,7 @@ const AuthorBarChart = () => {
       .transition()
       .duration(500)
       .attr("width", xScale.bandwidth())
-      .attr(
-        "height",
-        (d: AuthorDataType) => DIMENSIONS.height - yScale(d[metric])
-      )
+      .attr("height", (d: AuthorDataType) => DIMENSIONS.height - yScale(d[metric]))
       .attr("x", (d: AuthorDataType) => xScale(d.name) || 0)
       .attr("y", (d: AuthorDataType) => yScale(d[metric]));
 
@@ -181,32 +148,17 @@ const AuthorBarChart = () => {
 
     barElements.forEach(async (barElement, i) => {
       const bar = d3.select(barElement).datum(data[i]);
-      const profileImgSrc: string = await getAuthorProfileImgSrc(
-        data[i].name
-      ).then((res: AuthorInfo) => res.src);
+      const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: AuthorInfo) => res.src);
       bar
         .append("image")
         .attr("class", "profile-image")
         .attr("xlink:href", profileImgSrc ?? "")
-        .attr(
-          "x",
-          (d: AuthorDataType) =>
-            (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7
-        )
+        .attr("x", (d: AuthorDataType) => (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7)
         .attr("y", 204)
         .attr("width", 14)
         .attr("height", 14);
     });
-  }, [
-    data,
-    filteredData,
-    metric,
-    prevData,
-    rawData,
-    setFilteredData,
-    setSelectedData,
-    totalData,
-  ]);
+  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
@@ -215,16 +167,28 @@ const AuthorBarChart = () => {
   return (
     <div className="author-bar-chart__container">
       <div className="author-bar-chart__header">
-        <select className="select-box" onChange={handleChangeMetric}>
+        <select
+          className="select-box"
+          onChange={handleChangeMetric}
+        >
           {METRIC_TYPE.map((option) => (
-            <option key={option} value={option}>
+            <option
+              key={option}
+              value={option}
+            >
               {option === METRIC_TYPE[0] ? `${option} #` : option}
             </option>
           ))}
         </select>
       </div>
-      <svg className="author-bar-chart" ref={svgRef} />
-      <div className="author-bar-chart__tooltip" ref={tooltipRef} />
+      <svg
+        className="author-bar-chart"
+        ref={svgRef}
+      />
+      <div
+        className="author-bar-chart__tooltip"
+        ref={tooltipRef}
+      />
     </div>
   );
 };
