@@ -87,7 +87,7 @@ function getAuthorProfileImgSrc(authorName: string): Promise<SrcInfo> {
 
     img.onload = () => {
       const { src } = img;
-      const srcInfo = {
+      const srcInfo: SrcInfo = {
         key: authorName,
         value: src,
       };
