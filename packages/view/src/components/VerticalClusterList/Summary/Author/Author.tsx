@@ -1,6 +1,6 @@
-import type { AuthorProps } from "../Summary.type";
+import type { AuthorInfo } from "types";
 
-const Author = ({ name, src }: AuthorProps) => {
+const Author = ({ name, src }: AuthorInfo) => {
   return (
     <div className="name" data-tooltip-text={name}>
       <img src={src} alt="" width="30" />

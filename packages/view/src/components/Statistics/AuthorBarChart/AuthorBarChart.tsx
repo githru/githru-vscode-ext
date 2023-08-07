@@ -2,7 +2,7 @@ import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode, SrcInfo } from "types";
+import type { ClusterNode, AuthorInfo } from "types";
 import { useGlobalData } from "hooks";
 import { getAuthorProfileImgSrc } from "utils/author";
 
@@ -183,7 +183,7 @@ const AuthorBarChart = () => {
       const bar = d3.select(barElement).datum(data[i]);
       const profileImgSrc: string = await getAuthorProfileImgSrc(
         data[i].name
-      ).then((res: SrcInfo) => res.value);
+      ).then((res: AuthorInfo) => res.src);
       bar
         .append("image")
         .attr("class", "profile-image")

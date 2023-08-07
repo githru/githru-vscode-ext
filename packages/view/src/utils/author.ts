@@ -1,17 +1,20 @@
 import md5 from "md5";
 
-import { GITHUB_URL, GRAVATA_URL } from "constants/constants";
-import type { SrcInfo } from "types";
+import type { AuthorInfo } from "types";
 
-export function getAuthorProfileImgSrc(authorName: string): Promise<SrcInfo> {
+import { GITHUB_URL, GRAVATA_URL } from "../constants/constants";
+
+export function getAuthorProfileImgSrc(
+  authorName: string
+): Promise<AuthorInfo> {
   return new Promise((resolve) => {
     const img = new Image();
 
     img.onload = () => {
       const { src } = img;
-      const srcInfo: SrcInfo = {
-        key: authorName,
-        value: src,
+      const srcInfo: AuthorInfo = {
+        name: authorName,
+        src,
       };
       resolve(srcInfo);
     };

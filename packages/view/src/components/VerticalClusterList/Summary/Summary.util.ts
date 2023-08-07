@@ -84,9 +84,9 @@ export async function getAuthSrcMap(data: ClusterNode[]) {
   const promiseAuthSrc = authorNames.map(getAuthorProfileImgSrc);
   const authSrcs = await Promise.all(promiseAuthSrc);
   const authSrcMap: AuthSrcMap = {};
-  authSrcs.forEach((srcInfo) => {
-    const { key, value } = srcInfo;
-    authSrcMap[key] = value;
+  authSrcs.forEach((authorInfo) => {
+    const { name, src } = authorInfo;
+    authSrcMap[name] = src;
   });
   return authSrcMap;
 }

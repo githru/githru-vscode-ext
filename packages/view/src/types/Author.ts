@@ -1,4 +1,4 @@
-export type SrcInfo = {
-  key: string;
-  value: string;
+export type AuthorInfo = {
+  name: string;
+  src: string;
 };
