@@ -23,16 +23,13 @@ type GlobalDataState = {
   setLoading: Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const GlobalDataContext = createContext<GlobalDataState>(
-  {} as GlobalDataState
-);
+export const GlobalDataContext = createContext<GlobalDataState>({} as GlobalDataState);
 
 export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<ClusterNode[]>([]);
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
-  const [filteredRange, setFilteredRange] =
-    useState<DateFilterRange>(undefined);
+  const [filteredRange, setFilteredRange] = useState<DateFilterRange>(undefined);
   const [loading, setLoading] = useState(false);
 
   const fetchAnalyzedData = (analyzedData: ClusterNode[]) => {
@@ -58,11 +55,7 @@ export const GlobalDataProvider = ({ children }: { children: ReactNode }) => {
     [data, filteredRange, filteredData, selectedData, loading]
   );
 
-  return (
-    <GlobalDataContext.Provider value={value}>
-      {children}
-    </GlobalDataContext.Provider>
-  );
+  return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;
 };
 
 export const useGlobalData = () => {

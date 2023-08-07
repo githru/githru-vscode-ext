@@ -1,8 +1,8 @@
-import { singleton, inject } from "tsyringe";
-import { OctokitOptions } from "@octokit/core/dist-types/types";
-import { Octokit } from "@octokit/rest";
+import type { OctokitOptions } from "@octokit/core/dist-types/types";
 import { throttling } from "@octokit/plugin-throttling";
-import { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
+import type { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
+import { Octokit } from "@octokit/rest";
+import { inject, singleton } from "tsyringe";
 
 @singleton()
 export class PluginOctokit extends Octokit.plugin(throttling) {
@@ -31,9 +31,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
             url: string;
             request: { retryCount: number };
           };
-          console.log(
-            `[L] - request quota exhausted for request ${method} ${url}`
-          );
+          console.log(`[L] - request quota exhausted for request ${method} ${url}`);
 
           if (retryCount <= 1) {
             console.log(`[L] - retrying after ${retryAfter} seconds!`);
@@ -43,9 +41,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
         },
         onAbuseLimit: (retryAfter, options) => {
           const { method, url } = options as { method: string; url: string };
-          throw new Error(
-            `[E] - abuse detected for request ${method} ${url} ${retryAfter}`
-          );
+          throw new Error(`[E] - abuse detected for request ${method} ${url} ${retryAfter}`);
         },
       },
     });
@@ -86,9 +82,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
 
     const pullNumbers = data.map((item) => item.number);
 
-    const pullRequests = await Promise.all(
-      pullNumbers.map((pullNumber) => this._getPullRequest(pullNumber))
-    );
+    const pullRequests = await Promise.all(pullNumbers.map((pullNumber) => this._getPullRequest(pullNumber)));
 
     return pullRequests;
   };

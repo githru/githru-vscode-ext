@@ -1,11 +1,8 @@
 import { buildCommitDict, getLeafNodes } from "./commit.util";
 import { buildStemDict } from "./stem";
-import { CommitNode, CommitRaw } from "./types";
+import type { CommitNode, CommitRaw } from "./types";
 
-type FakeCommitData = Pick<
-  CommitRaw,
-  "id" | "parents" | "branches" | "committerDate"
->;
+type FakeCommitData = Pick<CommitRaw, "id" | "parents" | "branches" | "committerDate">;
 
 const fakeCommits: FakeCommitData[] = [
   {
@@ -100,10 +97,7 @@ const fakeCommits: FakeCommitData[] = [
   },
 ];
 
-function createTestCommit(
-  fakeCommitData: FakeCommitData,
-  sequence: number
-): CommitRaw {
+function createTestCommit(fakeCommitData: FakeCommitData, sequence: number): CommitRaw {
   return {
     tags: [],
     author: {
@@ -132,9 +126,7 @@ describe("stem", () => {
   let commitDict: Map<string, CommitNode>;
 
   beforeEach(() => {
-    commits = fakeCommits.map((data, idx) =>
-      createTestCommit(data, fakeCommits.length - 1 - idx)
-    );
+    commits = fakeCommits.map((data, idx) => createTestCommit(data, fakeCommits.length - 1 - idx));
     commitDict = buildCommitDict(commits);
   });
 
@@ -161,18 +153,10 @@ describe("stem", () => {
       HEAD: ["o", "n"],
       "implicit-1": ["i", "h", "g"],
     };
-    expect(stemDict.get("main")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.main
-    );
-    expect(
-      stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
-    ).toEqual(expectedStemDict["implicit-1"]);
-    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.dev
-    );
-    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.HEAD
-    );
+    expect(stemDict.get("main")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.main);
+    expect(stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict["implicit-1"]);
+    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.dev);
+    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.HEAD);
   });
 
   it("builds stem based on 'dev' branch", () => {
@@ -183,17 +167,9 @@ describe("stem", () => {
       HEAD: ["o", "n"],
       "implicit-1": ["i", "h", "g"],
     };
-    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.dev
-    );
-    expect(stemDict.get("sub1")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.sub1
-    );
-    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(
-      expectedStemDict.HEAD
-    );
-    expect(
-      stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)
-    ).toEqual(expectedStemDict["implicit-1"]);
+    expect(stemDict.get("dev")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.dev);
+    expect(stemDict.get("sub1")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.sub1);
+    expect(stemDict.get("HEAD")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict.HEAD);
+    expect(stemDict.get("implicit-1")?.nodes.map((node) => node.commit.id)).toEqual(expectedStemDict["implicit-1"]);
   });
 });

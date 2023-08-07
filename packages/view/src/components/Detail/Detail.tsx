@@ -8,8 +8,9 @@ import type { DetailProps, DetailSummaryProps } from "./Detail.type";
 import "./Detail.scss";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
-  const { authorLength, fileLength, commitLength, insertions, deletions } =
-    getCommitListDetail({ commitNodeListInCluster });
+  const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
+    commitNodeListInCluster,
+  });
 
   const summaryItems = [
     { name: "authors", count: authorLength },
@@ -36,12 +37,8 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
 
 const Detail = ({ selectedData, clusterId }: DetailProps) => {
   const commitNodeListInCluster =
-    selectedData?.filter(
-      (selected) => selected.commitNodeList[0].clusterId === clusterId
-    )[0].commitNodeList ?? [];
-  const { commitNodeList, toggle, handleToggle } = useCommitListHide(
-    commitNodeListInCluster
-  );
+    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
+  const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
@@ -56,12 +53,14 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
         {commitNodeList.map(({ commit }) => {
           const { id, message, author, commitDate } = commit;
           return (
-            <li key={id} className="commit-item">
+            <li
+              key={id}
+              className="commit-item"
+            >
               <div className="commit-detail">
                 <span className="message">{message} </span>
                 <span className="author-date">
-                  {author.names[0]},{" "}
-                  {dayjs(commitDate).format("YY. M. DD. a h:mm")}
+                  {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>
               </div>
               <div className="commit-id">
@@ -80,7 +79,11 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
         })}
       </ul>
       {isShow && (
-        <button type="button" className="toggle-button" onClick={handleToggle}>
+        <button
+          type="button"
+          className="toggle-button"
+          onClick={handleToggle}
+        >
           {toggle ? "Hide ..." : "Read More ..."}
         </button>
       )}

@@ -1,4 +1,4 @@
-import { CommitMessageType } from "./CommitMessageType";
+import type { CommitMessageType } from "./CommitMessageType";
 
 export interface FileChanged {
   [path: string]: {
