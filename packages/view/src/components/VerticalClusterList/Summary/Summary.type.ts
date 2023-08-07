@@ -24,9 +24,4 @@ export type Cluster = {
   summary: Summary;
 };
 
-export type SrcInfo = {
-  key: string;
-  value: string;
-};
-
 export type AuthSrcMap = Record<string, string>;
