@@ -1,10 +1,6 @@
-import { CommitNode, CommitRaw, PullRequest } from "./types";
+import type { CommitNode, CommitRaw, PullRequest } from "./types";
 
-// eslint-disable-next-line import/prefer-default-export
-export const convertPRCommitsToCommitNodes = (
-  baseCommit: CommitRaw,
-  pr: PullRequest
-): CommitNode[] =>
+export const convertPRCommitsToCommitNodes = (baseCommit: CommitRaw, pr: PullRequest): CommitNode[] =>
   pr.commitDetails.data.map((commitDetail) => {
     const {
       sha,
@@ -43,9 +39,7 @@ export const convertPRCommitsToCommitNodes = (
         name: committer?.name ?? "",
         email: committer?.email ?? "",
       },
-      committerDate: committer?.date
-        ? new Date(committer.date)
-        : baseCommit.committerDate,
+      committerDate: committer?.date ? new Date(committer.date) : baseCommit.committerDate,
       message,
       differenceStatistic: {
         fileDictionary,
@@ -58,10 +52,7 @@ export const convertPRCommitsToCommitNodes = (
     return { commit: prCommitRaw } as CommitNode;
   });
 
-export const convertPRDetailToCommitRaw = (
-  baseCommit: CommitRaw,
-  pr: PullRequest
-): CommitRaw => {
+export const convertPRDetailToCommitRaw = (baseCommit: CommitRaw, pr: PullRequest): CommitRaw => {
   const {
     data: { title, body, additions, deletions },
   } = pr.detail;

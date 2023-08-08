@@ -9,9 +9,7 @@ import type IDEPort from "./IDEPort";
 
 @injectable()
 export default class FakeIDEAdapter implements IDEPort {
-  public addAllEventListener(
-    fetchAnalyzedData: (analyzedData: ClusterNode[]) => void
-  ) {
+  public addAllEventListener(fetchAnalyzedData: (analyzedData: ClusterNode[]) => void) {
     const onReceiveMessage = (e: EngineMessageEvent): void => {
       const response = e.data;
       if (response.command === "fetchAnalyzedData") {

@@ -10,34 +10,18 @@ import { useGlobalData } from "hooks";
 import { throttle } from "utils";
 import type IDEPort from "ide/IDEPort";
 
-import {
-  filterDataByDate,
-  getMinMaxDate,
-  lineChartTimeFormatter,
-  sortBasedOnCommitNode,
-} from "./TemporalFilter.util";
+import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
 import { drawBrush } from "./LineChartBrush";
-import {
-  BRUSH_MARGIN,
-  TEMPORAL_FILTER_LINE_CHART_STYLES,
-} from "./LineChart.const";
+import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const {
-    data,
-    filteredData,
-    setFilteredData,
-    filteredRange,
-    setFilteredRange,
-    setSelectedData,
-    loading,
-    setLoading,
-  } = useGlobalData();
+  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading, setLoading } =
+    useGlobalData();
 
   const loaderStyle: CSSProperties = {
     position: "fixed",
@@ -63,14 +47,10 @@ const TemporalFilter = () => {
       const clocMapItem = clocMap.get(formattedDate);
       const commitMapItem = commitMap.get(formattedDate);
 
-      const clocValue =
-        commit.diffStatistics.insertions + commit.diffStatistics.deletions;
+      const clocValue = commit.diffStatistics.insertions + commit.diffStatistics.deletions;
 
       commitMap.set(formattedDate, clocMapItem ? clocMapItem + 1 : 1);
-      clocMap.set(
-        formattedDate,
-        commitMapItem ? commitMapItem + clocValue : clocValue
-      );
+      clocMap.set(formattedDate, commitMapItem ? commitMapItem + clocValue : clocValue);
     });
 
     const buildReturnArray = (map: Map<string, number>) =>
@@ -97,12 +77,10 @@ const TemporalFilter = () => {
     if (!wrapperRef.current || !ref.current) return undefined;
 
     let dateRange = filteredRange;
-    if (lineChartDataList[0].length === 0 && filteredRange === undefined)
-      dateRange = getMinMaxDate(sortedData);
+    if (lineChartDataList[0].length === 0 && filteredRange === undefined) dateRange = getMinMaxDate(sortedData);
 
     const axisHeight = 20;
-    const chartHeight =
-      (wrapperRef.current.getBoundingClientRect().height - axisHeight) / 2;
+    const chartHeight = (wrapperRef.current.getBoundingClientRect().height - axisHeight) / 2;
     const svgElement = ref.current;
 
     // CLOC
@@ -146,13 +124,7 @@ const TemporalFilter = () => {
       setSelectedData([]);
     };
 
-    drawBrush(
-      svgElement,
-      BRUSH_MARGIN,
-      windowSize.width,
-      chartHeight * 2,
-      dateChangeHandler
-    );
+    drawBrush(svgElement, BRUSH_MARGIN, windowSize.width, chartHeight * 2, dateChangeHandler);
 
     return () => {
       d3.select(svgElement).selectAll("g").remove();
@@ -186,8 +158,14 @@ const TemporalFilter = () => {
           <FiRefreshCcw />
         </button>
       </div>
-      <div className="line-charts" ref={wrapperRef}>
-        <svg className="line-charts-svg" ref={ref} />
+      <div
+        className="line-charts"
+        ref={wrapperRef}
+      >
+        <svg
+          className="line-charts-svg"
+          ref={ref}
+        />
       </div>
     </article>
   );

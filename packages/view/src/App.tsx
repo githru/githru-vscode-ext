@@ -19,8 +19,7 @@ import { useGlobalData } from "hooks";
 const App = () => {
   const initRef = useRef<boolean>(false);
 
-  const { data, filteredData, fetchAnalyzedData, loading, setLoading } =
-    useGlobalData();
+  const { data, filteredData, fetchAnalyzedData, loading, setLoading } = useGlobalData();
 
   const loaderStyle: CSSProperties = {
     position: "fixed",

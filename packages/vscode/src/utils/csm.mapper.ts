@@ -1,5 +1,10 @@
-import type { DifferenceStatistic, CommitNode as StemCommitNode, CSMDictionary } from "@githru-vscode-ext/analysis-engine/src/types";
-import { ClusterNode, CommitNode, DiffStatistics } from "./NodeTypes.temps";
+import type {
+  CommitNode as StemCommitNode,
+  CSMDictionary,
+  DifferenceStatistic,
+} from "@githru-vscode-ext/analysis-engine/src/types";
+
+import type { ClusterNode, CommitNode, DiffStatistics } from "./NodeTypes.temps";
 
 /**
  * engine DifferenceStatistic → view DiffStatistics
@@ -21,12 +26,12 @@ const mapDiffStatisticsFrom = (params: { differenceStatistic: DifferenceStatisti
       {}
     ),
   };
-}
+};
 
 /**
  * engine Commit[] → view Commit[]
  */
-const mapCommitNodeListFrom = (params: { commits: StemCommitNode[], clusterId: number }): CommitNode[] => {
+const mapCommitNodeListFrom = (params: { commits: StemCommitNode[]; clusterId: number }): CommitNode[] => {
   const { commits, clusterId } = params;
   return commits.map(({ commit }) => ({
     nodeTypeName: "COMMIT" as const,
@@ -45,7 +50,7 @@ const mapCommitNodeListFrom = (params: { commits: StemCommitNode[], clusterId: n
       },
       authorDate: commit.authorDate.toString(),
       commitDate: commit.committerDate.toString(),
-      diffStatistics: mapDiffStatisticsFrom({ differenceStatistic: commit.differenceStatistic} ),
+      diffStatistics: mapDiffStatisticsFrom({ differenceStatistic: commit.differenceStatistic }),
       message: commit.message,
     },
     // seq: 0,
@@ -55,7 +60,7 @@ const mapCommitNodeListFrom = (params: { commits: StemCommitNode[], clusterId: n
     // hasMinorTag: false,
     clusterId,
   }));
-}
+};
 
 /**
  * engine CSMDictionary → view ClusterNode[]
@@ -71,4 +76,4 @@ export const mapClusterNodesFrom = (csmDict: CSMDictionary): ClusterNode[] => {
     ],
     []
   );
-}
+};

@@ -6,9 +6,7 @@ export type IDEMessage = {
 };
 
 export default interface IDEPort {
-  addAllEventListener: (
-    fetchAnalyzedData: (analyzedData: ClusterNode[]) => void
-  ) => void;
+  addAllEventListener: (fetchAnalyzedData: (analyzedData: ClusterNode[]) => void) => void;
   sendFetchAnalyzedDataCommand: () => void;
   setPrimaryColor: (color: string) => void;
 }

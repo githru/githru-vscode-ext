@@ -1,6 +1,5 @@
 import { buildCSMDict } from "./csm";
-
-import type { CommitRaw, CommitNode, Stem, CSMDictionary } from "./types";
+import type { CommitNode, CommitRaw, CSMDictionary, Stem } from "./types";
 
 describe("csm", () => {
   // master = [0, 1,              2,                 3, 4, 5]
@@ -24,10 +23,7 @@ describe("csm", () => {
     ["8", { id: "8", parents: ["7", "13"], branches: [], sequence: 10 }],
     ["9", { id: "9", parents: ["8" /* "2" */], branches: [], sequence: 8 }],
     ["10", { id: "10", parents: ["9"], branches: [], sequence: 7 }],
-    [
-      "11",
-      { id: "11", parents: ["10", "16"], branches: ["sub1"], sequence: 3 },
-    ],
+    ["11", { id: "11", parents: ["10", "16"], branches: ["sub1"], sequence: 3 }],
     // sub2
     ["12", { id: "12", parents: ["7"], branches: [], sequence: 12 }],
     ["13", { id: "13", parents: ["12"], branches: [], sequence: 11 }],
@@ -36,10 +32,7 @@ describe("csm", () => {
     ["16", { id: "16", parents: ["15"], branches: ["sub2"], sequence: 4 }],
   ]) as Map<string, CommitRaw>;
 
-  function makeFakeStemTuple(
-    stemId: string,
-    commitIds: string[]
-  ): [string, Stem] {
+  function makeFakeStemTuple(stemId: string, commitIds: string[]): [string, Stem] {
     return [
       stemId,
       {
@@ -60,9 +53,7 @@ describe("csm", () => {
     makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].reverse().map(String)),
   ]);
 
-  const fakeCommitNodeDict: Map<string, CommitNode> = Array.from(
-    fakeStemDict.entries()
-  ).reduce((dict, [, stem]) => {
+  const fakeCommitNodeDict: Map<string, CommitNode> = Array.from(fakeStemDict.entries()).reduce((dict, [, stem]) => {
     stem.nodes.forEach((commitNode) => {
       dict.set(commitNode.commit.id, commitNode);
     });
@@ -88,34 +79,26 @@ describe("csm", () => {
       // sub2 =              [12,13,         14,15,16]
 
       it("has empty-squash-commits", () => {
-        const nonMergeCSMNodes = csmDict.master.filter(
-          (csmNode) => csmNode.source.length === 0
-        );
+        const nonMergeCSMNodes = csmDict.master.filter((csmNode) => csmNode.source.length === 0);
         expect(nonMergeCSMNodes).toBeDefined();
         expect(nonMergeCSMNodes.length).toBeGreaterThan(0);
 
         // 0,1,4,5 commits have no-squash-commits
         const expectedNonMergeCommitIds = ["0", "1", "4", "5"];
-        const nonMergeCommitIds = nonMergeCSMNodes.map(
-          (csmNode) => csmNode.base.commit.id
-        );
+        const nonMergeCommitIds = nonMergeCSMNodes.map((csmNode) => csmNode.base.commit.id);
         nonMergeCommitIds.forEach((commitId) => {
           expect(expectedNonMergeCommitIds.includes(commitId)).toBe(true);
         });
       });
 
       it("has squash-commits", () => {
-        const mergeCSMNodes = csmDict.master.filter(
-          (csmNode) => csmNode.source.length > 0
-        );
+        const mergeCSMNodes = csmDict.master.filter((csmNode) => csmNode.source.length > 0);
         expect(mergeCSMNodes).toBeDefined();
         expect(mergeCSMNodes.length).toBeGreaterThan(0);
 
         // 2,3 commits have sqaush-commits
         const expectedMergeCommitIds = ["2", "3"];
-        const mergeCommitIds = mergeCSMNodes.map(
-          (csmNode) => csmNode.base.commit.id
-        );
+        const mergeCommitIds = mergeCSMNodes.map((csmNode) => csmNode.base.commit.id);
         mergeCommitIds.forEach((commitId) => {
           expect(expectedMergeCommitIds.includes(commitId)).toBe(true);
         });
@@ -127,13 +110,9 @@ describe("csm", () => {
           "3": ["11", "16", "15", "14", "10", "9"],
         };
         mergeCSMNodes.forEach((csmNode) => {
-          const squashCommitIds = csmNode.source.map(
-            (commitNode) => commitNode.commit.id
-          );
+          const squashCommitIds = csmNode.source.map((commitNode) => commitNode.commit.id);
 
-          expect(squashCommitIds).toEqual(
-            expectedSquashCommitIds[csmNode.base.commit.id]
-          );
+          expect(squashCommitIds).toEqual(expectedSquashCommitIds[csmNode.base.commit.id]);
         });
       });
     });
@@ -144,10 +123,7 @@ describe("csm", () => {
 
     const fakeStemDictWithSub1: Map<string, Stem> = new Map([
       makeFakeStemTuple("master", [2, 3, 4, 5].reverse().map(String)),
-      makeFakeStemTuple(
-        "sub1",
-        [0, 1, 6, 7, 8, 9, 10, 11].reverse().map(String)
-      ),
+      makeFakeStemTuple("sub1", [0, 1, 6, 7, 8, 9, 10, 11].reverse().map(String)),
       makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].reverse().map(String)),
     ]);
 
@@ -157,29 +133,19 @@ describe("csm", () => {
 
     it("has squash-commits", () => {
       const expectedBaseCommitIds = ["0", "1", "6", "7", "8", "9", "10", "11"];
-      expect(csmDict.sub1.map((node) => node.base.commit.id)).toEqual(
-        expectedBaseCommitIds
-      );
+      expect(csmDict.sub1.map((node) => node.base.commit.id)).toEqual(expectedBaseCommitIds);
 
-      const mergeCommitNodes = csmDict.sub1.filter(
-        (node) => node.source.length
-      );
+      const mergeCommitNodes = csmDict.sub1.filter((node) => node.source.length);
       const expectedMergeCommitIds = ["8", "11"];
-      expect(mergeCommitNodes.map((node) => node.base.commit.id)).toEqual(
-        expectedMergeCommitIds
-      );
+      expect(mergeCommitNodes.map((node) => node.base.commit.id)).toEqual(expectedMergeCommitIds);
 
       const expectedSquashCommitIds: Record<string, string[]> = {
         "8": ["13", "12"],
         "11": ["16", "15", "14"],
       };
       mergeCommitNodes.forEach((csmNode) => {
-        const squashCommitIds = csmNode.source.map(
-          (commitNode) => commitNode.commit.id
-        );
-        expect(squashCommitIds).toEqual(
-          expectedSquashCommitIds[csmNode.base.commit.id]
-        );
+        const squashCommitIds = csmNode.source.map((commitNode) => commitNode.commit.id);
+        expect(squashCommitIds).toEqual(expectedSquashCommitIds[csmNode.base.commit.id]);
       });
     });
   });
