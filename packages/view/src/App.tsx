@@ -10,6 +10,7 @@ import {
   TemporalFilter,
   ThemeSelector,
   VerticalClusterList,
+  FilteredAuthors,
 } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
@@ -55,6 +56,7 @@ const App = () => {
       </div>
       <div className="top-container">
         <TemporalFilter />
+        <FilteredAuthors />
       </div>
       <div className="middle-container">
         {filteredData.length !== 0 ? (
