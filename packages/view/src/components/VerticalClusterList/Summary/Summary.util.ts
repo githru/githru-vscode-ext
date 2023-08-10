@@ -1,9 +1,7 @@
-import md5 from "md5";
-
 import type { GlobalProps, CommitNode, ClusterNode, SelectedDataProps } from "types";
+import { getAuthorProfileImgSrc } from "utils/author";
 
-import { GITHUB_URL, GRAVATA_URL } from "./Summary.const";
-import type { AuthSrcMap, Cluster, SrcInfo } from "./Summary.type";
+import type { AuthSrcMap, Cluster } from "./Summary.type";
 
 export function getInitData(data: GlobalProps["data"]) {
   const clusters: Cluster[] = [];
@@ -69,35 +67,14 @@ function getAuthorNames(data: ClusterNode[]) {
   return Array.from(setAuthorNames);
 }
 
-function getAuthorProfileImgSrc(authorName: string): Promise<SrcInfo> {
-  return new Promise((resolve) => {
-    const img = new Image();
-
-    img.onload = () => {
-      const { src } = img;
-      const srcInfo = {
-        key: authorName,
-        value: src,
-      };
-      resolve(srcInfo);
-    };
-
-    img.onerror = () => {
-      img.src = `${GRAVATA_URL}/${md5(authorName)}}?d=identicon&f=y`;
-    };
-
-    img.src = `${GITHUB_URL}/${authorName}.png?size=30`;
-  });
-}
-
 export async function getAuthSrcMap(data: ClusterNode[]) {
   const authorNames = getAuthorNames(data);
   const promiseAuthSrc = authorNames.map(getAuthorProfileImgSrc);
   const authSrcs = await Promise.all(promiseAuthSrc);
   const authSrcMap: AuthSrcMap = {};
-  authSrcs.forEach((srcInfo) => {
-    const { key, value } = srcInfo;
-    authSrcMap[key] = value;
+  authSrcs.forEach((authorInfo) => {
+    const { name, src } = authorInfo;
+    authSrcMap[name] = src;
   });
   return authSrcMap;
 }

@@ -2,19 +2,14 @@ import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import type { ClusterNode } from "types";
+import type { ClusterNode, AuthorInfo } from "types";
 import { useGlobalData } from "hooks";
+import { getAuthorProfileImgSrc } from "utils/author";
 
 import { useGetSelectedData } from "../Statistics.hook";
 
-import type { AuthorDataType, MetricType, SrcInfo } from "./AuthorBarChart.type";
-import {
-  convertNumberFormat,
-  getDataByAuthor,
-  sortDataByAuthor,
-  sortDataByName,
-  getAuthorProfileImgSrc,
-} from "./AuthorBarChart.util";
+import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
+import { convertNumberFormat, getDataByAuthor, sortDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 
 import "./AuthorBarChart.scss";
@@ -153,7 +148,7 @@ const AuthorBarChart = () => {
 
     barElements.forEach(async (barElement, i) => {
       const bar = d3.select(barElement).datum(data[i]);
-      const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: SrcInfo) => res.value);
+      const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: AuthorInfo) => res.src);
       bar
         .append("image")
         .attr("class", "profile-image")
