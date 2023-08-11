@@ -3,7 +3,4 @@ export type EngineCommand = {
   payload?: string;
 };
 
-export type EngineCommandNames =
-  | "fetchAnalyzedData"
-  | "getBranchList"
-  | "updatePrimaryColor";
+export type EngineCommandNames = "fetchAnalyzedData" | "getBranchList" | "updatePrimaryColor";

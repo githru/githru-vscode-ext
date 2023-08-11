@@ -1,10 +1,5 @@
-import {
-  CommitRaw,
-  DifferenceStatistic,
-  GitUser,
-  CommitMessageType,
-} from "./types";
 import { getCommitMessageType } from "./commit.util";
+import type { CommitMessageType, CommitRaw, DifferenceStatistic, GitUser } from "./types";
 
 function getNameAndEmail(category: GitUser[], preParsedInfo: string) {
   category.push({
@@ -56,24 +51,18 @@ export default function getCommitRaws(log: string) {
         ids.push(commitInfos[0]);
         commitInfos.splice(0, 1);
         parentsMatrix.push(commitInfos);
-        const branchAndTagInfos = splitedCommitLine[1]
-          ?.replace(")", "")
-          .replace(" -> ", ", ")
-          .split(", ");
+        const branchAndTagInfos = splitedCommitLine[1]?.replace(")", "").replace(" -> ", ", ").split(", ");
         if (branchAndTagInfos) {
           branchAndTagInfos.forEach((branchAndTagInfo) => {
             if (branchAndTagInfo.startsWith("tag:"))
-              return tagsMatrix[commitIdx].push(
-                branchAndTagInfo.replace("tag: ", "")
-              );
+              return tagsMatrix[commitIdx].push(branchAndTagInfo.replace("tag: ", ""));
             return branchesMatrix[commitIdx].push(branchAndTagInfo);
           });
         }
         return false;
       }
       if (str.startsWith("Author:")) return getNameAndEmail(authors, str);
-      if (str.startsWith("AuthorDate"))
-        return authorDates.push(new Date(str.split(": ")[1].trim()));
+      if (str.startsWith("AuthorDate")) return authorDates.push(new Date(str.split(": ")[1].trim()));
       if (str.startsWith("Commit:")) return getNameAndEmail(committers, str);
       if (str.startsWith("CommitDate")) {
         let indexCheckFileChanged = idx + 2;

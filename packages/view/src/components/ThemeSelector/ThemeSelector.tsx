@@ -11,10 +11,7 @@ const ThemeSelector = () => {
   const [color, setColor] = useState<string>(window.primaryColor);
 
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      PRIMARY_COLOR_VARIABLE_NAME,
-      window.primaryColor
-    );
+    document.documentElement.style.setProperty(PRIMARY_COLOR_VARIABLE_NAME, window.primaryColor);
   }, []);
 
   const storeColorHandler = debounce((colorCode: string) => {
@@ -36,10 +33,7 @@ const ThemeSelector = () => {
         onChange={(e) => {
           setColor(e.target.value);
           handlePrimaryColor(e.target.value as string);
-          document.documentElement.style.setProperty(
-            PRIMARY_COLOR_VARIABLE_NAME,
-            e.target.value
-          );
+          document.documentElement.style.setProperty(PRIMARY_COLOR_VARIABLE_NAME, e.target.value);
         }}
       />
     </div>

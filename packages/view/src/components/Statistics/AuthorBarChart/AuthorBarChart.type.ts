@@ -9,11 +9,6 @@ export type AuthorDataType = {
 
 export type MetricType = (typeof METRIC_TYPE)[number];
 
-export type SrcInfo = {
-  key: string;
-  value: string;
-};
-
 export type AuthorDataObj = {
   [key: string]: {
     name: string;

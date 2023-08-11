@@ -1,4 +1,4 @@
-import { CommitNode } from "./CommitNode";
+import type { CommitNode } from "./CommitNode";
 
 export interface Stem {
   nodes: CommitNode[];

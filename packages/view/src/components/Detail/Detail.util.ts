@@ -2,10 +2,7 @@
 import type { GlobalProps, CommitNode } from "types/";
 
 type GetCommitListInCluster = GlobalProps & { clusterId: number };
-export const getCommitListInCluster = ({
-  data,
-  clusterId,
-}: GetCommitListInCluster) =>
+export const getCommitListInCluster = ({ data, clusterId }: GetCommitListInCluster) =>
   data
     .map((clusterNode) => clusterNode.commitNodeList)
     .flat()
@@ -22,15 +19,11 @@ const getCommitListAuthorLength = (commitNodes: CommitNode[]) => {
 };
 
 const getChangeFileLength = (commitNodes: CommitNode[]) => {
-  return getDataSetSize(
-    commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat()
-  );
+  return getDataSetSize(commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat());
 };
 
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
-export const getCommitListDetail = ({
-  commitNodeListInCluster,
-}: GetCommitListDetail) => {
+export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDetail) => {
   const authorLength = getCommitListAuthorLength(commitNodeListInCluster);
   const fileLength = getChangeFileLength(commitNodeListInCluster);
   const diffStatistics = commitNodeListInCluster.reduce(
@@ -55,11 +48,7 @@ export const getCommitListDetail = ({
 
 export const getSummaryCommitList = (l: number, arr: CommitNode[]) => {
   const res = [];
-  for (
-    let item = arr.length - 1;
-    arr.length >= 5 ? item > arr.length - 1 - l : item >= 0;
-    item -= 1
-  ) {
+  for (let item = arr.length - 1; arr.length >= 5 ? item > arr.length - 1 - l : item >= 0; item -= 1) {
     res.push(arr[item]);
   }
 

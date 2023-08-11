@@ -48,15 +48,7 @@
       "warn",
       {
         "newlines-between": "always",
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object"
-        ]
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"]
       }
     ],
     "import/prefer-default-export": "off",
@@ -78,10 +70,7 @@
         "unnamedComponents": ["arrow-function", "function-expression"]
       }
     ],
-    "react/jsx-filename-extension": [
-      "error",
-      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ],
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/jsx-props-no-spreading": "off",
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/react-in-jsx-scope": "off",
