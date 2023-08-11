@@ -1,7 +1,4 @@
-export type AuthorProps = {
-  name: string;
-  src: string;
-};
+import type { AuthorInfo } from "types";
 
 export type Content = {
   message: string;
@@ -15,18 +12,13 @@ export type ContentProps = {
 };
 
 export type Summary = {
-  authorNames: Array<Array<AuthorProps["name"]>>;
+  authorNames: Array<Array<AuthorInfo["name"]>>;
   content: Content;
 };
 
 export type Cluster = {
   clusterId: number;
   summary: Summary;
-};
-
-export type SrcInfo = {
-  key: string;
-  value: string;
 };
 
 export type AuthSrcMap = Record<string, string>;
