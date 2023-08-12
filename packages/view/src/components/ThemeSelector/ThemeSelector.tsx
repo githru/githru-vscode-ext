@@ -1,9 +1,8 @@
 import "./ThemeSelector.scss";
-import { container } from "tsyringe";
 import { useCallback, useEffect, useState } from "react";
 
 import { debounce } from "utils";
-import type IDEPort from "ide/IDEPort";
+import { setPrimaryColor } from "services";
 
 import { PRIMARY_COLOR_VARIABLE_NAME } from "../../constants/constants";
 
@@ -15,8 +14,7 @@ const ThemeSelector = () => {
   }, []);
 
   const storeColorHandler = debounce((colorCode: string) => {
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.setPrimaryColor(colorCode);
+    setPrimaryColor(colorCode);
   }, 3000);
 
   const handlePrimaryColor = useCallback(

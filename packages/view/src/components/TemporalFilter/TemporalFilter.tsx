@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
@@ -8,7 +7,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
-import type IDEPort from "ide/IDEPort";
+import { sendFetchAnalyzedDataCommand } from "services";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -67,8 +66,7 @@ const TemporalFilter = () => {
   const refreshHandler = throttle(() => {
     setLoading(true);
 
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.sendFetchAnalyzedDataCommand();
+    sendFetchAnalyzedDataCommand();
   }, 3000);
 
   const windowSize = useWindowResize();
