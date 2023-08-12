@@ -9,7 +9,7 @@ import { ReactComponent as DiffDeleteIcon } from "../../assets/diff-delete.svg";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
-import type { DetailProps, DetailSummaryProps } from "./Detail.type";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
 
@@ -18,7 +18,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
     commitNodeListInCluster,
   });
 
-  const summaryItems = [
+  const summaryItems: DetailSummaryItem[] = [
     { name: "authors", count: authorLength, icon: <AuthorIcon /> },
     { name: "commits", count: commitLength, icon: <CommitIcon /> },
     { name: "changed files", count: fileLength, icon: <ChangedFileIcon /> },
