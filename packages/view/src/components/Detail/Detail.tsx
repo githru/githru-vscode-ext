@@ -37,7 +37,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
           >
             {icon}
             <strong className={name}>{count.toLocaleString("en")} </strong>
-            {count <= 1 ? name.slice(0, -1) : name}
+            <span className="detail__summary__item__name">{count <= 1 ? name.slice(0, -1) : name}</span>
           </span>
         ))}
       </div>

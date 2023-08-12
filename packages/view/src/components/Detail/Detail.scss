@@ -39,6 +39,12 @@
   }
 }
 
+@media (max-width: 1080px) {
+  .detail__summary__item__name {
+    display: none;
+  }
+}
+
 .detail__commit-list__container {
   padding: 0 20px;
   font-size: 12px;
