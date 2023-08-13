@@ -7,7 +7,8 @@ import BounceLoader from "react-spinners/BounceLoader";
 
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
-import { sendFetchAnalyzedDataCommand } from "services";
+
+import { sendFetchAnalyzedDataCommand } from "../../services";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
