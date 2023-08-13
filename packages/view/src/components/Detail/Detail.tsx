@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 
-import { ReactComponent as AuthorIcon } from "../../assets/author.svg";
-import { ReactComponent as ChangedFileIcon } from "../../assets/changed-file.svg";
-import { ReactComponent as CommitIcon } from "../../assets/commit.svg";
-import { ReactComponent as DiffAddIcon } from "../../assets/diff-add.svg";
-import { ReactComponent as DiffDeleteIcon } from "../../assets/diff-delete.svg";
+import { ReactComponent as AuthorIcon } from "assets/author.svg";
+import { ReactComponent as ChangedFileIcon } from "assets/changed-file.svg";
+import { ReactComponent as CommitIcon } from "assets/commit.svg";
+import { ReactComponent as DiffAddIcon } from "assets/diff-add.svg";
+import { ReactComponent as DiffDeleteIcon } from "assets/diff-delete.svg";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
