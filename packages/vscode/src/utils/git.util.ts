@@ -239,7 +239,7 @@ export async function getBranchNames(path: string, repo: string): Promise<string
             name
               .replace("*", "") // delete * prefix
               .replace("remotes/", "") // delete remotes/ prifix
-              .replace(/(origin\/HEAD.*) -> (?:.*)/g, "$1") // origin/HEAD parsing
+              .replace(/(.*) -> (?:.*)/g, "$1") // remote HEAD parsing
               .trim()
           )
           .filter((name) => !!name);
