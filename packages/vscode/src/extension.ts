@@ -35,15 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
     console.debug(currentWorkspacePath);
 
     const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
+    const initialBaseBranchName = getBaseBranchName(branchNames);
 
     const githubToken: string | undefined = await getGithubToken();
     console.log("GitHubToken: ", githubToken);
 
-    const fetchClusterNodes = async () => {
+    const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
       const gitLog = await getGitLog(gitPath, currentWorkspacePath);
       const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
       const { owner, repo } = getRepo(gitConfig);
-      const baseBranchName = getBaseBranchName(branchNames);
       const engine = new AnalysisEngine({
         isDebugMode: true,
         gitLog,
