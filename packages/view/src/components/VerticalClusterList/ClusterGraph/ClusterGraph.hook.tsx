@@ -71,7 +71,7 @@ const drawClusterGraph = (
 
   group
     .transition()
-    .duration(300)
+    .duration(0)
     .ease(d3.easeLinear)
     .attr("transform", (d, i) => getClusterPosition(d, i, detailElementHeight));
 
