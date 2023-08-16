@@ -1,4 +1,4 @@
-﻿import type { ClusterNode } from "types";
+﻿import type { IDESentEvents } from "types/IDESentEvents";
 
 export type IDEMessage = {
   command: string;
@@ -6,7 +6,7 @@ export type IDEMessage = {
 };
 
 export default interface IDEPort {
-  addAllEventListener: (fetchAnalyzedData: (analyzedData: ClusterNode[]) => void) => void;
-  sendFetchAnalyzedDataCommand: () => void;
+  addIDESentEventListener: (apiCallbacks: IDESentEvents) => void;
+  sendFetchAnalyzedDataMessage: () => void;
   setPrimaryColor: (color: string) => void;
 }
