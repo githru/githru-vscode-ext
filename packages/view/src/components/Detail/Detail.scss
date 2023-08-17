@@ -18,29 +18,14 @@
     flex-grow: 0.1;
     text-align: right;
 
-    span {
+    .detail__summary__item {
       position: relative;
       margin-right: 10px;
+      display: inline-flex;
+      gap: 4px;
 
-      strong {
-        margin-right: 2px;
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        right: -5px;
-        width: 1px;
-        height: 12px;
-        background: $white;
-      }
       &:last-child {
         margin-right: 0;
-
-        &::after {
-          display: none;
-        }
       }
     }
   }
@@ -51,6 +36,12 @@
 
   .deletions {
     color: red;
+  }
+}
+
+@media (max-width: 1080px) {
+  .detail__summary__item__name {
+    display: none;
   }
 }
 

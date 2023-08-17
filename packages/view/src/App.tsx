@@ -4,10 +4,18 @@ import { useRef } from "react";
 import type { CSSProperties } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FilteredAuthors,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
+import type { IDESentEvents } from "types/IDESentEvents";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -24,9 +32,13 @@ const App = () => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   if (initRef.current === false) {
+    const callbacks: IDESentEvents = {
+      fetchAnalyzedData: fetchAnalyzedData,
+    };
+
     setLoading(true);
-    ideAdapter.addAllEventListener(fetchAnalyzedData);
-    ideAdapter.sendFetchAnalyzedDataCommand();
+    ideAdapter.addIDESentEventListener(callbacks);
+    ideAdapter.sendFetchAnalyzedDataMessage();
     initRef.current = true;
   }
 
@@ -48,6 +60,7 @@ const App = () => {
       </div>
       <div className="top-container">
         <TemporalFilter />
+        <FilteredAuthors />
       </div>
       <div className="middle-container">
         {filteredData.length !== 0 ? (

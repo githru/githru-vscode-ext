@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
@@ -8,10 +7,8 @@ import BounceLoader from "react-spinners/BounceLoader";
 
 import { useGlobalData } from "hooks";
 import { throttle } from "utils";
-import type IDEPort from "ide/IDEPort";
-import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
-import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
-import { Author } from "components/VerticalClusterList/Summary/Author";
+
+import { sendFetchAnalyzedDataCommand } from "../../services";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -23,19 +20,8 @@ import { drawBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const {
-    data,
-    filteredData,
-    selectedData,
-    setFilteredData,
-    filteredRange,
-    setFilteredRange,
-    setSelectedData,
-    loading,
-    setLoading,
-  } = useGlobalData();
-  const authSrcMap = usePreLoadAuthorImg();
-  const selectedClusters = getInitData(selectedData);
+  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading, setLoading } =
+    useGlobalData();
 
   const loaderStyle: CSSProperties = {
     position: "fixed",
@@ -81,8 +67,7 @@ const TemporalFilter = () => {
   const refreshHandler = throttle(() => {
     setLoading(true);
 
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.sendFetchAnalyzedDataCommand();
+    sendFetchAnalyzedDataCommand();
   }, 3000);
 
   const windowSize = useWindowResize();
@@ -180,21 +165,6 @@ const TemporalFilter = () => {
           className="line-charts-svg"
           ref={ref}
         />
-      </div>
-
-      <div className="selected-cluster">
-        {authSrcMap &&
-          selectedClusters.map((selectedCluster) => {
-            return selectedCluster.summary.authorNames.map((authorArray: string[]) => {
-              return authorArray.map((authorName: string) => (
-                <Author
-                  key={authorName}
-                  name={authorName}
-                  src={authSrcMap[authorName]}
-                />
-              ));
-            });
-          })}
       </div>
     </article>
   );
