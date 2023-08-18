@@ -7,6 +7,7 @@ export type IDEMessage = {
 
 export default interface IDEPort {
   addIDESentEventListener: (apiCallbacks: IDESentEvents) => void;
-  sendFetchAnalyzedDataMessage: () => void;
+  sendFetchAnalyzedDataMessage: (payload?: string) => void;
+  sendGetBranchListMessage: () => void;
   setPrimaryColor: (color: string) => void;
 }
