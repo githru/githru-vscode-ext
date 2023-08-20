@@ -59,6 +59,11 @@ const config = {
           { loader: "sass-loader" },
         ],
       },
+      {
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: [{ loader: "@svgr/webpack", options: { exportType: "named" } }],
+      },
     ],
   },
   performance: {

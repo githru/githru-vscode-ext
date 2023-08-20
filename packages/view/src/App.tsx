@@ -15,6 +15,7 @@ import {
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
+import type { IDESentEvents } from "types/IDESentEvents";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -31,9 +32,13 @@ const App = () => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   if (initRef.current === false) {
+    const callbacks: IDESentEvents = {
+      fetchAnalyzedData: fetchAnalyzedData,
+    };
+
     setLoading(true);
-    ideAdapter.addAllEventListener(fetchAnalyzedData);
-    ideAdapter.sendFetchAnalyzedDataCommand();
+    ideAdapter.addIDESentEventListener(callbacks);
+    ideAdapter.sendFetchAnalyzedDataMessage();
     initRef.current = true;
   }
 
