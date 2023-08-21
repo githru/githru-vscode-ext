@@ -62,7 +62,7 @@ const config = {
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
-        use: [{ loader: "@svgr/webpack", options: { exportType: "named" } }],
+        loader: "@svgr/webpack",
       },
     ],
   },
