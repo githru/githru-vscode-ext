@@ -14,7 +14,7 @@ function normalizeFsPath(fsPath: string) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionUri, extensionPath } = context;
+  const { subscriptions, extensionUri, extensionPath, secrets } = context;
 
   console.log('Congratulations, your extension "githru" is now active!');
 
@@ -28,13 +28,11 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
-      console.debug(vscode.workspace.workspaceFolders);
-      console.debug(currentWorkspacePath);
 
       const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
       const initialBaseBranchName = getBaseBranchName(branchNames);
 
-      const githubToken: string | undefined = await getGithubToken();
+      const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new Error("Cannot retrieve GitHub token");
       }
@@ -67,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
-    const defaultGithubToken = await getGithubToken();
+    const defaultGithubToken = await getGithubToken(secrets);
 
     const newGithubToken = await vscode.window.showInputBox({
       title: "Type or paste your Github access token value.",
@@ -77,7 +75,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (!newGithubToken) throw new Error("Cannot get users' access token properly");
 
-    setGithubToken(newGithubToken);
+    setGithubToken(secrets, newGithubToken);
   });
 
   subscriptions.concat([disposable, getAccessToken]);

@@ -5,14 +5,17 @@ const SETTING_PROPERTY_NAMES = {
   PRIMARY_COLOR: "githru.color.primary",
 };
 
-export const getGithubToken = (): string | undefined => {
-  const configuration = vscode.workspace.getConfiguration();
-  return configuration.get(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
+export const getGithubToken = async (secrets: vscode.SecretStorage) => {
+  return await secrets.get(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
 };
 
-export const setGithubToken = (newGithubToken: string) => {
+export const setGithubToken = (secrets: vscode.SecretStorage, newGithubToken: string) => {
+  return secrets.store(SETTING_PROPERTY_NAMES.GITHUB_TOKEN, newGithubToken);
+};
+
+export const setPrimaryColor = (color: string) => {
   const configuration = vscode.workspace.getConfiguration();
-  return configuration.update(SETTING_PROPERTY_NAMES.GITHUB_TOKEN, newGithubToken, vscode.ConfigurationTarget.Global);
+  configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, color);
 };
 
 export const getPrimaryColor = (): string => {
