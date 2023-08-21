@@ -2,16 +2,12 @@ import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
+import { getGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
-
-const getGithubToken = (): string | undefined => {
-  const configuration = vscode.workspace.getConfiguration();
-  return configuration.get("githru.github.token");
-};
 
 function normalizeFsPath(fsPath: string) {
   return fsPath.replace(/\\/g, "/");
