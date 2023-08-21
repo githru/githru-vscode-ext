@@ -21,13 +21,21 @@ export default class FakeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
-  public sendFetchAnalyzedDataMessage() {
+  public sendFetchAnalyzedDataMessage(payload?: string) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
+      payload,
     };
     setTimeout(() => {
       this.sendMessageToMe(message);
     }, 3000);
+  }
+
+  public sendGetBranchListMessage() {
+    const message: IDEMessage = {
+      command: "getBranchList",
+    };
+    this.sendMessageToMe(message);
   }
 
   public setPrimaryColor(color: string) {

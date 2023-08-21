@@ -172,9 +172,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
         env: Object.assign({}, process.env),
       })
     ).then((values) => {
-      const status = values[0],
-        stdout = values[1],
-        stderr = values[2];
+      const [status, stdout, stderr] = values;
       if (status.code === 0) {
         resolve(stdout.toString());
       } else {
@@ -198,9 +196,7 @@ export async function getGitConfig(
         env: Object.assign({}, process.env),
       })
     ).then((values) => {
-      const status = values[0],
-        stdout = values[1],
-        stderr = values[2];
+      const [status, stdout, stderr] = values;
       if (status.code === 0) {
         resolve(stdout.toString());
       } else {
@@ -229,19 +225,24 @@ export const getRepo = (gitRemoteConfig: string) => {
 export async function getBranchNames(path: string, repo: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     resolveSpawnOutput(
-      cp.spawn(path, ["branch"], {
+      cp.spawn(path, ["branch", "-a"], {
         cwd: repo,
         env: Object.assign({}, process.env),
       })
     ).then((values) => {
-      const status = values[0],
-        stdout = values[1],
-        stderr = values[2];
+      const [status, stdout, stderr] = values;
       if (status.code === 0) {
         const branches = stdout
           .toString()
           .split("\n")
-          .map((name) => name.replace("*", "").trim());
+          .map((name) =>
+            name
+              .replace("*", "") // delete * prefix
+              .replace("remotes/", "") // delete remotes/ prifix
+              .replace(/(.*) -> (?:.*)/g, "$1") // remote HEAD parsing
+              .trim()
+          )
+          .filter((name) => !!name);
         resolve(branches);
       } else {
         reject(stderr);
