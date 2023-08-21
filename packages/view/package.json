@@ -8,10 +8,8 @@
   },
   "scripts": {
     "start": "webpack serve --config webpack.dev.config.js",
-    "build": "npm run build:react && npm run build:bundle:prod",
-    "build:dev": "npm run build:react && npm run build:bundle:dev",
-    "build:bundle:prod": "webpack --config webpack.prod.config.js",
-    "build:bundle:dev": "webpack --config webpack.dev.config.js",
+    "build": "webpack --config webpack.prod.config.js",
+    "build:dev": "webpack --config webpack.dev.config.js",
     "test": "",
     "test:e2e": "playwright test"
   },
