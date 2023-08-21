@@ -2,7 +2,7 @@ import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
-import { getGithubToken } from "./setting-repository";
+import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
@@ -67,8 +67,6 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
-    const config = vscode.workspace.getConfiguration();
-
     const defaultGithubToken = await getGithubToken();
 
     const newGithubToken = await vscode.window.showInputBox({
@@ -79,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (!newGithubToken) throw new Error("Cannot get users' access token properly");
 
-    config.update("githru.github.token", newGithubToken, vscode.ConfigurationTarget.Global);
+    setGithubToken(newGithubToken);
   });
 
   subscriptions.concat([disposable, getAccessToken]);

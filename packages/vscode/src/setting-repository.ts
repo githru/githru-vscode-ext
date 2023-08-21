@@ -10,9 +10,9 @@ export const getGithubToken = (): string | undefined => {
   return configuration.get(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
 };
 
-export const setPrimaryColor = (color: string) => {
+export const setGithubToken = (newGithubToken: string) => {
   const configuration = vscode.workspace.getConfiguration();
-  configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, color);
+  return configuration.update(SETTING_PROPERTY_NAMES.GITHUB_TOKEN, newGithubToken, vscode.ConfigurationTarget.Global);
 };
 
 export const getPrimaryColor = (): string => {
