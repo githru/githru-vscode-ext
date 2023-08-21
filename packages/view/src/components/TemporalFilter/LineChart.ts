@@ -40,8 +40,6 @@ const drawLineChart = (
   showXAxis: boolean,
   chartTitle: string
 ) => {
-  console.log("linechartdata", lineChartData);
-
   const width = chartWidth - margin.left - margin.right;
   const svg = d3.select(refTarget).append("g").attr("transform", `translate(${margin.left}, ${startHeight})`);
 
