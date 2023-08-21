@@ -1,5 +1,3 @@
-// @ts-check
-
 const path = require("path");
 
 const webpack = require("webpack");
@@ -53,11 +51,7 @@ const config = {
       },
       {
         test: /.(sass|scss)$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          { loader: "sass-loader" },
-        ],
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "sass-loader" }],
       },
       {
         test: /\.svg$/,
