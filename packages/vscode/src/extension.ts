@@ -2,23 +2,19 @@ import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
+import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
 
-const getGithubToken = (): string | undefined => {
-  const configuration = vscode.workspace.getConfiguration();
-  return configuration.get("githru.github.token");
-};
-
 function normalizeFsPath(fsPath: string) {
   return fsPath.replace(/\\/g, "/");
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionUri, extensionPath } = context;
+  const { subscriptions, extensionUri, extensionPath, secrets } = context;
 
   console.log('Congratulations, your extension "githru" is now active!');
 
@@ -32,13 +28,11 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
-      console.debug(vscode.workspace.workspaceFolders);
-      console.debug(currentWorkspacePath);
 
       const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
       const initialBaseBranchName = getBaseBranchName(branchNames);
 
-      const githubToken: string | undefined = await getGithubToken();
+      const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new Error("Cannot retrieve GitHub token");
       }
@@ -71,9 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
-    const config = vscode.workspace.getConfiguration();
-
-    const defaultGithubToken = await getGithubToken();
+    const defaultGithubToken = await getGithubToken(secrets);
 
     const newGithubToken = await vscode.window.showInputBox({
       title: "Type or paste your Github access token value.",
@@ -83,7 +75,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (!newGithubToken) throw new Error("Cannot get users' access token properly");
 
-    config.update("githru.github.token", newGithubToken, vscode.ConfigurationTarget.Global);
+    setGithubToken(secrets, newGithubToken);
   });
 
   subscriptions.concat([disposable, getAccessToken]);
