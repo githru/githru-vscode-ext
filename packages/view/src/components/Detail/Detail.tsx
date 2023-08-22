@@ -44,7 +44,6 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
     </div>
   );
 };
-
 const Detail = ({ selectedData, clusterId }: DetailProps) => {
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];

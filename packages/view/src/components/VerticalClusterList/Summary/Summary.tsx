@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 
+import type { ClusterNode } from "types";
 import { Detail } from "components";
 import { useGlobalData } from "hooks";
 
@@ -15,16 +16,16 @@ import type { Cluster } from "./Summary.type";
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const clusters = getInitData(data);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusterId = getClusterIds(selectedData);
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
-    setSelectedData(selectedDataUpdater(selected, clusterId));
+    setSelectedData((prevState: ClusterNode[]) => selectedDataUpdater(selected, clusterId)(prevState));
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({
+    detailRef.current?.scrollIntoView({
       block: "center",
       behavior: "smooth",
     });
@@ -67,7 +68,7 @@ const Summary = () => {
             {selectedClusterId.includes(cluster.clusterId) && (
               <div
                 className="detail__container"
-                ref={scrollRef}
+                ref={detailRef}
               >
                 <Detail
                   selectedData={selectedData}
