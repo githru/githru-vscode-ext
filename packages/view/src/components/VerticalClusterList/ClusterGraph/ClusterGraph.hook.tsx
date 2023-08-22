@@ -71,8 +71,7 @@ const drawClusterGraph = (
 
   group
     .transition()
-    .duration(300)
-    .ease(d3.easeLinear)
+    .duration(0)
     .attr("transform", (d, i) => getClusterPosition(d, i, detailElementHeight));
 
   drawLink(svgRef, data, detailElementHeight);
