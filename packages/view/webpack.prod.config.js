@@ -26,6 +26,7 @@ const config = {
       assets: path.resolve(__dirname, "src/assets/"),
       components: path.resolve(__dirname, "src/components/"),
       utils: path.resolve(__dirname, "src/utils/"),
+      services: path.resolve(__dirname, "src/services/"),
       styles: path.resolve(__dirname, "src/styles/"),
       types: path.resolve(__dirname, "src/types/"),
       hooks: path.resolve(__dirname, "src/hooks/"),
