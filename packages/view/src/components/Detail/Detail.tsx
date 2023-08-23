@@ -68,13 +68,15 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
               className="commit-item"
             >
               <div className="commit-detail">
-                {authSrcMap && (
-                  <Author
-                    name={author.names.toString()}
-                    src={authSrcMap[author.names.toString()]}
-                  />
-                )}
-                <span className="message">{message} </span>
+                <div className="avatar-message">
+                  {authSrcMap && (
+                    <Author
+                      name={author.names.toString()}
+                      src={authSrcMap[author.names.toString()]}
+                    />
+                  )}
+                  <span className="message">{message}</span>
+                </div>
                 <span className="author-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>

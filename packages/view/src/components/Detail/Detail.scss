@@ -46,34 +46,42 @@
 }
 
 .detail__commit-list__container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
   padding: 0 20px;
   font-size: 12px;
 
   .commit-item {
     display: flex;
     justify-content: space-between;
-    margin: 7px 0px;
     color: $gray-600;
 
     .commit-detail {
-      overflow: hidden;
       color: $white;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       width: 100%;
+      padding-left: 5px;
 
-      .message {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-        color: $white;
-        margin-right: 4px;
+      .avatar-message {
+        display: flex;
+        align-items: center;
 
-        &:hover {
-          display: block;
-          cursor: pointer;
-          overflow: visible;
+        .message {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
+          color: $white;
+          margin: 0 4px 0 15px;
+
+          &:hover {
+            display: block;
+            cursor: pointer;
+            overflow: visible;
+          }
         }
       }
 
@@ -83,9 +91,12 @@
       }
     }
     .commit-id {
-      width: 90px;
-      padding-left: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 140px;
       position: relative;
+
       span:hover {
         cursor: pointer;
         .commit-id__tooltip {
