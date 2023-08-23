@@ -5,6 +5,7 @@ import { ReactComponent as ChangedFileIcon } from "assets/changed-file.svg";
 import { ReactComponent as CommitIcon } from "assets/commit.svg";
 import { ReactComponent as DiffAddIcon } from "assets/diff-add.svg";
 import { ReactComponent as DiffDeleteIcon } from "assets/diff-delete.svg";
+import { Author } from "components/@common/Author";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -44,7 +45,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
     </div>
   );
 };
-const Detail = ({ selectedData, clusterId }: DetailProps) => {
+const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
@@ -67,6 +68,12 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
               className="commit-item"
             >
               <div className="commit-detail">
+                {authSrcMap && (
+                  <Author
+                    name={author.names.toString()}
+                    src={authSrcMap[author.names.toString()]}
+                  />
+                )}
                 <span className="message">{message} </span>
                 <span className="author-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
