@@ -7,6 +7,8 @@ interface Window {
 }
 
 declare module "*.svg" {
-  const content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  import type { ReactElement, SVGProps } from "react";
+
+  const content: (props: SVGProps<SVGElement>) => ReactElement;
   export default content;
 }
