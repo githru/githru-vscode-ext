@@ -68,7 +68,9 @@ const Detail = ({ selectedData, clusterId }: DetailProps) => {
               className="commit-item"
             >
               <div className="commit-detail">
-                <span className="message">{message} </span>
+                <div className="message-container">
+                  <span className="message">{message} </span>
+                </div>
                 <span className="author-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>

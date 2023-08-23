@@ -50,35 +50,48 @@
   font-size: 12px;
 
   .commit-item {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     margin: 7px 0px;
     color: $gray-600;
 
     .commit-detail {
-      overflow: hidden;
       color: $white;
       display: flex;
       justify-content: space-between;
       width: 100%;
 
-      .message {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-        color: $white;
-        margin-right: 4px;
+      .message-container {
+        position: relative;
+        overflow: visible;
+        flex-grow: 1;
+        padding-right: 50px;
+        width: auto;
 
-        &:hover {
-          display: block;
-          cursor: pointer;
-          overflow: visible;
+        .message {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
+          color: $white;
+          margin-right: 4px;
+
+          &:hover {
+            display: block;
+            cursor: pointer;
+            overflow: visible;
+            position: absolute;
+            z-index: 10;
+            background-color: #212121;
+            padding-bottom: 5px;
+          }
         }
       }
 
       .author-date {
         display: block;
+        position: relative;
         white-space: nowrap;
       }
     }
