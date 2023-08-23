@@ -4,13 +4,13 @@ import type { ClusterNode } from "types";
 import { Detail } from "components";
 import { useGlobalData } from "hooks";
 
+import "./Summary.scss";
+import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
-import "./Summary.scss";
 import { usePreLoadAuthorImg } from "./Summary.hook";
 import { getInitData, getClusterIds, getClusterById } from "./Summary.util";
 import { Content } from "./Content";
-import { Author } from "./Author";
 import type { Cluster } from "./Summary.type";
 
 const Summary = () => {
