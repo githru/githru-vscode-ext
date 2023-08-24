@@ -53,6 +53,7 @@
   font-size: 12px;
 
   .commit-item {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     color: $gray-600;
@@ -68,25 +69,40 @@
       .avatar-message {
         display: flex;
         align-items: center;
+        width: 100%;
 
-        .message {
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 1;
-          overflow: hidden;
-          color: $white;
-          margin: 0 4px 0 15px;
+        .message-container {
+          position: relative;
+          overflow: visible;
+          flex-grow: 1;
+          padding-right: 50px;
+          width: auto;
 
-          &:hover {
-            display: block;
-            cursor: pointer;
-            overflow: visible;
+          .message {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            color: $white;
+            margin: 0 4px 0 15px;
+
+            &:hover {
+              display: block;
+              cursor: pointer;
+              overflow: visible;
+              position: absolute;
+              z-index: 10;
+              background-color: #212121;
+              padding-bottom: 5px;
+              top: -7px;
+            }
           }
         }
       }
 
       .author-date {
         display: block;
+        position: relative;
         white-space: nowrap;
       }
     }
