@@ -73,6 +73,7 @@ const Summary = () => {
                 <Detail
                   selectedData={selectedData}
                   clusterId={cluster.clusterId}
+                  authSrcMap={authSrcMap}
                 />
               </div>
             )}
