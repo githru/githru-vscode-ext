@@ -1,8 +1,6 @@
 @import "styles/_pallete";
 @mixin animation {
-  transition:
-    bottom 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+  transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 @mixin shadow {
   box-shadow: 0px 0px 3px 1px rgba(100, 100, 100, 0.4);
@@ -33,7 +31,6 @@
   margin: 0 -5px;
 
   img {
-    width: 30px;
     border-radius: 50px;
   }
 
