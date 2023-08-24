@@ -75,7 +75,9 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                       src={authSrcMap[author.names.toString()]}
                     />
                   )}
-                  <span className="message">{message}</span>
+                  <div className="message-container">
+                    <span className="message">{message}</span>
+                  </div>
                 </div>
                 <span className="author-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
