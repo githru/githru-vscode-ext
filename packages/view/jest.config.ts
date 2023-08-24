@@ -7,6 +7,7 @@ const config: Config.InitialOptions = {
   transform: {
     "^.+\\.ts?$": "ts-jest",
   },
+  testPathIgnorePatterns: ["tests/"],
 };
 
 export default config;
