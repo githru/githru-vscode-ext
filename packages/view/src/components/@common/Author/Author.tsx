@@ -10,6 +10,7 @@ const Author = ({ name, src }: AuthorInfo) => {
       <img
         src={src}
         alt=""
+        width="30"
       />
     </div>
   );
