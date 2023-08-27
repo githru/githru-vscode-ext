@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-syntax */
-import type { GlobalProps, CommitNode } from "types/";
+import type { CommitNode } from "types/";
 
-type GetCommitListInCluster = GlobalProps & { clusterId: number };
-export const getCommitListInCluster = ({ data, clusterId }: GetCommitListInCluster) =>
-  data
-    .map((clusterNode) => clusterNode.commitNodeList)
-    .flat()
-    .filter((commitNode) => commitNode.clusterId === clusterId);
+// type GetCommitListInCluster = GlobalProps & { clusterId: number };
+// export const getCommitListInCluster = ({ data, clusterId }: GetCommitListInCluster) =>
+//   data
+//     .map((clusterNode) => clusterNode.commitNodeList)
+//     .flat()
+//     .filter((commitNode) => commitNode.clusterId === clusterId);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getDataSetSize = <T extends any[]>(arr: T) => {
