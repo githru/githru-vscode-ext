@@ -2,6 +2,7 @@ import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
+import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
@@ -24,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
       if (!currentWorkspaceUri) {
-        throw new Error("Cannot find current workspace path");
+        throw new WorkspacePathUndefinedError("Cannot find current workspace path");
       }
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
@@ -34,7 +35,10 @@ export function activate(context: vscode.ExtensionContext) {
 
       const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
-        throw new Error("Cannot retrieve GitHub token");
+        throw new GithubTokenUndefinedError(
+          "Cannot find your GitHub token. For more details, please refer to",
+          "https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
+        );
       }
 
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
@@ -60,7 +64,17 @@ export function activate(context: vscode.ExtensionContext) {
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
-      vscode.window.showErrorMessage((error as Error).message);
+      if (error instanceof GithubTokenUndefinedError) {
+        vscode.window.showInformationMessage(error.message, error.helpUrl).then((selection) => {
+          if (selection === (error as GithubTokenUndefinedError).helpUrl) {
+            vscode.env.openExternal(vscode.Uri.parse((error as GithubTokenUndefinedError).helpUrl));
+          }
+        });
+      } else if (error instanceof WorkspacePathUndefinedError) {
+        vscode.window.showErrorMessage(error.message);
+      } else {
+        vscode.window.showErrorMessage((error as Error).message);
+      }
     }
   });
 
