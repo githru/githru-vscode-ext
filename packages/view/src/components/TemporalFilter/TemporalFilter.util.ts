@@ -49,8 +49,8 @@ export const getMinMaxDate = (data: CommitNode[]) => {
   const minMaxDateFormat = "YYYY-MM-DD";
 
   return {
-    fromDate: dayjs(data[0].commit.commitDate).format(minMaxDateFormat),
-    toDate: dayjs(data[data.length - 1].commit.commitDate).format(minMaxDateFormat),
+    fromDate: dayjs(data[0]?.commit.commitDate).format(minMaxDateFormat),
+    toDate: dayjs(data[data.length - 1]?.commit.commitDate).format(minMaxDateFormat),
   };
 };
 
