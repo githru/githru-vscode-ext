@@ -6,10 +6,8 @@
   flex-grow: 1;
   padding-left: 20px;
   padding-top: 5px;
-
   .cluster-summary__cluster {
     padding: 5px 0;
-
     .toggle-contents-button {
       padding: 5px 15px;
       border: none;
@@ -86,8 +84,8 @@
 }
 
 .detail__container {
-  overflow: overlay;
-  max-height: 280px;
+  overflow: auto;
   height: 220px;
+  max-height: 280px;
   padding: 0px 30px;
 }

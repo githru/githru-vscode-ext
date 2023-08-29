@@ -1,5 +1,3 @@
-// @ts-check
-
 const path = require("path");
 
 const webpack = require("webpack");
@@ -28,6 +26,7 @@ const config = {
       assets: path.resolve(__dirname, "src/assets/"),
       components: path.resolve(__dirname, "src/components/"),
       utils: path.resolve(__dirname, "src/utils/"),
+      services: path.resolve(__dirname, "src/services/"),
       styles: path.resolve(__dirname, "src/styles/"),
       types: path.resolve(__dirname, "src/types/"),
       hooks: path.resolve(__dirname, "src/hooks/"),
@@ -53,16 +52,12 @@ const config = {
       },
       {
         test: /.(sass|scss)$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          { loader: "sass-loader" },
-        ],
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "sass-loader" }],
       },
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
-        use: [{ loader: "@svgr/webpack", options: { exportType: "named" } }],
+        loader: "@svgr/webpack",
       },
     ],
   },

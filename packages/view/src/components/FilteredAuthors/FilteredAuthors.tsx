@@ -1,4 +1,4 @@
-import { Author } from "components/VerticalClusterList/Summary/Author";
+import { Author } from "components/@common/Author";
 import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
 import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
 import { useGlobalData } from "hooks";

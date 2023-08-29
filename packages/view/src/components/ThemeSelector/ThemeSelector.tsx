@@ -2,8 +2,8 @@ import "./ThemeSelector.scss";
 import { useCallback, useEffect, useState } from "react";
 
 import { debounce } from "utils";
+import { setPrimaryColor } from "services";
 
-import { setPrimaryColor } from "../../services";
 import { PRIMARY_COLOR_VARIABLE_NAME } from "../../constants/constants";
 
 const ThemeSelector = () => {
