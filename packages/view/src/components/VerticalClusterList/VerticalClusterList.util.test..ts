@@ -2,7 +2,7 @@ import type { ClusterNode } from "types";
 
 import { selectedDataUpdater } from "./VerticalClusterList.util";
 
-const fakeClusterNode: ClusterNode = {
+const fakeSelected: ClusterNode = {
   nodeTypeName: "CLUSTER",
   commitNodeList: [
     {
@@ -202,3 +202,36 @@ const fakeClusterNode: ClusterNode = {
     },
   ],
 };
+
+const fakePrev: ClusterNode[] = [fakeSelected, fakeSelected, fakeSelected, fakeSelected];
+
+/*
+export const selectedDataUpdater = (selected: ClusterNode, clusterId: number) => (prev: ClusterNode[]) => {
+  if (prev.length === 0) return [selected];
+  const prevClusterIds = prev.map((prevSelected) => prevSelected.commitNodeList[0].clusterId);
+  const clusterInPrev = prevClusterIds.includes(clusterId);
+  if (clusterInPrev) {
+    return prev.filter((prevSelected) => prevSelected.commitNodeList[0].clusterId !== clusterId);
+  }
+  return [...prev, selected]; -> 배열을 test해야한다. 일단 전부 배열인지 -> 반복분 돌면서 확인한다. 
+};
+
+export type CommitNode = NodeBase & {
+  nodeTypeName: "COMMIT";
+  commit: Commit;
+  seq: number;
+  clusterId: number; // 동일한 Cluster 내부 commit 참조 id
+};
+
+export type ClusterNode = NodeBase & {
+  nodeTypeName: "CLUSTER";
+  commitNodeList: CommitNode[];
+};
+*/
+test("selectedDataUpdater test", () => {
+  const fakeDataUpdater = selectedDataUpdater(fakeSelected, 0);
+  const result = fakeDataUpdater(fakePrev);
+
+  expect(fakeDataUpdater).not.toBeUndefined();
+  expect(result).not.toBeUndefined();
+});
