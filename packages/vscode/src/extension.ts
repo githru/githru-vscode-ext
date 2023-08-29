@@ -81,7 +81,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  const loginWithGithup = vscode.commands.registerCommand(COMMAND_LOGIN_WITH_GITHUB, async () => {
+  const loginWithGithub = vscode.commands.registerCommand(COMMAND_LOGIN_WITH_GITHUB, async () => {
     const octokit = await credentials.getOctokit();
     const userInfo = await octokit.users.getAuthenticated();
     const auth = await credentials.getAuth();
@@ -91,7 +91,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`Logged into GitHub as ${userInfo.data.login}`);
   });
 
-  subscriptions.concat([disposable, loginWithGithup]);
+  subscriptions.concat([disposable, loginWithGithub]);
 
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
   myStatusBarItem.text = "githru";
