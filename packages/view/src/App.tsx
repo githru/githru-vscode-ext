@@ -17,6 +17,7 @@ import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
 import type { IDESentEvents } from "types/IDESentEvents";
 
+// overwrite BounceLoader style
 const loaderStyle: CSSProperties = {
   position: "fixed",
   left: "50%",
