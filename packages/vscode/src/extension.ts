@@ -15,7 +15,7 @@ function normalizeFsPath(fsPath: string) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionUri, extensionPath, secrets } = context;
+  const { subscriptions, extensionPath, secrets } = context;
 
   console.log('Congratulations, your extension "githru" is now active!');
 
@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         return data;
       };
       const fetchBranchList = () => JSON.stringify(branchNames);
-      const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes, fetchBranchList);
+      const webLoader = new WebviewLoader(extensionPath, context, fetchClusterNodes, fetchBranchList);
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");

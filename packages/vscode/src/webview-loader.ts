@@ -3,18 +3,18 @@ import * as vscode from "vscode";
 
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
 
+const ANALYZE_DATA_KEY = "memento_analyzed_data";
+
 export default class WebviewLoader implements vscode.Disposable {
   private readonly _panel: vscode.WebviewPanel | undefined;
-  private fsPath: string;
 
   constructor(
-    private readonly fileUri: vscode.Uri,
     private readonly extensionPath: string,
+    context: vscode.ExtensionContext,
     parseCommit: (baseBranchName?: string) => Promise<string>,
     getAllBranches: () => string
   ) {
     const viewColumn = vscode.ViewColumn.One;
-    this.fsPath = fileUri.fsPath;
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -28,10 +28,17 @@ export default class WebviewLoader implements vscode.Disposable {
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
       const { command, payload } = message;
 
-      if (command === "refresh" || command === "fetchAnalyzedData") {
-        const baseBranchName = payload ? JSON.parse(payload as string) : undefined;
-        const data = await parseCommit(baseBranchName);
-        const resMessage = { ...message, payload: data };
+      if (command === "fetchAnalyzedData" || command === "refresh") {
+        const storedAnalyzedData = context.workspaceState.get(ANALYZE_DATA_KEY);
+        const resMessage = message;
+
+        if (!storedAnalyzedData) {
+          const baseBranchName = payload ? JSON.parse(payload as string) : undefined;
+          const data = await parseCommit(baseBranchName);
+          context.workspaceState.update(ANALYZE_DATA_KEY, data);
+          resMessage.payload = data;
+        }
+        resMessage.payload = storedAnalyzedData;
         await this.respondToMessage(resMessage);
       }
 
