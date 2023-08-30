@@ -1,8 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { selectedDataUpdater } from "./VerticalClusterList.util";
-
-const fakeSelected: ClusterNode = {
+export const fakeFirstClusterNode: ClusterNode = {
   nodeTypeName: "CLUSTER",
   commitNodeList: [
     {
@@ -35,21 +33,19 @@ const fakeSelected: ClusterNode = {
               insertions: 17,
               deletions: 0,
             },
-            "packages/view/tsconfig.json": {
-              insertions: 25,
-              deletions: 0,
-            },
-            "packages/view/webpack.config.js": {
-              insertions: 71,
-              deletions: 0,
-            },
           },
         },
         message: "feat(webview): add typescript structure",
       },
       seq: 0,
-      clusterId: 4,
+      clusterId: 0,
     },
+  ],
+};
+
+export const fakeSecondClusterNode: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
     {
       nodeTypeName: "COMMIT",
       commit: {
@@ -84,49 +80,19 @@ const fakeSelected: ClusterNode = {
               insertions: 3,
               deletions: 1,
             },
-            "packages/view/src/App.js": {
-              insertions: 0,
-              deletions: 25,
-            },
-            "packages/view/src/index.js": {
-              insertions: 0,
-              deletions: 17,
-            },
-            "packages/view/src/logo.svg": {
-              insertions: 0,
-              deletions: 1,
-            },
-            "packages/vscode/.eslintrc.json": {
-              insertions: 2,
-              deletions: 1,
-            },
-            "packages/vscode/.gitignore": {
-              insertions: 4,
-              deletions: 0,
-            },
-            "packages/vscode/dist/extension.js": {
-              insertions: 0,
-              deletions: 116,
-            },
-            "packages/vscode/dist/extension.js.map": {
-              insertions: 0,
-              deletions: 1,
-            },
-            "packages/vscode/package.json": {
-              insertions: 3,
-              deletions: 3,
-            },
-            "packages/vscode/src/extension.ts": {
-              insertions: 5,
-              deletions: 2,
-            },
           },
         },
         message: "feat(vscode): launch webview for webviewApp",
       },
-      clusterId: 4,
+      clusterId: 1,
       seq: 1,
     },
+  ],
+};
+
+export const fakethirdClusterNode: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
     {
       nodeTypeName: "COMMIT",
       commit: {
@@ -169,69 +135,14 @@ const fakeSelected: ClusterNode = {
               insertions: 0,
               deletions: 9,
             },
-            "packages/vscode/dist/extension.js": {
-              insertions: 51,
-              deletions: 9,
-            },
-            "packages/vscode/dist/extension.js.map": {
-              insertions: 1,
-              deletions: 1,
-            },
-            "packages/vscode/package.json": {
-              insertions: 52,
-              deletions: 49,
-            },
-            "packages/vscode/src/webview-loader.ts": {
-              insertions: 54,
-              deletions: 0,
-            },
-            "packages/vscode/tsconfig.json": {
-              insertions: 12,
-              deletions: 3,
-            },
-            "packages/vscode/webpack.config.js": {
-              insertions: 13,
-              deletions: 2,
-            },
           },
         },
         message: "setup(vscode): add webview loader",
       },
       seq: 2,
-      clusterId: 4,
+      clusterId: 2,
     },
   ],
 };
 
-const fakePrev: ClusterNode[] = [fakeSelected, fakeSelected, fakeSelected, fakeSelected];
-
-/*
-export const selectedDataUpdater = (selected: ClusterNode, clusterId: number) => (prev: ClusterNode[]) => {
-  if (prev.length === 0) return [selected];
-  const prevClusterIds = prev.map((prevSelected) => prevSelected.commitNodeList[0].clusterId);
-  const clusterInPrev = prevClusterIds.includes(clusterId);
-  if (clusterInPrev) {
-    return prev.filter((prevSelected) => prevSelected.commitNodeList[0].clusterId !== clusterId);
-  }
-  return [...prev, selected]; -> 배열을 test해야한다. 일단 전부 배열인지 -> 반복분 돌면서 확인한다. 
-};
-
-export type CommitNode = NodeBase & {
-  nodeTypeName: "COMMIT";
-  commit: Commit;
-  seq: number;
-  clusterId: number; // 동일한 Cluster 내부 commit 참조 id
-};
-
-export type ClusterNode = NodeBase & {
-  nodeTypeName: "CLUSTER";
-  commitNodeList: CommitNode[];
-};
-*/
-test("selectedDataUpdater test", () => {
-  const fakeDataUpdater = selectedDataUpdater(fakeSelected, 0);
-  const result = fakeDataUpdater(fakePrev);
-
-  expect(fakeDataUpdater).not.toBeUndefined();
-  expect(result).not.toBeUndefined();
-});
+export const fakePrev: ClusterNode[] = [fakeSecondClusterNode, fakethirdClusterNode];
