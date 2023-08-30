@@ -48,7 +48,7 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
     clusters.push(cluster);
     return cluster;
   });
-
+  clusters.sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)));
   return clusters;
 }
 
