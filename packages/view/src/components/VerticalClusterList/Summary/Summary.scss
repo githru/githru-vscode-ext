@@ -89,3 +89,14 @@
   max-height: 280px;
   padding: 0px 30px;
 }
+
+.sort-button {
+  color: var(--primary-color);
+  cursor: pointer;
+  position:absolute;
+  right: 26%;
+  top: 34%;
+  &:hover {
+    color: white; 
+  }
+}
