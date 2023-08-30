@@ -10,6 +10,7 @@ test("FirstSelectedDataUpdater test", () => {
   expect(result.length).toBe(1);
   for (let i = 0; i < result.length; i += 1) {
     expect(result[i]).not.toBeUndefined();
+    expect(result[i].nodeTypeName).toBe("CLUSTER");
   }
 });
 
@@ -24,6 +25,7 @@ test("SecondSelectedDataUpdater test", () => {
   expect(result.length).toBe(3);
   for (let i = 0; i < result.length; i += 1) {
     expect(result[i]).not.toBeUndefined();
+    expect(result[i].nodeTypeName).toBe("CLUSTER");
   }
 });
 
@@ -37,5 +39,6 @@ test("ThirdSelectedDataUpdater test", () => {
   expect(result.length).toBe(1);
   for (let i = 0; i < result.length; i += 1) {
     expect(result[i]).not.toBeUndefined();
+    expect(result[i].nodeTypeName).toBe("CLUSTER");
   }
 });
