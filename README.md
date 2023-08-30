@@ -37,6 +37,7 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ytaek"><img src="https://avatars.githubusercontent.com/u/24404665?v=4?s=100" width="100px;" alt="ytaek"/><br /><sub><b>ytaek</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=ytaek" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/momomingzhi"><img src="https://avatars.githubusercontent.com/u/47150127?v=4?s=100" width="100px;" alt="mong"/><br /><sub><b>mong</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=momomingzhi" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/tae-sung-lee-5ab59a220/"><img src="https://avatars.githubusercontent.com/u/66891085?v=4?s=100" width="100px;" alt="Taesung Lee"/><br /><sub><b>Taesung Lee</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=2taesung" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/KKanghh"><img src="https://avatars.githubusercontent.com/u/84486674?v=4?s=100" width="100px;" alt="KKanghh"/><br /><sub><b>KKanghh</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=KKanghh" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
