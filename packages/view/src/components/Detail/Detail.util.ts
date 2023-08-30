@@ -48,7 +48,7 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
 
 export const getSummaryCommitList = (l: number, arr: CommitNode[]) => {
   const res = [];
-  for (let item = arr.length - 1; arr.length >= 5 ? item > arr.length - 1 - l : item >= 0; item -= 1) {
+  for (let item = arr.length - 1; arr.length >= l ? item > arr.length - 1 - l : item >= 0; item -= 1) {
     res.push(arr[item]);
   }
 
