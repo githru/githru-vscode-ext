@@ -20,11 +20,14 @@ export function getCommitMessageType(message: string): CommitMessageType {
   const lowerCaseMessage = message.toLowerCase();
   let type = "";
 
-  for (let index = 0; index < CommitMessageTypeList.length; index++) {
-    if (lowerCaseMessage.includes(CommitMessageTypeList[index])) {
-      type = CommitMessageTypeList[index];
+  CommitMessageTypeList.forEach((commitMessageType) => {
+    const classifiedCommitMessageIndex = lowerCaseMessage.indexOf(commitMessageType);
+
+    if (classifiedCommitMessageIndex >= 0) {
+      if (!type.length) type = commitMessageType;
+      else if (lowerCaseMessage.indexOf(type) > classifiedCommitMessageIndex) type = commitMessageType;
     }
-  }
+  });
 
   return type;
 }
