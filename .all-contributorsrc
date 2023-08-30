@@ -154,7 +154,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "2taesung",
+      "name": "Taesung Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66891085?v=4",
+      "profile": "https://www.linkedin.com/in/tae-sung-lee-5ab59a220/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
