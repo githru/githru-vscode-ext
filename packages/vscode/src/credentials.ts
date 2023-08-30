@@ -19,18 +19,20 @@ export class Credentials {
     this.setOctokit();
   }
 
+  private async createOctokit(session: vscode.AuthenticationSession) {
+    return new Octokit.Octokit({
+      auth: session.accessToken,
+      request: {
+        fetch: fetch,
+      },
+    });
+  }
+
   private async setOctokit() {
     const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: false });
 
     if (session) {
-      this.octokit = new Octokit.Octokit({
-        auth: session.accessToken,
-        request: {
-          fetch: fetch,
-        },
-      });
-
-      return;
+      this.octokit = await this.createOctokit(session);
     }
 
     this.octokit = undefined;
@@ -52,12 +54,7 @@ export class Credentials {
     }
 
     const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
-    this.octokit = new Octokit.Octokit({
-      auth: session.accessToken,
-      request: {
-        fetch: fetch,
-      },
-    });
+    this.octokit = await this.createOctokit(session);
 
     return this.octokit;
   }
@@ -68,12 +65,7 @@ export class Credentials {
     }
 
     const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
-    this.octokit = new Octokit.Octokit({
-      auth: session.accessToken,
-      request: {
-        fetch: fetch,
-      },
-    });
+    this.octokit = await this.createOctokit(session);
 
     return this.octokit.auth() as Promise<OctokitAuth>;
   }
