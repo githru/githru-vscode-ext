@@ -163,6 +163,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rbgksqkr",
+      "name": "Gyu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63959171?v=4",
+      "profile": "https://velog.io/@ghenmaru",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "angular",
