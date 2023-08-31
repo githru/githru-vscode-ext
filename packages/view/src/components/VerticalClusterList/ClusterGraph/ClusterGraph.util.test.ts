@@ -1,4 +1,4 @@
-import { fakePrev } from "../fakeTask";
+import { fakePrev } from "../fakeAsset";
 
 import { getClusterSizes, getGraphHeight } from "./ClusterGraph.util";
 

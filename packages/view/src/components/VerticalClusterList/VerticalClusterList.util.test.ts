@@ -1,44 +1,46 @@
 import { selectedDataUpdater } from "./VerticalClusterList.util";
-import { fakeFirstClusterNode, fakeSecondClusterNode, fakePrev } from "./fakeTask";
+import { fakeFirstClusterNode, fakeSecondClusterNode, fakePrev } from "./fakeAsset";
 
-test("FirstSelectedDataUpdater test", () => {
-  const fakeDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 0);
-  const result = fakeDataUpdater([]);
+const EmptyArrayAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 0);
+const PrevAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 5);
+const RemoveSelectedDataUpdater = selectedDataUpdater(fakeSecondClusterNode, 1);
 
-  expect(fakeDataUpdater).not.toBeUndefined();
-  expect(typeof fakeDataUpdater).toBe("function");
-  expect(result.length).toBe(1);
-  for (let i = 0; i < result.length; i += 1) {
-    expect(result[i]).not.toBeUndefined();
-    expect(result[i].nodeTypeName).toBe("CLUSTER");
-  }
+const EmptyArrayAddSelectedresult = EmptyArrayAddSelectedDataUpdater([]);
+const PrevAddSelectedresult = PrevAddSelectedDataUpdater(fakePrev);
+const RemoveSelectedresult = RemoveSelectedDataUpdater(fakePrev);
+
+test("EmptyArrayAddSelectedDataUpdater test", () => {
+  expect(EmptyArrayAddSelectedDataUpdater).not.toBeUndefined();
+  expect(typeof EmptyArrayAddSelectedDataUpdater).toBe("function");
+  expect(EmptyArrayAddSelectedresult).not.toBeUndefined();
+  expect(EmptyArrayAddSelectedresult.length).toBe(1);
 });
 
-test("SecondSelectedDataUpdater test", () => {
-  const fakeDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 5);
-  const result = fakeDataUpdater(fakePrev);
-
-  expect(fakeDataUpdater).not.toBeUndefined();
-  expect(typeof fakeDataUpdater).toBe("function");
-  expect(result).not.toBeUndefined();
-  expect(result).not.toBeUndefined();
-  expect(result.length).toBe(3);
-  for (let i = 0; i < result.length; i += 1) {
-    expect(result[i]).not.toBeUndefined();
-    expect(result[i].nodeTypeName).toBe("CLUSTER");
-  }
+test("PrevAddSelectedDataUpdater test", () => {
+  expect(PrevAddSelectedDataUpdater).not.toBeUndefined();
+  expect(typeof PrevAddSelectedDataUpdater).toBe("function");
+  expect(PrevAddSelectedresult).not.toBeUndefined();
+  expect(PrevAddSelectedresult.length).toBe(3);
 });
 
-test("ThirdSelectedDataUpdater test", () => {
-  const fakeDataUpdater = selectedDataUpdater(fakeSecondClusterNode, 1);
-  const result = fakeDataUpdater(fakePrev);
+test("RemoveSelectedDataUpdater test", () => {
+  expect(RemoveSelectedDataUpdater).not.toBeUndefined();
+  expect(typeof RemoveSelectedDataUpdater).toBe("function");
+  expect(RemoveSelectedresult).not.toBeUndefined();
+  expect(RemoveSelectedresult.length).toBe(1);
+});
 
-  expect(fakeDataUpdater).not.toBeUndefined();
-  expect(typeof fakeDataUpdater).toBe("function");
-  expect(result).not.toBeUndefined();
-  expect(result.length).toBe(1);
-  for (let i = 0; i < result.length; i += 1) {
-    expect(result[i]).not.toBeUndefined();
-    expect(result[i].nodeTypeName).toBe("CLUSTER");
-  }
+test.each(EmptyArrayAddSelectedresult)("EmptyArrayAddSelected", (Cluster) => {
+  expect(Cluster).not.toBeUndefined();
+  expect(Cluster.nodeTypeName).toBe("CLUSTER");
+});
+
+test.each(PrevAddSelectedresult)("prevAddSelected", (Cluster) => {
+  expect(Cluster).not.toBeUndefined();
+  expect(Cluster.nodeTypeName).toBe("CLUSTER");
+});
+
+test.each(RemoveSelectedresult)("RemoveSelectedSelected", (Cluster) => {
+  expect(Cluster).not.toBeUndefined();
+  expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });

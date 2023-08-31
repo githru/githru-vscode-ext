@@ -17,6 +17,7 @@ export function getClusterPosition(d: ClusterGraphElement, i: number, detailElem
   const margin = selectedLength * detailElementHeight;
   const x = SVG_MARGIN.left;
   const y = SVG_MARGIN.top + i * (CLUSTER_HEIGHT + NODE_GAP) + margin;
+  console.log(d);
   return `translate(${x}, ${y})`;
 }
 
