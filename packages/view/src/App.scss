@@ -28,7 +28,6 @@ body {
 }
 
 .top-container {
-  margin-bottom: 20px;
   height: 220px;
 }
 
@@ -36,4 +35,5 @@ body {
   display: flex;
   justify-content: center;
   height: calc(100vh - 200px);
+  margin-top: 20px;
 }
