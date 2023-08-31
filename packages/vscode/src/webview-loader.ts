@@ -10,7 +10,7 @@ export default class WebviewLoader implements vscode.Disposable {
   constructor(
     private readonly fileUri: vscode.Uri,
     private readonly extensionPath: string,
-    parseCommit: () => Promise<string>,
+    parseCommit: (baseBranchName?: string) => Promise<string>,
     getAllBranches: () => string
   ) {
     const viewColumn = vscode.ViewColumn.One;
@@ -26,20 +26,24 @@ export default class WebviewLoader implements vscode.Disposable {
     this._panel.iconPath = icon_path;
 
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
-      if (message.command === "refresh" || message.command === "fetchAnalyzedData") {
-        const data = await parseCommit();
+      const { command, payload } = message;
+
+      if (command === "refresh" || command === "fetchAnalyzedData") {
+        const baseBranchName = payload ? JSON.parse(payload as string) : undefined;
+        const data = await parseCommit(baseBranchName);
         const resMessage = { ...message, payload: data };
         await this.respondToMessage(resMessage);
       }
-      if (message.command === "getBranchList") {
+
+      if (command === "getBranchList") {
         const branches = getAllBranches();
         await this.respondToMessage({
           ...message,
           payload: branches,
         });
       }
-      if (message.command === "updatePrimaryColor") {
-        const colorCode = JSON.parse(message.payload as string);
+      if (command === "updatePrimaryColor") {
+        const colorCode = JSON.parse(payload as string);
         if (colorCode.primary) {
           setPrimaryColor(colorCode.primary);
         }
