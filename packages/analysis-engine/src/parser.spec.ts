@@ -1,4 +1,5 @@
 import { getCommitMessageType } from "./commit.util";
+import getCommitRaws from "./parser"; // 파일의 상대 경로에 따라 수정하세요
 
 describe("commit message type", () => {
   it.each([
@@ -29,5 +30,137 @@ describe("commit message type", () => {
   ])("has no valid commit message type", (message) => {
     const commitType = getCommitMessageType(message);
     expect(commitType).toBe("");
+  });
+});
+
+//branch와 tag test
+describe('getCommitRaws', () => {
+  const testCommitLines = [
+    "commit a b (HEAD)",
+    "commit a b (HEAD -> main, origin/main, origin/HEAD)",
+    "commit a b (HEAD, tag: v1.0.0)",
+    "commit a b (HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0)",
+    "commit a b (HEAD, tag: v2.0.0, tag: v1.4)"
+  ];
+
+  const expectedBranches = [
+    ['HEAD'],
+    ['HEAD', 'main', 'origin/main', 'origin/HEAD'],
+    ['HEAD'],
+    ['HEAD', 'main', 'origin/main', 'origin/HEAD'],
+    ['HEAD']
+  ];
+
+  const expectedTags=[
+    [],
+    [],
+    ['v1.0.0'],
+    ['v2.0.0'],
+    ['v2.0.0','v1.4']
+  ]
+
+  testCommitLines.forEach((mockLog, index) => {
+    it(`should parse gitlog to commitRaw(branch, tag)`, () => {
+      const mock = `${mockLog}
+Author: John Park <mail@gmail.com>
+AuthorDate: Sun Sep 4 20:17:59 2022 +0900
+Commit: John Park <mail@gmail.com>
+CommitDate: Sun Sep 4 20:17:59 2022 +0900
+\n\tcommit message
+`;
+      const result = getCommitRaws(mock);
+
+      expect(result).toEqual([
+        {
+          sequence: 0,
+          id: 'a',
+          parents: ['b'],
+          branches: expectedBranches[index],
+          tags: expectedTags[index],
+          author: { name: 'John Park', email: 'mail@gmail.com' },
+          authorDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+          committer: { name: 'John Park', email: 'mail@gmail.com' },
+          committerDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+          message: 'commit message',
+          differenceStatistic: {
+            totalInsertionCount: 0,
+            totalDeletionCount: 0,
+            fileDictionary: {},
+          },
+          commitMessageType: ""
+        },
+      ]);
+    });
+  });
+});
+
+//total file changed, deletion, addition test
+describe('getCommitRaws', () => {
+  const testCommitLines = [
+    "10\t0\ta.ts\n1\t0\tREADME.md",
+    "3\t3\ta.ts",
+    "4\t0\ta.ts",
+    "0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"
+  ];
+
+  const expectedBranches = [
+    {
+      totalInsertionCount: 11,
+      totalDeletionCount: 0,
+      fileDictionary: {
+        'a.ts': { insertionCount: 10, deletionCount: 0 },
+        'README.md': { insertionCount: 1, deletionCount: 0 },
+      }
+    },
+    {
+      totalInsertionCount: 3,
+      totalDeletionCount: 3,
+      fileDictionary: { 'a.ts': { insertionCount: 3, deletionCount: 3 } }
+    },
+    {
+      totalInsertionCount: 4,
+      totalDeletionCount: 0,
+      fileDictionary: { 'a.ts': { insertionCount: 4, deletionCount: 0 } }
+    },
+    {
+      totalInsertionCount: 5,
+      totalDeletionCount: 9,
+      fileDictionary: {
+        'a.ts': { insertionCount: 0, deletionCount: 6 },
+        'b.ts': { insertionCount: 2, deletionCount: 0 },
+        'c.ts': { insertionCount: 3, deletionCount: 3 },
+      }
+    }
+  ];
+
+  testCommitLines.forEach((mockLog, index) => {
+    it(`should parse gitlog to commitRaw(file changed)`, () => {
+      const mock = `commit a b (HEAD)
+Author: John Park <mail@gmail.com>
+AuthorDate: Sun Sep 4 20:17:59 2022 +0900
+Commit: John Park <mail@gmail.com>
+CommitDate: Sun Sep 4 20:17:59 2022 +0900
+\n\tcommit message
+\n${mockLog}
+`;
+      const result = getCommitRaws(mock);
+
+      expect(result).toEqual([
+        {
+          sequence: 0,
+          id: 'a',
+          parents: ['b'],
+          branches: ['HEAD'],
+          tags: [],
+          author: { name: 'John Park', email: 'mail@gmail.com' },
+          authorDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+          committer: { name: 'John Park', email: 'mail@gmail.com' },
+          committerDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+          message: 'commit message',
+          differenceStatistic: expectedBranches[index],
+          commitMessageType: ""
+        },
+      ]);
+    });
   });
 });
