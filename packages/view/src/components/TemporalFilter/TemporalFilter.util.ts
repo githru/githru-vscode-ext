@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import { timeFormat } from "d3";
 
-import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
-import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
+import type { ClusterNode, CommitNode } from "types/Nodes";
+
+import { NODE_TYPES } from "../../constants/constants";
 
 /**
  * Note: Line Chart를 위한 시간순 CommitNode 정렬
@@ -35,7 +36,7 @@ export function filterDataByDate({ data, fromDate, toDate }: FilterDataByDatePro
     .filter((commitNodeList) => commitNodeList.length > 0)
     .map(
       (commitNodeList): ClusterNode => ({
-        nodeTypeName: NODE_TYPE_NAME[1],
+        nodeTypeName: NODE_TYPES[1],
         commitNodeList,
       })
     );
@@ -49,8 +50,8 @@ export const getMinMaxDate = (data: CommitNode[]) => {
   const minMaxDateFormat = "YYYY-MM-DD";
 
   return {
-    fromDate: dayjs(data[0].commit.commitDate).format(minMaxDateFormat),
-    toDate: dayjs(data[data.length - 1].commit.commitDate).format(minMaxDateFormat),
+    fromDate: dayjs(data[0]?.commit.commitDate).format(minMaxDateFormat),
+    toDate: dayjs(data[data.length - 1]?.commit.commitDate).format(minMaxDateFormat),
   };
 };
 
