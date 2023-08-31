@@ -1,12 +1,37 @@
 import type { ClusterNode } from "types";
 
-import { getClusterById } from "./Summary.util";
+import { getClusterById, getClusterIds } from "./Summary.util";
 
 const clusterNodeMockData: ClusterNode[] = [
   {
     commitNodeList: [
       {
         clusterId: 0,
+        commit: {
+          author: { id: "no-id", emails: ["ytaek.kim@hcil.snu.ac.kr"], names: ["ytaek"] },
+          authorDate: "Thu Apr 28 2022 01:19:50 GMT+0900 (Korean Standard Time)",
+          commitDate: "Thu Apr 28 2022 01:19:50 GMT+0900 (Korean Standard Time)",
+          committer: { emails: ["noreply@github.com"], id: "no-id", names: ["GitHub"] },
+          diffStatistics: {
+            changedFileCount: 2,
+            deletions: 0,
+            insertions: 203,
+            files: { LICENSE: { insertions: 201, deletions: 0 }, "README.md": { insertions: 2, deletions: 0 } },
+          },
+          id: "71627b0568035fcf923e18a36b4f3f09fc1632c5",
+          message: "Initial commit",
+          parentIds: [],
+        },
+        nodeTypeName: "COMMIT",
+        seq: 1,
+      },
+    ],
+    nodeTypeName: "CLUSTER",
+  },
+  {
+    commitNodeList: [
+      {
+        clusterId: 1,
         commit: {
           author: { id: "no-id", emails: ["ytaek.kim@hcil.snu.ac.kr"], names: ["ytaek"] },
           authorDate: "Thu Apr 28 2022 01:19:50 GMT+0900 (Korean Standard Time)",
@@ -44,4 +69,13 @@ test("getClusterById test", () => {
   expect(result.commitNodeList[0].commit.diffStatistics.changedFileCount).toBe(2);
   expect(result.commitNodeList[0].commit.diffStatistics.insertions).toBe(203);
   expect(result.commitNodeList[0].commit.diffStatistics.deletions).toBe(0);
+});
+
+test("getClusterIds test", () => {
+  const result = getClusterIds(clusterNodeMockData);
+
+  expect(result).not.toBeUndefined();
+  expect(result[0]).toBe(0);
+  expect(result[1]).toBe(1);
+  expect(result).toHaveLength(2);
 });
