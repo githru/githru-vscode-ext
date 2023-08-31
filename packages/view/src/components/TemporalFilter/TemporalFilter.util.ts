@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { timeFormat } from "d3";
 
-import type { ClusterNode, CommitNode } from "types/NodeTypes";
+import type { ClusterNode, CommitNode } from "types/Nodes";
 
 import { NODE_TYPES } from "../../constants/constants";
 

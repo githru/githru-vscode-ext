@@ -1,5 +1,5 @@
 export * from "./global";
-export * from "./NodeTypes";
+export * from "./Nodes";
 export * from "./IDESentEvents";
 export * from "./IDEMessage";
 export * from "./Author";
