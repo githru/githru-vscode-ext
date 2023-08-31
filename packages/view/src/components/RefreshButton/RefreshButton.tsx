@@ -16,7 +16,7 @@ const RefreshButton = () => {
     setLoading(true);
 
     const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.sendFetchAnalyzedDataCommand();
+    ideAdapter.sendFetchAnalyzedDataMessage();
   }, 3000);
 
   return (
