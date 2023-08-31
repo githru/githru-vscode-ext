@@ -62,7 +62,7 @@ export async function activate(context: vscode.ExtensionContext) {
         return data;
       };
       const fetchBranchList = () => JSON.stringify(branchNames);
-      const webLoader = new WebviewLoader(extensionUri, extensionPath, fetchClusterNodes, fetchBranchList);
+      const webLoader = new WebviewLoader(extensionPath, context, fetchClusterNodes, fetchBranchList);
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
