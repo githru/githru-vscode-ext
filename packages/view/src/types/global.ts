@@ -1,7 +1,7 @@
 import type { Dispatch } from "react";
 import type React from "react";
 
-import type { ClusterNode } from "./NodeTypes.temp";
+import type { ClusterNode } from "./Nodes";
 
 export type GlobalProps = {
   data: ClusterNode[];

@@ -154,7 +154,44 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "2taesung",
+      "name": "Taesung Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66891085?v=4",
+      "profile": "https://www.linkedin.com/in/tae-sung-lee-5ab59a220/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "KKanghh",
+      "name": "KKanghh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84486674?v=4",
+      "profile": "https://github.com/KKanghh",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rbgksqkr",
+      "name": "Gyu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63959171?v=4",
+      "profile": "https://velog.io/@ghenmaru",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "KyuTae98",
+      "name": "박규태",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79373803?v=4",
+      "profile": "https://github.com/KyuTae98",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
