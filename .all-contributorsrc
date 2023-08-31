@@ -190,6 +190,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Jinho1011",
+      "name": "Jeon Jinho",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26860466?v=4",
+      "profile": "https://github.com/Jinho1011",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "angular",

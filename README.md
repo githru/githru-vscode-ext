@@ -40,6 +40,7 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/KKanghh"><img src="https://avatars.githubusercontent.com/u/84486674?v=4?s=100" width="100px;" alt="KKanghh"/><br /><sub><b>KKanghh</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=KKanghh" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://velog.io/@ghenmaru"><img src="https://avatars.githubusercontent.com/u/63959171?v=4?s=100" width="100px;" alt="Gyu"/><br /><sub><b>Gyu</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=rbgksqkr" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/KyuTae98"><img src="https://avatars.githubusercontent.com/u/79373803?v=4?s=100" width="100px;" alt="박규태"/><br /><sub><b>박규태</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=KyuTae98" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jinho1011"><img src="https://avatars.githubusercontent.com/u/26860466?v=4?s=100" width="100px;" alt="Jeon Jinho"/><br /><sub><b>Jeon Jinho</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=Jinho1011" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
