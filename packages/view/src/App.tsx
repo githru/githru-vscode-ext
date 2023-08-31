@@ -15,6 +15,7 @@ import {
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
+import { RefreshButton } from "components/RefreshButton";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -51,7 +52,10 @@ const App = () => {
     <>
       <div className="header-container">
         <BranchSelector />
-        <ThemeSelector />
+        <div className="header-buttons">
+          <ThemeSelector />
+          <RefreshButton />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />

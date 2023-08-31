@@ -1,14 +1,10 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
-import { FiRefreshCcw } from "react-icons/fi";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import { useGlobalData } from "hooks";
-import { throttle } from "utils";
-import type IDEPort from "ide/IDEPort";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -20,7 +16,7 @@ import { drawBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading, setLoading } =
+  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading } =
     useGlobalData();
 
   const loaderStyle: CSSProperties = {
@@ -63,13 +59,6 @@ const TemporalFilter = () => {
 
     return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
   }, [filteredData]);
-
-  const refreshHandler = throttle(() => {
-    setLoading(true);
-
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.sendFetchAnalyzedDataCommand();
-  }, 3000);
 
   const windowSize = useWindowResize();
 
@@ -148,16 +137,6 @@ const TemporalFilter = () => {
         loading={loading}
         cssOverride={loaderStyle}
       />
-
-      <div className="data-control-container">
-        <button
-          type="button"
-          className="refresh-button"
-          onClick={refreshHandler}
-        >
-          <FiRefreshCcw />
-        </button>
-      </div>
       <div
         className="line-charts"
         ref={wrapperRef}
