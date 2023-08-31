@@ -37,11 +37,8 @@ export async function activate(context: vscode.ExtensionContext) {
       const initialBaseBranchName = getBaseBranchName(branchNames);
 
       const githubToken: string | undefined = await getGithubToken(secrets);
-      if (!githubToken) {
-        throw new GithubTokenUndefinedError(
-          "Cannot find your GitHub token. For more details, please refer to",
-          "https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
-        );
+      if (githubToken) {
+        throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
@@ -68,11 +65,8 @@ export async function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {
-        vscode.window.showInformationMessage(error.message, error.helpUrl).then((selection) => {
-          if (selection === (error as GithubTokenUndefinedError).helpUrl) {
-            vscode.env.openExternal(vscode.Uri.parse((error as GithubTokenUndefinedError).helpUrl));
-          }
-        });
+        vscode.window.showErrorMessage(error.message);
+        vscode.commands.executeCommand(COMMAND_LOGIN_WITH_GITHUB);
       } else if (error instanceof WorkspacePathUndefinedError) {
         vscode.window.showErrorMessage(error.message);
       } else {
