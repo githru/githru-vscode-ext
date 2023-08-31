@@ -1,5 +1,6 @@
+import { fakeFirstClusterNode, fakeSecondClusterNode, fakePrev } from "../../../tests/fakeAsset";
+
 import { selectedDataUpdater } from "./VerticalClusterList.util";
-import { fakeFirstClusterNode, fakeSecondClusterNode, fakePrev } from "./fakeAsset";
 
 const EmptyArrayAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 0);
 const PrevAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 5);
