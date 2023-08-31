@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { getClusterById, getClusterIds } from "./Summary.util";
+import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
 
 const clusterNodeMockData: ClusterNode[] = [
   {
@@ -78,4 +78,14 @@ test("getClusterIds test", () => {
   expect(result[0]).toBe(0);
   expect(result[1]).toBe(1);
   expect(result).toHaveLength(2);
+});
+
+test("getInitData test", () => {
+  const result = getInitData(clusterNodeMockData);
+
+  expect(result).not.toBeUndefined();
+  expect(result[0].clusterId).toBe(0);
+  expect(result[0].createdAt.toString()).toBe(new Date("2022-04-27T16:19:50.000Z").toString());
+  expect(result[0].summary.authorNames[0][0]).toBe("ytaek");
+  expect(result[0].summary.content.message).toBe("Initial commit");
 });
