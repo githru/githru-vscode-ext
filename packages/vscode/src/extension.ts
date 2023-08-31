@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const initialBaseBranchName = getBaseBranchName(branchNames);
 
       const githubToken: string | undefined = await getGithubToken(secrets);
-      if (githubToken) {
+      if (!githubToken) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
