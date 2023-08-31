@@ -3,7 +3,7 @@ import { getAuthorProfileImgSrc } from "utils/author";
 
 import type { AuthSrcMap, Cluster } from "./Summary.type";
 
-export function getInitData(data: GlobalProps["data"]) {
+export function getInitData(data: GlobalProps["data"]): Cluster[] {
   const clusters: Cluster[] = [];
 
   data.map((clusterNode) => {
@@ -12,6 +12,7 @@ export function getInitData(data: GlobalProps["data"]) {
     const resultMsg = message.split("/n/n")[0];
     const cluster: Cluster = {
       clusterId: clusterNode.commitNodeList[0].clusterId,
+      createdAt: new Date(clusterNode.commitNodeList[0].commit.commitDate),
       summary: {
         authorNames: [],
         content: {
@@ -47,7 +48,7 @@ export function getInitData(data: GlobalProps["data"]) {
     clusters.push(cluster);
     return cluster;
   });
-
+  clusters.sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)));
   return clusters;
 }
 

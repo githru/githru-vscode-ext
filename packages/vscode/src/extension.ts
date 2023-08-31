@@ -1,7 +1,8 @@
 import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
-import { COMMAND_GET_ACCESS_TOKEN, COMMAND_LAUNCH } from "./commands";
+import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB } from "./commands";
+import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
@@ -14,8 +15,10 @@ function normalizeFsPath(fsPath: string) {
   return fsPath.replace(/\\/g, "/");
 }
 
-export function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionPath, secrets } = context;
+export async function activate(context: vscode.ExtensionContext) {
+  const { subscriptions, extensionUri, extensionPath, secrets } = context;
+  const credentials = new Credentials();
+  await credentials.initialize(context);
 
   console.log('Congratulations, your extension "githru" is now active!');
 
@@ -78,21 +81,17 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  const getAccessToken = vscode.commands.registerCommand(COMMAND_GET_ACCESS_TOKEN, async () => {
-    const defaultGithubToken = await getGithubToken(secrets);
+  const loginWithGithub = vscode.commands.registerCommand(COMMAND_LOGIN_WITH_GITHUB, async () => {
+    const octokit = await credentials.getOctokit();
+    const userInfo = await octokit.users.getAuthenticated();
+    const auth = await credentials.getAuth();
 
-    const newGithubToken = await vscode.window.showInputBox({
-      title: "Type or paste your Github access token value.",
-      placeHolder: "Type valid token here!",
-      value: defaultGithubToken ?? "",
-    });
+    setGithubToken(secrets, auth.token);
 
-    if (!newGithubToken) throw new Error("Cannot get users' access token properly");
-
-    setGithubToken(secrets, newGithubToken);
+    vscode.window.showInformationMessage(`Logged into GitHub as ${userInfo.data.login}`);
   });
 
-  subscriptions.concat([disposable, getAccessToken]);
+  subscriptions.concat([disposable, loginWithGithub]);
 
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
   myStatusBarItem.text = "githru";
