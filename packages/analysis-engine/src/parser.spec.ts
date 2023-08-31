@@ -1,6 +1,6 @@
 import { getCommitMessageType } from "./commit.util";
 import getCommitRaws from "./parser"; 
-import { CommitRaw, DifferenceStatistic } from "./types";
+import { CommitRaw, DifferenceStatistic } from "./types/CommitRaw";
 
 describe("commit message type", () => {
   it.each([
