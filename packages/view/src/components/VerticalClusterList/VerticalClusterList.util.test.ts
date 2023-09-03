@@ -10,21 +10,21 @@ const EmptyArrayAddSelectedresult = EmptyArrayAddSelectedDataUpdater([]);
 const PrevAddSelectedresult = PrevAddSelectedDataUpdater(fakePrev);
 const RemoveSelectedresult = RemoveSelectedDataUpdater(fakePrev);
 
-test("EmptyArrayAddSelectedDataUpdater test", () => {
+test("EmptyArrayAddSelectedDataUpdater", () => {
   expect(EmptyArrayAddSelectedDataUpdater).not.toBeUndefined();
   expect(typeof EmptyArrayAddSelectedDataUpdater).toBe("function");
   expect(EmptyArrayAddSelectedresult).not.toBeUndefined();
   expect(EmptyArrayAddSelectedresult.length).toBe(1);
 });
 
-test("PrevAddSelectedDataUpdater test", () => {
+test("PrevAddSelectedDataUpdater", () => {
   expect(PrevAddSelectedDataUpdater).not.toBeUndefined();
   expect(typeof PrevAddSelectedDataUpdater).toBe("function");
   expect(PrevAddSelectedresult).not.toBeUndefined();
   expect(PrevAddSelectedresult.length).toBe(3);
 });
 
-test("RemoveSelectedDataUpdater test", () => {
+test("RemoveSelectedDataUpdater", () => {
   expect(RemoveSelectedDataUpdater).not.toBeUndefined();
   expect(typeof RemoveSelectedDataUpdater).toBe("function");
   expect(RemoveSelectedresult).not.toBeUndefined();
