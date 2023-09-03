@@ -90,7 +90,7 @@ export const fakeSecondClusterNode: ClusterNode = {
   ],
 };
 
-export const fakethirdClusterNode: ClusterNode = {
+export const fakeThirdClusterNode: ClusterNode = {
   nodeTypeName: "CLUSTER",
   commitNodeList: [
     {
@@ -145,4 +145,4 @@ export const fakethirdClusterNode: ClusterNode = {
   ],
 };
 
-export const fakePrev: ClusterNode[] = [fakeSecondClusterNode, fakethirdClusterNode];
+export const fakePrev: ClusterNode[] = [fakeSecondClusterNode, fakeThirdClusterNode];
