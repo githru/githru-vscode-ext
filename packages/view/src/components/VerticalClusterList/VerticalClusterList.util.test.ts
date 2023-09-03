@@ -31,17 +31,17 @@ test("RemoveSelectedDataUpdater", () => {
   expect(RemoveSelectedresult.length).toBe(1);
 });
 
-test.each(EmptyArrayAddSelectedresult)("EmptyArrayAddSelected", (Cluster) => {
+test.each(EmptyArrayAddResultSelectedresult)("EmptyArrayAddSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
 
-test.each(PrevAddSelectedresult)("prevAddSelected", (Cluster) => {
+test.each(PrevAddResultSelectedresult)("prevAddSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
 
-test.each(RemoveSelectedresult)("RemoveSelectedSelected", (Cluster) => {
+test.each(RemoveResultSelectedresult)("RemoveSelectedSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
