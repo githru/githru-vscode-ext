@@ -80,8 +80,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const userInfo = await octokit.users.getAuthenticated();
     const auth = await credentials.getAuth();
 
-    setGithubToken(secrets, auth.token);
-
+    await setGithubToken(secrets, auth.token);
     vscode.window.showInformationMessage(`Logged into GitHub as ${userInfo.data.login}`);
   });
 

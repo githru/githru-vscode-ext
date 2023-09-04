@@ -18,7 +18,6 @@ export type Summary = {
 
 export type Cluster = {
   clusterId: number;
-  createdAt: Date;
   summary: Summary;
 };
 
