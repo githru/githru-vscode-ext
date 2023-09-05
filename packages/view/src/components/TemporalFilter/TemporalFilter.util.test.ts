@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { sortBasedOnCommitNode } from "./TemporalFilter.util";
+import { sortBasedOnCommitNode, filterDataByDate } from "./TemporalFilter.util";
 
 const clusterNodeDummyData: ClusterNode[] = [
   {
@@ -157,4 +157,18 @@ test("Sort cluster nodes in ascending order of commitdate", () => {
     expect(result).not.toBeUndefined();
     expect(currentCommitDate).toBeGreaterThanOrEqual(prevCommitDate);
   }
+});
+
+test("Filter data between selected dates", () => {
+  const fromDate = "2022-08-06";
+  const toDate = "2022-08-07";
+
+  const result = filterDataByDate({ data: clusterNodeDummyData, fromDate, toDate });
+
+  expect(result).not.toBeUndefined();
+  expect(result.length).toBe(2);
+  expect(result[0].nodeTypeName).toBe("CLUSTER");
+  expect(result[0].commitNodeList[0].commit.commitDate).toBe(
+    "Sun Aug 07 2022 15:27:06 GMT+0900 (Korean Standard Time)"
+  );
 });
