@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { sortBasedOnCommitNode, filterDataByDate } from "./TemporalFilter.util";
+import { sortBasedOnCommitNode, filterDataByDate, getCloc } from "./TemporalFilter.util";
 
 const clusterNodeDummyData: ClusterNode[] = [
   {
@@ -160,10 +160,11 @@ test("Sort cluster nodes in ascending order of commitdate", () => {
 });
 
 test("Filter data between selected dates", () => {
+  const data = clusterNodeDummyData;
   const fromDate = "2022-08-06";
   const toDate = "2022-08-07";
 
-  const result = filterDataByDate({ data: clusterNodeDummyData, fromDate, toDate });
+  const result = filterDataByDate({ data, fromDate, toDate });
 
   expect(result).not.toBeUndefined();
   expect(result.length).toBe(2);
@@ -171,4 +172,11 @@ test("Filter data between selected dates", () => {
   expect(result[0].commitNodeList[0].commit.commitDate).toBe(
     "Sun Aug 07 2022 15:27:06 GMT+0900 (Korean Standard Time)"
   );
+});
+
+test("Sum of insertions and deletions", () => {
+  const result = getCloc(clusterNodeDummyData[0].commitNodeList[0]);
+
+  expect(typeof result).toBe("number");
+  expect(result).toBe(591);
 });
