@@ -1,4 +1,4 @@
-import { fakePrev } from "../../../../tests/fakeAsset";
+import { fakePrev } from "../fakeTask";
 
 import { getClusterSizes, getGraphHeight } from "./ClusterGraph.util";
 
@@ -20,4 +20,11 @@ test("getGraphHeight test", () => {
   expect(result3).toBe(160);
   expect(result4).toBe(210);
   expect(result5).toBe(260);
+});
+
+test("getClusterPosition test", () => {
+  const result = getClusterSizes(fakePrev);
+  for (let i = 0; i < result.length; i += 1) {
+    expect(result[i]).toBe(1);
+  }
 });
