@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
 import { useEffect, useRef } from "react";
-import type { CSSProperties } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import {
@@ -15,15 +14,8 @@ import {
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
+import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
-
-// overwrite BounceLoader style
-const loaderStyle: CSSProperties = {
-  position: "fixed",
-  left: "50%",
-  top: "50%",
-  transform: "translate(-50%, 0)",
-};
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -50,7 +42,12 @@ const App = () => {
       <BounceLoader
         color="#ff8272"
         loading={loading}
-        cssOverride={loaderStyle}
+        cssOverride={{
+          position: "fixed",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, 0)",
+        }}
       />
     );
   }
@@ -59,7 +56,10 @@ const App = () => {
     <>
       <div className="header-container">
         <BranchSelector />
-        <ThemeSelector />
+        <div className="header-buttons">
+          <ThemeSelector />
+          <RefreshButton />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />

@@ -1,5 +1,6 @@
 import { getCommitMessageType } from "./commit.util";
-import getCommitRaws from "./parser"; // 파일의 상대 경로에 따라 수정하세요
+import getCommitRaws from "./parser"; 
+import type { CommitRaw, DifferenceStatistic } from "./types";
 
 describe("commit message type", () => {
   it.each([
@@ -33,7 +34,6 @@ describe("commit message type", () => {
   });
 });
 
-//branch와 tag test
 describe('getCommitRaws', () => {
   const testCommitLines = [
     "commit a b (HEAD)",
@@ -51,59 +51,22 @@ describe('getCommitRaws', () => {
     ['HEAD']
   ];
 
-  const expectedTags=[
+  const expectedTags = [
     [],
     [],
     ['v1.0.0'],
     ['v2.0.0'],
-    ['v2.0.0','v1.4']
-  ]
+    ['v2.0.0', 'v1.4']
+  ];
 
-  testCommitLines.forEach((mockLog, index) => {
-    it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const mock = `${mockLog}
-Author: John Park <mail@gmail.com>
-AuthorDate: Sun Sep 4 20:17:59 2022 +0900
-Commit: John Park <mail@gmail.com>
-CommitDate: Sun Sep 4 20:17:59 2022 +0900
-\n\tcommit message
-`;
-      const result = getCommitRaws(mock);
-
-      expect(result).toEqual([
-        {
-          sequence: 0,
-          id: 'a',
-          parents: ['b'],
-          branches: expectedBranches[index],
-          tags: expectedTags[index],
-          author: { name: 'John Park', email: 'mail@gmail.com' },
-          authorDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
-          committer: { name: 'John Park', email: 'mail@gmail.com' },
-          committerDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
-          message: 'commit message',
-          differenceStatistic: {
-            totalInsertionCount: 0,
-            totalDeletionCount: 0,
-            fileDictionary: {},
-          },
-          commitMessageType: ""
-        },
-      ]);
-    });
-  });
-});
-
-//total file changed, deletion, addition test
-describe('getCommitRaws', () => {
-  const testCommitLines = [
+  const testCommitFileChanges = [
     "10\t0\ta.ts\n1\t0\tREADME.md",
     "3\t3\ta.ts",
     "4\t0\ta.ts",
     "0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"
   ];
 
-  const expectedBranches = [
+  const expectedFileChanged:DifferenceStatistic[] = [
     {
       totalInsertionCount: 11,
       totalDeletionCount: 0,
@@ -133,7 +96,42 @@ describe('getCommitRaws', () => {
     }
   ];
 
+  const commonExpectatedResult: CommitRaw={
+    sequence: 0,
+    id: 'a',
+    parents: ['b'],
+    branches: ['HEAD'],
+    tags: [],
+    author: { name: 'John Park', email: 'mail@gmail.com' },
+    authorDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+    committer: { name: 'John Park', email: 'mail@gmail.com' },
+    committerDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
+    message: 'commit message',
+    differenceStatistic: {
+      totalInsertionCount: 0,
+      totalDeletionCount: 0,
+      fileDictionary: {},
+    },
+    commitMessageType: ""
+  };
+
   testCommitLines.forEach((mockLog, index) => {
+    it(`should parse gitlog to commitRaw(branch, tag)`, () => {
+      const mock = `${mockLog}
+Author: John Park <mail@gmail.com>
+AuthorDate: Sun Sep 4 20:17:59 2022 +0900
+Commit: John Park <mail@gmail.com>
+CommitDate: Sun Sep 4 20:17:59 2022 +0900
+\n\tcommit message
+`;
+      const result = getCommitRaws(mock);
+      const expectedResult = { ...commonExpectatedResult, branches: expectedBranches[index], tags: expectedTags[index] };
+      
+      expect(result).toEqual([expectedResult]);
+    });
+  });
+
+  testCommitFileChanges.forEach((mockLog, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
       const mock = `commit a b (HEAD)
 Author: John Park <mail@gmail.com>
@@ -144,23 +142,9 @@ CommitDate: Sun Sep 4 20:17:59 2022 +0900
 \n${mockLog}
 `;
       const result = getCommitRaws(mock);
+      const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
-      expect(result).toEqual([
-        {
-          sequence: 0,
-          id: 'a',
-          parents: ['b'],
-          branches: ['HEAD'],
-          tags: [],
-          author: { name: 'John Park', email: 'mail@gmail.com' },
-          authorDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
-          committer: { name: 'John Park', email: 'mail@gmail.com' },
-          committerDate: new Date('Sun Sep 4 20:17:59 2022 +0900'),
-          message: 'commit message',
-          differenceStatistic: expectedBranches[index],
-          commitMessageType: ""
-        },
-      ]);
+      expect(result).toEqual([expectedResult]);
     });
   });
 });

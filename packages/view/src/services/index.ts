@@ -11,3 +11,8 @@ export const sendFetchAnalyzedDataCommand = () => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
   ideAdapter.sendFetchAnalyzedDataMessage();
 };
+
+export const sendRefreshDataCommand = () => {
+  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+  ideAdapter.sendRefreshDataMessage();
+};
