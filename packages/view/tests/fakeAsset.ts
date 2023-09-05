@@ -145,4 +145,117 @@ export const fakeThirdClusterNode: ClusterNode = {
   ],
 };
 
+export const fakeFourthClusterNode: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "8a0d6f2df2db1ecfa09878b8e6ce2b14d8f9b142",
+        parentIds: ["6b8bd11644b5ea065deab70c2852d77c2fd4f5ad"],
+        author: {
+          id: "no-id",
+          names: ["snowy"],
+          emails: ["chocoheim@gusty.local"],
+        },
+        committer: {
+          id: "no-id",
+          names: ["snowy"],
+          emails: ["chocoheim@gusty.local"],
+        },
+        authorDate: "Sun Aug 07 2022 15:26:27 GMT+0900 (Korean Standard Time)",
+        commitDate: "Sun Aug 07 2022 15:27:06 GMT+0900 (Korean Standard Time)",
+        diffStatistics: {
+          changedFileCount: 11,
+          insertions: 481,
+          deletions: 110,
+          files: {
+            "package-lock.json": {
+              insertions: 276,
+              deletions: 14,
+            },
+            "packages/view/package.json": {
+              insertions: 7,
+              deletions: 3,
+            },
+            "packages/view/src/reportWebVitals.js": {
+              insertions: 0,
+              deletions: 13,
+            },
+            "packages/vscode/.eslintrc.json": {
+              insertions: 15,
+              deletions: 7,
+            },
+            "packages/vscode/CHANGELOG.md": {
+              insertions: 0,
+              deletions: 9,
+            },
+          },
+        },
+        message: "setup(vscode): add webview loader",
+      },
+      seq: 2,
+      clusterId: 3,
+    },
+  ],
+};
+
+export const fakeFifthClusterNode: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "8a0d6f2df2db1ecfa09878b8e6ce2b14d8f9b142",
+        parentIds: ["6b8bd11644b5ea065deab70c2852d77c2fd4f5ad"],
+        author: {
+          id: "no-id",
+          names: ["snowy"],
+          emails: ["chocoheim@gusty.local"],
+        },
+        committer: {
+          id: "no-id",
+          names: ["snowy"],
+          emails: ["chocoheim@gusty.local"],
+        },
+        authorDate: "Sun Aug 07 2022 15:26:27 GMT+0900 (Korean Standard Time)",
+        commitDate: "Sun Aug 07 2022 15:27:06 GMT+0900 (Korean Standard Time)",
+        diffStatistics: {
+          changedFileCount: 11,
+          insertions: 481,
+          deletions: 110,
+          files: {
+            "package-lock.json": {
+              insertions: 276,
+              deletions: 14,
+            },
+            "packages/view/package.json": {
+              insertions: 7,
+              deletions: 3,
+            },
+            "packages/view/src/reportWebVitals.js": {
+              insertions: 0,
+              deletions: 13,
+            },
+            "packages/vscode/.eslintrc.json": {
+              insertions: 15,
+              deletions: 7,
+            },
+            "packages/vscode/CHANGELOG.md": {
+              insertions: 0,
+              deletions: 9,
+            },
+          },
+        },
+        message: "setup(vscode): add webview loader",
+      },
+      seq: 2,
+      clusterId: 4,
+    },
+  ],
+};
+
 export const fakePrev: ClusterNode[] = [fakeSecondClusterNode, fakeThirdClusterNode];
+export const fakePrev2: ClusterNode[] = [fakeThirdClusterNode, fakeFifthClusterNode];
+export const fakePrev3: ClusterNode[] = [];
+export const fakePrev4: ClusterNode[] = [fakeFifthClusterNode, fakeFirstClusterNode];
