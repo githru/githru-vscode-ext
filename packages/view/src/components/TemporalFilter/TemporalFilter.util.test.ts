@@ -1,5 +1,7 @@
 import type { ClusterNode } from "types";
 
+import { sortBasedOnCommitNode } from "./TemporalFilter.util";
+
 const clusterNodeDummyData: ClusterNode[] = [
   {
     nodeTypeName: "CLUSTER",
@@ -144,3 +146,15 @@ const clusterNodeDummyData: ClusterNode[] = [
     ],
   },
 ];
+
+test("Sort cluster nodes in ascending order of commitdate", () => {
+  const result = sortBasedOnCommitNode(clusterNodeDummyData);
+
+  for (let i = 1; i < result.length; i += 1) {
+    const prevCommitDate = new Date(result[i - 1].commit.commitDate).getTime();
+    const currentCommitDate = new Date(result[i].commit.commitDate).getTime();
+
+    expect(result).not.toBeUndefined();
+    expect(currentCommitDate).toBeGreaterThanOrEqual(prevCommitDate);
+  }
+});
