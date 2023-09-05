@@ -1,6 +1,7 @@
-import { fakePrev, fakePrev2, fakePrev3, fakePrev4 } from "../../../../tests/fakeAsset";
+import { fakeFirstClusterNode, fakePrev, fakePrev2, fakePrev3, fakePrev4 } from "../../../../tests/fakeAsset";
 
-import { getClusterSizes, getGraphHeight, getSelectedIndex } from "./ClusterGraph.util";
+import { getClusterSizes, getGraphHeight, getClusterPosition, getSelectedIndex } from "./ClusterGraph.util";
+import type { ClusterGraphElement } from "./ClusterGraph.type";
 
 test("getClusterSizes", () => {
   const result = getClusterSizes(fakePrev);
@@ -31,21 +32,20 @@ test("getSelectedIndex", () => {
   expect(resultDiffEle.length).toBe(0);
 });
 
-/*
-export function getSelectedIndex(data: ClusterNode[], selectedData: SelectedDataProps) {
-  return selectedData
-    .map((selected) => selected.commitNodeList[0].clusterId)
-    .map((clusterId) => data.findIndex((item) => item.commitNodeList[0].clusterId === clusterId))
-    .filter((idx) => idx !== -1);
-}
-data에서 ClusterId가 같을경우 return 즉, 같은 array길이 return 
+const fakeClusterGraphElement: ClusterGraphElement = {
+  cluster: fakeFirstClusterNode,
+  clusterSize: 1,
+  selected: {
+    prev: [0, 1, 2, 3],
+    current: [5, 6, 7, 8],
+  },
+};
 
-export function getClusterPosition(d: ClusterGraphElement, i: number, detailElementHeight: number, isPrev = false) {
-  const selected = isPrev ? d.selected.prev : d.selected.current;
-  const selectedLength = selected.filter((selectedIdx) => selectedIdx < i).length;
-  const margin = selectedLength * detailElementHeight;
-  const x = SVG_MARGIN.left;
-  const y = SVG_MARGIN.top + i * (CLUSTER_HEIGHT + NODE_GAP) + margin;
-  return `translate(${x}, ${y})`;
-}
-*/
+test("getClusterPosition", () => {
+  const result1 = getClusterPosition(fakeClusterGraphElement, 1, 1, true);
+  const result2 = getClusterPosition(fakeClusterGraphElement, 1, 6, false);
+  const result3 = getClusterPosition(fakeClusterGraphElement, 2, 3, true);
+  expect(result1).toBe("translate(2, 61)");
+  expect(result2).toBe("translate(2, 60)");
+  expect(result3).toBe("translate(2, 116)");
+});
