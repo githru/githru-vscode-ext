@@ -1,6 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import type { CommitNode } from "types/";
 
+import { SUMMARY_COMMIT_LIST_PREVIEW_LENGTH } from "./Detail.const";
+
 // type GetCommitListInCluster = GlobalProps & { clusterId: number };
 // export const getCommitListInCluster = ({ data, clusterId }: GetCommitListInCluster) =>
 //   data
@@ -46,9 +48,15 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
   };
 };
 
-export const getSummaryCommitList = (l: number, arr: CommitNode[]) => {
+export const getSummaryCommitList = (arr: CommitNode[]) => {
   const res = [];
-  for (let item = arr.length - 1; arr.length >= l ? item > arr.length - 1 - l : item >= 0; item -= 1) {
+  for (
+    let item = arr.length - 1;
+    arr.length >= SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
+      ? item > arr.length - 1 - SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
+      : item >= 0;
+    item -= 1
+  ) {
     res.push(arr[item]);
   }
 
