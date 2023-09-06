@@ -41,7 +41,7 @@ export function filterDataByDate({ data, fromDate, toDate }: FilterDataByDatePro
       })
     );
 
-  return filteredData;
+  return filteredData.reverse();
 }
 
 export const getCloc = (d: CommitNode) => d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;
