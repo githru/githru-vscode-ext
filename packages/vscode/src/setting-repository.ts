@@ -9,8 +9,8 @@ export const getGithubToken = async (secrets: vscode.SecretStorage) => {
   return await secrets.get(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
 };
 
-export const setGithubToken = (secrets: vscode.SecretStorage, newGithubToken: string) => {
-  return secrets.store(SETTING_PROPERTY_NAMES.GITHUB_TOKEN, newGithubToken);
+export const setGithubToken = async (secrets: vscode.SecretStorage, newGithubToken: string) => {
+  return await secrets.store(SETTING_PROPERTY_NAMES.GITHUB_TOKEN, newGithubToken);
 };
 
 export const setPrimaryColor = (color: string) => {
