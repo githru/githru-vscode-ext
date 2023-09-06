@@ -16,7 +16,7 @@ function normalizeFsPath(fsPath: string) {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionUri, extensionPath, secrets } = context;
+  const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
   await credentials.initialize(context);
 
