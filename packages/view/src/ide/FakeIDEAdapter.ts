@@ -21,6 +21,14 @@ export default class FakeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
+  public sendRefreshDataMessage(payload?: string) {
+    const message: IDEMessage = {
+      command: "refresh",
+      payload,
+    };
+    this.sendMessageToMe(message);
+  }
+
   public sendFetchAnalyzedDataMessage(payload?: string) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",

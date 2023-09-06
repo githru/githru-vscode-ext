@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
-import { useRef } from "react";
-import type { CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import {
@@ -15,39 +14,40 @@ import {
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
+import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
 
-  const { data, filteredData, fetchAnalyzedData, loading, setLoading } = useGlobalData();
-
-  const loaderStyle: CSSProperties = {
-    position: "fixed",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, 0)",
-  };
+  const { filteredData, fetchAnalyzedData, loading, setLoading } = useGlobalData();
 
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
-  if (initRef.current === false) {
-    const callbacks: IDESentEvents = {
-      fetchAnalyzedData: fetchAnalyzedData,
-    };
+  useEffect(() => {
+    if (initRef.current === false) {
+      const callbacks: IDESentEvents = {
+        fetchAnalyzedData: fetchAnalyzedData,
+      };
 
-    setLoading(true);
-    ideAdapter.addIDESentEventListener(callbacks);
-    ideAdapter.sendFetchAnalyzedDataMessage();
-    initRef.current = true;
-  }
+      setLoading(true);
+      ideAdapter.addIDESentEventListener(callbacks);
+      ideAdapter.sendFetchAnalyzedDataMessage();
+      initRef.current = true;
+    }
+  }, [fetchAnalyzedData, ideAdapter, setLoading]);
 
-  if (!data?.length) {
+  if (loading) {
     return (
       <BounceLoader
         color="#ff8272"
         loading={loading}
-        cssOverride={loaderStyle}
+        cssOverride={{
+          position: "fixed",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, 0)",
+        }}
       />
     );
   }
@@ -56,7 +56,10 @@ const App = () => {
     <>
       <div className="header-container">
         <BranchSelector />
-        <ThemeSelector />
+        <div className="header-buttons">
+          <ThemeSelector />
+          <RefreshButton />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />

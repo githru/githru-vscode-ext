@@ -6,10 +6,7 @@ class WorkspacePathUndefinedError extends Error {
 }
 
 class GithubTokenUndefinedError extends Error {
-  constructor(
-    message: string,
-    public helpUrl: string
-  ) {
+  constructor(message: string) {
     super(message);
     this.name = "GithubTokenUndefinedError";
   }
