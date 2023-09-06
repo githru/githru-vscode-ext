@@ -82,6 +82,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     await setGithubToken(secrets, auth.token);
     vscode.window.showInformationMessage(`Logged into GitHub as ${userInfo.data.login}`);
+    vscode.commands.executeCommand(COMMAND_LAUNCH);
   });
 
   subscriptions.concat([disposable, loginWithGithub]);
