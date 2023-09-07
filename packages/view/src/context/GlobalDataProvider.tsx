@@ -13,7 +13,7 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
 
   const fetchAnalyzedData = (analyzedData: ClusterNode[]) => {
     setData(analyzedData);
-    setFilteredData([...analyzedData]);
+    setFilteredData([...analyzedData.reverse()]);
     setSelectedData([]);
     setLoading(false);
   };

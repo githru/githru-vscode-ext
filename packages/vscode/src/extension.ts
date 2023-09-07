@@ -16,7 +16,7 @@ function normalizeFsPath(fsPath: string) {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-  const { subscriptions, extensionUri, extensionPath, secrets } = context;
+  const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
   await credentials.initialize(context);
 
@@ -80,9 +80,9 @@ export async function activate(context: vscode.ExtensionContext) {
     const userInfo = await octokit.users.getAuthenticated();
     const auth = await credentials.getAuth();
 
-    setGithubToken(secrets, auth.token);
-
+    await setGithubToken(secrets, auth.token);
     vscode.window.showInformationMessage(`Logged into GitHub as ${userInfo.data.login}`);
+    vscode.commands.executeCommand(COMMAND_LAUNCH);
   });
 
   subscriptions.concat([disposable, loginWithGithub]);
