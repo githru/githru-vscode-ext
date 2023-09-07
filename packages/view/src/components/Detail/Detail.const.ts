@@ -1,2 +1,1 @@
 export const FIRST_SHOW_NUM = 5;
-export const SUMMARY_COMMIT_LIST_PREVIEW_LENGTH = 5;
