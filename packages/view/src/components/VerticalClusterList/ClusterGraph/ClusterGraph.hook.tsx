@@ -9,8 +9,8 @@ import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
 import type { ClusterGraphElement } from "./ClusterGraph.type";
-import { drawClusterBox, drawCommitAmountCluster, drawTotalLine } from "./Draws";
-import { destroyClusterGraph, getTranslateAfterSelect } from "./ClusterGraph.util";
+import { destroyClusterGraph, drawClusterBox, drawCommitAmountCluster, drawTotalLine } from "./Draws";
+import { getTranslateAfterSelect } from "./ClusterGraph.util";
 
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
