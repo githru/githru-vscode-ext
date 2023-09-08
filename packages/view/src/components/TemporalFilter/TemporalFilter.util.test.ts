@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { sortBasedOnCommitNode, filterDataByDate, getCloc } from "./TemporalFilter.util";
+import { sortBasedOnCommitNode, filterDataByDate, getCloc, getMinMaxDate } from "./TemporalFilter.util";
 
 const clusterNodeDummyData: ClusterNode[] = [
   {
@@ -177,6 +177,19 @@ test("Filter data between selected dates", () => {
 test("Sum of insertions and deletions", () => {
   const result = getCloc(clusterNodeDummyData[0].commitNodeList[0]);
 
+  expect(result).not.toBeUndefined();
   expect(typeof result).toBe("number");
   expect(result).toBe(591);
+});
+
+test("Get fromeDate and toDate", () => {
+  const result = getMinMaxDate(clusterNodeDummyData[0].commitNodeList);
+  const fromDate = new Date(result.fromDate).getTime();
+  const toDate = new Date(result.toDate).getTime();
+
+  expect(result).not.toBeUndefined();
+  expect(result).toBeInstanceOf(Object);
+  expect(result).toHaveProperty("fromDate");
+  expect(result).toHaveProperty("toDate");
+  expect(fromDate).toBeLessThanOrEqual(toDate);
 });
