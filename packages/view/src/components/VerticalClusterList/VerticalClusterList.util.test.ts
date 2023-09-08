@@ -1,8 +1,15 @@
-import { fakeFirstClusterNode, fakeSecondClusterNode, fakePrev } from "../../../tests/fakeAsset";
+import {
+  fakeFirstClusterNode,
+  fakeSecondClusterNode,
+  fakePrev,
+} from "../../../tests/fakeAsset";
 
 import { selectedDataUpdater } from "./VerticalClusterList.util";
 
-const EmptyArrayAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 0);
+const EmptyArrayAddSelectedDataUpdater = selectedDataUpdater(
+  fakeFirstClusterNode,
+  0,
+);
 const PrevAddSelectedDataUpdater = selectedDataUpdater(fakeFirstClusterNode, 5);
 const RemoveSelectedDataUpdater = selectedDataUpdater(fakeSecondClusterNode, 1);
 
@@ -31,17 +38,17 @@ test("RemoveSelectedDataUpdater", () => {
   expect(RemoveSelectedresult.length).toBe(1);
 });
 
-test.each(EmptyArrayAddResultSelectedresult)("EmptyArrayAddSelected", (Cluster) => {
+test.each(EmptyArrayAddSelectedresult)("EmptyArrayAddSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
 
-test.each(PrevAddResultSelectedresult)("prevAddSelected", (Cluster) => {
+test.each(PrevAddSelectedresult)("prevAddSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
 
-test.each(RemoveResultSelectedresult)("RemoveSelectedSelected", (Cluster) => {
+test.each(RemoveSelectedresult)("RemoveSelectedSelected", (Cluster) => {
   expect(Cluster).not.toBeUndefined();
   expect(Cluster.nodeTypeName).toBe("CLUSTER");
 });
