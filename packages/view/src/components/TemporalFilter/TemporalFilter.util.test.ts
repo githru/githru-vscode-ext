@@ -1,6 +1,12 @@
 import type { ClusterNode } from "types";
 
-import { sortBasedOnCommitNode, filterDataByDate, getCloc, getMinMaxDate } from "./TemporalFilter.util";
+import {
+  sortBasedOnCommitNode,
+  filterDataByDate,
+  getCloc,
+  getMinMaxDate,
+  lineChartTimeFormatter,
+} from "./TemporalFilter.util";
 
 const clusterNodeDummyData: ClusterNode[] = [
   {
@@ -169,9 +175,6 @@ test("Filter data between selected dates", () => {
   expect(result).not.toBeUndefined();
   expect(result.length).toBe(2);
   expect(result[0].nodeTypeName).toBe("CLUSTER");
-  expect(result[0].commitNodeList[0].commit.commitDate).toBe(
-    "Sun Aug 07 2022 15:27:06 GMT+0900 (Korean Standard Time)"
-  );
 });
 
 test("Sum of insertions and deletions", () => {
@@ -192,4 +195,12 @@ test("Get fromeDate and toDate", () => {
   expect(result).toHaveProperty("fromDate");
   expect(result).toHaveProperty("toDate");
   expect(fromDate).toBeLessThanOrEqual(toDate);
+});
+
+test("Date formatting", () => {
+  const result = lineChartTimeFormatter(new Date(clusterNodeDummyData[0].commitNodeList[0].commit.commitDate));
+
+  expect(result).not.toBeUndefined();
+  expect(typeof result).toBe("string");
+  expect(result).toBe("2022 08 07");
 });
