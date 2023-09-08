@@ -74,7 +74,8 @@
     "react/jsx-props-no-spreading": "off",
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/react-in-jsx-scope": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "consistent-return": "off"
   },
   "settings": {
     "import/resolver": {

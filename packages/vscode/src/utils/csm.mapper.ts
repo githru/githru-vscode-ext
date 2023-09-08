@@ -33,33 +33,38 @@ const mapDiffStatisticsFrom = (params: { differenceStatistic: DifferenceStatisti
  */
 const mapCommitNodeListFrom = (params: { commits: StemCommitNode[]; clusterId: number }): CommitNode[] => {
   const { commits, clusterId } = params;
-  return commits.map(({ commit }) => ({
-    nodeTypeName: "COMMIT" as const,
-    commit: {
-      id: commit.id,
-      parentIds: commit.parents,
-      author: {
-        id: "no-id",
-        names: [commit.author.name],
-        emails: [commit.author.email],
+  return commits.map(({ commit }) => {
+    const releaseTags=commit.tags.filter(tag=>tag.startsWith('v')||/^[0-9.]+$/.test(tag));
+    return {
+      nodeTypeName: "COMMIT" as const,
+      commit: {
+        id: commit.id,
+        parentIds: commit.parents,
+        author: {
+          id: "no-id",
+          names: [commit.author.name],
+          emails: [commit.author.email],
+        },
+        committer: {
+          id: "no-id",
+          names: [commit.committer.name],
+          emails: [commit.committer.email],
+        },
+        authorDate: commit.authorDate.toString(),
+        commitDate: commit.committerDate.toString(),
+        diffStatistics: mapDiffStatisticsFrom({ differenceStatistic: commit.differenceStatistic }),
+        message: commit.message,
+        tags: commit.tags,
+        releaseTags: releaseTags,
       },
-      committer: {
-        id: "no-id",
-        names: [commit.committer.name],
-        emails: [commit.committer.email],
-      },
-      authorDate: commit.authorDate.toString(),
-      commitDate: commit.committerDate.toString(),
-      diffStatistics: mapDiffStatisticsFrom({ differenceStatistic: commit.differenceStatistic }),
-      message: commit.message,
-    },
-    // seq: 0,
-    // implicitBranchNo: 0,
-    // isMergeCommit: false,
-    // hasMajorTag: false,
-    // hasMinorTag: false,
-    clusterId,
-  }));
+      // seq: 0,
+      // implicitBranchNo: 0,
+      // isMergeCommit: false,
+      // hasMajorTag: false,
+      // hasMinorTag: false,
+      clusterId,
+    }
+  });
 };
 
 /**

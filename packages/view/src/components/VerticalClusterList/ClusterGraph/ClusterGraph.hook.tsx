@@ -45,9 +45,9 @@ export const useHandleClusterGraph = ({
   selectedIndex,
   setSelectedData,
 }: {
-  data: ClusterNode[];
   clusterSizes: number[];
   selectedIndex: number[];
+  data: ClusterNode[];
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);

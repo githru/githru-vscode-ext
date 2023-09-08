@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import { timeFormat } from "d3";
 
-import type { ClusterNode, CommitNode } from "types/NodeTypes.temp";
-import { NODE_TYPE_NAME } from "types/NodeTypes.temp";
+import type { ClusterNode, CommitNode } from "types/Nodes";
+
+import { NODE_TYPES } from "../../constants/constants";
 
 /**
  * Note: Line Chart를 위한 시간순 CommitNode 정렬
@@ -35,12 +36,12 @@ export function filterDataByDate({ data, fromDate, toDate }: FilterDataByDatePro
     .filter((commitNodeList) => commitNodeList.length > 0)
     .map(
       (commitNodeList): ClusterNode => ({
-        nodeTypeName: NODE_TYPE_NAME[1],
+        nodeTypeName: NODE_TYPES[1],
         commitNodeList,
       })
     );
 
-  return filteredData;
+  return filteredData.reverse();
 }
 
 export const getCloc = (d: CommitNode) => d.commit.diffStatistics.insertions + d.commit.diffStatistics.deletions;

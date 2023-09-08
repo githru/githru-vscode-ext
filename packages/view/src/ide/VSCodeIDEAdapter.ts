@@ -23,6 +23,14 @@ export default class VSCodeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
+  public sendRefreshDataMessage(payload?: string) {
+    const message: IDEMessage = {
+      command: "refresh",
+      payload,
+    };
+    this.sendMessageToIDE(message);
+  }
+
   public sendFetchAnalyzedDataMessage(payload?: string) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
