@@ -153,7 +153,7 @@ const clusterNodeDummyData: ClusterNode[] = [
   },
 ];
 
-test("Sort cluster nodes in ascending order of commitdate", () => {
+test("sortBasedOnCommitNode test (Sort cluster nodes in ascending order of commitdate)", () => {
   const result = sortBasedOnCommitNode(clusterNodeDummyData);
 
   for (let i = 1; i < result.length; i += 1) {
@@ -165,7 +165,7 @@ test("Sort cluster nodes in ascending order of commitdate", () => {
   }
 });
 
-test("Filter data between selected dates", () => {
+test("filterDataByDate test (Filter data between selected dates)", () => {
   const data = clusterNodeDummyData;
   const fromDate = "2022-08-06";
   const toDate = "2022-08-07";
@@ -177,7 +177,7 @@ test("Filter data between selected dates", () => {
   expect(result[0].nodeTypeName).toBe("CLUSTER");
 });
 
-test("Sum of insertions and deletions", () => {
+test("getCloc test (Sum of insertions and deletions)", () => {
   const result = getCloc(clusterNodeDummyData[0].commitNodeList[0]);
 
   expect(result).not.toBeUndefined();
@@ -185,7 +185,7 @@ test("Sum of insertions and deletions", () => {
   expect(result).toBe(591);
 });
 
-test("Get fromeDate and toDate", () => {
+test("getMinMaxDate test (Get fromeDate and toDate)", () => {
   const result = getMinMaxDate(clusterNodeDummyData[0].commitNodeList);
   const fromDate = new Date(result.fromDate).getTime();
   const toDate = new Date(result.toDate).getTime();
@@ -197,7 +197,7 @@ test("Get fromeDate and toDate", () => {
   expect(fromDate).toBeLessThanOrEqual(toDate);
 });
 
-test("Date formatting", () => {
+test("lineChartTimeFormatter test (Date formatting)", () => {
   const result = lineChartTimeFormatter(new Date(clusterNodeDummyData[0].commitNodeList[0].commit.commitDate));
 
   expect(result).not.toBeUndefined();
