@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import type { CommitNode } from "types/";
 
-import { getCommitListDetail } from "./Detail.util";
+import { getCommitListDetail, getSummaryCommitList } from "./Detail.util";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const fakeCommitNodeListInCluster: CommitNode[] = [
@@ -213,4 +213,14 @@ test("getCommitListDetail test", () => {
   expect(result.commitLength).toBe(3);
   expect(result.insertions).toBe(1100);
   expect(result.deletions).toBe(278);
+});
+
+test("getSummaryCommitList test", () => {
+  const result1 = getSummaryCommitList(fakeCommitNodeListInCluster);
+
+  expect(result1).not.toBeUndefined();
+  expect(result1).toHaveLength(3);
+  expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
+  expect(result1[1].commit.id).toBe(fakeCommitNodeListInCluster[1].commit.id);
+  expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
 });
