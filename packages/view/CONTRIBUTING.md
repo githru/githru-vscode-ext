@@ -33,7 +33,7 @@
    [namespace] content
    ```
 
-   - _namespace_는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
+   - namespace는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
 
 2. PR을 보내기 전에 다음이 완료되었는지 확인해주세요.
 
