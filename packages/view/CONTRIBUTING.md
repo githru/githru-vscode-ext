@@ -33,7 +33,7 @@
    [namespace] content
    ```
 
-   - *namespace*는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
+   - _namespace_는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
 
 2. PR을 보내기 전에 다음이 완료되었는지 확인해주세요.
 
@@ -193,3 +193,50 @@ VerticalClusterList
 - 각 컴포넌트에서 사용하는 font size 단위
 
   좀 더 자세한 논의는 discussion [#99](https://github.com/githru/githru-vscode-ext/discussions/99)를 참고해주시기 바랍니다.
+
+## Unit 테스트 코드 작성
+
+- 라이브러리 : jest, RTL
+
+- 목표해야할 특성들
+
+1.명확성 : 테스트 코드는 명확해야 합니다. 누군가가 코드를 읽을 때, 테스트가 무엇을 하는지 쉽게 이해할 수 있어야 합니다.
+
+```text
+테스트 코드는 input과 output에 집중하는 테스트가 목적이지 로직을 구현하는게 목표가 아닙니다. 코드가 복잡할 이유가 없습니다. 
+```
+
+2.독립성 : 각 테스트는 독립적으로 실행될 수 있어야 합니다. 테스트 간에 상태가 공유되면 안 됩니다.
+
+```text
+unit 테스트는 말 그대로 단위 테스트입니다. 테스트 타겟 함수가 아닌 다른 로직에 의존성을 갖는 경우는 mocking을 사용합니다.
+```
+
+- 코드 구조
+
+describe, it 또는 test 블록을 사용해 테스트 구조를 만듭니다.
+일치 불일치와 같은 간단한 테스트는 test를 써도 됩니다.
+
+```test
+test('renders correctly', () => {
+  // 테스트 코드
+});
+```
+
+가능한 테스트에 대한 정보를 상세히 전달하기 위해 descriibe로 큰 스코프를 형상하고 그 안에 it으로 세부 테스크를 설명합니다.
+
+```test
+describe('Example Component', () => {
+  it('renders correctly', () => {
+    // 테스트 코드
+  });
+});
+```
+
+- 파일명
+
+App.spec.ts 명을 기본적으로 사용합니다.
+
+- 파일 위치
+
+unit 테스트 코드는 타겟 파일과 같은 위치에 위치시킵니다.
