@@ -1,6 +1,6 @@
 ﻿import { injectable } from "tsyringe";
 
-import type { ClusterNode, IDEMessage, IDEMessageEvent } from "types";
+import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
 
 import type IDEPort from "./IDEPort";
@@ -11,11 +11,14 @@ export default class VSCodeIDEAdapter implements IDEPort {
   public addIDESentEventListener(events: IDESentEvents) {
     const onReceiveMessage = (e: IDEMessageEvent): void => {
       const responseMessage = e.data;
-      switch (responseMessage.command) {
+      const { command, payload } = responseMessage;
+      const payloadData = payload ? JSON.parse(payload) : undefined;
+
+      switch (command) {
         case "fetchAnalyzedData":
-          events.fetchAnalyzedData(JSON.parse(responseMessage.payload || "") as unknown as ClusterNode[]);
-          break;
+          return events.fetchAnalyzedData(payloadData);
         case "getBranchList":
+          return events.fetchBranchList(payloadData);
         default:
           console.log("Unknown Message");
       }

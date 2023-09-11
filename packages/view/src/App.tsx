@@ -20,22 +20,24 @@ import type { IDESentEvents } from "types/IDESentEvents";
 const App = () => {
   const initRef = useRef<boolean>(false);
 
-  const { filteredData, fetchAnalyzedData, loading, setLoading } = useGlobalData();
+  const { filteredData, fetchAnalyzedData, fetchBranchList, loading, setLoading } = useGlobalData();
 
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
     if (initRef.current === false) {
       const callbacks: IDESentEvents = {
-        fetchAnalyzedData: fetchAnalyzedData,
+        fetchAnalyzedData,
+        fetchBranchList,
       };
 
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
+      ideAdapter.sendGetBranchListMessage();
       initRef.current = true;
     }
-  }, [fetchAnalyzedData, ideAdapter, setLoading]);
+  }, [fetchBranchList, fetchAnalyzedData, ideAdapter, setLoading]);
 
   if (loading) {
     return (

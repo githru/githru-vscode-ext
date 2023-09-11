@@ -33,13 +33,22 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
 
-      const branchNames = await getBranchNames(gitPath, currentWorkspacePath);
-      const initialBaseBranchName = getBaseBranchName(branchNames);
-
       const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
+
+      const fetchBranchList = async () => {
+        const storedBranchList = context.workspaceState.get<string[]>("branchList") ?? [];
+        context.workspaceState.update(
+          "branchList",
+          (await getBranchNames(gitPath, currentWorkspacePath)) ?? storedBranchList
+        );
+        return context.workspaceState.get<string[]>("branchList") ?? storedBranchList;
+      };
+
+      const branchNames = await fetchBranchList();
+      const initialBaseBranchName = getBaseBranchName(branchNames);
 
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
@@ -55,10 +64,9 @@ export async function activate(context: vscode.ExtensionContext) {
         });
         const csmDict = await engine.analyzeGit();
         const clusterNodes = mapClusterNodesFrom(csmDict);
-        const data = JSON.stringify(clusterNodes);
-        return data;
+        return clusterNodes;
       };
-      const fetchBranchList = () => JSON.stringify(branchNames);
+
       const webLoader = new WebviewLoader(extensionPath, context, fetchClusterNodes, fetchBranchList);
 
       subscriptions.push(webLoader);
