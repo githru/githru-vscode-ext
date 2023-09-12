@@ -208,7 +208,16 @@
       "contributions": [
         "code"
       ]
-    }
+    },
+    {
+       "login": "ss-won",
+      "name": "Sowon Jung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31684481?v=4",
+      "profile": "https://github.com/ss-won",
+      "contributions": [
+        "code"
+      ]
+    },
   ],
   "commitConvention": "angular",
   "commitType": "docs"
