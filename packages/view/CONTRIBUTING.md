@@ -33,7 +33,7 @@
    [namespace] content
    ```
 
-   - *namespace*는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
+   - _namespace_는 대괄호 안에 작성하며 필수사항입니다. `engine | view | vscode | fix request | question | discussion | knowledge | bug | warning` 중에서 한 가지를 반드시 선택해야 합니다.
 
 2. PR을 보내기 전에 다음이 완료되었는지 확인해주세요.
 
@@ -174,6 +174,10 @@ VerticalClusterList
   ```bash
   function GetData( ... ) { ... }
   ```
+
+- 선호에 따라 type, interface 자유롭게 사용
+
+- type 파일에 'Type' 키워드 지양, 어쩔수 없는 경우 suffix로 사용
 
 # Manifesto
 
