@@ -43,7 +43,10 @@ This project exists thanks to all the people who contribute. [[Contributing](htt
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jinho1011"><img src="https://avatars.githubusercontent.com/u/26860466?v=4?s=100" width="100px;" alt="Jeon Jinho"/><br /><sub><b>Jeon Jinho</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=Jinho1011" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://velog.io/@ss-won"><img src="https://avatars.githubusercontent.com/u/31684481?v=4?s=100" width="100px;" alt="Sowon Jung"/><br /><sub><b>Sowon Jung</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=ss-won" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kimdonggu42"><img src="https://avatars.githubusercontent.com/u/115632555?v=4?s=100" width="100px;" alt="김동구 Donggu Kim"/><br /><sub><b>김동구 Donggu Kim</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=kimdonggu42" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ss-won"><img src="https://avatars.githubusercontent.com/u/31684481?v=4?s=100" width="100px;" alt="Sowon Jung"/><br /><sub><b>Sowon Jung</b></sub></a><br /><a href="https://github.com/githru/githru-vscode-ext/commits?author=ss-won" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

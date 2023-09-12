@@ -201,14 +201,23 @@
       ]
     },
     {
-      "login": "ss-won",
-      "name": "Sowon Jung",
-      "avatar_url": "https://avatars.githubusercontent.com/u/31684481?v=4",
-      "profile": "https://velog.io/@ss-won",
+      "login": "kimdonggu42",
+      "name": "김동구 Donggu Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/115632555?v=4",
+      "profile": "https://github.com/kimdonggu42",
       "contributions": [
         "code"
       ]
-    }
+    },
+    {
+       "login": "ss-won",
+      "name": "Sowon Jung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31684481?v=4",
+      "profile": "https://github.com/ss-won",
+      "contributions": [
+        "code"
+      ]
+    },
   ],
   "commitConvention": "angular",
   "commitType": "docs"
