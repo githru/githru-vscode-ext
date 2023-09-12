@@ -230,3 +230,32 @@ App.spec.ts 명을 기본적으로 사용합니다.
 - 파일 위치
 
 unit 테스트 코드는 타겟 파일과 같은 위치에 위치시킵니다.
+
+## E2E 테스트 코드 작성
+
+- 라이브러리 : [Playwright](https://playwright.dev/)
+
+- 코드 구조
+
+describe, it 또는 test 블록을 사용해 User Story를 설명하며 테스트 구조를 만듭니다.
+네트워크 지연, 비동기에 의한 부분을 주의해 await를 이용합니다.
+
+```test
+describe('Example Component', () => {
+  it('renders correctly', () => {
+    // 테스트 코드
+  });
+});
+```
+
+- 파일명
+
+App.spec.ts 명을 기본적으로 사용합니다.
+
+- 파일 위치
+
+e2e 테스트 코드는 view의 root>tests 폴더에 일괄 위치시킵니다.
+
+- playwright-report
+
+활용 정책이 생기기 전까진 개인만 활용(gitignore 처리 완료)
