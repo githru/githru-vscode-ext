@@ -175,6 +175,10 @@ VerticalClusterList
   function GetData( ... ) { ... }
   ```
 
+- 선호에 따라 type, interface 자유롭게 사용
+
+- type 파일에 'Type' 키워드 지양, 어쩔수 없는 경우 suffix로 사용
+
 # Manifesto
 
 ## 색상
