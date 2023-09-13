@@ -1,5 +1,5 @@
 import type { DiffStatistics } from "./DiffStatistics";
-import type { GitHubUser } from "./GithubUser";
+import type { GitHubUser } from "./GitHubUser";
 
 export type Commit = {
   id: string;
