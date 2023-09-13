@@ -1,8 +1,7 @@
-import type { Dispatch } from "react";
-import type React from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { createContext, useContext } from "react";
 
-import type { ClusterNode } from "types";
+import type { ClusterNode, IDESentEvents } from "types";
 
 export type DateFilterRange =
   | {
@@ -16,13 +15,16 @@ type GlobalDataState = {
   filteredRange: DateFilterRange;
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
-  setFilteredData: Dispatch<React.SetStateAction<ClusterNode[]>>;
-  setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
-  setFilteredRange: Dispatch<React.SetStateAction<DateFilterRange>>;
-  fetchAnalyzedData: (analyzedData: ClusterNode[]) => void;
+  setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
+  setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
+  setFilteredRange: Dispatch<SetStateAction<DateFilterRange>>;
   loading: boolean;
-  setLoading: Dispatch<React.SetStateAction<boolean>>;
-};
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  branchList: string[];
+  setBranchList: Dispatch<SetStateAction<string[]>>;
+  selectedBranch: string;
+  setSelectedBranch: Dispatch<SetStateAction<string>>;
+} & IDESentEvents;
 
 export const GlobalDataContext = createContext<GlobalDataState | undefined>(undefined);
 

@@ -2,6 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
+import type { ClusterNode } from "./utils/NodeTypes.temps";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
@@ -11,8 +12,8 @@ export default class WebviewLoader implements vscode.Disposable {
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
-    parseCommit: (baseBranchName?: string) => Promise<string>,
-    getAllBranches: () => string
+    parseCommit: (baseBranchName?: string) => Promise<ClusterNode[]>,
+    parseBranches: () => Promise<string[]>
   ) {
     const viewColumn = vscode.ViewColumn.One;
 
@@ -29,8 +30,11 @@ export default class WebviewLoader implements vscode.Disposable {
       const { command, payload } = message;
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
-        const storedAnalyzedData = context.workspaceState.get(ANALYZE_DATA_KEY);
-        const resMessage = message;
+        const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(ANALYZE_DATA_KEY);
+        const resMessage = {
+          command,
+          payload: storedAnalyzedData,
+        };
 
         if (!storedAnalyzedData) {
           const baseBranchName = payload ? JSON.parse(payload as string) : undefined;
@@ -38,12 +42,12 @@ export default class WebviewLoader implements vscode.Disposable {
           context.workspaceState.update(ANALYZE_DATA_KEY, data);
           resMessage.payload = data;
         }
-        resMessage.payload = storedAnalyzedData;
+
         await this.respondToMessage(resMessage);
       }
 
       if (command === "getBranchList") {
-        const branches = getAllBranches();
+        const branches = await parseBranches();
         await this.respondToMessage({
           ...message,
           payload: branches,
@@ -68,7 +72,7 @@ export default class WebviewLoader implements vscode.Disposable {
     this._panel?.webview.postMessage({
       command: message.command,
       // TODO v2: need to re-fetch git data on behalf of cluster option
-      payload: message.payload,
+      payload: JSON.stringify(message.payload),
     });
   }
 

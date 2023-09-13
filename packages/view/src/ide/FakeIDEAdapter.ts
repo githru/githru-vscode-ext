@@ -1,9 +1,10 @@
 ﻿import { injectable } from "tsyringe";
 
-import type { ClusterNode, IDEMessage, IDEMessageEvent } from "types";
+import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
 
 import fakeData from "../fake-assets/cluster-nodes.json";
+import fakeBranchList from "../fake-assets/branch-list.json";
 
 import type IDEPort from "./IDEPort";
 
@@ -12,9 +13,16 @@ export default class FakeIDEAdapter implements IDEPort {
   public addIDESentEventListener(events: IDESentEvents) {
     const onReceiveMessage = (e: IDEMessageEvent): void => {
       const responseMessage = e.data;
-      if (responseMessage.command === "fetchAnalyzedData") {
-        const fetchedData = responseMessage.payload as unknown as ClusterNode[];
-        events.fetchAnalyzedData(fetchedData);
+      const { command, payload } = responseMessage;
+      const payloadData = payload ? JSON.parse(payload) : undefined;
+
+      switch (command) {
+        case "fetchAnalyzedData":
+          return events.fetchAnalyzedData(payloadData);
+        case "getBranchList":
+          return events.fetchBranchList(payloadData);
+        default:
+          console.log("Unknown Message");
       }
     };
 
@@ -60,17 +68,22 @@ export default class FakeIDEAdapter implements IDEPort {
     switch (command) {
       case "fetchAnalyzedData":
         return {
-          command: command,
-          payload: fakeData as unknown as string,
+          command,
+          payload: JSON.stringify(fakeData),
+        };
+      case "getBranchList":
+        return {
+          command,
+          payload: JSON.stringify(fakeBranchList),
         };
       case "updatePrimaryColor":
         return {
-          command: command,
+          command,
           payload: sessionStorage.getItem("PRIMARY_COLOR") as string,
         };
       default:
         return {
-          command: command,
+          command,
         };
     }
   }
