@@ -47,5 +47,7 @@ export type Commit = {
   commitDate: string;
   diffStatistics: DiffStatistics;
   message: string;
+  tags: string[];
+  releaseTags: string[];
   // fill necessary properties...
 };
