@@ -22,8 +22,8 @@ type GlobalDataState = {
   setLoading: Dispatch<SetStateAction<boolean>>;
   branchList: string[];
   setBranchList: Dispatch<SetStateAction<string[]>>;
-  selectedBranch: string;
-  setSelectedBranch: Dispatch<SetStateAction<string>>;
+  baseBranch: string;
+  setBaseBranch: Dispatch<SetStateAction<string>>;
 } & IDESentEvents;
 
 export const GlobalDataContext = createContext<GlobalDataState | undefined>(undefined);

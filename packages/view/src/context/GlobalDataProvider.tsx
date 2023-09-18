@@ -13,14 +13,14 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
   const [filteredRange, setFilteredRange] = useState<DateFilterRange>(undefined);
 
   const [branchList, setBranchList] = useState<string[]>([]);
-  // TODO 초기에 base branch를 fetch해서 적용
-  const [selectedBranch, setSelectedBranch] = useState<string>("main");
+  const [baseBranch, setBaseBranch] = useState<string>(branchList?.[0]);
 
-  const fetchBranchList = (branchList: string[]) => {
-    setBranchList(branchList);
+  const handleChangeBranchList = (branches: { branchList: string[]; head: string | null }) => {
+    setBaseBranch((prev) => (!prev && branches.head ? branches.head : prev));
+    setBranchList(branches.branchList);
   };
 
-  const fetchAnalyzedData = (analyzedData: ClusterNode[]) => {
+  const handleChangeAnalyzedData = (analyzedData: ClusterNode[]) => {
     setData(analyzedData);
     setFilteredData([...analyzedData.reverse()]);
     setSelectedData([]);
@@ -40,12 +40,12 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       setLoading,
       branchList,
       setBranchList,
-      selectedBranch,
-      setSelectedBranch,
-      fetchAnalyzedData,
-      fetchBranchList,
+      baseBranch,
+      setBaseBranch,
+      handleChangeAnalyzedData,
+      handleChangeBranchList,
     }),
-    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading]
+    [data, filteredRange, filteredData, selectedData, branchList, baseBranch, loading]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;
