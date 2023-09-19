@@ -222,42 +222,57 @@ export const getRepo = (gitRemoteConfig: string) => {
   return { owner, repo };
 };
 
-export async function getBranchNames(path: string, repo: string): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    resolveSpawnOutput(
-      cp.spawn(path, ["branch", "-a"], {
-        cwd: repo,
-        env: Object.assign({}, process.env),
-      })
-    ).then((values) => {
-      const [status, stdout, stderr] = values;
-      if (status.code === 0) {
-        const branches = stdout
-          .toString()
-          .split("\n")
-          .map((name) =>
-            name
-              .replace("*", "") // delete * prefix
-              .replace("remotes/", "") // delete remotes/ prifix
-              .replace(/(.*) -> (?:.*)/g, "$1") // remote HEAD parsing
-              .trim()
-          )
-          .filter((name) => !!name);
-        resolve(branches);
-      } else {
-        reject(stderr);
-      }
-    });
-  });
+export async function getBranches(
+  path: string,
+  repo: string
+): Promise<{
+  branchList: string[];
+  head: string | null;
+}> {
+  let head = null;
+  const branchList = [];
+
+  const [status, stdout, stderr] = await resolveSpawnOutput(
+    cp.spawn(path, ["branch", "-a"], {
+      cwd: repo,
+      env: Object.assign({}, process.env),
+    })
+  );
+
+  if (status.code !== 0) throw stderr;
+
+  const branches = stdout.toString().split(/\r\n|\r|\n/g);
+  for (let branch of branches) {
+    branch = branch
+      .trim()
+      .replace(/(.*) -> (?:.*)/g, "$1")
+      .replace("remotes/", "");
+    if (branch.startsWith("* ")) {
+      if (branch.includes("HEAD detached")) continue;
+      branch = branch.replace("* ", "");
+      head = branch;
+    }
+    branchList.push(branch);
+  }
+
+  if (!head) head = getDefaultBranchName(branchList);
+
+  return { branchList, head };
 }
 
-export function getBaseBranchName(branchNames: string[]): string {
-  for (const name of branchNames) {
-    if (name === "main") {
-      return "main";
-    } else if (name === "master") {
-      return "master";
-    }
-  }
-  return branchNames[0];
+export function getDefaultBranchName(branchList: string[]): string {
+  const branchSet = new Set(branchList);
+  return branchSet.has("main") ? "main" : branchSet.has("master") ? "master" : branchList?.[0];
+}
+
+export async function getCurrentBranchName(path: string, repo: string): Promise<string> {
+  const [status, stdout, stderr] = await resolveSpawnOutput(
+    cp.spawn(path, ["branch", "--show-current"], {
+      cwd: repo,
+      env: Object.assign({}, process.env),
+    })
+  );
+
+  if (status.code !== 0) throw stderr;
+  return stdout.toString().trim();
 }

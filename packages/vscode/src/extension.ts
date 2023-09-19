@@ -6,7 +6,15 @@ import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
-import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
+import {
+  findGit,
+  getBranches,
+  getCurrentBranchName,
+  getDefaultBranchName,
+  getGitConfig,
+  getGitLog,
+  getRepo,
+} from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
@@ -38,18 +46,17 @@ export async function activate(context: vscode.ExtensionContext) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
-      const fetchBranchList = async () => {
-        const storedBranchList = context.workspaceState.get<string[]>("branchList") ?? [];
-        context.workspaceState.update(
-          "branchList",
-          (await getBranchNames(gitPath, currentWorkspacePath)) ?? storedBranchList
-        );
-        return context.workspaceState.get<string[]>("branchList") ?? storedBranchList;
+      const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
+      const fetchCurrentBranch = async () => {
+        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+        if (!branchName) {
+          const branchList = (await fetchBranches()).branchList;
+          branchName = getDefaultBranchName(branchList);
+        }
+        return branchName;
       };
 
-      const branchNames = await fetchBranchList();
-      const initialBaseBranchName = getBaseBranchName(branchNames);
-
+      const initialBaseBranchName = await fetchCurrentBranch();
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
@@ -67,7 +74,11 @@ export async function activate(context: vscode.ExtensionContext) {
         return clusterNodes;
       };
 
-      const webLoader = new WebviewLoader(extensionPath, context, fetchClusterNodes, fetchBranchList);
+      const webLoader = new WebviewLoader(extensionPath, context, {
+        fetchClusterNodes,
+        fetchBranches,
+        fetchCurrentBranch,
+      });
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
