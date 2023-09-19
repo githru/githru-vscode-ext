@@ -19,7 +19,7 @@ jobs:
         run: npm i
 
       - name: Install global Playwright
-        run: npm global add playwright
+        run: npm -g add playwright
 
       - name: npx playwright install
         run: npx playwright install
