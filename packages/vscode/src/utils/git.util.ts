@@ -248,11 +248,14 @@ export async function getBranches(
       .replace(/(.*) -> (?:.*)/g, "$1")
       .replace("remotes/", "");
     if (branch.startsWith("* ")) {
+      if (branch.includes("HEAD detached")) continue;
       branch = branch.replace("* ", "");
       head = branch;
     }
     branchList.push(branch);
   }
+
+  if (!head) head = getDefaultBranchName(branchList);
 
   return { branchList, head };
 }

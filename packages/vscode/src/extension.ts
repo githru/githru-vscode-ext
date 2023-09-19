@@ -6,7 +6,15 @@ import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
-import { findGit, getBranches, getCurrentBranchName, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
+import {
+  findGit,
+  getBranches,
+  getCurrentBranchName,
+  getDefaultBranchName,
+  getGitConfig,
+  getGitLog,
+  getRepo,
+} from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
@@ -39,7 +47,14 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
-      const fetchCurrentBranch = async () => await getCurrentBranchName(gitPath, currentWorkspacePath);
+      const fetchCurrentBranch = async () => {
+        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+        if (!branchName) {
+          const branchList = (await fetchBranches()).branchList;
+          branchName = getDefaultBranchName(branchList);
+        }
+        return branchName;
+      };
 
       const initialBaseBranchName = await fetchCurrentBranch();
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {

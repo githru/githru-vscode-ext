@@ -13,10 +13,10 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
   const [filteredRange, setFilteredRange] = useState<DateFilterRange>(undefined);
 
   const [branchList, setBranchList] = useState<string[]>([]);
-  const [baseBranch, setBaseBranch] = useState<string>(branchList?.[0]);
+  const [selectedBranch, setSelectedBranch] = useState<string>(branchList?.[0]);
 
   const handleChangeBranchList = (branches: { branchList: string[]; head: string | null }) => {
-    setBaseBranch((prev) => (!prev && branches.head ? branches.head : prev));
+    setSelectedBranch((prev) => (!prev && branches.head ? branches.head : prev));
     setBranchList(branches.branchList);
   };
 
@@ -40,12 +40,12 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       setLoading,
       branchList,
       setBranchList,
-      baseBranch,
-      setBaseBranch,
+      selectedBranch,
+      setSelectedBranch,
       handleChangeAnalyzedData,
       handleChangeBranchList,
     }),
-    [data, filteredRange, filteredData, selectedData, branchList, baseBranch, loading]
+    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;

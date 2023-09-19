@@ -2,17 +2,15 @@ import { type ChangeEventHandler } from "react";
 import "./BranchSelector.scss";
 
 import { useGlobalData } from "hooks";
-import { container } from "tsyringe";
-import type IDEPort from "ide/IDEPort";
+import { sendFetchAnalyzedDataCommand } from "services";
 
 const BranchSelector = () => {
-  const { branchList, baseBranch, setBaseBranch, setLoading } = useGlobalData();
+  const { branchList, selectedBranch, setSelectedBranch, setLoading } = useGlobalData();
 
   const handleChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    setBaseBranch(e.target.value);
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+    setSelectedBranch(e.target.value);
     setLoading(true);
-    ideAdapter.sendFetchAnalyzedDataMessage(e.target.value);
+    sendFetchAnalyzedDataCommand(e.target.value);
   };
 
   return (
@@ -21,7 +19,7 @@ const BranchSelector = () => {
       <select
         className="select-box"
         onChange={handleChangeSelect}
-        value={baseBranch}
+        value={selectedBranch}
       >
         {branchList?.map((option) => (
           <option
