@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
+import classNames from "classnames/bind";
 
 import { PRIMARY_COLOR_VARIABLE_NAME } from "../../../constants/constants";
 import { useGetSelectedData } from "../Statistics.hook";
@@ -17,8 +18,7 @@ import {
   LABEL_VISIBLE_HEIGHT,
   OPACITY_CODE,
 } from "./FileIcicleSummary.const";
-
-import "./FileIcicleSummary.scss";
+import styles from "./FileIcicleSummary.module.scss";
 
 const partition = (data: FileChangesNode) => {
   const root = d3
@@ -117,6 +117,7 @@ const destroyIcicleTree = ($target: RefObject<SVGSVGElement>) => {
 };
 
 const FileIcicleSummary = () => {
+  const cx = classNames.bind(styles);
   const data = useGetSelectedData();
   const $summary = useRef<SVGSVGElement>(null);
 
@@ -136,7 +137,7 @@ const FileIcicleSummary = () => {
   }
 
   return (
-    <div className="file-icicle-summary">
+    <div className={cx("file-icicle-summary")}>
       <svg ref={$summary} />
     </div>
   );
