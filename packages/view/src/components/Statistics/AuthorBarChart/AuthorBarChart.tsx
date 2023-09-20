@@ -159,7 +159,7 @@ const AuthorBarChart = () => {
         .attr("width", 14)
         .attr("height", 14);
     });
-  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData]);
+  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData, cx]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
