@@ -27,7 +27,7 @@ const drawClusterGraph = (
     .attr("class", "cluster-graph__container")
     .attr("transform", (d, i) => getTranslateAfterSelect(d, i, detailElementHeight, true));
 
-  group.append("title").text((_, i) => `${i + 1}번째 container`);
+  group.append("title").text((_, i) => `${i + 1} container`);
 
   group
     .transition()
