@@ -14,7 +14,7 @@ export default class FakeIDEAdapter implements IDEPort {
     const onReceiveMessage = (e: IDEMessageEvent): void => {
       const responseMessage = e.data;
       const { command, payload } = responseMessage;
-      const payloadData = payload ? JSON.parse(payload) : undefined;
+      const payloadData = command && payload ? JSON.parse(payload) : undefined;
 
       switch (command) {
         case "fetchAnalyzedData":
