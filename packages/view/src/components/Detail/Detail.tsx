@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import classNames from "classnames/bind";
 
 import AuthorIcon from "assets/author.svg";
 import ChangedFileIcon from "assets/changed-file.svg";
@@ -11,10 +12,10 @@ import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
 import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
-
-import "./Detail.scss";
+import styles from "./Detail.module.scss";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
+  const cx = classNames.bind(styles);
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
     commitNodeListInCluster,
   });
@@ -28,17 +29,17 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   ];
 
   return (
-    <div className="detail__summary__container">
-      <div className="divider" />
-      <div className="detail__summary">
+    <div className={cx("detail__summary__container")}>
+      <div className={cx("divider")} />
+      <div className={cx("detail__summary")}>
         {summaryItems.map(({ name, count, icon }) => (
           <span
             key={name}
-            className="detail__summary__item"
+            className={cx("detail__summary__item")}
           >
             {icon}
-            <strong className={name}>{count.toLocaleString("en")} </strong>
-            <span className="detail__summary__item__name">{count <= 1 ? name.slice(0, -1) : name}</span>
+            <strong className={cx({ name })}>{count.toLocaleString("en")} </strong>
+            <span className={cx("detail__summary__item__name")}>{count <= 1 ? name.slice(0, -1) : name}</span>
           </span>
         ))}
       </div>
@@ -46,6 +47,7 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   );
 };
 const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
+  const cx = classNames.bind(styles);
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
@@ -59,31 +61,31 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
   return (
     <>
       <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
-      <ul className="detail__commit-list__container">
+      <ul className={cx("detail__commit-list__container")}>
         {commitNodeList.map(({ commit }) => {
           const { id, message, author, commitDate } = commit;
           return (
             <li
               key={id}
-              className="commit-item"
+              className={cx("commit-item")}
             >
-              <div className="commit-detail">
-                <div className="avatar-message">
+              <div className={cx("commit-detail")}>
+                <div className={cx("avatar-message")}>
                   {authSrcMap && (
                     <Author
                       name={author.names.toString()}
                       src={authSrcMap[author.names.toString()]}
                     />
                   )}
-                  <div className="message-container">
-                    <span className="message">{message}</span>
+                  <div className={cx("message-container")}>
+                    <span className={cx("message")}>{message}</span>
                   </div>
                 </div>
-                <span className="author-date">
+                <span className={cx("author-date")}>
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>
               </div>
-              <div className="commit-id">
+              <div className={cx("commit-id")}>
                 <span
                   onClick={handleCommitIdCopy(id)}
                   role="button"
@@ -91,7 +93,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                   onKeyDown={handleCommitIdCopy(id)}
                 >
                   {id.slice(0, 6)}
-                  <span className="commit-id__tooltip">{id}</span>
+                  <span className={cx("commit-id__tooltip")}>{id}</span>
                 </span>
               </div>
             </li>
@@ -101,7 +103,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
       {isShow && (
         <button
           type="button"
-          className="toggle-button"
+          className={cx("toggle-button")}
           onClick={handleToggle}
         >
           {toggle ? "Hide ..." : "Read More ..."}

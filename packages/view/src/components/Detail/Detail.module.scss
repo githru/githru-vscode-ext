@@ -1,0 +1,150 @@
+@import "styles/_pallete";
+
+.detail__summary__container {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 20px;
+  align-items: center;
+  font-size: 12px;
+
+  .divider {
+    margin-right: 1rem;
+    flex-grow: 10;
+    height: 0;
+    border: 1px solid $white;
+  }
+
+  .detail__summary {
+    flex-grow: 0.1;
+    text-align: right;
+
+    .detail__summary__item {
+      position: relative;
+      margin-right: 10px;
+      display: inline-flex;
+      gap: 4px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .additions {
+    color: green;
+  }
+
+  .deletions {
+    color: red;
+  }
+}
+
+@media (max-width: 1080px) {
+  .detail__summary__item__name {
+    display: none;
+  }
+}
+
+.detail__commit-list__container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+  padding: 0 20px;
+  font-size: 12px;
+
+  .commit-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: $gray-600;
+
+    .commit-detail {
+      color: $white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-left: 5px;
+
+      .avatar-message {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .message-container {
+          position: relative;
+          overflow: visible;
+          flex-grow: 1;
+          padding-right: 50px;
+          width: auto;
+
+          .message {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            color: $white;
+            margin: 0 4px 0 15px;
+
+            &:hover {
+              display: block;
+              cursor: pointer;
+              overflow: visible;
+              position: absolute;
+              z-index: 10;
+              background-color: #212121;
+              padding-bottom: 5px;
+              top: -7px;
+            }
+          }
+        }
+      }
+
+      .author-date {
+        display: block;
+        position: relative;
+        white-space: nowrap;
+      }
+    }
+    .commit-id {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 140px;
+      position: relative;
+
+      span:hover {
+        cursor: pointer;
+        .commit-id__tooltip {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+.toggle-button {
+  display: flex;
+  margin: 20px auto 0;
+  border: none;
+  background: none;
+  color: var(--primary-color);
+  cursor: pointer;
+
+  &:hover {
+    color: $gray-300;
+  }
+}
+
+.commit-id__tooltip {
+  display: none;
+  position: absolute;
+  background: $white;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  color: $gray-900;
+  transform: translateY(20%) translateX(-120%);
+}

@@ -2,6 +2,7 @@ import type { Dispatch, RefObject } from "react";
 import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
+import classNames from "classnames/bind";
 
 import type { ClusterNode } from "types";
 
@@ -10,11 +11,14 @@ import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
 import type { ClusterGraphElement, SVGElementSelection } from "./ClusterGraph.type";
 import { getClusterPosition } from "./ClusterGraph.util";
+import styles from "./ClusterGraph.module.scss";
+
+const cx = classNames.bind(styles);
 
 const drawClusterBox = (container: SVGElementSelection<SVGGElement>) => {
   container
     .append("rect")
-    .attr("class", "cluster-graph__cluster")
+    .attr("class", cx("cluster-graph__cluster"))
     .attr("width", GRAPH_WIDTH)
     .attr("height", CLUSTER_HEIGHT);
 };
@@ -23,7 +27,7 @@ const drawDegreeBox = (container: SVGElementSelection<SVGGElement>) => {
   const widthScale = d3.scaleLinear().range([0, GRAPH_WIDTH]).domain([0, 10]);
   container
     .append("rect")
-    .attr("class", "cluster-graph__degree")
+    .attr("class", cx("cluster-graph__degree"))
     .attr("width", (d) => widthScale(Math.min(d.clusterSize, 10)))
     .attr("height", CLUSTER_HEIGHT)
     .attr("x", (d) => (GRAPH_WIDTH - widthScale(Math.min(d.clusterSize, 10))) / 2);
@@ -43,7 +47,7 @@ const drawLink = (svgRef: RefObject<SVGSVGElement>, data: ClusterGraphElement[],
       },
     ])
     .join("line")
-    .attr("class", "cluster-graph__link")
+    .attr("class", cx("cluster-graph__link"))
     .attr("x1", SVG_MARGIN.left + GRAPH_WIDTH / 2)
     .attr("y1", (d) => d.start)
     .attr("x2", SVG_MARGIN.left + GRAPH_WIDTH / 2)
@@ -64,7 +68,7 @@ const drawClusterGraph = (
     .data(data)
     .join("g")
     .on("click", onClickCluster)
-    .attr("class", "cluster-graph__container")
+    .attr("class", cx("cluster-graph__container"))
     .attr("transform", (d, i) => getClusterPosition(d, i, detailElementHeight, true));
 
   group.append("title").text((d) => d.clusterSize);

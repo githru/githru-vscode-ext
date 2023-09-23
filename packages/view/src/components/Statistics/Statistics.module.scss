@@ -1,0 +1,14 @@
+.statistics {
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  padding: 0 20px 20px;
+  width: 300px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 850px) {
+  .statistics {
+    display: none;
+  }
+}

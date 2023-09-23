@@ -1,9 +1,12 @@
 import React from "react";
+import classNames from "classnames/bind";
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io";
 
 import type { ContentProps } from "../Summary.type";
+import styles from "../Summary.module.scss";
 
 const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
+  const cx = classNames.bind(styles);
   const str: string = content.message;
   const regex = /^(\(#[0-9]+\)|#[0-9]+)/g;
   const tobeStr: string[] = str.split(" ");
@@ -32,15 +35,15 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
 
   return (
     <>
-      <div className="cluster-summary__contents">
-        <div className="commit-message__wrapper">
-          <div className="commit-message">{linkedStr}</div>
+      <div className={cx("cluster-summary__contents")}>
+        <div className={cx("commit-message__wrapper")}>
+          <div className={cx("commit-message")}>{linkedStr}</div>
         </div>
-        {content.count > 0 && <span className="more-commit-count">+ {content.count} more</span>}
+        {content.count > 0 && <span className={cx("more-commit-count")}>+ {content.count} more</span>}
       </div>
-      <div className="collapsible-icon">
+      <div className={cx("collapsible-icon")}>
         {selectedClusterId.includes(clusterId) ? (
-          <IoIosArrowDropupCircle className="show" />
+          <IoIosArrowDropupCircle className={cx("show")} />
         ) : (
           <IoIosArrowDropdownCircle />
         )}

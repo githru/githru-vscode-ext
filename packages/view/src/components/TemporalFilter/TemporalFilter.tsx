@@ -3,11 +3,12 @@ import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import BounceLoader from "react-spinners/BounceLoader";
+import classNames from "classnames/bind";
 
 import { useGlobalData } from "hooks";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
-import "./TemporalFilter.scss";
+import styles from "./TemporalFilter.module.scss";
 import drawLineChart from "./LineChart";
 import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
@@ -16,6 +17,7 @@ import { drawBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
+  const cx = classNames.bind(styles);
   const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading } =
     useGlobalData();
 
@@ -131,18 +133,18 @@ const TemporalFilter = () => {
   ]);
 
   return (
-    <article className="temporal-filter">
+    <article className={cx("temporal-filter")}>
       <BounceLoader
         color="#ff8272"
         loading={loading}
         cssOverride={loaderStyle}
       />
       <div
-        className="line-charts"
+        className={cx("line-charts")}
         ref={wrapperRef}
       >
         <svg
-          className="line-charts-svg"
+          className={cx("line-charts-svg")}
           ref={ref}
         />
       </div>

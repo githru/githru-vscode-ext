@@ -1,10 +1,13 @@
+import classNames from "classnames/bind";
+
 import { AuthorBarChart } from "./AuthorBarChart";
 import { FileIcicleSummary } from "./FileIcicleSummary";
-import "./Statistics.scss";
+import styles from "./Statistics.module.scss";
 
 const Statistics = () => {
+  const cx = classNames.bind(styles);
   return (
-    <div className="statistics">
+    <div className={cx("statistics")}>
       <AuthorBarChart />
       <FileIcicleSummary />
     </div>
