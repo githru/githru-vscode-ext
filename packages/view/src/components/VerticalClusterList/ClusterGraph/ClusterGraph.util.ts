@@ -11,11 +11,20 @@ export function getGraphHeight(clusterSizes: number[]) {
   return clusterSizes.length * CLUSTER_HEIGHT + clusterSizes.length * NODE_GAP + NODE_GAP;
 }
 
+export function getStartYEndY(d: ClusterGraphElement, a: number, detailElementHeight: number) {
+  const selected = d.selected.current;
+  const selectedLength = selected.filter((selectedIdx) => selectedIdx < a).length;
+  const selectedLongerHeight = selectedLength * detailElementHeight;
+  const startY = SVG_MARGIN.top + 20 + (a + 1) * (CLUSTER_HEIGHT + NODE_GAP) + selectedLongerHeight;
+  const endY = startY + detailElementHeight - 50;
+  return { startY, endY };
+}
+
 export function getTranslateAfterSelect(
   d: ClusterGraphElement,
   i: number,
   detailElementHeight: number,
-  isPrev = false
+  isPrev = false // TODO - 해당 인자를 개선해야할듯
 ) {
   const selected = isPrev ? d.selected.prev : d.selected.current;
   const selectedLength = selected.filter((selectedIdx) => selectedIdx < i).length;
