@@ -14,7 +14,6 @@ const ClusterGraph = () => {
 
   const svgRef = useHandleClusterGraph({
     data,
-    clusterSizes,
     selectedIndex,
     setSelectedData,
   });
