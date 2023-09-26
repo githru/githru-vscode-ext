@@ -14,20 +14,12 @@ export default class FakeIDEAdapter implements IDEPort {
     const onReceiveMessage = (e: IDEMessageEvent): void => {
       const responseMessage = e.data;
       const { command, payload } = responseMessage;
-            const { command, payload } = responseMessage;
-            const payloadData = command && payload ? JSON.parse(payload) : payload;
-
+      
       switch (command) {
         case "fetchAnalyzedData":
           return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
           return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
-        default:
-          console.log("Unknown Message");
-      }
-          return events.fetchAnalyzedData(payloadData);
-        case "getBranchList":
-          return events.fetchBranchList(payloadData);
         default:
           console.log("Unknown Message");
       }
@@ -54,9 +46,9 @@ export default class FakeIDEAdapter implements IDEPort {
     }, 3000);
   }
 
-  public sendGetBranchListMessage() {
+  public sendFetchBranchListMessage() {
     const message: IDEMessage = {
-      command: "getBranchList",
+      command: "fetchBranchList",
     };
     this.sendMessageToMe(message);
   }
@@ -78,7 +70,7 @@ export default class FakeIDEAdapter implements IDEPort {
           command,
           payload: JSON.stringify(fakeData),
         };
-      case "getBranchList":
+      case "fetchBranchList":
         return {
           command,
           payload: JSON.stringify(fakeBranchList),

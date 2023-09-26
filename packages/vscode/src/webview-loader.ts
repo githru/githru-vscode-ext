@@ -12,9 +12,9 @@ export default class WebviewLoader implements vscode.Disposable {
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
-    parseCommit: (baseBranchName?: string) => Promise<ClusterNode[]>,
-    parseBranches: () => Promise<string[]>
+    fetcher: GithruFetcherMap
   ) {
+    const { fetchClusterNodes, fetchBranches, fetchCurrentBranch } = fetcher;
     const viewColumn = vscode.ViewColumn.One;
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
@@ -26,35 +26,36 @@ export default class WebviewLoader implements vscode.Disposable {
     const icon_path = vscode.Uri.file(path.join(this.extensionPath, "images", "logo.png"));
     this._panel.iconPath = icon_path;
 
-    this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload: unknown }) => {
+    this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload?: string }) => {
       const { command, payload } = message;
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
-        const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(ANALYZE_DATA_KEY);
+        const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+        const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
         const resMessage = {
           command,
           payload: storedAnalyzedData,
         };
 
         if (!storedAnalyzedData) {
-          const baseBranchName = payload ? JSON.parse(payload as string) : undefined;
-          const data = await parseCommit(baseBranchName);
-          context.workspaceState.update(ANALYZE_DATA_KEY, data);
-          resMessage.payload = data;
+          const analyzedData = await fetchClusterNodes(baseBranchName);
+          context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+          resMessage.payload = analyzedData;
         }
 
         await this.respondToMessage(resMessage);
       }
 
-      if (command === "getBranchList") {
-        const branches = await parseBranches();
+      if (command === "fetchBranchList") {
+        const branches = await fetchBranches();
         await this.respondToMessage({
           ...message,
           payload: branches,
         });
       }
+
       if (command === "updatePrimaryColor") {
-        const colorCode = JSON.parse(payload as string);
+        const colorCode = payload && JSON.parse(payload);
         if (colorCode.primary) {
           setPrimaryColor(colorCode.primary);
         }
@@ -107,3 +108,10 @@ export default class WebviewLoader implements vscode.Disposable {
     return returnString;
   }
 }
+
+type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
+type GithruFetcherMap = {
+  fetchClusterNodes: GithruFetcher<ClusterNode[], [string]>;
+  fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
+  fetchCurrentBranch: GithruFetcher<string>;
+};
