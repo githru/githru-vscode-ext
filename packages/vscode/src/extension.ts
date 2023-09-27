@@ -26,12 +26,19 @@ function normalizeFsPath(fsPath: string) {
 export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
+  let currentPanel: vscode.WebviewPanel | undefined = undefined;
+
   await credentials.initialize(context);
 
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
     try {
+      console.debug(currentPanel);
+      if (currentPanel) {
+        currentPanel.reveal();
+        return;
+      }
       const gitPath = (await findGit()).path;
 
       const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
@@ -79,6 +86,7 @@ export async function activate(context: vscode.ExtensionContext) {
         fetchBranches,
         fetchCurrentBranch,
       });
+      currentPanel = webLoader.getPanel();
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
