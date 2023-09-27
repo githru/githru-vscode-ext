@@ -69,6 +69,10 @@ export default class WebviewLoader implements vscode.Disposable {
     this._panel?.dispose();
   }
 
+  getPanel() {
+    return this._panel;
+  }
+
   private async respondToMessage(message: { command: string; payload: unknown }) {
     this._panel?.webview.postMessage({
       command: message.command,
