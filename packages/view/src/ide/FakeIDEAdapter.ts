@@ -17,9 +17,9 @@ export default class FakeIDEAdapter implements IDEPort {
       
       switch (command) {
         case "fetchAnalyzedData":
-          return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
+          return events.fetchAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
-          return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
+          return events.fetchBranchList(payload ? JSON.parse(payload) : undefined);
         default:
           console.log("Unknown Message");
       }
