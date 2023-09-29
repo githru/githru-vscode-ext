@@ -1,10 +1,10 @@
 import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
-import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB } from "./commands";
+import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { getGithubToken, setGithubToken,  } from "./setting-repository";
+import { deleteGithubToken, getGithubToken, setGithubToken,  } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
   findGit,
@@ -106,7 +106,12 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand(COMMAND_LAUNCH);
   });
 
-  subscriptions.concat([disposable, loginWithGithub]);
+  const resetGithubAuth = vscode.commands.registerCommand(COMMAND_RESET_GITHUB_AUTH, async () => {
+    await deleteGithubToken(secrets);
+    vscode.window.showInformationMessage(`Github Authentication reset.`);
+  });
+
+  subscriptions.concat([disposable, loginWithGithub, resetGithubAuth]);
 
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
   myStatusBarItem.text = "githru";
