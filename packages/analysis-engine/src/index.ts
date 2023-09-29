@@ -48,18 +48,34 @@ export class AnalysisEngine {
   };
 
   public analyzeGit = async () => {
+    let isPRSuccess = true;
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
+
     const commitRaws = getCommitRaws(this.gitLog);
     if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
+    
     const commitDict = buildCommitDict(commitRaws);
-    const pullRequests = await this.octokit.getPullRequests();
-    if (this.isDebugMode) console.log("pullRequests: ", pullRequests);
+    if (this.isDebugMode) console.log("commitDict: ", commitDict);
+
+    const pullRequests = await this.octokit.getPullRequests().catch((err) => {
+      console.error(err);
+      isPRSuccess = false;
+      return [];
+    }).then((pullRequests) => {
+      console.log("success, pr = ", pullRequests);
+      return pullRequests;
+    });
+    if (this.isDebugMode) console.log("pullRequests: ", pullRequests, );
+
     const stemDict = buildStemDict(commitDict, this.baseBranchName);
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
 
-    return csmDict;
+    return {
+      isPRSuccess,
+      csmDict
+    };
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {

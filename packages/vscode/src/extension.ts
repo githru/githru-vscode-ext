@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { getGithubToken, setGithubToken } from "./setting-repository";
+import { getGithubToken, setGithubToken,  } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
   findGit,
@@ -69,9 +69,11 @@ export async function activate(context: vscode.ExtensionContext) {
           auth: githubToken,
           baseBranchName,
         });
-        const csmDict = await engine.analyzeGit();
-        const clusterNodes = mapClusterNodesFrom(csmDict);
-        return clusterNodes;
+
+        const { isPRSuccess, csmDict } = await engine.analyzeGit();
+        if (isPRSuccess) console.log("crawling PR failed");
+
+        return mapClusterNodesFrom(csmDict);
       };
 
       const webLoader = new WebviewLoader(extensionPath, context, {
