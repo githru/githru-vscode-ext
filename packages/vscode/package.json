@@ -52,6 +52,11 @@
         "command": "githru.command.login.github",
         "title": "Login with Github",
         "category": "Githru"
+      },
+      {
+        "command": "githru.command.reset.github_auth",
+        "title": "Reset GitHub Authentication saved previously",
+        "category": "Githru"
       }
     ],
     "configuration": {
