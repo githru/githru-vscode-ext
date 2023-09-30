@@ -2,7 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
-import type { ClusterNode } from "./utils/NodeTypes.temps";
+import type { ClusterNode } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
@@ -31,17 +31,17 @@ export default class WebviewLoader implements vscode.Disposable {
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
         const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
-        const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
-        const resMessage = {
-          command,
-          payload: storedAnalyzedData,
-        };
+        // Disable Cache temporarily
+        // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
+        // if (!storedAnalyzedData) {
 
-        if (!storedAnalyzedData) {
-          const analyzedData = await fetchClusterNodes(baseBranchName);
-          context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
-          resMessage.payload = analyzedData;
-        }
+        const analyzedData = await fetchClusterNodes(baseBranchName);
+        context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+
+        const resMessage = {
+            command,
+            payload: analyzedData,
+        };
 
         await this.respondToMessage(resMessage);
       }
