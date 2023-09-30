@@ -1,12 +1,14 @@
 import { type ChangeEventHandler } from "react";
-import "./BranchSelector.scss";
+import classNames from "classnames/bind";
 
 import { useGlobalData } from "hooks";
 import { sendFetchAnalyzedDataCommand } from "services";
 
+import styles from "./BranchSelector.module.scss";
+
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch, setLoading } = useGlobalData();
-
+  const cx = classNames.bind(styles);
   const handleChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setSelectedBranch(e.target.value);
     setLoading(true);
@@ -14,10 +16,10 @@ const BranchSelector = () => {
   };
 
   return (
-    <section className="branch-selector">
+    <section className={cx("branch-selector")}>
       <span>Branches:</span>
       <select
-        className="select-box"
+        className={cx("select-box")}
         onChange={handleChangeSelect}
         value={selectedBranch}
       >
