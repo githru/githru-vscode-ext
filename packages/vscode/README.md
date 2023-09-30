@@ -33,6 +33,12 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 
+### 0.6.0
+- branch selector
+- reset github auth
+- error handling for pr/auth
+- e2e test
+
 ### 0.5.0
 - login by github auth
 - fix minor ui issues

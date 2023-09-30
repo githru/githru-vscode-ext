@@ -2,25 +2,25 @@
   cursor: pointer;
 
   &:hover {
-    .cluster-graph__cluster {
+    .cluster-graph-container__box {
       stroke-width: 3;
     }
   }
 
-  .cluster-graph__cluster {
+  .cluster-graph-container__box {
     rx: 5;
     stroke-width: 1;
     stroke: var(--primary-color);
     fill: transparent;
   }
 
-  .cluster-graph__degree {
+  .cluster-graph-container__commit-amount-cluster {
     rx: 5;
     fill: var(--primary-color);
   }
 }
 
-.cluster-graph__link {
+.cluster-graph__total-line {
   stroke: var(--primary-color);
   stroke-width: 1;
 }

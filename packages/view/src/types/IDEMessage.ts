@@ -7,4 +7,9 @@ export interface IDEMessageEvent extends MessageEvent {
   data: IDEMessage;
 }
 
-export type IDEMessageCommandNames = "refresh" | "fetchAnalyzedData" | "getBranchList" | "updatePrimaryColor";
+export type IDEMessageCommandNames =
+  | "refresh"
+  | "fetchAnalyzedData"
+  | "fetchBranchList"
+  | "fetchCurrentBranch"
+  | "updatePrimaryColor";

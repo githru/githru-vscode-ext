@@ -1,6 +1,6 @@
 import type { NODE_TYPES } from "constants/constants";
 
-import type { Commit } from "./CommitTypes.temp";
+import type { Commit } from "./Commit";
 
 export type NodeTypeName = (typeof NODE_TYPES)[number];
 

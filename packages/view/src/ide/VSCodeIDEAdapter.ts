@@ -16,9 +16,9 @@ export default class VSCodeIDEAdapter implements IDEPort {
 
       switch (command) {
         case "fetchAnalyzedData":
-          return events.fetchAnalyzedData(payloadData);
-        case "getBranchList":
-          return events.fetchBranchList(payloadData);
+          return events.handleChangeAnalyzedData(payloadData);
+        case "fetchBranchList":
+          return events.handleChangeBranchList(payloadData);
         default:
           console.log("Unknown Message");
       }
@@ -26,25 +26,25 @@ export default class VSCodeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
-  public sendRefreshDataMessage(payload?: string) {
+  public sendRefreshDataMessage(baseBranch?: string) {
     const message: IDEMessage = {
       command: "refresh",
-      payload,
+      payload: JSON.stringify(baseBranch),
     };
     this.sendMessageToIDE(message);
   }
 
-  public sendFetchAnalyzedDataMessage(payload?: string) {
+  public sendFetchAnalyzedDataMessage(baseBranch?: string) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
-      payload,
+      payload: JSON.stringify(baseBranch),
     };
     this.sendMessageToIDE(message);
   }
 
-  public sendGetBranchListMessage() {
+  public sendFetchBranchListMessage() {
     const message: IDEMessage = {
-      command: "getBranchList",
+      command: "fetchBranchList",
     };
     this.sendMessageToIDE(message);
   }

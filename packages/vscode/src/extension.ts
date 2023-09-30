@@ -1,12 +1,20 @@
 import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
-import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB } from "./commands";
+import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { getGithubToken, setGithubToken } from "./setting-repository";
+import { deleteGithubToken, getGithubToken, setGithubToken,  } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
-import { findGit, getBaseBranchName, getBranchNames, getGitConfig, getGitLog, getRepo } from "./utils/git.util";
+import {
+  findGit,
+  getBranches,
+  getCurrentBranchName,
+  getDefaultBranchName,
+  getGitConfig,
+  getGitLog,
+  getRepo,
+} from "./utils/git.util";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
@@ -38,18 +46,17 @@ export async function activate(context: vscode.ExtensionContext) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
-      const fetchBranchList = async () => {
-        const storedBranchList = context.workspaceState.get<string[]>("branchList") ?? [];
-        context.workspaceState.update(
-          "branchList",
-          (await getBranchNames(gitPath, currentWorkspacePath)) ?? storedBranchList
-        );
-        return context.workspaceState.get<string[]>("branchList") ?? storedBranchList;
+      const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
+      const fetchCurrentBranch = async () => {
+        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+        if (!branchName) {
+          const branchList = (await fetchBranches()).branchList;
+          branchName = getDefaultBranchName(branchList);
+        }
+        return branchName;
       };
 
-      const branchNames = await fetchBranchList();
-      const initialBaseBranchName = getBaseBranchName(branchNames);
-
+      const initialBaseBranchName = await fetchCurrentBranch();
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
@@ -62,12 +69,18 @@ export async function activate(context: vscode.ExtensionContext) {
           auth: githubToken,
           baseBranchName,
         });
-        const csmDict = await engine.analyzeGit();
-        const clusterNodes = mapClusterNodesFrom(csmDict);
-        return clusterNodes;
+
+        const { isPRSuccess, csmDict } = await engine.analyzeGit();
+        if (isPRSuccess) console.log("crawling PR failed");
+
+        return mapClusterNodesFrom(csmDict);
       };
 
-      const webLoader = new WebviewLoader(extensionPath, context, fetchClusterNodes, fetchBranchList);
+      const webLoader = new WebviewLoader(extensionPath, context, {
+        fetchClusterNodes,
+        fetchBranches,
+        fetchCurrentBranch,
+      });
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
@@ -93,7 +106,12 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand(COMMAND_LAUNCH);
   });
 
-  subscriptions.concat([disposable, loginWithGithub]);
+  const resetGithubAuth = vscode.commands.registerCommand(COMMAND_RESET_GITHUB_AUTH, async () => {
+    await deleteGithubToken(secrets);
+    vscode.window.showInformationMessage(`Github Authentication reset.`);
+  });
+
+  subscriptions.concat([disposable, loginWithGithub, resetGithubAuth]);
 
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
   myStatusBarItem.text = "githru";
