@@ -1,6 +1,6 @@
 import { fakeFirstClusterNode, fakePrev, fakePrev2, fakePrev3, fakePrev4 } from "../../../../tests/fakeAsset";
 
-import { getClusterSizes, getGraphHeight, getClusterPosition, getSelectedIndex } from "./ClusterGraph.util";
+import { getClusterSizes, getGraphHeight, getTranslateAfterSelect, getSelectedIndex } from "./ClusterGraph.util";
 import type { ClusterGraphElement } from "./ClusterGraph.type";
 
 const getClusterSizesResult = getClusterSizes(fakePrev);
@@ -41,9 +41,9 @@ const fakeClusterGraphElement: ClusterGraphElement = {
 };
 
 test("getClusterPosition", () => {
-  const resultPrev = getClusterPosition(fakeClusterGraphElement, 1, 1, true);
-  const resultCurrent = getClusterPosition(fakeClusterGraphElement, 1, 6, false);
-  const resultDiffI = getClusterPosition(fakeClusterGraphElement, 2, 3, true);
+  const resultPrev = getTranslateAfterSelect(fakeClusterGraphElement, 1, 1, true);
+  const resultCurrent = getTranslateAfterSelect(fakeClusterGraphElement, 1, 6, false);
+  const resultDiffI = getTranslateAfterSelect(fakeClusterGraphElement, 2, 3, true);
   expect(resultPrev).toBe("translate(2, 61)");
   expect(resultCurrent).toBe("translate(2, 60)");
   expect(resultDiffI).toBe("translate(2, 116)");

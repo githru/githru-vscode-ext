@@ -7,12 +7,18 @@ export const setPrimaryColor = (color: string) => {
   ideAdapter.setPrimaryColor(color);
 };
 
-export const sendFetchAnalyzedDataCommand = () => {
+export const sendFetchAnalyzedDataCommand = (selectedBranch?: string) => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-  ideAdapter.sendFetchAnalyzedDataMessage();
+  ideAdapter.sendFetchAnalyzedDataMessage(selectedBranch);
 };
 
-export const sendRefreshDataCommand = () => {
+export const sendRefreshDataCommand = (selectedBranch?: string) => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-  ideAdapter.sendRefreshDataMessage();
+  ideAdapter.sendRefreshDataMessage(selectedBranch);
+  ideAdapter.sendFetchBranchListMessage();
+};
+
+export const sendFetchBranchListCommand = () => {
+  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+  ideAdapter.sendFetchBranchListMessage();
 };

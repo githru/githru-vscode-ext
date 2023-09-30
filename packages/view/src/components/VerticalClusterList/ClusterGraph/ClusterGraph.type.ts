@@ -17,3 +17,5 @@ export type SVGElementSelection<T extends BaseType> = Selection<
   SVGSVGElement | null,
   unknown
 >;
+
+export type SVGMargin = { [key: string]: number };

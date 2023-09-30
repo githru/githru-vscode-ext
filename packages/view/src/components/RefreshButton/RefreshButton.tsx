@@ -1,22 +1,19 @@
 import "reflect-metadata";
 import cn from "classnames";
-import { container } from "tsyringe";
 import { FiRefreshCcw } from "react-icons/fi";
 
 import { throttle } from "utils";
-import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
 
 import "./RefreshButton.scss";
+import { sendRefreshDataCommand } from "services";
 
 const RefreshButton = () => {
-  const { loading, setLoading } = useGlobalData();
+  const { loading, setLoading, selectedBranch } = useGlobalData();
 
   const refreshHandler = throttle(() => {
     setLoading(true);
-
-    const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-    ideAdapter.sendFetchAnalyzedDataMessage();
+    sendRefreshDataCommand(selectedBranch);
   }, 3000);
 
   return (

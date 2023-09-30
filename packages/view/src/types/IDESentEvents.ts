@@ -3,5 +3,5 @@ import type { ClusterNode } from "types";
 // triggered by ide response
 export type IDESentEvents = {
   handleChangeAnalyzedData: (analyzedData: ClusterNode[]) => void;
-  handleChangeBranchList: (branchList: string[]) => void;
+  handleChangeBranchList: (branches: { branchList: string[]; head: string | null }) => void;
 };

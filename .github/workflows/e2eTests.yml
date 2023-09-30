@@ -1,0 +1,29 @@
+name: E2E Tests - Playwright
+on:
+  pull_request:
+    branches: [main, master]
+jobs:
+  tests:
+    timeout-minutes: 600
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/view
+    steps:
+      - uses: actions/checkout@v2  # v3 is not available as of my last update in January 2022
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.0
+
+      # Add Playwright GitHub Action
+      - name: Setup Playwright
+        uses: microsoft/playwright-github-action@v1
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: npx playwright install
+        run: npx playwright install
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
