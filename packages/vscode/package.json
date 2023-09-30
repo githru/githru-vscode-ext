@@ -7,7 +7,7 @@
     "url": "https://github.com/githru/githru-vscode-ext",
     "type": "git"
   },
-  "version": "0.5.0",
+  "version": "0.6.0",
   "engines": {
     "vscode": "^1.67.0"
   },
@@ -52,6 +52,11 @@
         "command": "githru.command.login.github",
         "title": "Login with Github",
         "category": "Githru"
+      },
+      {
+        "command": "githru.command.reset.github_auth",
+        "title": "Reset GitHub Authentication saved previously",
+        "category": "Githru"
       }
     ],
     "configuration": {
@@ -84,7 +89,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "dependencies": {
-    "@githru-vscode-ext/analysis-engine": "^0.5.0",
+    "@githru-vscode-ext/analysis-engine": "^0.6.0",
     "@octokit/rest": "^20.0.1",
     "node-fetch": "^3.3.2"
   },

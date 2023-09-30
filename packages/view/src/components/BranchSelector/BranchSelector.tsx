@@ -2,15 +2,17 @@ import { type ChangeEventHandler } from "react";
 import classNames from "classnames/bind";
 
 import { useGlobalData } from "hooks";
+import { sendFetchAnalyzedDataCommand } from "services";
 
 import styles from "./BranchSelector.module.scss";
 
 const BranchSelector = () => {
+  const { branchList, selectedBranch, setSelectedBranch, setLoading } = useGlobalData();
   const cx = classNames.bind(styles);
-  const { branchList, selectedBranch } = useGlobalData();
   const handleChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    // TODO - webview로 선택된 branch을 payload에 실어 sendFetchAnalyzedDataCommand 호출
-    console.log(e.target.value);
+    setSelectedBranch(e.target.value);
+    setLoading(true);
+    sendFetchAnalyzedDataCommand(e.target.value);
   };
 
   return (
@@ -21,7 +23,7 @@ const BranchSelector = () => {
         onChange={handleChangeSelect}
         value={selectedBranch}
       >
-        {branchList.map((option) => (
+        {branchList?.map((option) => (
           <option
             key={option}
             value={option}
