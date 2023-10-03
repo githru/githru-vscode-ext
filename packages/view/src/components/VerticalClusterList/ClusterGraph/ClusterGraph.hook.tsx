@@ -28,6 +28,7 @@ const drawClusterGraph = (
     .data(data)
     .join("g")
     .on("click", onClickCluster)
+    .attr("data-testid", "cluster-graph__container")
     .attr("class", cx("cluster-graph__container"))
     .attr("transform", (d, i) => getTranslateAfterSelect(d, i, detailElementHeight, true));
 
