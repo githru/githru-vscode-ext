@@ -33,5 +33,6 @@ export const drawTotalLine = (
     .attr("x2", svgMargin.left + graphWidth / 2)
     .attr("y2", (d) => d.end + d.selected.prev.length * detailElementHeight)
     .transition()
-    .attr("y2", (d) => d.end + d.selected.current.length * detailElementHeight);
+    .attr("y2", (d) => d.end + d.selected.current.length * detailElementHeight)
+    .attr("pointer-events", "none");
 };
