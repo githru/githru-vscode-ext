@@ -20,11 +20,9 @@ const ClusterGraph = () => {
     setSelectedData,
   });
 
-  console.log(styles);
-
   return (
     <svg
-      className={cx("cluster-graph")}
+      className={cx("cluster-graph__container", "cluster-graph__total-line", "circle-group")}
       ref={svgRef}
       width={SVG_WIDTH}
       height={graphHeight}
