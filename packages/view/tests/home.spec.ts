@@ -11,11 +11,9 @@ test.describe("home", () => {
   });
 
   test("when click cluster", async ({ page }) => {
-    await page.waitForSelector(".cluster-graph");
+    await page.waitForSelector("[data-testid=cluster-graph__container]", { state: "attached" });
 
-    await page.waitForSelector(".cluster-graph > .cluster-graph__container", { state: "attached" });
-
-    const childContainers = await page.$$(".cluster-graph > .cluster-graph__container");
+    const childContainers = await page.$$("[data-testid=cluster-graph__container]");
 
     if (childContainers.length > CLICK_INDEX) {
       await childContainers[CLICK_INDEX].scrollIntoViewIfNeeded();
@@ -27,7 +25,7 @@ test.describe("home", () => {
     // waiting for changing
     await page.waitForTimeout(1000);
 
-    const newChildContainers = await page.$$(".cluster-graph > .cluster-graph__container");
+    const newChildContainers = await page.$$("[data-testid=cluster-graph__container]");
 
     const targetIndexForCheck = CLICK_INDEX + 1;
     const transformPositionForCheck = 10 + targetIndexForCheck * 50 + 220;
