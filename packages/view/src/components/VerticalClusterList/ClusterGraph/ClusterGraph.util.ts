@@ -24,7 +24,7 @@ export function getTranslateAfterSelect(
   d: ClusterGraphElement,
   i: number,
   detailElementHeight: number,
-  isPrev = false // TODO - 해당 인자를 개선해야할듯
+  isPrev = false // TODO - this param can be removed
 ) {
   const selected = isPrev ? d.selected.prev : d.selected.current;
   const selectedLength = selected.filter((selectedIdx) => selectedIdx < i).length;
