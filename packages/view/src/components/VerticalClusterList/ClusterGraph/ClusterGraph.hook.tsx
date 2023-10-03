@@ -9,7 +9,7 @@ import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
 import type { ClusterGraphElement } from "./ClusterGraph.type";
-import { destroyClusterGraph, drawClusterBox, drawCommitAmountCluster, drawTotalLine } from "./Draws";
+import { destroyClusterGraph, drawClusterBox, drawCommitAmountCluster, drawSubGraph, drawTotalLine } from "./Draws";
 import { getTranslateAfterSelect } from "./ClusterGraph.util";
 
 const drawClusterGraph = (
@@ -34,18 +34,17 @@ const drawClusterGraph = (
     .duration(0)
     .attr("transform", (d, i) => getTranslateAfterSelect(d, i, detailElementHeight));
 
-  drawTotalLine(svgRef, data, detailElementHeight, SVG_MARGIN, CLUSTER_HEIGHT, NODE_GAP, GRAPH_WIDTH);
   drawClusterBox(group, GRAPH_WIDTH, CLUSTER_HEIGHT);
   drawCommitAmountCluster(group, GRAPH_WIDTH, CLUSTER_HEIGHT);
+  drawSubGraph(svgRef, data, detailElementHeight);
+  drawTotalLine(svgRef, data, detailElementHeight, SVG_MARGIN, CLUSTER_HEIGHT, NODE_GAP, GRAPH_WIDTH);
 };
 
 export const useHandleClusterGraph = ({
   data,
-  clusterSizes,
   selectedIndex,
   setSelectedData,
 }: {
-  clusterSizes: number[];
   selectedIndex: number[];
   data: ClusterNode[];
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
@@ -53,9 +52,9 @@ export const useHandleClusterGraph = ({
   const svgRef = useRef<SVGSVGElement>(null);
   const prevSelected = useRef<number[]>([-1]);
 
-  const clusterGraphElements = data.map((cluster, i) => ({
+  const clusterGraphElements = data.map((cluster) => ({
     cluster,
-    clusterSize: clusterSizes[i],
+    clusterSize: cluster.commitNodeList.length,
     selected: {
       prev: prevSelected.current,
       current: selectedIndex,
@@ -63,8 +62,10 @@ export const useHandleClusterGraph = ({
   }));
 
   const handleClickCluster = useCallback(
-    (_: PointerEvent, d: ClusterGraphElement) =>
-      setSelectedData(selectedDataUpdater(d.cluster, d.cluster.commitNodeList[0].clusterId)),
+    (_: PointerEvent, d: ClusterGraphElement) => {
+      const targetIndex = d.cluster.commitNodeList[0].clusterId;
+      setSelectedData(selectedDataUpdater(d.cluster, targetIndex));
+    },
     [setSelectedData]
   );
   useEffect(() => {

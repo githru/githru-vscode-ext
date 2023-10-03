@@ -14,13 +14,12 @@ export default class FakeIDEAdapter implements IDEPort {
     const onReceiveMessage = (e: IDEMessageEvent): void => {
       const responseMessage = e.data;
       const { command, payload } = responseMessage;
-      const payloadData = payload ? JSON.parse(payload) : undefined;
 
       switch (command) {
         case "fetchAnalyzedData":
-          return events.handleChangeAnalyzedData(payloadData);
+          return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
-          return events.handleChangeBranchList(payloadData);
+          return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
         default:
           console.log("Unknown Message");
       }
