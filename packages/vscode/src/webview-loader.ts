@@ -2,7 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
-import type { ClusterNode } from "./utils/NodeTypes.temps";
+import type { ClusterNode } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
