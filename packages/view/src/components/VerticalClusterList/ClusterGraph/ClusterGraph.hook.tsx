@@ -42,19 +42,21 @@ const drawClusterGraph = (
 
 export const useHandleClusterGraph = ({
   data,
+  clusterSizes,
   selectedIndex,
   setSelectedData,
 }: {
   selectedIndex: number[];
+  clusterSizes: number[];
   data: ClusterNode[];
   setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const prevSelected = useRef<number[]>([-1]);
 
-  const clusterGraphElements = data.map((cluster) => ({
+  const clusterGraphElements = data.map((cluster, i) => ({
     cluster,
-    clusterSize: cluster.commitNodeList.length,
+    clusterSize: clusterSizes[i],
     selected: {
       prev: prevSelected.current,
       current: selectedIndex,
