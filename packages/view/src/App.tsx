@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 import { useEffect, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
+import classNames from "classnames/bind";
 
 import {
   BranchSelector,
@@ -11,13 +12,15 @@ import {
   VerticalClusterList,
   FilteredAuthors,
 } from "components";
-import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 
+import styles from "./App.module.scss";
+
 const App = () => {
+  const cx = classNames.bind(styles);
   const initRef = useRef<boolean>(false);
 
   const { filteredData, handleChangeAnalyzedData, handleChangeBranchList, loading, setLoading } = useGlobalData();
@@ -56,18 +59,18 @@ const App = () => {
 
   return (
     <>
-      <div className="header-container">
+      <div className={cx("header-container")}>
         <BranchSelector />
-        <div className="header-buttons">
+        <div className={cx("header-buttons")}>
           <ThemeSelector />
           <RefreshButton />
         </div>
       </div>
-      <div className="top-container">
+      <div className={cx("top-container")}>
         <TemporalFilter />
         <FilteredAuthors />
       </div>
-      <div className="middle-container">
+      <div className={cx("middle-container")}>
         {filteredData.length !== 0 ? (
           <>
             <VerticalClusterList />
