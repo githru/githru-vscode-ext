@@ -34,7 +34,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
     try {
-      console.debug("current Panel = ", currentPanel);
+      console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
       if (currentPanel) {
         currentPanel.reveal();
         return;
@@ -96,6 +96,14 @@ export async function activate(context: vscode.ExtensionContext) {
         fetchCurrentBranch,
       });
       currentPanel = webLoader.getPanel();
+
+      currentPanel?.onDidDispose(
+        () => {
+          currentPanel = undefined;
+        },
+        null,
+        context.subscriptions
+      );
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");
