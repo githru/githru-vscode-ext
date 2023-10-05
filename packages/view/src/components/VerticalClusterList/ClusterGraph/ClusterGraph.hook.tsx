@@ -2,7 +2,6 @@ import type { Dispatch, RefObject } from "react";
 import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
-import classNames from "classnames/bind";
 
 import type { ClusterNode } from "types";
 
@@ -12,9 +11,6 @@ import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from
 import type { ClusterGraphElement } from "./ClusterGraph.type";
 import { destroyClusterGraph, drawClusterBox, drawCommitAmountCluster, drawSubGraph, drawTotalLine } from "./Draws";
 import { getTranslateAfterSelect } from "./ClusterGraph.util";
-import styles from "./ClusterGraph.module.scss";
-
-const cx = classNames.bind(styles);
 
 const drawClusterGraph = (
   svgRef: RefObject<SVGSVGElement>,
@@ -28,11 +24,10 @@ const drawClusterGraph = (
     .data(data)
     .join("g")
     .on("click", onClickCluster)
-    .attr("data-testid", "cluster-graph__container")
-    .attr("class", cx("cluster-graph__container"))
+    .attr("class", "cluster-graph__container")
     .attr("transform", (d, i) => getTranslateAfterSelect(d, i, detailElementHeight, true));
 
-  group.append("title").text((_, i) => `${i + 1} container`);
+  group.append("title").text((_, i) => `${i + 1}번째 container`);
 
   group
     .transition()

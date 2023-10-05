@@ -1,7 +1,6 @@
 import type { ChangeEvent, MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
-import classNames from "classnames/bind";
 
 import type { ClusterNode, AuthorInfo } from "types";
 import { useGlobalData } from "hooks";
@@ -12,10 +11,10 @@ import { useGetSelectedData } from "../Statistics.hook";
 import type { AuthorDataType, MetricType } from "./AuthorBarChart.type";
 import { convertNumberFormat, getDataByAuthor, sortDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
-import styles from "./AuthorBarChart.module.scss";
+
+import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
-  const cx = classNames.bind(styles);
   const { data: totalData, filteredData, setSelectedData, setFilteredData } = useGlobalData();
   const rawData = useGetSelectedData();
 
@@ -46,10 +45,10 @@ const AuthorBarChart = () => {
 
     const xAxisGroup = svg
       .append("g")
-      .attr("class", cx("axis x-axis"))
+      .attr("class", "axis x-axis")
       .style("transform", `translateY(${DIMENSIONS.height}px)`);
-    const yAxisGroup = svg.append("g").attr("class", cx("axis y-axis"));
-    const barGroup = svg.append("g").attr("class", cx("bars"));
+    const yAxisGroup = svg.append("g").attr("class", "axis y-axis");
+    const barGroup = svg.append("g").attr("class", "bars");
 
     // Scales
     const xScale = d3
@@ -74,7 +73,7 @@ const AuthorBarChart = () => {
 
     xAxisGroup
       .append("text")
-      .attr("class", cx("x-axis-label"))
+      .attr("class", "x-axis-label")
       .style("transform", `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`)
       .text(`${metric} # / Total ${metric} # (%)`);
 
@@ -87,9 +86,9 @@ const AuthorBarChart = () => {
         .style("left", `${e.pageX - 70}px`)
         .style("top", `${e.pageY - 70}px`)
         .html(
-          `<p class=cx("name")>${d.name}</p>
+          `<p class="name">${d.name}</p>
               <p>${metric}: 
-                <span class=cx("selected")>
+                <span class="selected">
                   ${d[metric].toLocaleString()}
                 </span> 
                 / ${totalMetricValues.toLocaleString()} 
@@ -123,7 +122,7 @@ const AuthorBarChart = () => {
         (enter) =>
           enter
             .append("g")
-            .attr("class", cx("bar"))
+            .attr("class", "bar")
             .append("rect")
             .attr("width", xScale.bandwidth())
             .attr("height", 0)
@@ -152,24 +151,24 @@ const AuthorBarChart = () => {
       const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: AuthorInfo) => res.src);
       bar
         .append("image")
-        .attr("class", cx("profile-image"))
+        .attr("class", "profile-image")
         .attr("xlink:href", profileImgSrc ?? "")
         .attr("x", (d: AuthorDataType) => (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7)
         .attr("y", 204)
         .attr("width", 14)
         .attr("height", 14);
     });
-  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData, cx]);
+  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
   };
 
   return (
-    <div className={cx("author-bar-chart__container")}>
-      <div className={cx("author-bar-chart__header")}>
+    <div className="author-bar-chart__container">
+      <div className="author-bar-chart__header">
         <select
-          className={cx("select-box")}
+          className="select-box"
           onChange={handleChangeMetric}
         >
           {METRIC_TYPE.map((option) => (
@@ -183,11 +182,11 @@ const AuthorBarChart = () => {
         </select>
       </div>
       <svg
-        className={cx("author-bar-chart")}
+        className="author-bar-chart"
         ref={svgRef}
       />
       <div
-        className={cx("author-bar-chart__tooltip")}
+        className="author-bar-chart__tooltip"
         ref={tooltipRef}
       />
     </div>

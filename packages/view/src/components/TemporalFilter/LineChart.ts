@@ -1,10 +1,8 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
-import classNames from "classnames/bind";
 
 import type { DateFilterRange } from "hooks";
-
-import styles from "./LineChart.module.scss";
+import "./LineChart.scss";
 
 export type LineChartDatum = {
   dateString: string;
@@ -42,7 +40,6 @@ const drawLineChart = (
   showXAxis: boolean,
   chartTitle: string
 ) => {
-  const cx = classNames.bind(styles);
   const width = chartWidth - margin.left - margin.right;
   const svg = d3.select(refTarget).append("g").attr("transform", `translate(${margin.left}, ${startHeight})`);
 
@@ -81,9 +78,9 @@ const drawLineChart = (
       .call(xAxis);
   }
 
-  svg.append("path").datum(lineChartData).attr("class", cx("cloc-line-chart")).attr("d", area);
+  svg.append("path").datum(lineChartData).attr("class", "cloc-line-chart").attr("d", area);
 
-  svg.append("text").text(chartTitle).attr("class", cx("temporal-filter__label")).attr("x", 0).attr("y", 15);
+  svg.append("text").text(chartTitle).attr("class", "temporal-filter__label").attr("x", 0).attr("y", 15);
 
   return xScale;
 };
