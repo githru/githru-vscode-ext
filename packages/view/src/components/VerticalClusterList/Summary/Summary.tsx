@@ -1,10 +1,10 @@
 import { useRef, useEffect } from "react";
-import classNames from "classnames/bind";
 
 import type { ClusterNode } from "types";
 import { Detail } from "components";
 import { useGlobalData } from "hooks";
 
+import "./Summary.scss";
 import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 
@@ -12,10 +12,8 @@ import { usePreLoadAuthorImg } from "./Summary.hook";
 import { getInitData, getClusterIds, getClusterById } from "./Summary.util";
 import { Content } from "./Content";
 import type { Cluster } from "./Summary.type";
-import styles from "./Summary.module.scss";
 
 const Summary = () => {
-  const cx = classNames.bind(styles);
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
   const clusters = getInitData(data);
   const detailRef = useRef<HTMLDivElement>(null);
@@ -32,22 +30,23 @@ const Summary = () => {
       behavior: "smooth",
     });
   }, [selectedData]);
+
   return (
-    <div className={cx("cluster-summary__container")}>
+    <div className="cluster-summary__container">
       {clusters.map((cluster: Cluster) => {
         return (
           <div
-            className={cx("cluster-summary__cluster")}
             role="presentation"
+            className="cluster-summary__cluster"
             key={cluster.clusterId}
           >
             <button
-              className={cx("toggle-contents-button")}
               type="button"
+              className="toggle-contents-button"
               onClick={onClickClusterSummary(cluster.clusterId)}
             >
-              <div className={cx("toggle-contents-container")}>
-                <div className={cx("name-box")}>
+              <div className="toggle-contents-container">
+                <div className="name-box">
                   {authSrcMap &&
                     cluster.summary.authorNames.map((authorArray: string[]) => {
                       return authorArray.map((authorName: string) => (
@@ -68,7 +67,7 @@ const Summary = () => {
             </button>
             {selectedClusterId.includes(cluster.clusterId) && (
               <div
-                className={cx("detail__container")}
+                className="detail__container"
                 ref={detailRef}
               >
                 <Detail

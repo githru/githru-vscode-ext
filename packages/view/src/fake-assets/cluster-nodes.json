@@ -34,9 +34,7 @@
               }
             }
           },
-          "message": "Initial commit",
-          "tags": ["sadasd","asdasd"],
-          "releaseTags": []
+          "message": "Initial commit"
         },
         "clusterId": 0
       }
@@ -73,9 +71,7 @@
               }
             }
           },
-          "message": "Added node.js.y,ml",
-          "tags": [],
-          "releaseTags": []
+          "message": "Added node.js.yml"
         },
         "clusterId": 1
       }
@@ -284,9 +280,7 @@
               }
             }
           },
-          "message": "feat: initializ,e modules",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: initialize modules"
         },
         "clusterId": 2
       }
@@ -323,9 +317,7 @@
               }
             }
           },
-          "message": "chore: add CODE,OWNWERS",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: add CODEOWNWERS"
         },
         "clusterId": 3
       }
@@ -442,9 +434,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #2 from ytaek/dev/n/nfeat: launch view module in vscode",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #2 from ytaek/dev/n/nfeat: launch view module in vscode"
         },
         "clusterId": 4
       },
@@ -488,9 +478,7 @@
               }
             }
           },
-          "message": "feat(webview): ,add typescript structure",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(webview): add typescript structure"
         },
         "clusterId": 4
       },
@@ -566,9 +554,7 @@
               }
             }
           },
-          "message": "feat(vscode): l,aunch webview for webviewApp",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode): launch webview for webviewApp"
         },
         "clusterId": 4
       },
@@ -640,9 +626,7 @@
               }
             }
           },
-          "message": "setup(vscode): ,add webview loader",
-          "tags": [],
-          "releaseTags": []
+          "message": "setup(vscode): add webview loader"
         },
         "clusterId": 4
       }
@@ -747,9 +731,7 @@
               }
             }
           },
-          "message": "feat: analysis-,engine base codes (#7)/n/n* feat: analysis-engine base codes/n* fix: all tests",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: analysis-engine base codes (#7)/n/n* feat: analysis-engine base codes/n* fix: all tests"
         },
         "clusterId": 5
       }
@@ -790,9 +772,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #13 from ytaek/dev/n/nfeat: sketch for git graph node types",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #13 from ytaek/dev/n/nfeat: sketch for git graph node types"
         },
         "clusterId": 6
       },
@@ -896,9 +876,7 @@
               }
             }
           },
-          "message": "Merge branch 'm,ain' of https://github.com/githru/githru-vscode-ext into dev",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge branch 'main' of https://github.com/githru/githru-vscode-ext into dev"
         },
         "clusterId": 6
       },
@@ -930,9 +908,7 @@
               }
             }
           },
-          "message": "feat: add (temp,orary) detailed types",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add (temporary) detailed types"
         },
         "clusterId": 6
       },
@@ -972,9 +948,7 @@
               }
             }
           },
-          "message": "feat: sketch fo,r git graph node type",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: sketch for git graph node type"
         },
         "clusterId": 6
       }
@@ -1043,9 +1017,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #15 from jin-Pro/main/n/nReact 18 version setup",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #15 from jin-Pro/main/n/nReact 18 version setup"
         },
         "clusterId": 7
       },
@@ -1085,9 +1057,7 @@
               }
             }
           },
-          "message": "fix: React 18 v,ersion setup",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: React 18 version setup"
         },
         "clusterId": 7
       },
@@ -1139,9 +1109,7 @@
               }
             }
           },
-          "message": "fix: delete don,'t use public file",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: delete don't use public file"
         },
         "clusterId": 7
       }
@@ -1186,9 +1154,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #17 from githru/feat/temporalfilter/n/nfeat: add `TemporalFilter` component",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #17 from githru/feat/temporalfilter/n/nfeat: add `TemporalFilter` component"
         },
         "clusterId": 8
       },
@@ -1220,9 +1186,7 @@
               }
             }
           },
-          "message": "feat(view): add, global any type",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add global any type"
         },
         "clusterId": 8
       },
@@ -1258,9 +1222,7 @@
               }
             }
           },
-          "message": "feat(view): add, `TemporalFilter` component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add `TemporalFilter` component"
         },
         "clusterId": 8
       }
@@ -1373,9 +1335,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #19 from hanseul-lee/main/n/nfeat: view base codes and add `Statistics` component",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #19 from hanseul-lee/main/n/nfeat: view base codes and add `Statistics` component"
         },
         "clusterId": 9
       },
@@ -1423,9 +1383,7 @@
               }
             }
           },
-          "message": "feat: add webpa,ck dependencies and reset style in index.tsx",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add webpack dependencies and reset style in index.tsx"
         },
         "clusterId": 9
       },
@@ -1457,9 +1415,7 @@
               }
             }
           },
-          "message": "fix: fix app.te,st",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: fix app.test"
         },
         "clusterId": 9
       },
@@ -1503,9 +1459,7 @@
               }
             }
           },
-          "message": "feat: add Stati,stics components",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add Statistics components"
         },
         "clusterId": 9
       },
@@ -1537,9 +1491,7 @@
               }
             }
           },
-          "message": "style: add rese,t.scss",
-          "tags": [],
-          "releaseTags": []
+          "message": "style: add reset.scss"
         },
         "clusterId": 9
       },
@@ -1627,9 +1579,7 @@
               }
             }
           },
-          "message": "feat: set initi,al view base codes",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: set initial view base codes"
         },
         "clusterId": 9
       }
@@ -1698,9 +1648,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #20 from jeonghye-choi/feat/styles/n/nfeat: add style pallete",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #20 from jeonghye-choi/feat/styles/n/nfeat: add style pallete"
         },
         "clusterId": 10
       },
@@ -1732,9 +1680,7 @@
               }
             }
           },
-          "message": "fix: build erro,r(Failed to compile) declared but never read",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: build error(Failed to compile) declared but never read"
         },
         "clusterId": 10
       },
@@ -1766,9 +1712,7 @@
               }
             }
           },
-          "message": "feat: add prett,ierrc file for matching fomating",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add prettierrc file for matching fomating"
         },
         "clusterId": 10
       },
@@ -1808,9 +1752,7 @@
               }
             }
           },
-          "message": "feat: apply sty,les to app (root)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: apply styles to app (root)"
         },
         "clusterId": 10
       },
@@ -1846,9 +1788,7 @@
               }
             }
           },
-          "message": "feat: add utils, for styles",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add utils for styles"
         },
         "clusterId": 10
       },
@@ -1880,9 +1820,7 @@
               }
             }
           },
-          "message": "feat: add font ,style variables",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add font style variables"
         },
         "clusterId": 10
       },
@@ -1918,9 +1856,7 @@
               }
             }
           },
-          "message": "feat: add theme, for dark and light",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add theme for dark and light"
         },
         "clusterId": 10
       },
@@ -1952,9 +1888,7 @@
               }
             }
           },
-          "message": "feat: add color, palletes with levels",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add color palletes with levels"
         },
         "clusterId": 10
       }
@@ -2007,9 +1941,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #18 from ytaek/dev/n/nchore: ClusterNode Data Sample",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #18 from ytaek/dev/n/nchore: ClusterNode Data Sample"
         },
         "clusterId": 11
       },
@@ -2185,9 +2117,7 @@
               }
             }
           },
-          "message": "Merge branch 'm,ain' into dev",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge branch 'main' into dev"
         },
         "clusterId": 11
       },
@@ -2227,9 +2157,7 @@
               }
             }
           },
-          "message": "chore: added cl,uster data sample",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: added cluster data sample"
         },
         "clusterId": 11
       },
@@ -2269,9 +2197,7 @@
               }
             }
           },
-          "message": "chore: sample a,pp script",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: sample app script"
         },
         "clusterId": 11
       }
@@ -2344,9 +2270,7 @@
               }
             }
           },
-          "message": "feat: test envi,ronment settings (#26)/n/n* feat: jest config",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: test environment settings (#26)/n/n* feat: jest config"
         },
         "clusterId": 12
       }
@@ -2415,9 +2339,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #30 from vgihan/main/n/nbuild: apply absolute path in tsconfig",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #30 from vgihan/main/n/nbuild: apply absolute path in tsconfig"
         },
         "clusterId": 13
       },
@@ -2449,9 +2371,7 @@
               }
             }
           },
-          "message": "fix: apply pret,tier rule in NodeTypes.temp.ts",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: apply prettier rule in NodeTypes.temp.ts"
         },
         "clusterId": 13
       },
@@ -2483,9 +2403,7 @@
               }
             }
           },
-          "message": "build: add abso,lute path in webpack config",
-          "tags": [],
-          "releaseTags": []
+          "message": "build: add absolute path in webpack config"
         },
         "clusterId": 13
       },
@@ -2517,9 +2435,7 @@
               }
             }
           },
-          "message": "chore: add ts-l,oader module",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: add ts-loader module"
         },
         "clusterId": 13
       },
@@ -2603,9 +2519,7 @@
               }
             }
           },
-          "message": "Merge remote-tr,acking branch 'upstream/main'",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge remote-tracking branch 'upstream/main'"
         },
         "clusterId": 13
       },
@@ -2641,9 +2555,7 @@
               }
             }
           },
-          "message": "refactor: enhan,ce export component code",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor: enhance export component code"
         },
         "clusterId": 13
       },
@@ -2687,9 +2599,7 @@
               }
             }
           },
-          "message": "build: apply ab,solute path in tsconfig",
-          "tags": [],
-          "releaseTags": []
+          "message": "build: apply absolute path in tsconfig"
         },
         "clusterId": 13
       },
@@ -2725,9 +2635,7 @@
               }
             }
           },
-          "message": "feat: add `Vert,icalClusterList` Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add `VerticalClusterList` Component"
         },
         "clusterId": 13
       }
@@ -2768,9 +2676,7 @@
               }
             }
           },
-          "message": "fix: treat lint, error from circular type definition (#34)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: treat lint error from circular type definition (#34)"
         },
         "clusterId": 14
       }
@@ -2807,9 +2713,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #33 from blcklamb/main/n/nchore: commitList interface CONFIRMED!",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #33 from blcklamb/main/n/nchore: commitList interface CONFIRMED!"
         },
         "clusterId": 15
       },
@@ -2841,9 +2745,7 @@
               }
             }
           },
-          "message": "chore: GitUser ,edit",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: GitUser edit"
         },
         "clusterId": 15
       },
@@ -2875,9 +2777,7 @@
               }
             }
           },
-          "message": "chore: fix Inte,rface and date separation",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: fix Interface and date separation"
         },
         "clusterId": 15
       },
@@ -2909,9 +2809,7 @@
               }
             }
           },
-          "message": "chore: typo and, name changed",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: typo and name changed"
         },
         "clusterId": 15
       },
@@ -2943,9 +2841,7 @@
               }
             }
           },
-          "message": "chore: delete t,ype",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: delete type"
         },
         "clusterId": 15
       },
@@ -2977,9 +2873,7 @@
               }
             }
           },
-          "message": "chore: fix fiel,ds",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: fix fields"
         },
         "clusterId": 15
       },
@@ -3015,9 +2909,7 @@
               }
             }
           },
-          "message": "delete: wrong f,ile directory",
-          "tags": [],
-          "releaseTags": []
+          "message": "delete: wrong file directory"
         },
         "clusterId": 15
       },
@@ -3049,9 +2941,7 @@
               }
             }
           },
-          "message": "chore: mkdir ty,pes",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: mkdir types"
         },
         "clusterId": 15
       },
@@ -3083,9 +2973,7 @@
               }
             }
           },
-          "message": "chore: CommitRa,w",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: CommitRaw"
         },
         "clusterId": 15
       },
@@ -3117,9 +3005,7 @@
               }
             }
           },
-          "message": "chore: fix plur,al",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: fix plural"
         },
         "clusterId": 15
       },
@@ -3151,9 +3037,7 @@
               }
             }
           },
-          "message": "chore: type to ,interface",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: type to interface"
         },
         "clusterId": 15
       },
@@ -3185,9 +3069,7 @@
               }
             }
           },
-          "message": "chore: pull req,uest failure fix",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: pull request failure fix"
         },
         "clusterId": 15
       },
@@ -3219,9 +3101,7 @@
               }
             }
           },
-          "message": "chore: fix PR t,est failure",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: fix PR test failure"
         },
         "clusterId": 15
       },
@@ -3253,9 +3133,7 @@
               }
             }
           },
-          "message": "chore: prettier, lint apply",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: prettier lint apply"
         },
         "clusterId": 15
       },
@@ -3287,9 +3165,7 @@
               }
             }
           },
-          "message": "chore: discussi,ng about CommitList Interface",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: discussing about CommitList Interface"
         },
         "clusterId": 15
       },
@@ -3321,9 +3197,7 @@
               }
             }
           },
-          "message": "chore: commitLi,st interface",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: commitList interface"
         },
         "clusterId": 15
       }
@@ -3392,9 +3266,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #41 from hanseul-lee/main/n/nchore: fix lint rule and folder structure",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #41 from hanseul-lee/main/n/nchore: fix lint rule and folder structure"
         },
         "clusterId": 16
       },
@@ -3434,9 +3306,7 @@
               }
             }
           },
-          "message": "fix: build erro,r",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: build error"
         },
         "clusterId": 16
       },
@@ -3468,9 +3338,7 @@
               }
             }
           },
-          "message": "fix: fix typo o,f ClusterNode type",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: fix typo of ClusterNode type"
         },
         "clusterId": 16
       },
@@ -3502,9 +3370,7 @@
               }
             }
           },
-          "message": "chore: disable ,arrow-body-style rule",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: disable arrow-body-style rule"
         },
         "clusterId": 16
       },
@@ -3564,9 +3430,7 @@
               }
             }
           },
-          "message": "chore: move 'st,yles' folder to 'src'",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: move 'styles' folder to 'src'"
         },
         "clusterId": 16
       }
@@ -3611,9 +3475,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #42 from hy57in/main/n/nfeat: all contributors 봇 설치",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #42 from hy57in/main/n/nfeat: all contributors 봇 설치"
         },
         "clusterId": 17
       },
@@ -3645,9 +3507,7 @@
               }
             }
           },
-          "message": "chore: update p,ackage-lock.json",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore: update package-lock.json"
         },
         "clusterId": 17
       },
@@ -3711,9 +3571,7 @@
               }
             }
           },
-          "message": "Merge remote-tr,acking branch 'upstream/main'",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge remote-tracking branch 'upstream/main'"
         },
         "clusterId": 17
       },
@@ -3757,9 +3615,7 @@
               }
             }
           },
-          "message": "feat: all contr,ibutors 봇 설치",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: all contributors 봇 설치"
         },
         "clusterId": 17
       }
@@ -3800,9 +3656,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #44 from githru/all-contributors/add-ansrlm/n/ndocs: add ansrlm as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #44 from githru/all-contributors/add-ansrlm/n/ndocs: add ansrlm as a contributor for code"
         },
         "clusterId": 18
       },
@@ -3834,9 +3688,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 18
       },
@@ -3868,9 +3720,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 18
       }
@@ -3911,9 +3761,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #45 from githru/all-contributors/add-kmin-jeong/n/ndocs: add kmin-jeong as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #45 from githru/all-contributors/add-kmin-jeong/n/ndocs: add kmin-jeong as a contributor for code"
         },
         "clusterId": 19
       },
@@ -3945,9 +3793,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 19
       },
@@ -3979,9 +3825,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 19
       }
@@ -4022,9 +3866,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #43 from ytaek/dev/n/nchore(view): add (missing) message field in samples.",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #43 from ytaek/dev/n/nchore(view): add (missing) message field in samples."
         },
         "clusterId": 20
       },
@@ -4060,9 +3902,7 @@
               }
             }
           },
-          "message": "chore(view): ad,d (missing) message field in samples.",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(view): add (missing) message field in samples."
         },
         "clusterId": 20
       }
@@ -4103,9 +3943,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #48 from githru/all-contributors/add-hanseul-lee/n/ndocs: add hanseul-lee as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #48 from githru/all-contributors/add-hanseul-lee/n/ndocs: add hanseul-lee as a contributor for code"
         },
         "clusterId": 21
       },
@@ -4137,9 +3975,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 21
       },
@@ -4171,9 +4007,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 21
       }
@@ -4214,9 +4048,7 @@
               }
             }
           },
-          "message": "docs: add ooooo,robo as a contributor for code (#47)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: 조예진 <orobos654@gmail.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add ooooorobo as a contributor for code (#47)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: 조예진 <orobos654@gmail.com>"
         },
         "clusterId": 22
       }
@@ -4257,9 +4089,7 @@
               }
             }
           },
-          "message": "docs: add hy57i,n as a contributor for code (#46)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: HyojinKim <gywls00100@gmail.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add hy57in as a contributor for code (#46)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: HyojinKim <gywls00100@gmail.com>"
         },
         "clusterId": 23
       }
@@ -4300,9 +4130,7 @@
               }
             }
           },
-          "message": "docs: add anpau,l0615 as a contributor for code (#49)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: HyojinKim <gywls00100@gmail.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add anpaul0615 as a contributor for code (#49)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>/nCo-authored-by: HyojinKim <gywls00100@gmail.com>"
         },
         "clusterId": 24
       }
@@ -4339,9 +4167,7 @@
               }
             }
           },
-          "message": "feat: implement, DAG (simple ver.) (#39)/n/n* feat: implement dag/n/n* fix: add parents field to CommitDagNode/n/n* fix: use CommitRaw type",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: implement DAG (simple ver.) (#39)/n/n* feat: implement dag/n/n* fix: add parents field to CommitDagNode/n/n* fix: use CommitRaw type"
         },
         "clusterId": 25
       }
@@ -4382,9 +4208,7 @@
               }
             }
           },
-          "message": "docs: add jin-P,ro as a contributor for code (#50)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add jin-Pro as a contributor for code (#50)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>"
         },
         "clusterId": 26
       }
@@ -4425,9 +4249,7 @@
               }
             }
           },
-          "message": "fix: all-contri,butors bot config 수정 (#51)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: all-contributors bot config 수정 (#51)"
         },
         "clusterId": 27
       }
@@ -4480,9 +4302,7 @@
               }
             }
           },
-          "message": "build: GOGO! ve,rsion 0.1.0 (#52)/n/n* chore: GOGO! version 0.1.0/n* build(vscode): add package dependency (vscode -> engine)",
-          "tags": [],
-          "releaseTags": []
+          "message": "build: GOGO! version 0.1.0 (#52)/n/n* chore: GOGO! version 0.1.0/n* build(vscode): add package dependency (vscode -> engine)"
         },
         "clusterId": 28
       }
@@ -4519,9 +4339,7 @@
               }
             }
           },
-          "message": "doc: contributi,ng.md 수정 (#53)/n/n* doc: contributing.md 수정/n* doc: contributing.md 추가 수정",
-          "tags": [],
-          "releaseTags": []
+          "message": "doc: contributing.md 수정 (#53)/n/n* doc: contributing.md 수정/n* doc: contributing.md 추가 수정"
         },
         "clusterId": 29
       }
@@ -4606,9 +4424,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #59 from jin-Pro/main/n/nfeat(view): Detail Component && Define Total Data",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #59 from jin-Pro/main/n/nfeat(view): Detail Component && Define Total Data"
         },
         "clusterId": 30
       },
@@ -4680,9 +4496,7 @@
               }
             }
           },
-          "message": "feat(view): def,ine Total Data in App.tsx",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): define Total Data in App.tsx"
         },
         "clusterId": 30
       },
@@ -4726,9 +4540,7 @@
               }
             }
           },
-          "message": "feat(view): add, Detail Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add Detail Component"
         },
         "clusterId": 30
       }
@@ -4769,9 +4581,7 @@
               }
             }
           },
-          "message": "docs: add jejec,runch as a contributor for code (#66)/n/ndocs: add jejecrunch as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add jejecrunch as a contributor for code (#66)/n/ndocs: add jejecrunch as a contributor for code"
         },
         "clusterId": 31
       },
@@ -4803,9 +4613,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 31
       },
@@ -4837,9 +4645,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 31
       }
@@ -4880,9 +4686,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #67 from githru/all-contributors/add-vgihan/n/ndocs: add vgihan as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #67 from githru/all-contributors/add-vgihan/n/ndocs: add vgihan as a contributor for code"
         },
         "clusterId": 32
       },
@@ -4914,9 +4718,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 32
       },
@@ -4948,9 +4750,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 32
       }
@@ -5011,9 +4811,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #62 from vgihan/main/n/nfeat(view): add ClusterGraph in VerticalClusterList Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #62 from vgihan/main/n/nfeat(view): add ClusterGraph in VerticalClusterList Component"
         },
         "clusterId": 33
       },
@@ -5049,9 +4847,7 @@
               }
             }
           },
-          "message": "refactor(view):, rename commitCounts & fix code for conventions",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): rename commitCounts & fix code for conventions"
         },
         "clusterId": 33
       },
@@ -5087,9 +4883,7 @@
               }
             }
           },
-          "message": "feat(view): add, Container Component in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add Container Component in VerticalClusterList"
         },
         "clusterId": 33
       },
@@ -5121,9 +4915,7 @@
               }
             }
           },
-          "message": "fix(view): dele,te useMemo in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): delete useMemo in ClusterGraph"
         },
         "clusterId": 33
       },
@@ -5155,9 +4947,7 @@
               }
             }
           },
-          "message": "refactor(view):, rename ClusterGraph util",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): rename ClusterGraph util"
         },
         "clusterId": 33
       },
@@ -5197,9 +4987,7 @@
               }
             }
           },
-          "message": "refactor(view):, split util logic of ClusterGraph in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): split util logic of ClusterGraph in VerticalClusterList"
         },
         "clusterId": 33
       },
@@ -5231,9 +5019,7 @@
               }
             }
           },
-          "message": "fix(view): add ,export to GlobalProps type in global.d.ts",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): add export to GlobalProps type in global.d.ts"
         },
         "clusterId": 33
       },
@@ -5277,9 +5063,7 @@
               }
             }
           },
-          "message": "feat(view): add, ClusterGraph Component in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add ClusterGraph Component in VerticalClusterList"
         },
         "clusterId": 33
       }
@@ -5320,9 +5104,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #76 from githru/all-contributors/add-wherehows/n/ndocs: add wherehows as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #76 from githru/all-contributors/add-wherehows/n/ndocs: add wherehows as a contributor for code"
         },
         "clusterId": 34
       },
@@ -5354,9 +5136,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 34
       },
@@ -5388,9 +5168,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 34
       }
@@ -5431,9 +5209,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #75 from githru/all-contributors/add-pshdev1030/n/ndocs: add pshdev1030 as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #75 from githru/all-contributors/add-pshdev1030/n/ndocs: add pshdev1030 as a contributor for code"
         },
         "clusterId": 35
       },
@@ -5469,9 +5245,7 @@
               }
             }
           },
-          "message": "Merge branch 'm,ain' into all-contributors/add-pshdev1030",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge branch 'main' into all-contributors/add-pshdev1030"
         },
         "clusterId": 35
       },
@@ -5503,9 +5277,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 35
       },
@@ -5537,9 +5309,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 35
       }
@@ -5584,9 +5354,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #72 from jin-Pro/main/n/nfeat(view): Detail Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #72 from jin-Pro/main/n/nfeat(view): Detail Component"
         },
         "clusterId": 36
       },
@@ -5626,9 +5394,7 @@
               }
             }
           },
-          "message": "enhance(view): ,add Commit Type Message Property closed [#70]/n/nenhance(view): CommitNode Type add taskId Property/n/nfeat(view): Detail Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "enhance(view): add Commit Type Message Property closed [#70]/n/nenhance(view): CommitNode Type add taskId Property/n/nfeat(view): Detail Component"
         },
         "clusterId": 36
       }
@@ -5697,9 +5463,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #63 from jejecrunch/main/n/nfeat(view) add Summary in VerticalClusterList Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #63 from jejecrunch/main/n/nfeat(view) add Summary in VerticalClusterList Component"
         },
         "clusterId": 37
       },
@@ -5731,9 +5495,7 @@
               }
             }
           },
-          "message": "fix(view): Fix ,tooltip style",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): Fix tooltip style"
         },
         "clusterId": 37
       },
@@ -5769,9 +5531,7 @@
               }
             }
           },
-          "message": "refactor(view):, Apply feedback about #63",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): Apply feedback about #63"
         },
         "clusterId": 37
       },
@@ -5803,9 +5563,7 @@
               }
             }
           },
-          "message": "fix(view): Fix ,graph height/n>/n>/nCo-authored-by: jejecrunch <gkswlgp456@gmail.com>/nCo-authored-by: vgihan <jum654@naver.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): Fix graph height/n>/n>/nCo-authored-by: jejecrunch <gkswlgp456@gmail.com>/nCo-authored-by: vgihan <jum654@naver.com>"
         },
         "clusterId": 37
       },
@@ -5837,9 +5595,7 @@
               }
             }
           },
-          "message": "fix(view): Sync, graph height and commit height/n>/n>/nCo-authored-by: jejecrunch <gkswlgp456@gmail.com>/nCo-authored-by: vgihan <jum654@naver.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): Sync graph height and commit height/n>/n>/nCo-authored-by: jejecrunch <gkswlgp456@gmail.com>/nCo-authored-by: vgihan <jum654@naver.com>"
         },
         "clusterId": 37
       },
@@ -5903,9 +5659,7 @@
               }
             }
           },
-          "message": "refactor(view):, Refactor code due to #63 comment and change plan",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): Refactor code due to #63 comment and change plan"
         },
         "clusterId": 37
       },
@@ -5937,9 +5691,7 @@
               }
             }
           },
-          "message": "fix(view): Fix ,`npm run build` fail error",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): Fix `npm run build` fail error"
         },
         "clusterId": 37
       },
@@ -5971,9 +5723,7 @@
               }
             }
           },
-          "message": "chore(view): Up,date nanoid version",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(view): Update nanoid version"
         },
         "clusterId": 37
       },
@@ -6017,9 +5767,7 @@
               }
             }
           },
-          "message": "feat(view): add, Content in Summary Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add Content in Summary Component"
         },
         "clusterId": 37
       },
@@ -6075,9 +5823,7 @@
               }
             }
           },
-          "message": "feat(view): add, Summary in VerticalClusterList Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add Summary in VerticalClusterList Component"
         },
         "clusterId": 37
       },
@@ -6113,9 +5859,7 @@
               }
             }
           },
-          "message": "add(view): add ,nanoid library for key value",
-          "tags": [],
-          "releaseTags": []
+          "message": "add(view): add nanoid library for key value"
         },
         "clusterId": 37
       }
@@ -6152,9 +5896,7 @@
               }
             }
           },
-          "message": "setup: set reac,t-hooks eslint rules (#81)",
-          "tags": [],
-          "releaseTags": []
+          "message": "setup: set react-hooks eslint rules (#81)"
         },
         "clusterId": 38
       }
@@ -6299,9 +6041,7 @@
               }
             }
           },
-          "message": "feat(view): add, AuthorBarChart in Statistics Component (#74)/n/n* feat(view): add initial AuthorBarChart Component/n/n* bak(view): backup/n/n* fix: fixed an error with chart width overflow/n/n* refactor(view): fix getDataByAuthor logic/n/n* feat(view): sync chart data with clusterData/n/n* fix(view): fix metric type to string literal type/n/n* chore(view): fix test script/n/n* style(view): add className and middle container style/n/n* fix: fix typo .all-contributorsrc/n/n* fix(view): move dependencies into useEffect/n/n* chore(view): add return type of useGetTotalData function/n/n* style(view): fix hover color state  and text location/n/nCo-authored-by: hanseul-lee <hanseul.dev@gmail.com>/nCo-authored-by: pshdev1030 <pshdev1030@gmail.com>/nCo-authored-by: wherehows <sensitive.hu@gmail.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add AuthorBarChart in Statistics Component (#74)/n/n* feat(view): add initial AuthorBarChart Component/n/n* bak(view): backup/n/n* fix: fixed an error with chart width overflow/n/n* refactor(view): fix getDataByAuthor logic/n/n* feat(view): sync chart data with clusterData/n/n* fix(view): fix metric type to string literal type/n/n* chore(view): fix test script/n/n* style(view): add className and middle container style/n/n* fix: fix typo .all-contributorsrc/n/n* fix(view): move dependencies into useEffect/n/n* chore(view): add return type of useGetTotalData function/n/n* style(view): fix hover color state  and text location/n/nCo-authored-by: hanseul-lee <hanseul.dev@gmail.com>/nCo-authored-by: pshdev1030 <pshdev1030@gmail.com>/nCo-authored-by: wherehows <sensitive.hu@gmail.com>"
         },
         "clusterId": 39
       }
@@ -6370,9 +6110,7 @@
               }
             }
           },
-          "message": "feat(vscode): f,etch data from analysis-engine and render with webview (#80)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode): fetch data from analysis-engine and render with webview (#80)"
         },
         "clusterId": 40
       }
@@ -6445,9 +6183,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #89 from ytaek/vscode/n/nfeat(vscode): add status bar button, chore(vscode): prettify",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #89 from ytaek/vscode/n/nfeat(vscode): add status bar button, chore(vscode): prettify"
         },
         "clusterId": 41
       },
@@ -6479,9 +6215,7 @@
               }
             }
           },
-          "message": "fix(vscode): fi,x typo in webpack",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(vscode): fix typo in webpack"
         },
         "clusterId": 41
       },
@@ -6517,9 +6251,7 @@
               }
             }
           },
-          "message": "chore(vscode): ,add a missing file",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(vscode): add a missing file"
         },
         "clusterId": 41
       },
@@ -6551,9 +6283,7 @@
               }
             }
           },
-          "message": "chore(vscode): ,modify status bar priority (to leftmost)",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(vscode): modify status bar priority (to leftmost)"
         },
         "clusterId": 41
       },
@@ -6617,9 +6347,7 @@
               }
             }
           },
-          "message": "feat(vscode): a,dd status bar button, chore(vscode): prettify",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode): add status bar button, chore(vscode): prettify"
         },
         "clusterId": 41
       }
@@ -6692,9 +6420,7 @@
               }
             }
           },
-          "message": "feat(view): add, TemporalFilter Types and Structures (#87)/n/n* feat: add test fake-asset/n/n* feat: add TemporalFilter file structure/n/n* feat: add dummy sortedData at TemporalFilter/n/n#32/n/n* fix: change data type of `ClocLineChart`, `CommitLineChart`",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add TemporalFilter Types and Structures (#87)/n/n* feat: add test fake-asset/n/n* feat: add TemporalFilter file structure/n/n* feat: add dummy sortedData at TemporalFilter/n/n#32/n/n* fix: change data type of `ClocLineChart`, `CommitLineChart`"
         },
         "clusterId": 42
       }
@@ -6739,9 +6465,7 @@
               }
             }
           },
-          "message": "feat: temporalf,ilter util 함수 추가 (#92)/n/n* feat: temporalfilter util 함수 추가/n/n날짜별 commit, cloc를 가져오고 오름차순으로 정렬하였습니다./n/n* build: add package-lock.json/n/n* fix: fix temporal filter logic/n/n유틸함수의 타입을 명시하고 총 commit을 바르게 계산하도록 수정하였습니다.",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: temporalfilter util 함수 추가 (#92)/n/n* feat: temporalfilter util 함수 추가/n/n날짜별 commit, cloc를 가져오고 오름차순으로 정렬하였습니다./n/n* build: add package-lock.json/n/n* fix: fix temporal filter logic/n/n유틸함수의 타입을 명시하고 총 commit을 바르게 계산하도록 수정하였습니다."
         },
         "clusterId": 43
       }
@@ -6782,9 +6506,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #93 from githru/all-contributors/add-jeonghye-choi/n/ndocs: add jeonghye-choi as a contributor for code",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #93 from githru/all-contributors/add-jeonghye-choi/n/ndocs: add jeonghye-choi as a contributor for code"
         },
         "clusterId": 44
       },
@@ -6816,9 +6538,7 @@
               }
             }
           },
-          "message": "docs: update .a,ll-contributorsrc",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update .all-contributorsrc"
         },
         "clusterId": 44
       },
@@ -6850,9 +6570,7 @@
               }
             }
           },
-          "message": "docs: update RE,ADME.md",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: update README.md"
         },
         "clusterId": 44
       }
@@ -6893,9 +6611,7 @@
               }
             }
           },
-          "message": "docs: add taejs, as a contributor for code (#96)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add taejs as a contributor for code (#96)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>"
         },
         "clusterId": 45
       }
@@ -6948,9 +6664,7 @@
               }
             }
           },
-          "message": "feat(view): add, sortBasedOnCommitNode util function in TemporalFilter Component (#95)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add sortBasedOnCommitNode util function in TemporalFilter Component (#95)"
         },
         "clusterId": 46
       }
@@ -6999,9 +6713,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #88 from jin-Pro/main/n/nenhance(view):  Detail Component Contents",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #88 from jin-Pro/main/n/nenhance(view):  Detail Component Contents"
         },
         "clusterId": 47
       },
@@ -7037,9 +6749,7 @@
               }
             }
           },
-          "message": "fix(view): dele,te numAddCommar Func, as use toLocaleString",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): delete numAddCommar Func, as use toLocaleString"
         },
         "clusterId": 47
       },
@@ -7071,9 +6781,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,set type unknown => string",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix set type unknown => string"
         },
         "clusterId": 47
       },
@@ -7117,9 +6825,7 @@
               }
             }
           },
-          "message": "enhance(view): ,add Cluster Detail Information in Detail Component/nenhance(view): merge/n/nfix(view): fix value naming taskId => ClusterId/n/nenhance(view): add Cluster Detail Data in Detail Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "enhance(view): add Cluster Detail Information in Detail Component/nenhance(view): merge/n/nfix(view): fix value naming taskId => ClusterId/n/nenhance(view): add Cluster Detail Data in Detail Component"
         },
         "clusterId": 47
       }
@@ -7180,9 +6886,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #103 from jin-Pro/main/n/nenhance(view): add FilteredData & SelectedData",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #103 from jin-Pro/main/n/nenhance(view): add FilteredData & SelectedData"
         },
         "clusterId": 48
       },
@@ -7238,9 +6942,7 @@
               }
             }
           },
-          "message": "enhance(view): ,add FilteredData & SelectedData",
-          "tags": [],
-          "releaseTags": []
+          "message": "enhance(view): add FilteredData & SelectedData"
         },
         "clusterId": 48
       }
@@ -7281,9 +6983,7 @@
               }
             }
           },
-          "message": "feat(view): add, cloc linechart (#105)/n/n* feat: add cloc linechart/n/ncloc 차트를 구현하였습니다./n차후 수정해야할 부분을 주석의 TODO로 정리 해두었습니다./n/n* fix: data가 없을 경우 early return",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add cloc linechart (#105)/n/n* feat: add cloc linechart/n/ncloc 차트를 구현하였습니다./n차후 수정해야할 부분을 주석의 TODO로 정리 해두었습니다./n/n* fix: data가 없을 경우 early return"
         },
         "clusterId": 49
       }
@@ -7344,9 +7044,7 @@
               }
             }
           },
-          "message": "\bfeat(view): r,eturn Summary value and modify content data (#97)/n/n* chore(view): Run `npm install`/n/n* feat(view): Turn data about summary and apply color visualizing/n/n* refactor(view): remove unnecessary id/n/n* refactor(view): remove unnecessary namebox and summary id/n/n* feat(view): change author profile hover action/n/n* chore(view): Run `npm install`/n/n* style(view): add color codes for same names/n/n* style(view): modify color function for more separate author",
-          "tags": [],
-          "releaseTags": []
+          "message": "\bfeat(view): return Summary value and modify content data (#97)/n/n* chore(view): Run `npm install`/n/n* feat(view): Turn data about summary and apply color visualizing/n/n* refactor(view): remove unnecessary id/n/n* refactor(view): remove unnecessary namebox and summary id/n/n* feat(view): change author profile hover action/n/n* chore(view): Run `npm install`/n/n* style(view): add color codes for same names/n/n* style(view): modify color function for more separate author"
         },
         "clusterId": 50
       }
@@ -7403,9 +7101,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #98 from vgihan/feat/v2/n/nfeat(view): add ClusterGraph Component v2 in VerticalClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #98 from vgihan/feat/v2/n/nfeat(view): add ClusterGraph Component v2 in VerticalClusterGraph"
         },
         "clusterId": 51
       },
@@ -7437,9 +7133,7 @@
               }
             }
           },
-          "message": "fix(view): modi,fy style code for sync graph",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): modify style code for sync graph"
         },
         "clusterId": 51
       },
@@ -7475,9 +7169,7 @@
               }
             }
           },
-          "message": "refactor(view):, split type of Selection",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): split type of Selection"
         },
         "clusterId": 51
       },
@@ -7509,9 +7201,7 @@
               }
             }
           },
-          "message": "refactor(view):, rename widthScale in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): rename widthScale in ClusterGraph"
         },
         "clusterId": 51
       },
@@ -7547,9 +7237,7 @@
               }
             }
           },
-          "message": "fix(view): add ,scale func & modify style code",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): add scale func & modify style code"
         },
         "clusterId": 51
       },
@@ -7581,9 +7269,7 @@
               }
             }
           },
-          "message": "feat(view): add, onClickCluster handler in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add onClickCluster handler in ClusterGraph"
         },
         "clusterId": 51
       },
@@ -7615,9 +7301,7 @@
               }
             }
           },
-          "message": "refactor(view):, split draw func in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): split draw func in ClusterGraph"
         },
         "clusterId": 51
       },
@@ -7653,9 +7337,7 @@
               }
             }
           },
-          "message": "feat(view): add, action of cluster's hover event",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add action of cluster's hover event"
         },
         "clusterId": 51
       },
@@ -7695,9 +7377,7 @@
               }
             }
           },
-          "message": "refactor(view):, split style code to scss in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): split style code to scss in ClusterGraph"
         },
         "clusterId": 51
       },
@@ -7737,9 +7417,7 @@
               }
             }
           },
-          "message": "feat(view): add, ClusterGraph Component v2 in VerticalClusterList (width degree version)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add ClusterGraph Component v2 in VerticalClusterList (width degree version)"
         },
         "clusterId": 51
       }
@@ -7804,9 +7482,7 @@
               }
             }
           },
-          "message": "feat(engine): I,mplement STEM (#91)/n/n* feat: implement Stem/n/n* feat: change implicit branch stem naming/n/n* test: add test for HEAD/n/n* chore: set off the eslint no-continue rule/n/n* refactor: 리뷰 반영/n/n* feat: queue 생성 시, constructor에 정렬 비교 함수 파라미터 추가/n/n* chore: edit test name",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(engine): Implement STEM (#91)/n/n* feat: implement Stem/n/n* feat: change implicit branch stem naming/n/n* test: add test for HEAD/n/n* chore: set off the eslint no-continue rule/n/n* refactor: 리뷰 반영/n/n* feat: queue 생성 시, constructor에 정렬 비교 함수 파라미터 추가/n/n* chore: edit test name"
         },
         "clusterId": 52
       }
@@ -7851,9 +7527,7 @@
               }
             }
           },
-          "message": "feat: commit ch,art 추가 (#109)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: commit chart 추가 (#109)"
         },
         "clusterId": 53
       }
@@ -7902,9 +7576,7 @@
               }
             }
           },
-          "message": "feat(engine): i,mplement PARSE (#82)/n/n* feat(engine): add parseSpawn/n/n* feat(engine): add parseIndex/n/n* feat(engine): add parseLog ids, parents, branches/n/n* feat(engine): parseLog to JSON/n/ntags, author, authorDate, committer, commitDate, messages, differenceStatistics까지 추가하였습니다./n/n* chore(engine): 불필요한 코드 제거/n/n* fix(engine): [object]로 표시되는 부분 수정/n/nconsole.log로 찍을 때 2뎁스 이하로 내려가는 부분이 [object]로 표기되어 해당 depth를 설정하는 코드 추가/n/n* feat(engine): parse 부분 index.ts 작성/n/nbuild 후 바로 git log 명령어와 parse를 실행하도록 수정했습니다./nparseToJSON(value)의 return 값이 CommitRaw(JSON)입니다./n/n* refact(engine): erase useless lines/n/n* chore(engine): delete parseIndex.ts/n/nindex.ts에 통합하여 기존 별도로 구분된 parse 전용 index는 삭제/n/n* feat(engine): sequenceNumber field add/n/n이후 DAG, STEM 작업을 위해 각 커밋의 순서를 나타내는 필드 추가/n/n* fix(engine): eslint error/n/n* refact(engine): 문기님 피드백 반영 사항/n/n- getNameAndEmail 함수 추가/n- eslint 걸리는 것 우회/n- parseSpawn에서 오타 수정/n- 선언자 수정/n- sequenceNumber 이름 수정/n/n* fix(engine): add trim()/n/nbranch 및 tag가 파싱될 때 앞에 공백이 들어가는 것을 제거하기 위해 trim()을 썼습니다./n/n* fix(engine): #90 이슈 해결/n/ngit log output 중 ref 정보가 terminal에서는 보여지지만 spawn을 했을 때  보여지지 않는 에러를 해결/n/n* refact(engine): PR comment 피드백 반영/n/n- slice를 startswith으로 대체했습니다./n- if else 중첩을 줄이고 early return을 적용했습니다./n- JSONArray 선언 코드 위치를 사용 직전으로 옮겼습니다./n/n* fix(engine): eslint error/n/n- consistent-return 에러 해결을 위해 return false를 추가/n/n* fix(engine): PR comment 반영/n/n- inspect 출력 형식을 디버깅 때만 사용하여 제거/n- 2D array의 경우 의미 파악을 위해 ~Matrix로 변수명을 변경하고 같은 의미를 가진 것에 대한 타입을 추가/n/n* feat(engine): consider empty input/n/nparseToJSON(\"\")일 때 early return이 되도록 추가/n/n* feat(engine): sequence field in test file",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(engine): implement PARSE (#82)/n/n* feat(engine): add parseSpawn/n/n* feat(engine): add parseIndex/n/n* feat(engine): add parseLog ids, parents, branches/n/n* feat(engine): parseLog to JSON/n/ntags, author, authorDate, committer, commitDate, messages, differenceStatistics까지 추가하였습니다./n/n* chore(engine): 불필요한 코드 제거/n/n* fix(engine): [object]로 표시되는 부분 수정/n/nconsole.log로 찍을 때 2뎁스 이하로 내려가는 부분이 [object]로 표기되어 해당 depth를 설정하는 코드 추가/n/n* feat(engine): parse 부분 index.ts 작성/n/nbuild 후 바로 git log 명령어와 parse를 실행하도록 수정했습니다./nparseToJSON(value)의 return 값이 CommitRaw(JSON)입니다./n/n* refact(engine): erase useless lines/n/n* chore(engine): delete parseIndex.ts/n/nindex.ts에 통합하여 기존 별도로 구분된 parse 전용 index는 삭제/n/n* feat(engine): sequenceNumber field add/n/n이후 DAG, STEM 작업을 위해 각 커밋의 순서를 나타내는 필드 추가/n/n* fix(engine): eslint error/n/n* refact(engine): 문기님 피드백 반영 사항/n/n- getNameAndEmail 함수 추가/n- eslint 걸리는 것 우회/n- parseSpawn에서 오타 수정/n- 선언자 수정/n- sequenceNumber 이름 수정/n/n* fix(engine): add trim()/n/nbranch 및 tag가 파싱될 때 앞에 공백이 들어가는 것을 제거하기 위해 trim()을 썼습니다./n/n* fix(engine): #90 이슈 해결/n/ngit log output 중 ref 정보가 terminal에서는 보여지지만 spawn을 했을 때  보여지지 않는 에러를 해결/n/n* refact(engine): PR comment 피드백 반영/n/n- slice를 startswith으로 대체했습니다./n- if else 중첩을 줄이고 early return을 적용했습니다./n- JSONArray 선언 코드 위치를 사용 직전으로 옮겼습니다./n/n* fix(engine): eslint error/n/n- consistent-return 에러 해결을 위해 return false를 추가/n/n* fix(engine): PR comment 반영/n/n- inspect 출력 형식을 디버깅 때만 사용하여 제거/n- 2D array의 경우 의미 파악을 위해 ~Matrix로 변수명을 변경하고 같은 의미를 가진 것에 대한 타입을 추가/n/n* feat(engine): consider empty input/n/nparseToJSON(\"\")일 때 early return이 되도록 추가/n/n* feat(engine): sequence field in test file"
         },
         "clusterId": 54
       }
@@ -7997,9 +7669,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #112 from vgihan/main/n/nfeat(view): add opening Detail Component action of selected cluster event",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #112 from vgihan/main/n/nfeat(view): add opening Detail Component action of selected cluster event"
         },
         "clusterId": 55
       },
@@ -8031,9 +7701,7 @@
               }
             }
           },
-          "message": "fix(view): solv,ing problem of lint deps warning",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): solving problem of lint deps warning"
         },
         "clusterId": 55
       },
@@ -8093,9 +7761,7 @@
               }
             }
           },
-          "message": "feat(view): mov,e detail component in Summary",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): move detail component in Summary"
         },
         "clusterId": 55
       },
@@ -8139,9 +7805,7 @@
               }
             }
           },
-          "message": "feat(view): add, action of cluster graph click event in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add action of cluster graph click event in VerticalClusterList"
         },
         "clusterId": 55
       },
@@ -8181,9 +7845,7 @@
               }
             }
           },
-          "message": "feat(view): app,ly selectedData in Detail Component",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): apply selectedData in Detail Component"
         },
         "clusterId": 55
       },
@@ -8243,9 +7905,7 @@
               }
             }
           },
-          "message": "feat(view): add, action of selected event in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add action of selected event in VerticalClusterList"
         },
         "clusterId": 55
       }
@@ -8326,9 +7986,7 @@
               }
             }
           },
-          "message": "feat(view): add, Filter in TemporalFilter Component  (#115)/n/n* fix: delete sample clusterNodeList data/n/n#32/n/n* fix: change authorDate, commitDate type Date->string/n/n#32/n/n* feat: add Filter with date/n/n#32/n/n* feat: add `filterDataByDate` util function/n/n* feat: add `ThemeSelector` for theme control/n/n#32/n/n* feat: add Filter, ThemeSelector to TemporalFilter/n/n#32/n/n* feat: add TemporalFilter styles/n/n#32/n/n* fix: apply type change (date->string)/n/n* feat: update `filterDataByDate` util function/n/n#32/n/n* feat: add minDate, maxDate for date range/n/n#32/n/n* fix(type): update NodeBase type/n/n* chore: delete console.log/n/n* fix: fix compile error/n/n* refactor: update `sortBasedOnCommitNode` function logic/n/n#32",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add Filter in TemporalFilter Component  (#115)/n/n* fix: delete sample clusterNodeList data/n/n#32/n/n* fix: change authorDate, commitDate type Date->string/n/n#32/n/n* feat: add Filter with date/n/n#32/n/n* feat: add `filterDataByDate` util function/n/n* feat: add `ThemeSelector` for theme control/n/n#32/n/n* feat: add Filter, ThemeSelector to TemporalFilter/n/n#32/n/n* feat: add TemporalFilter styles/n/n#32/n/n* fix: apply type change (date->string)/n/n* feat: update `filterDataByDate` util function/n/n#32/n/n* feat: add minDate, maxDate for date range/n/n#32/n/n* fix(type): update NodeBase type/n/n* chore: delete console.log/n/n* fix: fix compile error/n/n* refactor: update `sortBasedOnCommitNode` function logic/n/n#32"
         },
         "clusterId": 56
       }
@@ -8381,9 +8039,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #118 from ytaek/int/n/nfeat(vscode): integrate vscode + engine + view",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #118 from ytaek/int/n/nfeat(vscode): integrate vscode + engine + view"
         },
         "clusterId": 57
       },
@@ -8415,9 +8071,7 @@
               }
             }
           },
-          "message": "setup(view): ad,d fake-assets to src for asset bundling.",
-          "tags": [],
-          "releaseTags": []
+          "message": "setup(view): add fake-assets to src for asset bundling."
         },
         "clusterId": 57
       },
@@ -8461,9 +8115,7 @@
               }
             }
           },
-          "message": "feat(vscode): i,ntegrate vscode + engine + view",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode): integrate vscode + engine + view"
         },
         "clusterId": 57
       }
@@ -8508,9 +8160,7 @@
               }
             }
           },
-          "message": "chore(vscode): ,add README, add disposable (#101)",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(vscode): add README, add disposable (#101)"
         },
         "clusterId": 58
       }
@@ -8587,9 +8237,7 @@
               }
             }
           },
-          "message": "feat(view): add, tooltip and transition to AuthorBarChart (#114)/n/n* chore(view): class명 카멜케이스에서 하이픈으로 변경/n/n* feat(view): 최대 10개 data만 보여지도록 적용/n/n* feat(view): metric 변경 시 transition 추가 및 name y값 조정/n/n* feat(view): tooltip 추가/n/n* style(view): scss 네이밍 수정 및 nesting 적용/n/n* feat(view): bar class 내 text와 rect 그룹화 및 hover 스타일 변경 적용/n/n* fix(view): fix style error and typo/n/n* fix(view): fix unique key prop error in Summary",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add tooltip and transition to AuthorBarChart (#114)/n/n* chore(view): class명 카멜케이스에서 하이픈으로 변경/n/n* feat(view): 최대 10개 data만 보여지도록 적용/n/n* feat(view): metric 변경 시 transition 추가 및 name y값 조정/n/n* feat(view): tooltip 추가/n/n* style(view): scss 네이밍 수정 및 nesting 적용/n/n* feat(view): bar class 내 text와 rect 그룹화 및 hover 스타일 변경 적용/n/n* fix(view): fix style error and typo/n/n* fix(view): fix unique key prop error in Summary"
         },
         "clusterId": 59
       }
@@ -8630,9 +8278,7 @@
               }
             }
           },
-          "message": "docs: add blckl,amb as a contributor for code (#121)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add blcklamb as a contributor for code (#121)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>"
         },
         "clusterId": 60
       }
@@ -8733,9 +8379,7 @@
               }
             }
           },
-          "message": "feat(view): app,ly styles to Temporal filter (#107)/n/n* fix:틀 복구 성공/n/n* feat: 틀 css 삭제 & 데이터 가공 util 구현/n/n* fix: commit,cloc 차트 수정/n/n* fix: util 함수 오류 수정/n/n* fix: fix type error/n/n* fix:fix naming convention/n/n* fix:fix conflict/n/n* feat: cloc chart에 css적용/n/n* fix:fix conflict/n/n* fix: fix typo/n/n* fixL fix conflict/n/n* feat:그래프 css구현/n/n* fix: 높이 수정/n/n* fix: 색상 수정/n/n* fix:fix colors and height/n/n* fix:fix height/n/n* fix:fix cssnaming and margin pixel/n/n* fix:fix naming/n/n* fix:fix length",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): apply styles to Temporal filter (#107)/n/n* fix:틀 복구 성공/n/n* feat: 틀 css 삭제 & 데이터 가공 util 구현/n/n* fix: commit,cloc 차트 수정/n/n* fix: util 함수 오류 수정/n/n* fix: fix type error/n/n* fix:fix naming convention/n/n* fix:fix conflict/n/n* feat: cloc chart에 css적용/n/n* fix:fix conflict/n/n* fix: fix typo/n/n* fixL fix conflict/n/n* feat:그래프 css구현/n/n* fix: 높이 수정/n/n* fix: 색상 수정/n/n* fix:fix colors and height/n/n* fix:fix height/n/n* fix:fix cssnaming and margin pixel/n/n* fix:fix naming/n/n* fix:fix length"
         },
         "clusterId": 61
       }
@@ -8776,9 +8420,7 @@
               }
             }
           },
-          "message": "docs: add ytaek, as a contributor for code (#122)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs: add ytaek as a contributor for code (#122)/n/n* docs: update README.md/n/n* docs: update .all-contributorsrc/n/nCo-authored-by: allcontributors[bot] <46447321+allcontributors[bot]@users.noreply.github.com>"
         },
         "clusterId": 62
       }
@@ -8823,9 +8465,7 @@
               }
             }
           },
-          "message": "feat(engine): i,mplement csm (#111)/n/n* feat(engine): prototyping csm/n/n* feat(engine): implement csm/n/n* fix(engine): fix bug nested-merge squash/n/n- modify squash splice index/n- include found-merge-commit to squash-commit-nodes/n/n* feat(engine): apply sorting for squash-commits/n/n* fix(engine): change csm-node interface/n/n* fix(engine): remove unnecessary csm-node property/n/n* test(engine): add tests for csm/n/n* fix(engine): change stem-node index ordering/n/n- ASIS/n- stem[0] : oldest/n- stem[-1] : latest/n/n- TOBE/n- stem[0] : latest/n- stem[-1] : oldest/n/n* lint(engine): disable null-assertion rule/n/n* chore(engine): change function name buildCSM → buildCSMDict",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(engine): implement csm (#111)/n/n* feat(engine): prototyping csm/n/n* feat(engine): implement csm/n/n* fix(engine): fix bug nested-merge squash/n/n- modify squash splice index/n- include found-merge-commit to squash-commit-nodes/n/n* feat(engine): apply sorting for squash-commits/n/n* fix(engine): change csm-node interface/n/n* fix(engine): remove unnecessary csm-node property/n/n* test(engine): add tests for csm/n/n* fix(engine): change stem-node index ordering/n/n- ASIS/n- stem[0] : oldest/n- stem[-1] : latest/n/n- TOBE/n- stem[0] : latest/n- stem[-1] : oldest/n/n* lint(engine): disable null-assertion rule/n/n* chore(engine): change function name buildCSM → buildCSMDict"
         },
         "clusterId": 63
       }
@@ -8902,9 +8542,7 @@
               }
             }
           },
-          "message": "feat(vscode) in,tegrate analysis-engine with vscode (#120)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode) integrate analysis-engine with vscode (#120)"
         },
         "clusterId": 64
       }
@@ -8941,9 +8579,7 @@
               }
             }
           },
-          "message": "chore(engine): ,re-export types via index.ts (#127)",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(engine): re-export types via index.ts (#127)"
         },
         "clusterId": 65
       }
@@ -8996,9 +8632,7 @@
               }
             }
           },
-          "message": "feat(vscode): a,dd cluster-nodes mapper (#131)/n/n* feat(vscode): add cluster-nodes mapper/n/n* chore(engine): delete unused temp-type/n/n* fix(view): disable TemporalFilter.type `CommitNode.seq`",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(vscode): add cluster-nodes mapper (#131)/n/n* feat(vscode): add cluster-nodes mapper/n/n* chore(engine): delete unused temp-type/n/n* fix(view): disable TemporalFilter.type `CommitNode.seq`"
         },
         "clusterId": 66
       }
@@ -9055,9 +8689,7 @@
               }
             }
           },
-          "message": "fix(engine): Da,te type 적용 (#130)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(engine): Date type 적용 (#130)"
         },
         "clusterId": 67
       }
@@ -9094,9 +8726,7 @@
               }
             }
           },
-          "message": "fix(vscode): fi,x wrong command (#133)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(vscode): fix wrong command (#133)"
         },
         "clusterId": 68
       }
@@ -9153,9 +8783,7 @@
               }
             }
           },
-          "message": "fix(view):Tempo,ral filter 차트 css수정 (#129)/n/n* fix:틀 복구 성공/n/n* feat: 틀 css 삭제 & 데이터 가공 util 구현/n/n* fix: commit,cloc 차트 수정/n/n* fix: util 함수 오류 수정/n/n* fix: fix type error/n/n* fix:fix naming convention/n/n* fix:fix conflict/n/n* feat: cloc chart에 css적용/n/n* fix:fix conflict/n/n* fix: fix typo/n/n* fixL fix conflict/n/n* feat:그래프 css구현/n/n* fix: 높이 수정/n/n* fix: 색상 수정/n/n* fix:fix colors and height/n/n* fix:fix height/n/n* fix:fix cssnaming and margin pixel/n/n* fix:fix naming/n/n* fix:fix length/n/n* fix:fix height to 100px and margin with middle contents",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view):Temporal filter 차트 css수정 (#129)/n/n* fix:틀 복구 성공/n/n* feat: 틀 css 삭제 & 데이터 가공 util 구현/n/n* fix: commit,cloc 차트 수정/n/n* fix: util 함수 오류 수정/n/n* fix: fix type error/n/n* fix:fix naming convention/n/n* fix:fix conflict/n/n* feat: cloc chart에 css적용/n/n* fix:fix conflict/n/n* fix: fix typo/n/n* fixL fix conflict/n/n* feat:그래프 css구현/n/n* fix: 높이 수정/n/n* fix: 색상 수정/n/n* fix:fix colors and height/n/n* fix:fix height/n/n* fix:fix cssnaming and margin pixel/n/n* fix:fix naming/n/n* fix:fix length/n/n* fix:fix height to 100px and margin with middle contents"
         },
         "clusterId": 69
       }
@@ -9192,9 +8820,7 @@
               }
             }
           },
-          "message": "contributing.md, 수정 (#132)",
-          "tags": [],
-          "releaseTags": []
+          "message": "contributing.md 수정 (#132)"
         },
         "clusterId": 70
       }
@@ -9231,9 +8857,7 @@
               }
             }
           },
-          "message": "test(engine): a,dd sequence to fake commits (#136)/n/n* test: set seq num when creating fake commits/n/n* refactor: change importing path/n/n* test: change fake commit ids to alphapet",
-          "tags": [],
-          "releaseTags": []
+          "message": "test(engine): add sequence to fake commits (#136)/n/n* test: set seq num when creating fake commits/n/n* refactor: change importing path/n/n* test: change fake commit ids to alphapet"
         },
         "clusterId": 71
       }
@@ -9270,9 +8894,7 @@
               }
             }
           },
-          "message": "fix: activate p,roduction mode (#137)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix: activate production mode (#137)"
         },
         "clusterId": 72
       }
@@ -9325,9 +8947,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #94 from taejs/stats-icicle/n/nfeat(view): add FileIcicleSummary",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #94 from taejs/stats-icicle/n/nfeat(view): add FileIcicleSummary"
         },
         "clusterId": 73
       },
@@ -9359,9 +8979,7 @@
               }
             }
           },
-          "message": "feature(view): ,hide root node of partitions - FileIcicleSummary/n/nRefers githru - https://github.com/githru/githru/blob/b479984a3081e4e6e389179b86a6997db984d5a3/frontend/src/components/FileIcicleSummary.js#L8",
-          "tags": [],
-          "releaseTags": []
+          "message": "feature(view): hide root node of partitions - FileIcicleSummary/n/nRefers githru - https://github.com/githru/githru/blob/b479984a3081e4e6e389179b86a6997db984d5a3/frontend/src/components/FileIcicleSummary.js#L8"
         },
         "clusterId": 73
       },
@@ -9393,9 +9011,7 @@
               }
             }
           },
-          "message": "feature(view): ,make <FileIcicleSummary/> to be zoomable",
-          "tags": [],
-          "releaseTags": []
+          "message": "feature(view): make <FileIcicleSummary/> to be zoomable"
         },
         "clusterId": 73
       },
@@ -9427,9 +9043,7 @@
               }
             }
           },
-          "message": "feature(view): ,draw icicle tree in <FileIcicleSummary/>",
-          "tags": [],
-          "releaseTags": []
+          "message": "feature(view): draw icicle tree in <FileIcicleSummary/>"
         },
         "clusterId": 73
       },
@@ -9473,9 +9087,7 @@
               }
             }
           },
-          "message": "chore(view): cr,eate FileIcicleSummary component",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(view): create FileIcicleSummary component"
         },
         "clusterId": 73
       },
@@ -9507,9 +9119,7 @@
               }
             }
           },
-          "message": "chore(view): co,py fake data from githru FileIcicleSummary.tsx",
-          "tags": [],
-          "releaseTags": []
+          "message": "chore(view): copy fake data from githru FileIcicleSummary.tsx"
         },
         "clusterId": 73
       }
@@ -9570,9 +9180,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #134 from jin-Pro/main/n/nstyle(view): add Detail Component css",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #134 from jin-Pro/main/n/nstyle(view): add Detail Component css"
         },
         "clusterId": 74
       },
@@ -9620,9 +9228,7 @@
               }
             }
           },
-          "message": "enhance(view): ,add commitList list up feature && detail Summary Move Up",
-          "tags": [],
-          "releaseTags": []
+          "message": "enhance(view): add commitList list up feature && detail Summary Move Up"
         },
         "clusterId": 74
       },
@@ -9654,9 +9260,7 @@
               }
             }
           },
-          "message": "style(view): ad,d detail component scroll hide",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): add detail component scroll hide"
         },
         "clusterId": 74
       },
@@ -9692,9 +9296,7 @@
               }
             }
           },
-          "message": "refactor(view):, fix Detail Component split DetailSummary",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): fix Detail Component split DetailSummary"
         },
         "clusterId": 74
       },
@@ -9730,9 +9332,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,Detail Component space && naming",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix Detail Component space && naming"
         },
         "clusterId": 74
       },
@@ -9768,9 +9368,7 @@
               }
             }
           },
-          "message": "style(view): ad,d Detail Container css in Summary",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): add Detail Container css in Summary"
         },
         "clusterId": 74
       },
@@ -9806,9 +9404,7 @@
               }
             }
           },
-          "message": "style(view): ad,d Detail css",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): add Detail css"
         },
         "clusterId": 74
       },
@@ -9840,9 +9436,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,Detail Util Func Smallize",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix Detail Util Func Smallize"
         },
         "clusterId": 74
       }
@@ -9879,9 +9473,7 @@
               }
             }
           },
-          "message": "fix(engine): bu,gfix idendtifing nested-merge from squash-commits (#126) (#135)/n/n* fix(engine): bugfix idendtifing nested-merge from squash-commits (#126)/n/n* fix(engine): bugfix nested-merge filtering/n/n* chore(engine): rename variable of csm",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(engine): bugfix idendtifing nested-merge from squash-commits (#126) (#135)/n/n* fix(engine): bugfix idendtifing nested-merge from squash-commits (#126)/n/n* fix(engine): bugfix nested-merge filtering/n/n* chore(engine): rename variable of csm"
         },
         "clusterId": 75
       }
@@ -9938,9 +9530,7 @@
               }
             }
           },
-          "message": "fix(view): impr,ove CLS performance (#139)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): improve CLS performance (#139)"
         },
         "clusterId": 76
       }
@@ -10005,9 +9595,7 @@
               }
             }
           },
-          "message": "style(view): 전반,적 레이아웃 100%에 맞게 축소 (#141)",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): 전반적 레이아웃 100%에 맞게 축소 (#141)"
         },
         "clusterId": 77
       }
@@ -10048,9 +9636,7 @@
               }
             }
           },
-          "message": "fix(engine): ma,in/master/HEAD 브랜치를 가질 경우 stemId를 main/master/HEAD로 설정 (#140)/n/n* fix: main/master/HEAD 브랜치를 가질 경우 stemId를 main/master/HEAD로 설정/n/n* refactor: change importing path/n/n* test: change test name/n/n* refactor: use closure/n/n* test: check if stemDict has main or master/n/n* refactor: change function name",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(engine): main/master/HEAD 브랜치를 가질 경우 stemId를 main/master/HEAD로 설정 (#140)/n/n* fix: main/master/HEAD 브랜치를 가질 경우 stemId를 main/master/HEAD로 설정/n/n* refactor: change importing path/n/n* test: change test name/n/n* refactor: use closure/n/n* test: check if stemDict has main or master/n/n* refactor: change function name"
         },
         "clusterId": 78
       }
@@ -10087,9 +9673,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,tempral filter overlap scroll bar (#143)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix tempral filter overlap scroll bar (#143)"
         },
         "clusterId": 79
       }
@@ -10146,9 +9730,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #142 from vgihan/main/n/nfeat(view): add transition in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #142 from vgihan/main/n/nfeat(view): add transition in ClusterGraph"
         },
         "clusterId": 80
       },
@@ -10180,9 +9762,7 @@
               }
             }
           },
-          "message": "fix(view): upda,te svg height when detail open in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): update svg height when detail open in ClusterGraph"
         },
         "clusterId": 80
       },
@@ -10226,9 +9806,7 @@
               }
             }
           },
-          "message": "feat(view): add, transition in Summary",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add transition in Summary"
         },
         "clusterId": 80
       },
@@ -10264,9 +9842,7 @@
               }
             }
           },
-          "message": "refactor(view):, rename class prop of element in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "refactor(view): rename class prop of element in ClusterGraph"
         },
         "clusterId": 80
       },
@@ -10310,9 +9886,7 @@
               }
             }
           },
-          "message": "feat(view): add, transition in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add transition in ClusterGraph"
         },
         "clusterId": 80
       }
@@ -10349,9 +9923,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #150 from vgihan/main/n/nfix(view): update cluster graph size (width, height, gap)",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #150 from vgihan/main/n/nfix(view): update cluster graph size (width, height, gap)"
         },
         "clusterId": 81
       },
@@ -10383,9 +9955,7 @@
               }
             }
           },
-          "message": "fix(view): upda,te cluster graph size (width, height, gap)",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): update cluster graph size (width, height, gap)"
         },
         "clusterId": 81
       }
@@ -10438,9 +10008,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,summary issue #146 (#151)/n/n* chore(view): Run `npm install`/n/n* chore(view): Run `npm install`/n/n* fix(view): fix summary issues #146/n/n* fix(view): modify each node height/n/n* fix(view): modify author background color #102/n/n* fix(view): modify long commit message",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix summary issue #146 (#151)/n/n* chore(view): Run `npm install`/n/n* chore(view): Run `npm install`/n/n* fix(view): fix summary issues #146/n/n* fix(view): modify each node height/n/n* fix(view): modify author background color #102/n/n* fix(view): modify long commit message"
         },
         "clusterId": 82
       }
@@ -10489,9 +10057,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #152 from vgihan/main/n/nfeat(view): add cluster link line in ClusterGraph (fix issue #146)",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #152 from vgihan/main/n/nfeat(view): add cluster link line in ClusterGraph (fix issue #146)"
         },
         "clusterId": 83
       },
@@ -10527,9 +10093,7 @@
               }
             }
           },
-          "message": "fix(view): upda,te className for convention in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): update className for convention in ClusterGraph"
         },
         "clusterId": 83
       },
@@ -10573,9 +10137,7 @@
               }
             }
           },
-          "message": "feat(view): add, cluster link line in ClusterGraph",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add cluster link line in ClusterGraph"
         },
         "clusterId": 83
       }
@@ -10628,9 +10190,7 @@
               }
             }
           },
-          "message": "fix(view): fix ,some issues of temporal filter #145 (#153)/n/n* chore(view): Run `npm install`/n/n* chore(view): Run `npm install`/n/n* fix(view): remove y axis and add chart name/n/n* fix(view): remove checkbox/n/n* fix(view): fill in the upside of date control/n/n* fix(view): modify date controller padding value",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): fix some issues of temporal filter #145 (#153)/n/n* chore(view): Run `npm install`/n/n* chore(view): Run `npm install`/n/n* fix(view): remove y axis and add chart name/n/n* fix(view): remove checkbox/n/n* fix(view): fill in the upside of date control/n/n* fix(view): modify date controller padding value"
         },
         "clusterId": 84
       }
@@ -10691,9 +10251,7 @@
               }
             }
           },
-          "message": "feat(view): man,ipulate data from props, remove fake assets in <FileIcicleSummary/> (#156)/n/n* feat(view): add getFileChangesMap function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): add getFileScoresMap function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): add getFileChangesTree function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): manipulate data from props, remove fake assets in <FileIcicleSummary/>/n/n* chore(view): move constants to FileIcicleSummary.const.ts/n/n* chore(view): change compare function to sort by value desc/n/n* style(view): change color code of FileIcicleSummary/n/nFollowing main color/nhttps://github.com/githru/githru-vscode-ext/issues/84/n/n* chore(view): remove unused title of FileIcicleSummary/n/n* style(view): improve readability of FileIcicleSummary/n/n- Increased font size/n- Change font color to white",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): manipulate data from props, remove fake assets in <FileIcicleSummary/> (#156)/n/n* feat(view): add getFileChangesMap function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): add getFileScoresMap function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): add getFileChangesTree function/n/nmanipulate FileIcicleSummary data/n/n* feat(view): manipulate data from props, remove fake assets in <FileIcicleSummary/>/n/n* chore(view): move constants to FileIcicleSummary.const.ts/n/n* chore(view): change compare function to sort by value desc/n/n* style(view): change color code of FileIcicleSummary/n/nFollowing main color/nhttps://github.com/githru/githru-vscode-ext/issues/84/n/n* chore(view): remove unused title of FileIcicleSummary/n/n* style(view): improve readability of FileIcicleSummary/n/n- Increased font size/n- Change font color to white"
         },
         "clusterId": 85
       }
@@ -10770,9 +10328,7 @@
               }
             }
           },
-          "message": "feat(view): fix, verticalClusterList issues and refactor detail component (#154)/n/n* chore: add time file in utils folder/n/n* chore: add path alias in webpack config/n/n* feat(view): add additional information in detail component/n/n* feat(view): change style of detail summary/n/n* feat(view): change style of divider/n/n* feat(view): add collapsible marker/n/n* feat(view): changed fixed height of detail/n/n* feat(view): add visibility to summary/n/n* fix(view): fix that read more btn doesnt work/n/n* feat(view): change color for visibility",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): fix verticalClusterList issues and refactor detail component (#154)/n/n* chore: add time file in utils folder/n/n* chore: add path alias in webpack config/n/n* feat(view): add additional information in detail component/n/n* feat(view): change style of detail summary/n/n* feat(view): change style of divider/n/n* feat(view): add collapsible marker/n/n* feat(view): changed fixed height of detail/n/n* feat(view): add visibility to summary/n/n* fix(view): fix that read more btn doesnt work/n/n* feat(view): change color for visibility"
         },
         "clusterId": 86
       }
@@ -10853,9 +10409,7 @@
               }
             }
           },
-          "message": "style(view): fi,x style issues in authorBarChart (#155)/n/n* style(view): selectBox outline 및 margin 수정/n/n* style(view): authorBarChart y축 tick 제거/n/n* style(view): 스크롤바 스타일 수정/n/n* fix(view): option명 commit -> commit #으로 변경/n/n* style(view): 전반적인 컴포넌트 레이아웃 간격 조절/n/n* fix(view): fix ci errors",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): fix style issues in authorBarChart (#155)/n/n* style(view): selectBox outline 및 margin 수정/n/n* style(view): authorBarChart y축 tick 제거/n/n* style(view): 스크롤바 스타일 수정/n/n* fix(view): option명 commit -> commit #으로 변경/n/n* style(view): 전반적인 컴포넌트 레이아웃 간격 조절/n/n* fix(view): fix ci errors"
         },
         "clusterId": 87
       }
@@ -10936,9 +10490,7 @@
               }
             }
           },
-          "message": "style(view): fi,x style issues in detail component (#157)",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): fix style issues in detail component (#157)"
         },
         "clusterId": 88
       }
@@ -10975,9 +10527,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #158 from jin-Pro/main/n/nadd View CONTRIBUTING.md Template",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #158 from jin-Pro/main/n/nadd View CONTRIBUTING.md Template"
         },
         "clusterId": 89
       },
@@ -11009,9 +10559,7 @@
               }
             }
           },
-          "message": "docs(view): add, View CONTRIBUTING.md Template",
-          "tags": [],
-          "releaseTags": []
+          "message": "docs(view): add View CONTRIBUTING.md Template"
         },
         "clusterId": 89
       }
@@ -11052,9 +10600,7 @@
               }
             }
           },
-          "message": "feat: add contr,ibuting md and readme md files (#160)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat: add contributing md and readme md files (#160)"
         },
         "clusterId": 90
       }
@@ -11099,9 +10645,7 @@
               }
             }
           },
-          "message": "Merge pull requ,est #159 from vgihan/main/n/nfix(view): modify variable height ClusterGraph transition & update scroll",
-          "tags": [],
-          "releaseTags": []
+          "message": "Merge pull request #159 from vgihan/main/n/nfix(view): modify variable height ClusterGraph transition & update scroll"
         },
         "clusterId": 91
       },
@@ -11137,9 +10681,7 @@
               }
             }
           },
-          "message": "fix(view): dele,te last element of cluster-graph__link",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): delete last element of cluster-graph__link"
         },
         "clusterId": 91
       },
@@ -11175,9 +10717,7 @@
               }
             }
           },
-          "message": "fix(view): upda,te style problem in VerticalClusterList",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): update style problem in VerticalClusterList"
         },
         "clusterId": 91
       },
@@ -11209,9 +10749,7 @@
               }
             }
           },
-          "message": "fix(view): add ,ClusterGraph useEffect deps",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): add ClusterGraph useEffect deps"
         },
         "clusterId": 91
       },
@@ -11243,9 +10781,7 @@
               }
             }
           },
-          "message": "feat(view): add, scroll center in Summary",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(view): add scroll center in Summary"
         },
         "clusterId": 91
       },
@@ -11285,9 +10821,7 @@
               }
             }
           },
-          "message": "fix(view): modi,fy variable height detail problem",
-          "tags": [],
-          "releaseTags": []
+          "message": "fix(view): modify variable height detail problem"
         },
         "clusterId": 91
       }
@@ -11328,9 +10862,7 @@
               }
             }
           },
-          "message": "feat(engine): a,dd contributing.md (#161)",
-          "tags": [],
-          "releaseTags": []
+          "message": "feat(engine): add contributing.md (#161)"
         },
         "clusterId": 92
       }
@@ -11367,9 +10899,7 @@
               }
             }
           },
-          "message": "style(view): fi,x option background color (#162)",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): fix option background color (#162)"
         },
         "clusterId": 93
       }
@@ -11406,9 +10936,7 @@
               }
             }
           },
-          "message": "style(view): fi,t summary height and delete animation (#163)",
-          "tags": [],
-          "releaseTags": []
+          "message": "style(view): fit summary height and delete animation (#163)"
         },
         "clusterId": 94
       }
