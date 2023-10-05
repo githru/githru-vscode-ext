@@ -6,6 +6,8 @@
   flex-grow: 1;
   padding-left: 20px;
   padding-top: 5px;
+  width: 100%;
+
   .cluster-summary__cluster {
     padding: 5px 0;
     .toggle-contents-button {
@@ -93,10 +95,10 @@
 .sort-button {
   color: var(--primary-color);
   cursor: pointer;
-  position:absolute;
+  position: absolute;
   right: 26%;
   top: 34%;
   &:hover {
-    color: white; 
+    color: white;
   }
 }
