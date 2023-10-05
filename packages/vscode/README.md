@@ -33,6 +33,10 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 
+### 0.6.1
+- subgraph
+- launch one panel only
+
 ### 0.6.0
 - branch selector
 - reset github auth

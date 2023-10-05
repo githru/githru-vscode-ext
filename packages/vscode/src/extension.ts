@@ -34,7 +34,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
     try {
-      console.debug(currentPanel);
+      console.debug("current Panel = ", currentPanel);
       if (currentPanel) {
         currentPanel.reveal();
         return;
@@ -55,7 +55,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
       const fetchCurrentBranch = async () => {
-        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+
+        let branchName;
+        try {
+            branchName = await getCurrentBranchName(gitPath, currentWorkspacePath)
+        } catch (error) {
+            console.error(error);
+        }
+
         if (!branchName) {
           const branchList = (await fetchBranches()).branchList;
           branchName = getDefaultBranchName(branchList);
