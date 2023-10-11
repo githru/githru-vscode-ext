@@ -26,12 +26,19 @@ function normalizeFsPath(fsPath: string) {
 export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
+  let currentPanel: vscode.WebviewPanel | undefined = undefined;
+
   await credentials.initialize(context);
 
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
     try {
+      console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
+      if (currentPanel) {
+        currentPanel.reveal();
+        return;
+      }
       const gitPath = (await findGit()).path;
 
       const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
@@ -48,7 +55,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
       const fetchCurrentBranch = async () => {
-        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+
+        let branchName;
+        try {
+            branchName = await getCurrentBranchName(gitPath, currentWorkspacePath)
+        } catch (error) {
+            console.error(error);
+        }
+
         if (!branchName) {
           const branchList = (await fetchBranches()).branchList;
           branchName = getDefaultBranchName(branchList);
@@ -81,6 +95,15 @@ export async function activate(context: vscode.ExtensionContext) {
         fetchBranches,
         fetchCurrentBranch,
       });
+      currentPanel = webLoader.getPanel();
+
+      currentPanel?.onDidDispose(
+        () => {
+          currentPanel = undefined;
+        },
+        null,
+        context.subscriptions
+      );
 
       subscriptions.push(webLoader);
       vscode.window.showInformationMessage("Hello Githru");

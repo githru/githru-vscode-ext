@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 
-import "./App.module.scss";
+import "./App.scss";
 import { GlobalDataProvider } from "./context/GlobalDataProvider";
 import App from "./App";
 

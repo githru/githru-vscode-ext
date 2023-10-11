@@ -1,20 +1,17 @@
-import classNames from "classnames/bind";
-
 import { Author } from "components/@common/Author";
 import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
 import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
 import { useGlobalData } from "hooks";
 
-import styles from "./FilteredAuthors.module.scss";
+import "./FilteredAuthors.scss";
 
 const FilteredAuthors = () => {
-  const cx = classNames.bind(styles);
   const { selectedData } = useGlobalData();
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusters = getInitData(selectedData);
 
   return (
-    <div className={cx("selected-container")}>
+    <div className="selected-container">
       {authSrcMap &&
         selectedClusters.map((selectedCluster) => {
           return selectedCluster.summary.authorNames.map((authorArray: string[]) => {
