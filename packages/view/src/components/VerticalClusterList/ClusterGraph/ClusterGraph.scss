@@ -1,5 +1,6 @@
 .cluster-graph__container {
   cursor: pointer;
+  min-width: 84px;
 
   &:hover {
     .cluster-graph-container__box {
