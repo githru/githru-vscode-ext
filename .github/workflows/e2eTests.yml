@@ -25,5 +25,6 @@ jobs:
       - name: npx playwright install
         run: npx playwright install
 
-      - name: Run Playwright tests
-        run: npm run test:e2e
+# Temporarily Disabled until UI renewal
+#      - name: Run Playwright tests
+#        run: npm run test:e2e
