@@ -33,6 +33,7 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
+    myStatusBarItem.text = "$(sync~spin) githru";
     try {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
       if (currentPanel) {
@@ -100,12 +101,14 @@ export async function activate(context: vscode.ExtensionContext) {
       currentPanel?.onDidDispose(
         () => {
           currentPanel = undefined;
+          myStatusBarItem.text = "githru";
         },
         null,
         context.subscriptions
       );
 
       subscriptions.push(webLoader);
+      myStatusBarItem.text = "$(check) githru";
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {
