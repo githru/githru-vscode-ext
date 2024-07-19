@@ -38,6 +38,7 @@ export async function activate(context: vscode.ExtensionContext) {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
       if (currentPanel) {
         currentPanel.reveal();
+        myStatusBarItem.text = "$(check) githru";
         return;
       }
       const gitPath = (await findGit()).path;
