@@ -25,6 +25,7 @@ const AuthorBarChart = () => {
   const [prevData, setPrevData] = useState<ClusterNode[]>([]);
 
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
+
   let data = authorData.sort((a, b) => {
     if (a[metric] === b[metric]) {
       return sortDataByName(a.name, b.name);
@@ -32,7 +33,16 @@ const AuthorBarChart = () => {
     return b[metric] - a[metric];
   });
   if (data.length > 10) {
-    data = data.slice(0, 10);
+    const topAuthors = data.slice(0, 9);
+    const otherAuthors = data.slice(9);
+    const reducedOtherAuthors = otherAuthors.reduce(
+      (acc, cur) => {
+        acc[metric] += cur[metric];
+        return acc;
+      },
+      { name: "others", [metric]: 0 } as AuthorDataType
+    );
+    data = [...topAuthors, reducedOtherAuthors];
   }
 
   useEffect(() => {
