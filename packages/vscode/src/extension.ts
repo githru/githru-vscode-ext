@@ -18,6 +18,7 @@ import {
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
+const projectName = 'githru';
 
 function normalizeFsPath(fsPath: string) {
   return fsPath.replace(/\\/g, "/");
@@ -33,12 +34,12 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-    myStatusBarItem.text = "$(sync~spin) githru";
+    myStatusBarItem.text = `$(sync~spin) ${projectName}`;
     try {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
       if (currentPanel) {
         currentPanel.reveal();
-        myStatusBarItem.text = "$(check) githru";
+        myStatusBarItem.text = `$(check) ${projectName}`;
         return;
       }
       const gitPath = (await findGit()).path;
@@ -102,14 +103,14 @@ export async function activate(context: vscode.ExtensionContext) {
       currentPanel?.onDidDispose(
         () => {
           currentPanel = undefined;
-          myStatusBarItem.text = "githru";
+          myStatusBarItem.text = projectName;
         },
         null,
         context.subscriptions
       );
 
       subscriptions.push(webLoader);
-      myStatusBarItem.text = "$(check) githru";
+      myStatusBarItem.text = `$(check) ${projectName}`;
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {
@@ -141,7 +142,7 @@ export async function activate(context: vscode.ExtensionContext) {
   subscriptions.concat([disposable, loginWithGithub, resetGithubAuth]);
 
   myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -10);
-  myStatusBarItem.text = "githru";
+  myStatusBarItem.text = projectName;
   myStatusBarItem.command = COMMAND_LAUNCH;
   subscriptions.push(myStatusBarItem);
 
