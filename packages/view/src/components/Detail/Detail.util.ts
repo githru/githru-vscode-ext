@@ -1,15 +1,12 @@
 /* eslint-disable no-restricted-syntax */
-import type { GlobalProps, CommitNode } from "types/";
+import type { CommitNode } from "types/";
 
-type GetCommitListInCluster = GlobalProps & { clusterId: number };
-export const getCommitListInCluster = ({
-  data,
-  clusterId,
-}: GetCommitListInCluster) =>
-  data
-    .map((clusterNode) => clusterNode.commitNodeList)
-    .flat()
-    .filter((commitNode) => commitNode.clusterId === clusterId);
+// type GetCommitListInCluster = GlobalProps & { clusterId: number };
+// export const getCommitListInCluster = ({ data, clusterId }: GetCommitListInCluster) =>
+//   data
+//     .map((clusterNode) => clusterNode.commitNodeList)
+//     .flat()
+//     .filter((commitNode) => commitNode.clusterId === clusterId);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getDataSetSize = <T extends any[]>(arr: T) => {
@@ -22,15 +19,11 @@ const getCommitListAuthorLength = (commitNodes: CommitNode[]) => {
 };
 
 const getChangeFileLength = (commitNodes: CommitNode[]) => {
-  return getDataSetSize(
-    commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat()
-  );
+  return getDataSetSize(commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat());
 };
 
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
-export const getCommitListDetail = ({
-  commitNodeListInCluster,
-}: GetCommitListDetail) => {
+export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDetail) => {
   const authorLength = getCommitListAuthorLength(commitNodeListInCluster);
   const fileLength = getChangeFileLength(commitNodeListInCluster);
   const diffStatistics = commitNodeListInCluster.reduce(
@@ -53,11 +46,14 @@ export const getCommitListDetail = ({
   };
 };
 
-export const getSummaryCommitList = (l: number, arr: CommitNode[]) => {
+export const getSummaryCommitList = (arr: CommitNode[]) => {
   const res = [];
+  const SUMMARY_COMMIT_LIST_PREVIEW_LENGTH = 5;
   for (
     let item = arr.length - 1;
-    arr.length >= 5 ? item > arr.length - 1 - l : item >= 0;
+    arr.length >= SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
+      ? item > arr.length - 1 - SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
+      : item >= 0;
     item -= 1
   ) {
     res.push(arr[item]);

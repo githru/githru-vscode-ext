@@ -1,0 +1,22 @@
+.refresh-button {
+  width: 30px;
+  height: 30px;
+  border: 0px solid transparent;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.refresh-button-icon {
+  &--loading {
+    animation: rotate 2s infinite;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

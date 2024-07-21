@@ -18,29 +18,14 @@
     flex-grow: 0.1;
     text-align: right;
 
-    span {
+    .detail__summary__item {
       position: relative;
       margin-right: 10px;
+      display: inline-flex;
+      gap: 4px;
 
-      strong {
-        margin-right: 2px;
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        right: -5px;
-        width: 1px;
-        height: 12px;
-        background: $white;
-      }
       &:last-child {
         margin-right: 0;
-
-        &::after {
-          display: none;
-        }
       }
     }
   }
@@ -54,36 +39,80 @@
   }
 }
 
+@media (max-width: 1080px) {
+  .detail__summary__item__name {
+    display: none;
+  }
+}
+
 .detail__commit-list__container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
   padding: 0 20px;
   font-size: 12px;
 
   .commit-item {
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    margin: 7px 0px;
     color: $gray-600;
 
     .commit-detail {
-      overflow: hidden;
       color: $white;
-      .message {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-        color: $white;
-        margin-right: 4px;
-        &:hover {
-          display: block;
-          cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-left: 5px;
+
+      .avatar-message {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .message-container {
+          position: relative;
           overflow: visible;
+          flex-grow: 1;
+          padding-right: 50px;
+          width: auto;
+
+          .message {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            color: $white;
+            margin: 0 4px 0 15px;
+
+            &:hover {
+              display: block;
+              cursor: pointer;
+              overflow: visible;
+              position: absolute;
+              z-index: 10;
+              background-color: #212121;
+              padding-bottom: 5px;
+              top: -7px;
+            }
+          }
         }
+      }
+
+      .author-date {
+        display: block;
+        position: relative;
+        white-space: nowrap;
       }
     }
     .commit-id {
-      padding-left: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 6em;
       position: relative;
+
       span:hover {
         cursor: pointer;
         .commit-id__tooltip {
@@ -99,7 +128,7 @@
   margin: 20px auto 0;
   border: none;
   background: none;
-  color: #ff8272;
+  color: var(--primary-color);
   cursor: pointer;
 
   &:hover {

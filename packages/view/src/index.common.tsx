@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom/client";
 
-import { GlobalDataProvider } from "hooks";
-
 import "./App.scss";
+import { GlobalDataProvider } from "./context/GlobalDataProvider";
 import App from "./App";
 
 export const initRender = () => {

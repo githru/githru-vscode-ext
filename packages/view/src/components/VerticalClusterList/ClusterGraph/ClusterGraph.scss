@@ -1,26 +1,31 @@
 .cluster-graph__container {
   cursor: pointer;
+  min-width: 84px;
 
   &:hover {
-    .cluster-graph__cluster {
+    .cluster-graph-container__box {
       stroke-width: 3;
     }
   }
 
-  .cluster-graph__cluster {
+  .cluster-graph-container__box {
     rx: 5;
     stroke-width: 1;
-    stroke: #ff8272;
+    stroke: var(--primary-color);
     fill: transparent;
   }
 
-  .cluster-graph__degree {
+  .cluster-graph-container__commit-amount-cluster {
     rx: 5;
-    fill: #ff8272;
+    fill: var(--primary-color);
   }
 }
 
-.cluster-graph__link {
-  stroke: #ff8272;
+.cluster-graph__total-line {
+  stroke: var(--primary-color);
   stroke-width: 1;
+}
+
+.circle-group {
+  fill: var(--primary-color);
 }

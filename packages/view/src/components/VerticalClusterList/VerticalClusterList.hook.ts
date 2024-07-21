@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 
 import type { SelectedDataProps } from "types";
 
-export const useResizeObserver = (
-  ref: RefObject<HTMLDivElement>,
-  selectedData: SelectedDataProps
-) => {
+export const useResizeObserver = (ref: RefObject<HTMLDivElement>, selectedData: SelectedDataProps) => {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {

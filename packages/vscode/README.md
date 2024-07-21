@@ -33,9 +33,30 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 
+### 0.6.1
+- subgraph
+- launch one panel only
+
+### 0.6.0
+- branch selector
+- reset github auth
+- error handling for pr/auth
+- e2e test
+
+### 0.5.0
+- login by github auth
+- fix minor ui issues
+- author avatar in details
+- error handling
+
+### 0.4.0
+- app loading ui
+- improved internal architecture
+- theme color palette
+
 ### 0.3.0
-- added temporal filter by brushing
-= added refresh feature.
+- temporal filter by brushing
+- refresh
 - put avatar in author bar chart
 - improved some UX.
 
@@ -49,4 +70,3 @@ Calling out known issues can help limit users opening duplicate issues against y
 ### 0.1.0
 
 Initial release.
-

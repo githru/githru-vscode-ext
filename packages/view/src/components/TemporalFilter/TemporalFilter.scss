@@ -2,40 +2,14 @@
   display: flex;
   flex-direction: column;
 
-  .data-control-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-    padding: 1px;
-    // background: #212121;
-    color: white;
-    height: 30px;
-    backdrop-filter: blur(8px);
-
-    .filter {
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .theme-selector {
-      margin-right: 3px;
-    }
-  }
-
   .line-charts {
     display: flex;
     flex-direction: column;
     height: 140px;
     width: 100%;
     align-content: space-around;
-    position: relative;
-    top: 30px;
+    
+    margin-top: 30px;
   }
 
   .line-charts-svg {
@@ -54,7 +28,7 @@
 
   .line-chart {
     overflow: visible;
-    fill: #ff8272;
+    fill: var(--primary-color);
   }
 }
 
@@ -79,27 +53,4 @@
   font-size: 10px;
   font-weight: 500;
   fill: white;
-}
-
-.refresh-button {
-  width: 2.2rem;
-  height: 1.2rem;
-  position: absolute;
-  right: 0;
-  border: 0px solid white;
-  border-radius: 5px;
-  color: white;
-  background-color: transparent;
-  cursor: pointer;
-  padding-right: 2.6rem;
-
-  &:active {
-    background-color: black;
-    color: white;
-  }
-
-  &:hover {
-    background-color: white;
-    color: black;
-  }
 }

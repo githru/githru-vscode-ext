@@ -1,38 +1,33 @@
 import {
-  CommitRaw,
-  CommitNode,
-  CommitMessageType,
+  type CommitDict,
+  type CommitMessageType,
   CommitMessageTypeList,
-  CommitDict,
+  type CommitNode,
+  type CommitRaw,
 } from "./types";
 
 export function buildCommitDict(commits: CommitRaw[]): CommitDict {
-  return new Map(
-    commits.map((commit) => [commit.id, { commit } as CommitNode])
-  );
+  return new Map(commits.map((commit) => [commit.id, { commit } as CommitNode]));
 }
 
 export function getLeafNodes(commitDict: CommitDict): CommitNode[] {
   const leafNodes: CommitNode[] = [];
-  commitDict.forEach(
-    (node) => node.commit.branches.length && leafNodes.push(node)
-  );
+  commitDict.forEach((node) => node.commit.branches.length && leafNodes.push(node));
   return leafNodes;
 }
 
 export function getCommitMessageType(message: string): CommitMessageType {
-  let messagePrefix = message.match(/\w*(\(.*\))?!?:/)?.[0];
-  if (!messagePrefix) return "";
+  const lowerCaseMessage = message.toLowerCase();
+  let type = "";
 
-  /**
-   * commit type 직후에 세 가지 특수문자가 올 수 있음
-   * ( -> scope
-   * ! -> breaking change
-   * : -> type과 message 구분
-   */
-  const separatorIdx = messagePrefix.search(/[(!:]/);
+  CommitMessageTypeList.forEach((commitMessageType) => {
+    const classifiedCommitMessageIndex = lowerCaseMessage.indexOf(commitMessageType);
 
-  if (separatorIdx > 0) messagePrefix = messagePrefix.slice(0, separatorIdx);
+    if (classifiedCommitMessageIndex >= 0) {
+      if (!type.length) type = commitMessageType;
+      else if (lowerCaseMessage.indexOf(type) > classifiedCommitMessageIndex) type = commitMessageType;
+    }
+  });
 
-  return CommitMessageTypeList.includes(messagePrefix) ? messagePrefix : "";
+  return type;
 }

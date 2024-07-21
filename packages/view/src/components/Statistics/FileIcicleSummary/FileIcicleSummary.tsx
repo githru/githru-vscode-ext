@@ -3,6 +3,7 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
+import { PRIMARY_COLOR_VARIABLE_NAME } from "../../../constants/constants";
 import { useGetSelectedData } from "../Statistics.hook";
 
 import { getFileChangesTree } from "./FileIcicleSummary.util";
@@ -14,7 +15,7 @@ import {
   SINGLE_RECT_WIDTH,
   FONT_SIZE,
   LABEL_VISIBLE_HEIGHT,
-  COLOR_CODE,
+  OPACITY_CODE,
 } from "./FileIcicleSummary.const";
 
 import "./FileIcicleSummary.scss";
@@ -27,22 +28,16 @@ const partition = (data: FileChangesNode) => {
     // https://observablehq.com/@d3/visiting-a-d3-hierarchy#count
     .sum((d) => d?.value ?? 0)
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
-  return d3
-    .partition<FileChangesNode>()
-    .size([HEIGHT, ((root.height + 1) * WIDTH) / MAX_DEPTH])(root);
+  return d3.partition<FileChangesNode>().size([HEIGHT, ((root.height + 1) * WIDTH) / MAX_DEPTH])(root);
 };
 
 const labelVisible = (d: HierarchyRectangularNode<FileChangesNode>) =>
   d.y1 <= WIDTH && d.y0 >= 0 && d.x1 - d.x0 > LABEL_VISIBLE_HEIGHT;
 
-const rectHeight = (d: HierarchyRectangularNode<FileChangesNode>) =>
-  d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
+const rectHeight = (d: HierarchyRectangularNode<FileChangesNode>) => d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
 
 // Refer https://observablehq.com/@d3/zoomable-icicle
-const drawIcicleTree = async (
-  $target: RefObject<SVGSVGElement>,
-  data: FileChangesNode
-) => {
+const drawIcicleTree = async ($target: RefObject<SVGSVGElement>, data: FileChangesNode) => {
   let focus: HierarchyRectangularNode<FileChangesNode> | null = null;
   const root = partition(data);
 
@@ -65,10 +60,8 @@ const drawIcicleTree = async (
     .attr("width", (d) => d.y1 - d.y0 - 1)
     .attr("height", (d) => rectHeight(d))
     // directory don't have value field
-    .style(
-      "fill",
-      (d) => COLOR_CODE[d.data.value !== undefined ? "file" : "dir"]
-    )
+    .style("fill", `var(${PRIMARY_COLOR_VARIABLE_NAME})`)
+    .style("opacity", (d) => (d.data.value !== undefined ? OPACITY_CODE.file : OPACITY_CODE.dir))
     .style("cursor", "pointer");
 
   // Append labels
@@ -111,18 +104,11 @@ const drawIcicleTree = async (
     const t = cell
       .transition()
       .duration(750)
-      .attr(
-        "transform",
-        (d) => `translate(${positionMap.get(d).y0},${positionMap.get(d).x0})`
-      );
+      .attr("transform", (d) => `translate(${positionMap.get(d).y0},${positionMap.get(d).x0})`);
 
     rect.transition(t).attr("height", (d) => rectHeight(positionMap.get(d)));
-    text
-      .transition(t)
-      .attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)));
-    tspan
-      .transition(t)
-      .attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)) * 0.7);
+    text.transition(t).attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)));
+    tspan.transition(t).attr("fill-opacity", (d) => +labelVisible(positionMap.get(d)) * 0.7);
   });
 };
 

@@ -1,0 +1,13 @@
+@import "styles/_pallete";
+
+.theme-selector {
+  input[type="color"] {
+    outline: none;
+    -webkit-appearance: none;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    width: 54px;
+    height: 30px;
+  }
+}

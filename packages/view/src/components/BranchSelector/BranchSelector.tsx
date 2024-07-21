@@ -1,18 +1,31 @@
+import { type ChangeEventHandler } from "react";
 import "./BranchSelector.scss";
 
-// TODO - UI구현을 위한 mock data입니다.
-const getDataList = () => {
-  return ["dev", "feat", "edit"];
-};
+import { useGlobalData } from "hooks";
+import { sendFetchAnalyzedDataCommand } from "services";
 
 const BranchSelector = () => {
-  const branchList = getDataList();
+  const { branchList, selectedBranch, setSelectedBranch, setLoading } = useGlobalData();
+
+  const handleChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setSelectedBranch(e.target.value);
+    setLoading(true);
+    sendFetchAnalyzedDataCommand(e.target.value);
+  };
+
   return (
-    <section className="branch-seletor">
+    <section className="branch-selector">
       <span>Branches:</span>
-      <select className="select-box">
-        {branchList.map((option) => (
-          <option key={option} value={option}>
+      <select
+        className="select-box"
+        onChange={handleChangeSelect}
+        value={selectedBranch}
+      >
+        {branchList?.map((option) => (
+          <option
+            key={option}
+            value={option}
+          >
             {option}
           </option>
         ))}
