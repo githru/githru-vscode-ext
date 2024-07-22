@@ -84,7 +84,7 @@ const AuthorBarChart = () => {
     const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
       tooltip
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 70}px`)
+        .style("top", `${e.pageY - 90}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
