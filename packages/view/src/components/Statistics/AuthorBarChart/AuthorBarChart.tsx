@@ -16,14 +16,18 @@ import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
   const { data: totalData, filteredData, setSelectedData, setFilteredData } = useGlobalData();
-  const rawData = useGetSelectedData();
+  console.log("filteredData", filteredData);
 
+  const rawData = useGetSelectedData();
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
-  const [prevData, setPrevData] = useState<ClusterNode[]>([]);
-
+  const [prevData, setPrevData] = useState<ClusterNode[][]>([]);
+  // const [test, setTest] = useState<boolean>(false);
+  // const [showPrevData, setShowPrevData] = useState<ClusterNode[][]>([]);
+  console.log("prevData", prevData);
+  // console.log("showPrevData", showPrevData);
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
 
   let data = authorData.sort((a, b) => {
@@ -32,16 +36,19 @@ const AuthorBarChart = () => {
     }
     return b[metric] - a[metric];
   });
+  console.log("data", data.slice(9));
   if (data.length > 10) {
     const topAuthors = data.slice(0, 9);
     const otherAuthors = data.slice(9);
     const reducedOtherAuthors = otherAuthors.reduce(
       (acc, cur) => {
         acc[metric] += cur[metric];
+        acc.names?.push(cur.name);
         return acc;
       },
-      { name: "others", [metric]: 0 } as AuthorDataType
+      { name: "others", commit: 0, insertion: 0, deletion: 0, names: [] } as AuthorDataType
     );
+    console.log("reducedOtherAuthors", reducedOtherAuthors);
     data = [...topAuthors, reducedOtherAuthors];
   }
 
@@ -92,7 +99,7 @@ const AuthorBarChart = () => {
       tooltip
         .style("display", "inline-block")
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 90}px`)
+        .style("top", `${e.pageY - 70}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
@@ -111,20 +118,74 @@ const AuthorBarChart = () => {
     const handleMouseOut = () => {
       tooltip.style("display", "none");
     };
+
+    // const handleClickBar = (_: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
+    //   const isAuthorSelected = !!prevData.length;
+
+    //   if (isAuthorSelected) {
+    //     setFilteredData(prevData);
+    //     setPrevData([]);
+    //   } else {
+    //     setFilteredData(sortDataByAuthor(filteredData, d.name));
+    //     setPrevData(filteredData);
+    //   }
+
+    //   setSelectedData([]);
+    //   tooltip.style("display", "none");
+    // };
+
     const handleClickBar = (_: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
       const isAuthorSelected = !!prevData.length;
+      // 원래대로 돌리는 로직
+      // prevData.pop();
+      // if (d.name !== d.name) {
+      //   setTest((prev) => !prev);
+      // }
 
       if (isAuthorSelected) {
-        setFilteredData(prevData);
+        const newFilteredData = () =>
+          d.names
+            ? d.names.flatMap((name) => sortDataByAuthor(filteredData, name))
+            : sortDataByAuthor(filteredData, d.name);
+        setFilteredData(newFilteredData);
+        // setShowPrevData([...showPrevData, filteredData]);
         setPrevData([]);
-      } else {
-        setFilteredData(sortDataByAuthor(filteredData, d.name));
-        setPrevData(filteredData);
+      }
+      if (!isAuthorSelected) {
+        // 없다면 이전데이터에 현재 필터된 데이터를 집어넣음
+
+        // names 배열이 있다면 함수에 하나씩 집어 넣음 없다면 기존 필터된 데이터를 집어넣음
+        // 그리고 새로 필터링된 데이터를 필터된 데이터 스테이트에 집어넣음
+        const newFilteredData = d.names
+          ? d.names.flatMap((name) => sortDataByAuthor(filteredData, name))
+          : sortDataByAuthor(filteredData, d.name);
+        setFilteredData(newFilteredData);
+        // setShowPrevData([filteredData]);
+        setPrevData([filteredData]);
       }
 
       setSelectedData([]);
       tooltip.style("display", "none");
     };
+    // // 선택된 사용자가 있을경우
+    // if (isAuthorSelected) {
+    //   setFilteredData(prevData);
+    //   setPrevData([]);
+    //   return;
+    // }
+    // // 선택된 사용자가 있고 others(d.names을 포함)의 데이터일때
+    // if (isAuthorSelected && !d.names) {
+    // }
+
+    // if (d.names) {
+    //   const newFilteredData = d.names
+    //     ? d.names.flatMap((name) => sortDataByAuthor(filteredData, name))
+    //     : sortDataByAuthor(filteredData, d.name);
+    //   setFilteredData(newFilteredData);
+    // }
+    // setPrevData(filteredData);
+    // setSelectedData([]);
+    // tooltip.style("display", "none");
 
     // Draw bars
     barGroup
