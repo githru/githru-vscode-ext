@@ -88,13 +88,11 @@ const AuthorBarChart = () => {
       .text(`${metric} # / Total ${metric} # (%)`);
 
     // Event handler
-    const handleMouseOver = () => {
-      tooltip.style("display", "inline-block");
-    };
-    const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
+    const handleMouseOver = (e: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
       tooltip
+        .style("display", "inline-block")
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 70}px`)
+        .style("top", `${e.pageY - 90}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
@@ -105,6 +103,10 @@ const AuthorBarChart = () => {
                 (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
               </p>`
         );
+    };
+
+    const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>) => {
+      tooltip.style("left", `${e.pageX - 70}px`).style("top", `${e.pageY - 90}px`);
     };
     const handleMouseOut = () => {
       tooltip.style("display", "none");
