@@ -24,10 +24,6 @@ const AuthorBarChart = () => {
 
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
   const [prevData, setPrevData] = useState<ClusterNode[][]>([]);
-  // const [test, setTest] = useState<boolean>(false);
-  // const [showPrevData, setShowPrevData] = useState<ClusterNode[][]>([]);
-  console.log("prevData", prevData);
-  // console.log("showPrevData", showPrevData);
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
 
   let data = authorData.sort((a, b) => {
@@ -99,7 +95,7 @@ const AuthorBarChart = () => {
       tooltip
         .style("display", "inline-block")
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 70}px`)
+        .style("top", `${e.pageY - 90}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
@@ -160,7 +156,6 @@ const AuthorBarChart = () => {
           ? d.names.flatMap((name) => sortDataByAuthor(filteredData, name))
           : sortDataByAuthor(filteredData, d.name);
         setFilteredData(newFilteredData);
-        // setShowPrevData([filteredData]);
         setPrevData([filteredData]);
       }
 
