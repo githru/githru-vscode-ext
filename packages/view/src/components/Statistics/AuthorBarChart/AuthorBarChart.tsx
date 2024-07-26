@@ -91,10 +91,11 @@ const AuthorBarChart = () => {
 
     // Event handler
     const handleMouseOver = (e: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
+      console.log("이름입니다", d.name);
       tooltip
         .style("display", "inline-block")
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 90}px`)
+        .style("top", `${e.pageY - 120}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
@@ -108,7 +109,7 @@ const AuthorBarChart = () => {
     };
 
     const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>) => {
-      tooltip.style("left", `${e.pageX - 70}px`).style("top", `${e.pageY - 90}px`);
+      tooltip.style("left", `${e.pageX - 70}px`).style("top", `${e.pageY - 120}px`);
     };
     const handleMouseOut = () => {
       tooltip.style("display", "none");
