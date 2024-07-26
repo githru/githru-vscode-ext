@@ -122,7 +122,7 @@ const AuthorBarChart = () => {
       };
 
       if (isAuthorSelected) {
-        // 현재 선택된 저자를 다시 클릭하면 이전 데이터로 복원
+        // 현재 선택된 사용자를 다시 클릭하면 이전 데이터로 복원
         const newFilteredData = prevData.length > 0 ? prevData.pop() : filteredData;
         setFilteredData(newFilteredData ?? filteredData);
         setPrevData([...prevData]);
@@ -198,7 +198,6 @@ const AuthorBarChart = () => {
     totalData,
     selectedAuthor,
     setSelectedAuthor,
-    // selectedAuthorNames,
   ]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
