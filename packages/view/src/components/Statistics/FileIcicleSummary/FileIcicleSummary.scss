@@ -2,6 +2,7 @@
 
 .file-icicle-summary {
   text {
-    fill: $white;
+    fill: var(--primary-color);
+    filter: invert(100) grayscale(100) contrast(100);
   }
 }
