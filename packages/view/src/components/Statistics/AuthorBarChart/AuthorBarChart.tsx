@@ -127,18 +127,25 @@ const AuthorBarChart = () => {
         setFilteredData(newFilteredData ?? filteredData);
         setPrevData([...prevData]);
         setSelectedAuthor("");
-      } else if (d.name === "others") {
+        setSelectedData([]);
+        tooltip.style("display", "none");
+        return;
+      }
+
+      if (d.name === "others") {
         // "others" 바를 클릭할 때
         setPrevData([...prevData, filteredData]);
         setFilteredData(getNewFilteredData(d.names || []));
         setSelectedAuthor(d.name);
-      } else {
-        // 특정 사용자를 클릭할 때
-        setPrevData([...prevData, filteredData]);
-        setFilteredData(getNewFilteredData([d.name]));
-        setSelectedAuthor(d.name);
+        setSelectedData([]);
+        tooltip.style("display", "none");
+        return;
       }
 
+      // 특정 사용자를 클릭할 때
+      setPrevData([...prevData, filteredData]);
+      setFilteredData(getNewFilteredData([d.name]));
+      setSelectedAuthor(d.name);
       setSelectedData([]);
       tooltip.style("display", "none");
     };
