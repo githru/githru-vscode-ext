@@ -23,6 +23,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     const squashStemId = squashStartNode.stemId!;
     const squashStem = stemDict.get(squashStemId);
     if (!squashStem) {
+      // eslint-disable-next-line no-continue
       continue;
     }
 

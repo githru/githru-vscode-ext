@@ -53,19 +53,22 @@ export class AnalysisEngine {
 
     const commitRaws = getCommitRaws(this.gitLog);
     if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
-    
+
     const commitDict = buildCommitDict(commitRaws);
     if (this.isDebugMode) console.log("commitDict: ", commitDict);
 
-    const pullRequests = await this.octokit.getPullRequests().catch((err) => {
-      console.error(err);
-      isPRSuccess = false;
-      return [];
-    }).then((pullRequests) => {
-      console.log("success, pr = ", pullRequests);
-      return pullRequests;
-    });
-    if (this.isDebugMode) console.log("pullRequests: ", pullRequests, );
+    const pullRequests = await this.octokit
+      .getPullRequests()
+      .catch((err) => {
+        console.error(err);
+        isPRSuccess = false;
+        return [];
+      })
+      .then((result) => {
+        console.log("success, pr = ", result);
+        return result;
+      });
+    if (this.isDebugMode) console.log("pullRequests: ", pullRequests);
 
     const stemDict = buildStemDict(commitDict, this.baseBranchName);
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
@@ -74,7 +77,7 @@ export class AnalysisEngine {
 
     return {
       isPRSuccess,
-      csmDict
+      csmDict,
     };
   };
 

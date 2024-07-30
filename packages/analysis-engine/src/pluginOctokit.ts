@@ -82,6 +82,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
 
     const pullNumbers = data.map((item) => item.number);
 
+    // eslint-disable-next-line no-underscore-dangle
     const pullRequests = await Promise.all(pullNumbers.map((pullNumber) => this._getPullRequest(pullNumber)));
 
     return pullRequests;

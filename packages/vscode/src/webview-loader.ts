@@ -1,4 +1,5 @@
 import * as path from "path";
+
 import * as vscode from "vscode";
 
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
@@ -39,8 +40,8 @@ export default class WebviewLoader implements vscode.Disposable {
         context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
 
         const resMessage = {
-            command,
-            payload: analyzedData,
+          command,
+          payload: analyzedData,
         };
 
         await this.respondToMessage(resMessage);

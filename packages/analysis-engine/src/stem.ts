@@ -90,11 +90,13 @@ export function buildStemDict(commitDict: CommitDict, baseBranchName: string): S
 
   while (!q.isEmpty()) {
     const tail = q.pop();
+    // eslint-disable-next-line no-continue
     if (!tail) continue;
 
     const stemId = getStemId(tail.commit.id, tail.commit.branches, baseBranchName, mainNode, headNode);
 
     const nodes = getStemNodes(tail.commit.id, commitDict, q, stemId);
+    // eslint-disable-next-line no-continue
     if (nodes.length === 0) continue;
 
     const stem: Stem = { nodes };

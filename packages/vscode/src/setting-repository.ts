@@ -14,8 +14,8 @@ export const setGithubToken = async (secrets: vscode.SecretStorage, newGithubTok
 };
 
 export const deleteGithubToken = async (secrets: vscode.SecretStorage) => {
-    return await secrets.delete(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
-}
+  return await secrets.delete(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
+};
 
 export const setPrimaryColor = (color: string) => {
   const configuration = vscode.workspace.getConfiguration();
@@ -29,7 +29,6 @@ export const getPrimaryColor = (): string => {
   if (!primaryColor) {
     configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, "#ff8272");
     return "#ff8272";
-  } else {
-    return primaryColor;
   }
+  return primaryColor;
 };

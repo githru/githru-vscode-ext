@@ -87,14 +87,12 @@ function findGitOnDarwin() {
 
 function findGitOnWin32() {
   return (
-    findSystemGitWin32(process.env["ProgramW6432"])
+    findSystemGitWin32(process.env.ProgramW6432)
       .then(undefined, () => findSystemGitWin32(process.env["ProgramFiles(x86)"]))
-      .then(undefined, () => findSystemGitWin32(process.env["ProgramFiles"]))
+      .then(undefined, () => findSystemGitWin32(process.env.ProgramFiles))
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       .then(undefined, () =>
-        findSystemGitWin32(
-          process.env["LocalAppData"] ? path.join(process.env["LocalAppData"]!, "Programs") : undefined
-        )
+        findSystemGitWin32(process.env.LocalAppData ? path.join(process.env.LocalAppData!, "Programs") : undefined)
       )
       .then(undefined, () => findGitWin32InPath())
   );
@@ -103,7 +101,7 @@ function findSystemGitWin32(pathBase?: string) {
   return pathBase ? getGitExecutable(path.join(pathBase, "Git", "cmd", "git.exe")) : Promise.reject<GitExecutable>();
 }
 async function findGitWin32InPath() {
-  const dirs = (process.env["PATH"] || "").split(";");
+  const dirs = (process.env.PATH || "").split(";");
   dirs.unshift(process.cwd());
 
   for (let i = 0; i < dirs.length; i++) {
@@ -169,7 +167,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
     resolveSpawnOutput(
       cp.spawn(gitPath, args, {
         cwd: currentWorkspacePath,
-        env: Object.assign({}, process.env),
+        env: { ...process.env },
       })
     ).then((values) => {
       const [status, stdout, stderr] = values;
@@ -193,7 +191,7 @@ export async function getGitConfig(
     resolveSpawnOutput(
       cp.spawn(gitPath, args, {
         cwd: currentWorkspacePath,
-        env: Object.assign({}, process.env),
+        env: { ...process.env },
       })
     ).then((values) => {
       const [status, stdout, stderr] = values;
@@ -235,7 +233,7 @@ export async function getBranches(
   const [status, stdout, stderr] = await resolveSpawnOutput(
     cp.spawn(path, ["branch", "-a"], {
       cwd: repo,
-      env: Object.assign({}, process.env),
+      env: { ...process.env },
     })
   );
 
@@ -269,7 +267,7 @@ export async function getCurrentBranchName(path: string, repo: string): Promise<
   const [status, stdout, stderr] = await resolveSpawnOutput(
     cp.spawn(path, ["branch", "--show-current"], {
       cwd: repo,
-      env: Object.assign({}, process.env),
+      env: { ...process.env },
     })
   );
 
