@@ -16,23 +16,35 @@ import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
   const { data: totalData, filteredData, setSelectedData, setFilteredData } = useGlobalData();
-  const rawData = useGetSelectedData();
 
+  const rawData = useGetSelectedData();
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const [metric, setMetric] = useState<MetricType>(METRIC_TYPE[0]);
-  const [prevData, setPrevData] = useState<ClusterNode[]>([]);
-
+  const [prevData, setPrevData] = useState<ClusterNode[][]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<string>("");
   const authorData = getDataByAuthor(rawData as ClusterNode[]);
+
   let data = authorData.sort((a, b) => {
     if (a[metric] === b[metric]) {
       return sortDataByName(a.name, b.name);
     }
     return b[metric] - a[metric];
   });
+
   if (data.length > 10) {
-    data = data.slice(0, 10);
+    const topAuthors = data.slice(0, 9);
+    const otherAuthors = data.slice(9);
+    const reducedOtherAuthors = otherAuthors.reduce(
+      (acc, cur) => {
+        acc[metric] += cur[metric];
+        acc.names?.push(cur.name);
+        return acc;
+      },
+      { name: "others", commit: 0, insertion: 0, deletion: 0, names: [] } as AuthorDataType
+    );
+    data = [...topAuthors, reducedOtherAuthors];
   }
 
   useEffect(() => {
@@ -82,7 +94,7 @@ const AuthorBarChart = () => {
       tooltip
         .style("display", "inline-block")
         .style("left", `${e.pageX - 70}px`)
-        .style("top", `${e.pageY - 90}px`)
+        .style("top", `${e.pageY - 120}px`)
         .html(
           `<p class="name">${d.name}</p>
               <p>${metric}: 
@@ -96,22 +108,44 @@ const AuthorBarChart = () => {
     };
 
     const handleMouseMove = (e: MouseEvent<SVGRectElement | SVGTextElement>) => {
-      tooltip.style("left", `${e.pageX - 70}px`).style("top", `${e.pageY - 90}px`);
+      tooltip.style("left", `${e.pageX - 70}px`).style("top", `${e.pageY - 120}px`);
     };
     const handleMouseOut = () => {
       tooltip.style("display", "none");
     };
+
     const handleClickBar = (_: MouseEvent<SVGRectElement | SVGTextElement>, d: AuthorDataType) => {
-      const isAuthorSelected = !!prevData.length;
+      const isAuthorSelected = selectedAuthor === d.name && d.name !== "others";
+
+      const getNewFilteredData = (names: string[]) => {
+        return sortDataByAuthor(totalData, names);
+      };
 
       if (isAuthorSelected) {
-        setFilteredData(prevData);
-        setPrevData([]);
-      } else {
-        setFilteredData(sortDataByAuthor(filteredData, d.name));
-        setPrevData(filteredData);
+        // 현재 선택된 사용자를 다시 클릭하면 이전 데이터로 복원
+        const newFilteredData = prevData.length > 0 ? prevData.pop() : filteredData;
+        setFilteredData(newFilteredData ?? filteredData);
+        setPrevData([...prevData]);
+        setSelectedAuthor("");
+        setSelectedData([]);
+        tooltip.style("display", "none");
+        return;
       }
 
+      if (d.name === "others") {
+        // "others" 바를 클릭할 때
+        setPrevData([...prevData, filteredData]);
+        setFilteredData(getNewFilteredData(d.names || []));
+        setSelectedAuthor(d.name);
+        setSelectedData([]);
+        tooltip.style("display", "none");
+        return;
+      }
+
+      // 특정 사용자를 클릭할 때
+      setPrevData([...prevData, filteredData]);
+      setFilteredData(getNewFilteredData([d.name]));
+      setSelectedAuthor(d.name);
       setSelectedData([]);
       tooltip.style("display", "none");
     };
@@ -160,7 +194,18 @@ const AuthorBarChart = () => {
         .attr("width", 14)
         .attr("height", 14);
     });
-  }, [data, filteredData, metric, prevData, rawData, setFilteredData, setSelectedData, totalData]);
+  }, [
+    data,
+    filteredData,
+    metric,
+    prevData,
+    rawData,
+    setFilteredData,
+    setSelectedData,
+    totalData,
+    selectedAuthor,
+    setSelectedAuthor,
+  ]);
 
   const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
     setMetric(e.target.value as MetricType);
