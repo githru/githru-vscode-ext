@@ -27,5 +27,7 @@
     "noUnusedParameters": true /* Raise an error when a function parameter isn't read. */,
     // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
     "noImplicitReturns": true
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/dist"]
 }
