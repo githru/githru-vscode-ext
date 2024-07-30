@@ -13,12 +13,6 @@
     "test": "jest",
     "test:e2e": "playwright test"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/githru/githru-vscode-ext.git"

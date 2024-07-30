@@ -7,7 +7,7 @@
     "deploy:all": "npm run deploy --workspaces",
     "test:all": "npm run test --workspaces",
     "lint": "eslint '**/*.{js,ts,tsx}'",
-    "lint:fix": "npm run lint --fix",
+    "lint:fix": "eslint '**/*.{js,ts,tsx}' --fix",
     "prettier": "prettier '**/*.{ts,tsx,json,yaml,md}' --check",
     "prettier:fix": "prettier '**/*.{ts,tsx,json,yaml,md}' --write"
   },
