@@ -56,13 +56,16 @@ export class Credentials {
     }
   }
 
-  async getOctokit(): Promise<Octokit.Octokit> {
+  async getOctokit(): Promise<Octokit.Octokit | undefined> {
     await this.ensureOctokitInstance();
-    return this.octokit!;
+    return this.octokit;
   }
 
-  async getAuth(): Promise<OctokitAuth> {
-    await this.ensureOctokitInstance();
-    return this.octokit!.auth() as Promise<OctokitAuth>;
+  async getAuth(): Promise<OctokitAuth | undefined> {
+    const octokit = await this.getOctokit();
+    if (octokit) {
+      return octokit.auth() as Promise<OctokitAuth>;
+    }
+    return undefined;
   }
 }
