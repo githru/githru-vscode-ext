@@ -208,7 +208,7 @@ export async function getGitConfig(
 
 export const getRepo = (gitRemoteConfig: string) => {
   const gitRemoteConfigPattern =
-    /(?:https?|git)(?::\/\/(?:\w+@)?|@)(?:github\.com)(?:\/|:)(?:(?<owner>[^\/]+?)\/(?<repo>[^\/\.]+))(?:\.git|\/)?(\S*)$/m;
+    /(?:https?|git)(?::\/\/(?:\w+@)?|@)(?:github\.com)(?:\/|:)(?:(?<owner>[^/]+?)\/(?<repo>[^/.]+))(?:\.git|\/)?(\S*)$/m;
   const gitRemote = gitRemoteConfig.match(gitRemoteConfigPattern)?.groups;
   if (!gitRemote) {
     throw new Error("git remote config should be: [https?://|git@]${domain}/${owner}/${repo}.git");
