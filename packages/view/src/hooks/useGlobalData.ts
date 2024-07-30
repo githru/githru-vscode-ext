@@ -24,6 +24,10 @@ type GlobalDataState = {
   setBranchList: Dispatch<SetStateAction<string[]>>;
   selectedBranch: string;
   setSelectedBranch: Dispatch<SetStateAction<string>>;
+  owner: string;
+  setOwner: Dispatch<SetStateAction<string>>;
+  repo: string;
+  setRepo: Dispatch<SetStateAction<string>>;
 } & IDESentEvents;
 
 export const GlobalDataContext = createContext<GlobalDataState | undefined>(undefined);

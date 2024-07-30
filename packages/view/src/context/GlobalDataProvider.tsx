@@ -14,6 +14,8 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
 
   const [branchList, setBranchList] = useState<string[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<string>(branchList?.[0]);
+  const [owner, setOwner] = useState<string>("");
+  const [repo, setRepo] = useState<string>("");
 
   const handleChangeBranchList = (branches: { branchList: string[]; head: string | null }) => {
     setSelectedBranch((prev) => (!prev && branches.head ? branches.head : prev));
@@ -44,8 +46,12 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       setSelectedBranch,
       handleChangeAnalyzedData,
       handleChangeBranchList,
+      owner,
+      setOwner,
+      repo,
+      setRepo,
     }),
-    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading]
+    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading, owner, repo]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;
