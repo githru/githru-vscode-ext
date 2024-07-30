@@ -10,3 +10,5 @@ test.*
 *.css
 *.scss
 *.d.ts
+
+packages/vscode
