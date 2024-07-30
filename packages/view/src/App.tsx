@@ -16,6 +16,7 @@ import type IDEPort from "ide/IDEPort";
 import { useGlobalData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
+import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -38,6 +39,18 @@ const App = () => {
       initRef.current = true;
     }
   }, [handleChangeAnalyzedData, handleChangeBranchList, ideAdapter, setLoading]);
+
+  const { setOwner, setRepo } = useGlobalData();
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
+      const message = event.data;
+      setOwner(message.data.owner);
+      setRepo(message.data.repo);
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   if (loading) {
     return (
