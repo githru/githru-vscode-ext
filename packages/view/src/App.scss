@@ -32,8 +32,8 @@ body {
 }
 
 .middle-container {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
   height: calc(100vh - 200px);
   margin-top: 20px;
 }

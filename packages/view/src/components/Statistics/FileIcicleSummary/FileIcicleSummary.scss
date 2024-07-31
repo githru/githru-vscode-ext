@@ -1,6 +1,7 @@
 @import "styles/_pallete";
 
 .file-icicle-summary {
+  width: 90%;
   text {
     fill: var(--primary-color);
     filter: invert(100) grayscale(100) contrast(100);

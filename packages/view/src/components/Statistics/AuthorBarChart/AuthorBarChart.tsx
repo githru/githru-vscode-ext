@@ -213,6 +213,7 @@ const AuthorBarChart = () => {
 
   return (
     <div className="author-bar-chart__container">
+      <p>Author Bar Chart</p>
       <div className="author-bar-chart__header">
         <select
           className="select-box"
