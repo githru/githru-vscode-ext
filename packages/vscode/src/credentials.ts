@@ -49,23 +49,21 @@ export class Credentials {
   }
 
   /** Octokit 인스턴스가 없다면, 인증 세션을 새로 만듦으로써, Octokit 인스턴스가 항상 존재하도록 보장한다. */
-  private async ensureOctokitInstance(): Promise<void> {
-    if (!this.octokit) {
+  private async getOctokitInstance(): Promise<Octokit.Octokit> {
+    if (this.octokit) {
+      return this.octokit;
+    } else {
       const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
       this.octokit = await this.createOctokit(session);
+      return this.octokit;
     }
   }
 
-  async getOctokit(): Promise<Octokit.Octokit | undefined> {
-    await this.ensureOctokitInstance();
-    return this.octokit;
+  async getOctokit(): Promise<Octokit.Octokit> {
+    return this.getOctokitInstance();
   }
 
-  async getAuth(): Promise<OctokitAuth | undefined> {
-    const octokit = await this.getOctokit();
-    if (octokit) {
-      return octokit.auth() as Promise<OctokitAuth>;
-    }
-    return undefined;
+  async getAuth(): Promise<OctokitAuth> {
+    return (await this.getOctokitInstance()).auth() as Promise<OctokitAuth>;
   }
 }
