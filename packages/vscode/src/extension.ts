@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { deleteGithubToken, getGithubToken, setGithubToken,  } from "./setting-repository";
+import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
   findGit,
@@ -18,7 +18,7 @@ import {
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
-const projectName = 'githru';
+const projectName = "githru";
 
 function normalizeFsPath(fsPath: string) {
   return fsPath.replace(/\\/g, "/");
@@ -58,12 +58,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
       const fetchCurrentBranch = async () => {
-
         let branchName;
         try {
-            branchName = await getCurrentBranchName(gitPath, currentWorkspacePath)
+          branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
 
         if (!branchName) {
