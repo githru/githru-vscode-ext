@@ -123,7 +123,6 @@ export default class WebviewLoader implements vscode.Disposable {
   private async fetchCurrentBranch() {
     let branchName;
     try {
-        console.log('이거다',this.gitPath)
       branchName = await getCurrentBranchName(this.gitPath, this.getCurrentWorkspacePath());
     } catch (error) {
       console.error(error);
