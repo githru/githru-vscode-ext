@@ -24,7 +24,7 @@ function normalizeFsPath(fsPath: string) {
 export default class WebviewLoader implements vscode.Disposable {
   private readonly _panel: vscode.WebviewPanel | undefined;
   githubToken: string | undefined;
-  gitPath: string | undefined;
+  gitPath: string;
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
@@ -32,6 +32,8 @@ export default class WebviewLoader implements vscode.Disposable {
   ) {
     const viewColumn = vscode.ViewColumn.One;
     this.githubToken = githubToken;
+    this.gitPath = ''
+
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -44,6 +46,7 @@ export default class WebviewLoader implements vscode.Disposable {
 
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload?: string }) => {
       const { command, payload } = message;
+      await this.setGitPath()
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
         const baseBranchName = (payload && JSON.parse(payload)) ?? (await this.fetchCurrentBranch());
@@ -105,13 +108,13 @@ export default class WebviewLoader implements vscode.Disposable {
     return normalizeFsPath(currentWorkspaceUri.fsPath);
   }
 
-  private async getGitPath() {
-    return (await findGit()).path;
+  private async setGitPath() {
+    this.gitPath = (await findGit()).path
   }
-
+  
   private async fetchBranches() {
     try {
-      return await getBranches(await this.getGitPath(), this.getCurrentWorkspacePath());
+      return await getBranches(this.gitPath, this.getCurrentWorkspacePath());
     } catch (e) {
       console.debug(e);
     }
@@ -120,7 +123,8 @@ export default class WebviewLoader implements vscode.Disposable {
   private async fetchCurrentBranch() {
     let branchName;
     try {
-      branchName = await getCurrentBranchName(await this.getGitPath(), this.getCurrentWorkspacePath());
+        console.log('이거다',this.gitPath)
+      branchName = await getCurrentBranchName(this.gitPath, this.getCurrentWorkspacePath());
     } catch (error) {
       console.error(error);
     }
@@ -141,8 +145,8 @@ export default class WebviewLoader implements vscode.Disposable {
     if (!baseBranchName) {
       baseBranchName = await this.fetchCurrentBranch();
     }
-    const gitLog = await getGitLog(await this.getGitPath(), this.getCurrentWorkspacePath());
-    const gitConfig = await getGitConfig(await this.getGitPath(), this.getCurrentWorkspacePath(), "origin");
+    const gitLog = await getGitLog(this.gitPath, this.getCurrentWorkspacePath());
+    const gitConfig = await getGitConfig(this.gitPath, this.getCurrentWorkspacePath(), "origin");
     const { owner, repo } = getRepo(gitConfig);
     const engine = new AnalysisEngine({
       isDebugMode: true,
