@@ -9,6 +9,8 @@ const FilteredAuthors = () => {
   const { selectedData } = useGlobalData();
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusters = getInitData(selectedData);
+  const filteredSelectedData = selectedClusters.reverse().slice(0, 9);
+  const selectedClustersLength = selectedClusters.slice(9);
 
   return (
     <div className="selected-container">
