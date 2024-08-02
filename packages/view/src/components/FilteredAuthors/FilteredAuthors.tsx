@@ -9,8 +9,9 @@ const FilteredAuthors = () => {
   const { selectedData } = useGlobalData();
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusters = getInitData(selectedData);
-  const filteredSelectedData = selectedClusters.reverse().slice(0, 9);
-  const selectedClustersLength = selectedClusters.slice(9);
+
+  // 이미 선택된 사용자를 관리
+  const addedAuthors = new Set();
 
   return (
     <div className="selected-container">
@@ -19,13 +20,21 @@ const FilteredAuthors = () => {
         {authSrcMap &&
           selectedClusters.map((selectedCluster) => {
             return selectedCluster.summary.authorNames.map((authorArray: string[]) => {
-              return authorArray.map((authorName: string) => (
-                <Author
-                  key={authorName}
-                  name={authorName}
-                  src={authSrcMap[authorName]}
-                />
-              ));
+              return authorArray.map((authorName: string) => {
+                // 이미 추가된 사용자인지 확인 후 추가되지 않은 경우에만 추가하고 Set에 이름을 저장
+                if (!addedAuthors.has(authorName)) {
+                  addedAuthors.add(authorName);
+                  return (
+                    <Author
+                      key={authorName}
+                      name={authorName}
+                      src={authSrcMap[authorName]}
+                    />
+                  );
+                }
+                // 이미 추가된 사용자인 경우 null 반환
+                return null;
+              });
             });
           })}
       </div>
