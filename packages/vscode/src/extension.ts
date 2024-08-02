@@ -76,7 +76,9 @@ export async function activate(context: vscode.ExtensionContext) {
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-        const { owner, repo } = getRepo(gitConfig);
+        const { owner, repo: initialRepo } = getRepo(gitConfig);
+        webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
+        const repo = initialRepo[0];
         const engine = new AnalysisEngine({
           isDebugMode: true,
           gitLog,

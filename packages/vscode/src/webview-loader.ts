@@ -111,6 +111,14 @@ export default class WebviewLoader implements vscode.Disposable {
         `;
     return returnString;
   }
+  public setGlobalOwnerAndRepo(owner: string, repo: string) {
+    if (this._panel) {
+      this._panel.webview.postMessage({
+        command: "setGlobalOwnerAndRepo",
+        data: { owner, repo },
+      });
+    }
+  }
 }
 
 type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
