@@ -137,7 +137,7 @@ const FileIcicleSummary = () => {
 
   return (
     <div className="file-icicle-summary">
-      <p>File Icicle Summary</p>
+      <p>File Summary</p>
       <svg ref={$summary} />
     </div>
   );
