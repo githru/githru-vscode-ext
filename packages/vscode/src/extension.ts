@@ -3,15 +3,15 @@ import * as vscode from "vscode";
 import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { deleteGithubToken, getGithubToken, setGithubToken,  } from "./setting-repository";
+import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
-const projectName = 'githru';
+const projectName = "githru";
 
 export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
-  const credentials = new Credentials();
+  const credentials = new Credentials();ㅁ
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
   await credentials.initialize(context);

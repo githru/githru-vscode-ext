@@ -4,13 +4,12 @@
   width: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .author-bar-chart__header {
   width: 100%;
   text-align: right;
-  padding-left: 40px;
 
   & .select-box {
     font-size: 10px;
