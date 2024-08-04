@@ -11,7 +11,7 @@ const projectName = "githru";
 
 export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
-  const credentials = new Credentials();ㅁ
+  const credentials = new Credentials();
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
   await credentials.initialize(context);
