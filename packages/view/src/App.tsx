@@ -37,8 +37,10 @@ const App = () => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
       const message = event.data;
-      setOwner(message.data.owner);
-      setRepo(message.data.repo);
+      if (message.data) {
+        setOwner(message.data.owner);
+        setRepo(message.data.repo);
+      }
     };
 
     window.addEventListener("message", handleMessage);
