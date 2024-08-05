@@ -90,7 +90,11 @@
     "yarn": "^1.22.19"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@jest/types": "^29.6.3",
+    "@mui/icons-material": "^5.16.6",
+    "@mui/material": "^5.16.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
