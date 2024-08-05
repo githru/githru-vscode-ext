@@ -5,6 +5,7 @@ export type AuthorDataType = {
   commit: number;
   insertion: number;
   deletion: number;
+  names?: string[];
 };
 
 export type MetricType = (typeof METRIC_TYPE)[number];

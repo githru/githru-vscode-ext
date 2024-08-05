@@ -1,28 +1,13 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as vscode from "vscode";
 
 import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } from "./commands";
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
-import { deleteGithubToken, getGithubToken, setGithubToken,  } from "./setting-repository";
-import { mapClusterNodesFrom } from "./utils/csm.mapper";
-import {
-  findGit,
-  getBranches,
-  getCurrentBranchName,
-  getDefaultBranchName,
-  getGitConfig,
-  getGitLog,
-  getRepo,
-} from "./utils/git.util";
+import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
 import WebviewLoader from "./webview-loader";
 
 let myStatusBarItem: vscode.StatusBarItem;
-const projectName = 'githru';
-
-function normalizeFsPath(fsPath: string) {
-  return fsPath.replace(/\\/g, "/");
-}
+const projectName = "githru";
 
 export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
@@ -42,62 +27,18 @@ export async function activate(context: vscode.ExtensionContext) {
         myStatusBarItem.text = `$(check) ${projectName}`;
         return;
       }
-      const gitPath = (await findGit()).path;
 
       const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
       if (!currentWorkspaceUri) {
         throw new WorkspacePathUndefinedError("Cannot find current workspace path");
       }
 
-      const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
-
       const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
-      const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
-      const fetchCurrentBranch = async () => {
-
-        let branchName;
-        try {
-            branchName = await getCurrentBranchName(gitPath, currentWorkspacePath)
-        } catch (error) {
-            console.error(error);
-        }
-
-        if (!branchName) {
-          const branchList = (await fetchBranches()).branchList;
-          branchName = getDefaultBranchName(branchList);
-        }
-        return branchName;
-      };
-
-      const initialBaseBranchName = await fetchCurrentBranch();
-      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
-        const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-        const { owner, repo } = getRepo(gitConfig);
-        const engine = new AnalysisEngine({
-          isDebugMode: true,
-          gitLog,
-          owner,
-          repo,
-          auth: githubToken,
-          baseBranchName,
-        });
-
-        const { isPRSuccess, csmDict } = await engine.analyzeGit();
-        if (isPRSuccess) console.log("crawling PR failed");
-
-        return mapClusterNodesFrom(csmDict);
-      };
-
-      const webLoader = new WebviewLoader(extensionPath, context, {
-        fetchClusterNodes,
-        fetchBranches,
-        fetchCurrentBranch,
-      });
+      const webLoader = new WebviewLoader(extensionPath, context, githubToken);
       currentPanel = webLoader.getPanel();
 
       currentPanel?.onDidDispose(

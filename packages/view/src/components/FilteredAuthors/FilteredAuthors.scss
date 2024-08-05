@@ -1,9 +1,13 @@
 .selected-container {
-  position: relative;
-  top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.selected-content {
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
-  padding: 4px 6px;
   box-sizing: border-box;
+  align-items: center;
 }
