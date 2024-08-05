@@ -147,6 +147,7 @@ export default class WebviewLoader implements vscode.Disposable {
     const gitLog = await getGitLog(this.gitPath, this.getCurrentWorkspacePath());
     const gitConfig = await getGitConfig(this.gitPath, this.getCurrentWorkspacePath(), "origin");
     const { owner, repo } = getRepo(gitConfig);
+    this.setGlobalOwnerAndRepo(owner, repo);
     const engine = new AnalysisEngine({
       isDebugMode: true,
       gitLog,
