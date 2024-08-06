@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io";
+import ArrowDropDownCircleRoundedIcon from "@mui/icons-material/ArrowDropDownCircleRounded";
 
 import { useGlobalData } from "hooks";
 
@@ -48,9 +48,9 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
       </div>
       <div className="collapsible-icon">
         {selectedClusterId.includes(clusterId) ? (
-          <IoIosArrowDropupCircle className="show" />
+          <ArrowDropDownCircleRoundedIcon className="show" />
         ) : (
-          <IoIosArrowDropdownCircle />
+          <ArrowDropDownCircleRoundedIcon />
         )}
       </div>
     </>

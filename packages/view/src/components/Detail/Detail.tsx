@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import CommitRoundedIcon from "@mui/icons-material/CommitRounded";
+import RestorePageRoundedIcon from "@mui/icons-material/RestorePageRounded";
 
-import AuthorIcon from "assets/author.svg";
-import ChangedFileIcon from "assets/changed-file.svg";
-import CommitIcon from "assets/commit.svg";
-import DiffAddIcon from "assets/diff-add.svg";
-import DiffDeleteIcon from "assets/diff-delete.svg";
 import { Author } from "components/@common/Author";
 
 import { useCommitListHide } from "./Detail.hook";
@@ -20,11 +20,11 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   });
 
   const summaryItems: DetailSummaryItem[] = [
-    { name: "authors", count: authorLength, icon: <AuthorIcon /> },
-    { name: "commits", count: commitLength, icon: <CommitIcon /> },
-    { name: "changed files", count: fileLength, icon: <ChangedFileIcon /> },
-    { name: "additions", count: insertions, icon: <DiffAddIcon /> },
-    { name: "deletions", count: deletions, icon: <DiffDeleteIcon /> },
+    { name: "authors", count: authorLength, icon: <PersonRoundedIcon sx={{ fontSize: 18 }} /> },
+    { name: "commits", count: commitLength, icon: <CommitRoundedIcon sx={{ fontSize: 18 }} /> },
+    { name: "changed files", count: fileLength, icon: <RestorePageRoundedIcon sx={{ fontSize: 18 }} /> },
+    { name: "additions", count: insertions, icon: <AddCircleRoundedIcon sx={{ fontSize: 18 }} /> },
+    { name: "deletions", count: deletions, icon: <RemoveCircleRoundedIcon sx={{ fontSize: 18 }} /> },
   ];
 
   return (
