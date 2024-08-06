@@ -35,6 +35,17 @@ body {
   display: grid;
   grid-template-columns: 4fr 1fr;
   height: calc(100vh - 200px);
-
   padding: 20px;
+}
+
+.no-commits-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 350px);
+
+  h1 {
+    margin: 40px 0 0 0;
+  }
 }

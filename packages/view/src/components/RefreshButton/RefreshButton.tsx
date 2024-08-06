@@ -1,10 +1,9 @@
 import "reflect-metadata";
 import cn from "classnames";
-import { FiRefreshCcw } from "react-icons/fi";
+import ReplayCircleFilledRoundedIcon from "@mui/icons-material/ReplayCircleFilledRounded";
 
 import { throttle } from "utils";
 import { useGlobalData } from "hooks";
-
 import "./RefreshButton.scss";
 import { sendRefreshDataCommand } from "services";
 
@@ -22,9 +21,9 @@ const RefreshButton = () => {
       className={cn("refresh-button")}
       onClick={refreshHandler}
     >
-      <FiRefreshCcw
+      <ReplayCircleFilledRoundedIcon
         className={cn("refresh-button-icon", { "refresh-button-icon--loading": loading })}
-        stroke="white"
+        style={{ color: "white" }}
       />
     </button>
   );

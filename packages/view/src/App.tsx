@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import { useEffect, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
+import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
@@ -74,14 +75,18 @@ const App = () => {
       <div className="top-container">
         <TemporalFilter />
       </div>
-      <div className="middle-container">
+      <div>
         {filteredData.length !== 0 ? (
-          <>
+          <div className="middle-container">
             <VerticalClusterList />
             <Statistics />
-          </>
+          </div>
         ) : (
-          <div>NO COMMIT EXISTS</div>
+          <div className="no-commits-container">
+            <MonoLogo />
+            <h1>No Commits Found.</h1>
+            <p>Make at least one commit to proceed.</p>
+          </div>
         )}
       </div>
     </>
