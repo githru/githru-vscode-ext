@@ -40,13 +40,12 @@ body {
 
 .no-commits-container{
   display: flex;
-  //background-color: white;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: calc(100vh - 350px);
 
   h1 {
-    margin-bottom: 0rem;
+    margin: 40px 0 0 0;
   }
 }
