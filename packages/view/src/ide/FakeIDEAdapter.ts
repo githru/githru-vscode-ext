@@ -42,6 +42,7 @@ export default class FakeIDEAdapter implements IDEPort {
       payload,
     };
     setTimeout(() => {
+      // loading time을 시뮬레이션 하기 위함
       this.sendMessageToMe(message);
     }, 1500);
   }
