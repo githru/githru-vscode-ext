@@ -43,7 +43,7 @@ export default class FakeIDEAdapter implements IDEPort {
     };
     setTimeout(() => {
       this.sendMessageToMe(message);
-    }, 3000);
+    }, 1500);
   }
 
   public sendFetchBranchListMessage() {
