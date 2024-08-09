@@ -1,4 +1,5 @@
-﻿import { injectable } from "tsyringe";
+﻿import { getPayloadParam } from "@githru-vscode-ext/analysis-engine/src/utils";
+import { injectable } from "tsyringe";
 
 import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
@@ -19,11 +20,28 @@ export default class VSCodeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payloadData);
         case "fetchBranchList":
           return events.handleChangeBranchList(payloadData);
+        case "fetchMoreGitLog": {
+          const gitLogOffset = getPayloadParam(payload, "offset");
+          if (gitLogOffset) {
+            events.handleChangeGitLogSkipCount(+gitLogOffset);
+          } else {
+            console.log("Invalid Offset", gitLogOffset);
+          }
+          break;
+        }
         default:
           console.log("Unknown Message");
       }
     };
     window.addEventListener("message", onReceiveMessage);
+  }
+
+  public sendFetchMoreGitLogMessage(offset = 0, limit = 100) {
+    const message: IDEMessage = {
+      command: "fetchMoreGitLog",
+      payload: `offset=${offset}&limit=${limit}`,
+    };
+    this.sendMessageToIDE(message);
   }
 
   public sendRefreshDataMessage(baseBranch?: string) {

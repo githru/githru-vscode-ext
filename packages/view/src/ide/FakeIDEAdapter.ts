@@ -1,4 +1,5 @@
 ﻿import { injectable } from "tsyringe";
+import { getPayloadParam } from "@githru-vscode-ext/analysis-engine/src/utils";
 
 import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
@@ -20,12 +21,29 @@ export default class FakeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
           return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
+        case "fetchMoreGitLog": {
+          const gitLogOffset = getPayloadParam(payload, "offset");
+          if (gitLogOffset) {
+            events.handleChangeGitLogSkipCount(+gitLogOffset);
+          } else {
+            console.log("Invalid Offset", gitLogOffset);
+          }
+          break;
+        }
         default:
           console.log("Unknown Message");
       }
     };
 
     window.addEventListener("message", onReceiveMessage);
+  }
+
+  public sendFetchMoreGitLogMessage(offset = 0, limit = 100) {
+    const message: IDEMessage = {
+      command: "fetchMoreGitLog",
+      payload: `offset=${offset}&limit=${limit}`,
+    };
+    this.sendMessageToMe(message);
   }
 
   public sendRefreshDataMessage(payload?: string) {
@@ -66,6 +84,11 @@ export default class FakeIDEAdapter implements IDEPort {
     const { command } = message;
 
     switch (command) {
+      case "fetchMoreGitLog":
+        return {
+          command,
+          payload: { offset: 100, limit: 100 },
+        };
       case "fetchAnalyzedData":
         return {
           command,
