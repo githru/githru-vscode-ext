@@ -1,4 +1,5 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
+import AnalysisEngine, { getPayloadParam } from "@githru-vscode-ext/analysis-engine";
+
 import * as path from "path";
 import * as vscode from "vscode";
 
@@ -25,6 +26,12 @@ export default class WebviewLoader implements vscode.Disposable {
   private readonly _panel: vscode.WebviewPanel | undefined;
   githubToken: string | undefined;
   gitPath: string;
+  /** 처음에 불러올 개수
+   * @description 설정 또는 view에서 사용자가 커스터마이징 할 수 있도록 열어둬도 됩니다. */
+  private gitLogCount: number = 0;
+  // TODO
+  /* private prevGitLogCount: number = 0; */
+  private baseBranchName: string = "main";
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
@@ -32,8 +39,7 @@ export default class WebviewLoader implements vscode.Disposable {
   ) {
     const viewColumn = vscode.ViewColumn.One;
     this.githubToken = githubToken;
-    this.gitPath = ''
-
+    this.gitPath = "";
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -46,16 +52,19 @@ export default class WebviewLoader implements vscode.Disposable {
 
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload?: string }) => {
       const { command, payload } = message;
-      await this.setGitPath()
-
+      await this.setGitPath();
       if (command === "fetchAnalyzedData" || command === "refresh") {
-        const baseBranchName = (payload && JSON.parse(payload)) ?? (await this.fetchCurrentBranch());
+        this.baseBranchName = (payload && JSON.parse(payload)) ?? (await this.fetchCurrentBranch());
         // Disable Cache temporarily
         // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
         // if (!storedAnalyzedData) {
 
-        const analyzedData = await this.fetchClusterNodes(baseBranchName);
-        context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+        const analyzedData = await this.fetchClusterNodes(
+          this.baseBranchName
+          // TODO
+          /* this.gitLogCount */
+        );
+        context.workspaceState.update(`${ANALYZE_DATA_KEY}_${this.baseBranchName}`, analyzedData);
 
         const resMessage = {
           command,
@@ -78,6 +87,27 @@ export default class WebviewLoader implements vscode.Disposable {
         if (colorCode.primary) {
           setPrimaryColor(colorCode.primary);
         }
+      }
+
+      if (command === "fetchMoreGitLog") {
+        const offset = getPayloadParam(payload, "offset");
+        const limit = getPayloadParam(payload, "limit");
+        const newGitLogCount = +(limit ?? 0);
+        this.gitLogCount = this.gitLogCount + newGitLogCount;
+        console.log("view -> engine 메시지 : ", { offset, limit, newGitLogCount });
+
+        // TODO : CSM 가공 (이어붙이기)
+        const analyzedData = await this.fetchClusterNodes(
+          this.baseBranchName
+          /* offset */
+          /* this.gitLogCount, +(limit ?? 0) */
+        );
+        const resMessage = {
+          command,
+          payload: { newGitLogCount, analyzedData },
+        };
+
+        await this.respondToMessage(resMessage);
       }
     });
 
@@ -109,9 +139,9 @@ export default class WebviewLoader implements vscode.Disposable {
   }
 
   private async setGitPath() {
-    this.gitPath = (await findGit()).path
+    this.gitPath = (await findGit()).path;
   }
-  
+
   private async fetchBranches() {
     try {
       return await getBranches(this.gitPath, this.getCurrentWorkspacePath());
@@ -135,14 +165,19 @@ export default class WebviewLoader implements vscode.Disposable {
     return branchName;
   }
 
-  private async fetchClusterNodes(baseBranchName?: string) {
+  private async fetchClusterNodes(
+    baseBranchName?: string
+    // TODO
+    // gitLogCountOffset = 0,
+    // gitLogCountLimit = 100
+  ) {
     const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
     if (!currentWorkspaceUri) {
       throw new WorkspacePathUndefinedError("Cannot find current workspace path");
     }
 
     if (!baseBranchName) {
-      baseBranchName = await this.fetchCurrentBranch();
+      this.baseBranchName = await this.fetchCurrentBranch();
     }
     const gitLog = await getGitLog(this.gitPath, this.getCurrentWorkspacePath());
     const gitConfig = await getGitConfig(this.gitPath, this.getCurrentWorkspacePath(), "origin");
@@ -154,7 +189,7 @@ export default class WebviewLoader implements vscode.Disposable {
       owner,
       repo,
       auth: this.githubToken,
-      baseBranchName,
+      baseBranchName: this.baseBranchName,
     });
 
     const { isPRSuccess, csmDict } = await engine.analyzeGit();

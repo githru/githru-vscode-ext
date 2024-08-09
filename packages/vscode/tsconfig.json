@@ -5,7 +5,8 @@
     "outDir": "dist",
     "lib": ["ES2020"],
     "sourceMap": true,
-    "rootDir": "src",
+    // ? getPayloadParam 함수가 analysis-engine 패키지에 선언되어 있으므로, import하기 위해 rootDirs 배열로 처리.
+    "rootDirs": ["src", "../analysis-engine"],
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
