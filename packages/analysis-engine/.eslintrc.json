@@ -11,7 +11,7 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "simple-import-sort"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "@typescript-eslint/parser", "prettier"],
   "rules": {
     "no-unused-vars": "off",
     "no-console": "off",
