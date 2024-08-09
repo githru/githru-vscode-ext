@@ -7,6 +7,7 @@ import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
+import { getSummary } from "./summary";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
@@ -53,28 +54,32 @@ export class AnalysisEngine {
 
     const commitRaws = getCommitRaws(this.gitLog);
     if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
-    
+
     const commitDict = buildCommitDict(commitRaws);
     if (this.isDebugMode) console.log("commitDict: ", commitDict);
 
-    const pullRequests = await this.octokit.getPullRequests().catch((err) => {
-      console.error(err);
-      isPRSuccess = false;
-      return [];
-    }).then((pullRequests) => {
-      console.log("success, pr = ", pullRequests);
-      return pullRequests;
-    });
-    if (this.isDebugMode) console.log("pullRequests: ", pullRequests, );
+    const pullRequests = await this.octokit
+      .getPullRequests()
+      .catch((err) => {
+        console.error(err);
+        isPRSuccess = false;
+        return [];
+      })
+      .then((pullRequests) => {
+        console.log("success, pr = ", pullRequests);
+        return pullRequests;
+      });
+    if (this.isDebugMode) console.log("pullRequests: ", pullRequests);
 
     const stemDict = buildStemDict(commitDict, this.baseBranchName);
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
+    getSummary(csmDict);
 
     return {
       isPRSuccess,
-      csmDict
+      csmDict,
     };
   };
 
