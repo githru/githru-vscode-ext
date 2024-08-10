@@ -5,8 +5,7 @@ import type { Margin } from "./LineChart";
 
 export type BrushXSelection = [number, number] | null;
 
-export const drawBrush = (
-  refTarget: SVGSVGElement,
+export const createBrush = (
   margin: Margin,
   chartWidth: number,
   chartHeight: number,
@@ -19,7 +18,6 @@ export const drawBrush = (
     brushHandler(event.selection as BrushXSelection);
   };
 
-  const svg = d3.select(refTarget);
   const brush = d3
     .brushX()
     .extent([
@@ -29,8 +27,20 @@ export const drawBrush = (
     // .handleSize(5)
     .on("end", brushed);
 
-  svg
+  return brush;
+};
+
+export const drawBrush = (refTarget: SVGSVGElement, margin: Margin, brush: d3.BrushBehavior<unknown>) => {
+  const svg = d3.select(refTarget);
+
+  const brushGroup = svg
     .append("g")
     .call(brush)
     .attr("transform", `translate(${margin.left / 2}, 0)`);
+
+  return brushGroup;
+};
+
+export const resetBrush = (brushGroup: SVGGElement, brush: d3.BrushBehavior<unknown>) => {
+  d3.select(brushGroup).call(brush.move, null);
 };
