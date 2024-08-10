@@ -33,12 +33,12 @@ body {
 
 .middle-container {
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 4fr 2fr;
   height: calc(100vh - 200px);
   padding: 20px;
 }
 
-.no-commits-container{
+.no-commits-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
