@@ -12,12 +12,15 @@ import drawLineChart from "./LineChart";
 import type { LineChartDatum } from "./LineChart";
 import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
-import { drawBrush } from "./LineChartBrush";
+import { createBrush, drawBrush, resetBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading } =
     useGlobalData();
+
+  const brushGroupRef = useRef<SVGGElement | null>(null);
+  const brushRef = useRef<d3.BrushBehavior<unknown>>();
 
   const loaderStyle: CSSProperties = {
     position: "fixed",
@@ -113,7 +116,8 @@ const TemporalFilter = () => {
       setSelectedData([]);
     };
 
-    drawBrush(svgElement, BRUSH_MARGIN, windowSize.width, chartHeight * 2, dateChangeHandler);
+    brushRef.current = createBrush(BRUSH_MARGIN, windowSize.width, chartHeight * 2, dateChangeHandler);
+    brushGroupRef.current = drawBrush(svgElement, BRUSH_MARGIN, brushRef.current).node();
 
     return () => {
       d3.select(svgElement).selectAll("g").remove();
@@ -130,6 +134,12 @@ const TemporalFilter = () => {
     setSelectedData,
   ]);
 
+  const resetBrushHandler = () => {
+    if (brushGroupRef.current && brushRef.current) {
+      resetBrush(brushGroupRef.current, brushRef.current);
+    }
+  };
+
   return (
     <article className="temporal-filter">
       <BounceLoader
@@ -141,6 +151,14 @@ const TemporalFilter = () => {
         className="line-charts"
         ref={wrapperRef}
       >
+        {filteredRange && (
+          <button
+            type="button"
+            onClick={resetBrushHandler}
+          >
+            reset
+          </button>
+        )}
         <svg
           className="line-charts-svg"
           ref={ref}
