@@ -9,9 +9,7 @@ import { GRAPH_WIDTH } from "../ClusterGraph.const";
 const tooltip = d3
   .select("body")
   .append("div")
-  .attr("class", "tooltip")
-  .style("position", "absolute")
-  .style("z-index", "10")
+  .attr("class", "sub-graph-tooltip")
   .style("visibility", "hidden")
   .text("Tooltip");
 
