@@ -25,12 +25,7 @@
       "parserOptions": {
         "project": ["./tsconfig.json"]
       },
-      "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "@typescript-eslint/parser"
-      ],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
       "rules": {
         "no-empty": "warn",
         "@typescript-eslint/no-unused-vars": "warn",
