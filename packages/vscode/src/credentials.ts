@@ -38,7 +38,7 @@ export class Credentials {
     this.octokit = undefined;
   }
 
-  registerListeners(context: vscode.ExtensionContext): void {
+  private registerListeners(context: vscode.ExtensionContext): void {
     context.subscriptions.push(
       vscode.authentication.onDidChangeSessions(async (e) => {
         if (e.provider.id === GITHUB_AUTH_PROVIDER_ID) {
@@ -48,25 +48,22 @@ export class Credentials {
     );
   }
 
-  async getOctokit(): Promise<Octokit.Octokit> {
+  /** Octokit 인스턴스가 없다면, 인증 세션을 새로 만듦으로써, Octokit 인스턴스가 항상 존재하도록 보장한다. */
+  private async getOctokitInstance(): Promise<Octokit.Octokit> {
     if (this.octokit) {
       return this.octokit;
+    } else {
+      const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
+      this.octokit = await this.createOctokit(session);
+      return this.octokit;
     }
+  }
 
-    const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
-    this.octokit = await this.createOctokit(session);
-
-    return this.octokit;
+  async getOctokit(): Promise<Octokit.Octokit> {
+    return this.getOctokitInstance();
   }
 
   async getAuth(): Promise<OctokitAuth> {
-    if (this.octokit) {
-      return this.octokit.auth() as Promise<OctokitAuth>;
-    }
-
-    const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
-    this.octokit = await this.createOctokit(session);
-
-    return this.octokit.auth() as Promise<OctokitAuth>;
+    return (await this.getOctokitInstance()).auth() as Promise<OctokitAuth>;
   }
 }

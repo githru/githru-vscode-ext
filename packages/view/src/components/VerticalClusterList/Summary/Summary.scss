@@ -9,7 +9,7 @@
   width: 100%;
 
   .cluster-summary__cluster {
-    padding: 5px 0;
+    padding: 5px;
     .toggle-contents-button {
       padding: 5px 15px;
       border: none;
@@ -47,6 +47,7 @@
 
       & .show {
         visibility: visible;
+        transform: rotate(180deg);
       }
     }
 
@@ -58,6 +59,7 @@
     .cluster-summary__contents {
       flex-grow: 1;
       display: flex;
+      align-items: center;
       justify-content: space-between;
       font-size: 12px;
       gap: 10px;

@@ -1,33 +1,41 @@
-import React from "react";
-import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io";
+import React, { useEffect, useState } from "react";
+import ArrowDropDownCircleRoundedIcon from "@mui/icons-material/ArrowDropDownCircleRounded";
+
+import { useGlobalData } from "hooks";
 
 import type { ContentProps } from "../Summary.type";
 
 const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
-  const str: string = content.message;
-  const regex = /^(\(#[0-9]+\)|#[0-9]+)/g;
-  const tobeStr: string[] = str.split(" ");
+  const { owner, repo } = useGlobalData();
+  const [linkedStr, setLinkedStr] = useState<React.ReactNode[]>([]);
 
-  const linkedStr = tobeStr.reduce((acc: React.ReactNode[], tokenStr: string) => {
-    const matches = tokenStr.match(regex); // #num 으로 결과가 나옴 ()가 결과에 포함되지 않음
-    if (matches) {
-      const matchedStr = matches[0];
-      const matchedStrNum: string = matchedStr.substring(1);
-      const linkIssues = `https://github.com/githru/githru-vscode-ext/issues/${matchedStrNum}`;
-      acc.push(
-        <a
-          href={linkIssues}
-          key={`issues-${matchedStr}`}
-        >
-          {matchedStr}
-        </a>
-      );
-      acc.push(" ");
-    } else {
-      acc.push(tokenStr);
-      acc.push(" ");
-    }
-    return acc;
+  useEffect(() => {
+    const str: string = content.message;
+    const regex = /^(\(#[0-9]+\)|#[0-9]+)/g;
+    const tobeStr: string[] = str.split(" ");
+
+    const newLinkedStr = tobeStr.reduce((acc: React.ReactNode[], tokenStr: string) => {
+      const matches = tokenStr.match(regex); // #num 으로 결과가 나옴 ()가 결과에 포함되지 않음
+      if (matches) {
+        const matchedStr = matches[0];
+        const matchedStrNum: string = matchedStr.substring(1);
+        const linkIssues = `https://github.com/${owner}/${repo}/issues/${matchedStrNum}`;
+        acc.push(
+          <a
+            href={linkIssues}
+            key={`issues-${matchedStr}`}
+          >
+            {matchedStr}
+          </a>
+        );
+        acc.push(" ");
+      } else {
+        acc.push(tokenStr);
+        acc.push(" ");
+      }
+      return acc;
+    }, []);
+    setLinkedStr(newLinkedStr);
   }, []);
 
   return (
@@ -40,9 +48,9 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
       </div>
       <div className="collapsible-icon">
         {selectedClusterId.includes(clusterId) ? (
-          <IoIosArrowDropupCircle className="show" />
+          <ArrowDropDownCircleRoundedIcon className="show" />
         ) : (
-          <IoIosArrowDropdownCircle />
+          <ArrowDropDownCircleRoundedIcon />
         )}
       </div>
     </>

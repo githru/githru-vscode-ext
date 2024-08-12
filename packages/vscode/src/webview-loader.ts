@@ -1,21 +1,39 @@
+import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import * as path from "path";
 import * as vscode from "vscode";
 
+import { WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
-import type { ClusterNode } from "./types/Node";
+import { mapClusterNodesFrom } from "./utils/csm.mapper";
+import {
+  findGit,
+  getBranches,
+  getCurrentBranchName,
+  getDefaultBranchName,
+  getGitConfig,
+  getGitLog,
+  getRepo,
+} from "./utils/git.util";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
+function normalizeFsPath(fsPath: string) {
+  return fsPath.replace(/\\/g, "/");
+}
+
 export default class WebviewLoader implements vscode.Disposable {
   private readonly _panel: vscode.WebviewPanel | undefined;
-
+  githubToken: string | undefined;
+  gitPath: string;
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
-    fetcher: GithruFetcherMap
+    githubToken: string | undefined
   ) {
-    const { fetchClusterNodes, fetchBranches, fetchCurrentBranch } = fetcher;
     const viewColumn = vscode.ViewColumn.One;
+    this.githubToken = githubToken;
+    this.gitPath = ''
+
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -28,26 +46,27 @@ export default class WebviewLoader implements vscode.Disposable {
 
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload?: string }) => {
       const { command, payload } = message;
+      await this.setGitPath()
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
-        const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+        const baseBranchName = (payload && JSON.parse(payload)) ?? (await this.fetchCurrentBranch());
         // Disable Cache temporarily
         // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
         // if (!storedAnalyzedData) {
 
-        const analyzedData = await fetchClusterNodes(baseBranchName);
+        const analyzedData = await this.fetchClusterNodes(baseBranchName);
         context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
 
         const resMessage = {
-            command,
-            payload: analyzedData,
+          command,
+          payload: analyzedData,
         };
 
         await this.respondToMessage(resMessage);
       }
 
       if (command === "fetchBranchList") {
-        const branches = await fetchBranches();
+        const branches = await this.fetchBranches();
         await this.respondToMessage({
           ...message,
           payload: branches,
@@ -81,6 +100,69 @@ export default class WebviewLoader implements vscode.Disposable {
     });
   }
 
+  private getCurrentWorkspacePath() {
+    const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
+    if (!currentWorkspaceUri) {
+      throw new WorkspacePathUndefinedError("Cannot find current workspace path");
+    }
+    return normalizeFsPath(currentWorkspaceUri.fsPath);
+  }
+
+  private async setGitPath() {
+    this.gitPath = (await findGit()).path
+  }
+  
+  private async fetchBranches() {
+    try {
+      return await getBranches(this.gitPath, this.getCurrentWorkspacePath());
+    } catch (e) {
+      console.debug(e);
+    }
+  }
+
+  private async fetchCurrentBranch() {
+    let branchName;
+    try {
+      branchName = await getCurrentBranchName(this.gitPath, this.getCurrentWorkspacePath());
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!branchName) {
+      const branchList = (await this.fetchBranches())?.branchList;
+      branchName = getDefaultBranchName(branchList || []);
+    }
+    return branchName;
+  }
+
+  private async fetchClusterNodes(baseBranchName?: string) {
+    const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
+    if (!currentWorkspaceUri) {
+      throw new WorkspacePathUndefinedError("Cannot find current workspace path");
+    }
+
+    if (!baseBranchName) {
+      baseBranchName = await this.fetchCurrentBranch();
+    }
+    const gitLog = await getGitLog(this.gitPath, this.getCurrentWorkspacePath());
+    const gitConfig = await getGitConfig(this.gitPath, this.getCurrentWorkspacePath(), "origin");
+    const { owner, repo } = getRepo(gitConfig);
+    this.setGlobalOwnerAndRepo(owner, repo);
+    const engine = new AnalysisEngine({
+      isDebugMode: true,
+      gitLog,
+      owner,
+      repo,
+      auth: this.githubToken,
+      baseBranchName,
+    });
+
+    const { isPRSuccess, csmDict } = await engine.analyzeGit();
+    if (isPRSuccess) console.log("crawling PR failed");
+
+    return mapClusterNodesFrom(csmDict);
+  }
+
   private getWebviewContent(webview: vscode.Webview): string {
     const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
     const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
@@ -111,11 +193,12 @@ export default class WebviewLoader implements vscode.Disposable {
         `;
     return returnString;
   }
+  public setGlobalOwnerAndRepo(owner: string, repo: string) {
+    if (this._panel) {
+      this._panel.webview.postMessage({
+        command: "setGlobalOwnerAndRepo",
+        data: { owner, repo },
+      });
+    }
+  }
 }
-
-type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
-type GithruFetcherMap = {
-  fetchClusterNodes: GithruFetcher<ClusterNode[], [string]>;
-  fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
-  fetchCurrentBranch: GithruFetcher<string>;
-};

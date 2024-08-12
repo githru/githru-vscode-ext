@@ -1,9 +1,13 @@
 .vertical-cluster-list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+}
+
+.vertical-cluster-list__content {
+  display: flex;
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
   flex-grow: 1;
-  width: 100%;
+  width: 70%;
 }

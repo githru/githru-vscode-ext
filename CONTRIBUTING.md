@@ -1,18 +1,18 @@
 # Contributing to Githru
 
-TODO: Add support수정 필요!
+TODO: Add support 수정 필요!
 
 ## Develop Environment
 
 - [node](https://nodejs.org/ko/download/) -v v14.17.3
 - [vscode](https://code.visualstudio.com/)
-- [vscode plugin - eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [vscode plugin - ESlint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
 ## Installation
 
 1. 이 저장소를 [Fork](https://help.github.com/articles/fork-a-repo/) 한 후
    로컬 기기에 [clone](https://help.github.com/articles/cloning-a-repository/) 합니다.
-2. VSCode를 사용한다면 아래 과정을 통해 custom TS setting을 활성화해야합니다.
+2. VSCode를 사용한다면 아래 과정을 통해 custom TS setting을 활성화해야 합니다.
 
    1. TypeScript 파일이 열려 있는 상태로 `ctrl(cmd) + shift + p`를 입력합니다.
    2. "Select TypeScript Version"을 선택합니다.
@@ -42,7 +42,7 @@ TODO: Add support수정 필요!
    yarn test
    ```
 
-7. [demo README](https://github.com/EveryAnalytics/react-analytics-provider/tree/main/demo)를 참고해 demo앱도 실행해 보세요.
+7. [demo README](https://github.com/EveryAnalytics/react-analytics-provider/tree/main/demo)를 참고해 demo 앱도 실행해 보세요.
 
 ## Debugging
 
@@ -60,7 +60,7 @@ TODO: Add support수정 필요!
 
 ## Commit message
 
-커밋 메세지는 제목과 본문을 포함해야 합니다.
+커밋 메시지는 제목과 본문을 포함해야 합니다.
 
 제목은 해당 커밋에 대한 주요 내용을 간략하게 기록합니다.
 형식은 https://www.conventionalcommits.org/en/v1.0.0/ 를 따릅니다.
@@ -68,7 +68,7 @@ TODO: Add support수정 필요!
 - optional scope을 사용하며, `engine`, `vscode`, `view` 3가지 scope만을 사용합니다.
 - ex) feat(view): Add File Icicle Tree view.
 
-본문은 커밋에서 수정된 상세내역을 작성합니다. 생략 가능하며, `어떻게`보단 `무엇을`, `왜` 해결했는지 적어주시는 것이 좋습니다.
+본문은 커밋에서 수정된 상세내용을 작성합니다. 생략 가능하며, `어떻게`보단 `무엇을`, `왜` 해결했는지 적어주시는 것이 좋습니다.
 
 상황에 따라 연관된 이슈 트래킹 번호를 포함합니다.
 
@@ -88,7 +88,7 @@ PR의 제목 형식은 commit과 동일하게 맞추면 됩니다.
 
 ## Coding Guidelines
 
-`vscode`의 `eslint` 플러그인을 통해 미리 설정된 코드 컨벤션을 적용하고 검사해 볼 수 있습니다.
+`vscode`의 `ESlint` 플러그인을 통해 미리 설정된 코드 컨벤션을 적용하고 검사해 볼 수 있습니다.
 
 ## Add yourself as a contributor
 

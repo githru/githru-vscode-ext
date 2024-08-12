@@ -1,13 +1,13 @@
 # githru-vscode-ext
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 Lightweight but robust Githru for VSCode Extension
 
 ## Getting Started
 
 https://github.com/githru/githru-vscode-ext/blob/main/doc/getting-started-ko.md
+
+## Documentation
+
+https://github.com/githru/githru-vscode-ext/wiki
 
 ## Contributors
 
