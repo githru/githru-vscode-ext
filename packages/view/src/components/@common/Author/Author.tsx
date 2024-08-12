@@ -1,17 +1,18 @@
+import { Tooltip, Avatar } from "@mui/material";
+
 import type { AuthorInfo } from "types";
-import "./Author.scss";
 
 const Author = ({ name, src }: AuthorInfo) => {
   return (
-    <div
-      className="author"
-      data-tooltip-text={name}
+    <Tooltip
+      title={name}
+      placement="top-start"
     >
-      <img
+      <Avatar
+        alt={name}
         src={src}
-        alt=""
       />
-    </div>
+    </Tooltip>
   );
 };
 
