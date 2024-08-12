@@ -11,6 +11,7 @@ const Author = ({ name, src }: AuthorInfo) => {
       <Avatar
         alt={name}
         src={src}
+        sx={{ width: 30, height: 30 }}
       />
     </Tooltip>
   );
