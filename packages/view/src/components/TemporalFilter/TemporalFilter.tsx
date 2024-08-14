@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import BounceLoader from "react-spinners/BounceLoader";
+import { Button } from "@mui/material";
 
 import { useGlobalData } from "hooks";
 
@@ -152,12 +153,15 @@ const TemporalFilter = () => {
         ref={wrapperRef}
       >
         {filteredRange && (
-          <button
+          <Button
             type="button"
+            variant="contained"
             onClick={resetBrushHandler}
+            size="small"
+            className="reset-button"
           >
-            reset
-          </button>
+            Reset
+          </Button>
         )}
         <svg
           className="line-charts-svg"
