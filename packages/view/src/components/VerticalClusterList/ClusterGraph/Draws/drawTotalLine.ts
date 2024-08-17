@@ -14,8 +14,8 @@ export const drawTotalLine = (
 ) => {
   const lineData = [
     {
-      start: svgMargin.top,
-      end: (clusterHeight + nodeGap) * data.length,
+      start: 0,
+      end: clusterHeight + nodeGap * 2,
       selected: {
         prev: data[0].selected.prev,
         current: data[0].selected.current,
