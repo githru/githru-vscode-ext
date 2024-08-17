@@ -1,14 +1,16 @@
-import { useGlobalData } from "hooks";
+import React from "react";
 
-import { getGraphHeight, getClusterSizes, getSelectedIndex } from "./ClusterGraph.util";
+import { useGlobalData } from "hooks";
+import type { ClusterGraphProps } from "types/ClusterGraphProps";
+
+import { getGraphHeight, getSelectedIndex } from "./ClusterGraph.util";
 import { DETAIL_HEIGHT, SVG_WIDTH } from "./ClusterGraph.const";
 import { useHandleClusterGraph } from "./ClusterGraph.hook";
 
 import "./ClusterGraph.scss";
 
-const ClusterGraph = () => {
-  const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
-  const clusterSizes = getClusterSizes(data);
+const ClusterGraph: React.FC<ClusterGraphProps> = ({ data, clusterSizes }) => {
+  const { selectedData, setSelectedData } = useGlobalData();
   const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight = getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
 
