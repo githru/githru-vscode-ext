@@ -24,10 +24,10 @@ export const drawTotalLine = (
   ];
 
   d3.select(svgRef.current)
-    .selectAll(".cluster-graph__total-line")
+    .selectAll(".cluster-graph__connector-line")
     .data(lineData)
     .join("line")
-    .attr("class", "cluster-graph__total-line")
+    .attr("class", "cluster-graph__connector-line")
     .attr("x1", svgMargin.left + graphWidth / 2)
     .attr("y1", (d) => d.start)
     .attr("x2", svgMargin.left + graphWidth / 2)
