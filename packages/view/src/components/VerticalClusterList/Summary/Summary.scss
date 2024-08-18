@@ -9,7 +9,8 @@
   width: 100%;
 
   .cluster-summary__cluster {
-    padding: 5px;
+    display: flex;
+    align-items: center;
     .toggle-contents-button {
       padding: 5px 15px;
       border: none;
@@ -22,6 +23,11 @@
         border-radius: 40px;
         background-color: lighten($gray-800, 5);
       }
+    }
+    .cluster-summary__info-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
     }
 
     .toggle-contents-container {
@@ -85,6 +91,9 @@
       }
     }
   }
+}
+.cluster-graph {
+  display: block;
 }
 
 .detail__container {
