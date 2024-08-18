@@ -75,7 +75,7 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
-    const geminiCommitSummary = await getSummary(csmDict?.main?.slice(0, 10) ?? []);
+    const geminiCommitSummary = await getSummary(commitRaws?.slice(-10) ?? []);
     if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
 
     return {
