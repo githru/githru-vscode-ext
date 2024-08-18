@@ -1,8 +1,11 @@
 import type { OctokitOptions } from "@octokit/core/dist-types/types";
 import { throttling } from "@octokit/plugin-throttling";
 import type { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
-import { Octokit } from "@octokit/rest";
+import { Octokit, type RestEndpointMethodTypes } from "@octokit/rest";
 import { inject, singleton } from "tsyringe";
+
+type PullsListResponseData = RestEndpointMethodTypes["pulls"]["get"]["response"];
+type PullsListCommitsResponseData = RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
 
 @singleton()
 export class PluginOctokit extends Octokit.plugin(throttling) {
@@ -52,13 +55,13 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
   private _getPullRequest = async (pullNumber: number) => {
     const { owner, repo } = this;
 
-    const pullRequestDetail = await this.rest.pulls.get({
+    const pullRequestDetail:PullsListResponseData = await this.rest.pulls.get({
       owner,
       repo,
       pull_number: pullNumber,
     });
 
-    const pullRequestCommits = await this.rest.pulls.listCommits({
+    const pullRequestCommits:PullsListCommitsResponseData = await this.rest.pulls.listCommits({
       owner,
       repo,
       pull_number: pullNumber,
@@ -70,7 +73,11 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
     };
   };
 
-  public getPullRequests = async () => {
+
+  public getPullRequests = async (): Promise<{
+    detail: PullsListResponseData,
+    commitDetails: PullsListCommitsResponseData
+  }[]> => {
     const { owner, repo } = this;
 
     const { data } = await this.rest.pulls.list({
