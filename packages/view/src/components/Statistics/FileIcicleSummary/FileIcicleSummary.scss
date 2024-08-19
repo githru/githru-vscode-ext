@@ -1,4 +1,4 @@
-@import "styles/_pallete";
+@import "styles/app";
 
 .file-icicle-summary {
   width: 16rem;
@@ -6,4 +6,10 @@
     fill: var(--primary-color);
     filter: invert(100) grayscale(100) contrast(100);
   }
+}
+
+.file-icicle-title {
+  font-size: $font-size-title;
+  font-weight: $font-weight-semibold;
+  margin-bottom: 1rem;
 }

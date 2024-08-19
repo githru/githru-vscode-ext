@@ -1,40 +1,13 @@
-$font-size--base: font-size(16px);
-$font-size--secondary: font-size(14px);
+$font-size-title: 1rem;
+$font-size-body: 0.875rem;
+$font-size-caption: 0.75rem;
 
-$font-weight--thin: 100;
-$font-weight--extralight: 200;
-$font-weight--light: 300;
-$font-weight--regular: 400;
-$font-weight--medium: 500;
-$font-weight--semibold: 600;
-$font-weight--bold: 700;
-$font-weight--extrabold: 800;
-$font-weight--black: 900;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-semibold: 600;
+$font-weight-extrabold: 800;
 
-$line-height--base: 1.62;
-$line-height--title: 1.15;
-$line-height--quote: 1.3;
-$line-height--button: 1;
-
-@function calculateRem($size) {
-  $remSize: $size / 16px;
-  @return $remSize * 1rem;
-}
-
-@mixin font-size($size) {
-  font-size: $size;
-  font-size: calculateRem($size);
-}
-
-@mixin font-face($font-name, $file-name, $weight: normal, $style: normal) {
-  @font-face {
-    font-family: quote($font-name);
-    src: url($file-name + ".eot");
-    src: url($file-name + ".eot?#iefix") format("embedded-opentype"),
-      url($file-name + ".woff") format("woff"),
-      url($file-name + ".ttf") format("truetype"),
-      url($file-name + ".svg##{$font-name}") format("svg");
-    font-weight: $weight;
-    font-style: $style;
-  }
-}
+$line-height-base: 1.62;
+$line-height-title: 1.15;
+$line-height-quote: 1.3;
+$line-height-button: 1;

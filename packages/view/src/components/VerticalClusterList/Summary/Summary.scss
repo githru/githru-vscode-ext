@@ -1,4 +1,4 @@
-@import "styles/_pallete";
+@import "styles/app";
 
 .cluster-summary__container {
   display: flex;
@@ -67,7 +67,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: $font-size-body;
       gap: 10px;
 
       .commit-message__wrapper {
@@ -87,7 +87,7 @@
 
       .more-commit-count {
         text-align: right;
-        font-size: 10px;
+        font-size: $font-size-caption;
       }
     }
   }
