@@ -152,7 +152,13 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
   throw new Error("None of the provided paths are a Git executable");
 }
 
-export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
+export async function getGitLog(
+  gitPath: string,
+  currentWorkspacePath: string
+  // TODO
+  // gitLogCountOffset: number,
+  // gitLogCountLimit: number
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const args = [
       "--no-pager",
@@ -165,6 +171,11 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
       "--decorate",
       "-c",
     ];
+
+    // TODO
+    // console.log("getGitLog", { gitLogCountOffset, gitLogCountLimit });
+    // if (gitLogCountOffset) args.push(`--skip=${gitLogCountOffset}`);
+    // if (gitLogCountLimit) args.push(`-n ${gitLogCountLimit}`);
 
     resolveSpawnOutput(
       cp.spawn(gitPath, args, {

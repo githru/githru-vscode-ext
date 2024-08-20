@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { GlobalDataContext, type DateFilterRange } from "hooks";
 import type { ClusterNode } from "types";
@@ -29,6 +29,13 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
     setLoading(false);
   };
 
+  /** Git Log 분할 로직 */
+  // TODO : vscode 설정에서 처음 받아올 로그의 count를 설정한 후 주입하게 해도 됩니다.
+  const [currentGitLogCount, setCurrentGitLogCount] = useState<number>(100);
+  const handleChangeGitLogSkipCount = useCallback((newSkipCount: number) => {
+    setCurrentGitLogCount((p) => p + newSkipCount);
+  }, []);
+
   const value = useMemo(
     () => ({
       data,
@@ -50,8 +57,23 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       setOwner,
       repo,
       setRepo,
+      currentGitLogCount,
+      setCurrentGitLogCount,
+      handleChangeGitLogSkipCount,
     }),
-    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading, owner, repo]
+    [
+      data,
+      filteredRange,
+      filteredData,
+      selectedData,
+      loading,
+      branchList,
+      selectedBranch,
+      owner,
+      repo,
+      currentGitLogCount,
+      handleChangeGitLogSkipCount,
+    ]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;

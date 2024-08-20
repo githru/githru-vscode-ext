@@ -12,4 +12,5 @@ export type IDEMessageCommandNames =
   | "fetchAnalyzedData"
   | "fetchBranchList"
   | "fetchCurrentBranch"
+  | "fetchMoreGitLog"
   | "updatePrimaryColor";

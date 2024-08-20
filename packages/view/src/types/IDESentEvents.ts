@@ -4,4 +4,5 @@ import type { ClusterNode } from "types";
 export type IDESentEvents = {
   handleChangeAnalyzedData: (analyzedData: ClusterNode[]) => void;
   handleChangeBranchList: (branches: { branchList: string[]; head: string | null }) => void;
+  handleChangeGitLogSkipCount: (newCount: number) => void;
 };

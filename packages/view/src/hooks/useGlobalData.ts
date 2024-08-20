@@ -28,6 +28,8 @@ type GlobalDataState = {
   setOwner: Dispatch<SetStateAction<string>>;
   repo: string;
   setRepo: Dispatch<SetStateAction<string>>;
+  currentGitLogCount: number;
+  setCurrentGitLogCount: Dispatch<SetStateAction<number>>;
 } & IDESentEvents;
 
 export const GlobalDataContext = createContext<GlobalDataState | undefined>(undefined);

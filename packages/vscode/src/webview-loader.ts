@@ -9,6 +9,12 @@ const ANALYZE_DATA_KEY = "memento_analyzed_data";
 export default class WebviewLoader implements vscode.Disposable {
   private readonly _panel: vscode.WebviewPanel | undefined;
 
+  /** 처음에 불러올 개수
+   * @description 설정 또는 view에서 사용자가 커스터마이징 할 수 있도록 열어둬도 됩니다. */
+  private gitLogCount: number = 0;
+  // TODO
+  /* private prevGitLogCount: number = 0; */
+  private baseBranchName: string = "main";
   constructor(
     private readonly extensionPath: string,
     context: vscode.ExtensionContext,
@@ -30,17 +36,21 @@ export default class WebviewLoader implements vscode.Disposable {
       const { command, payload } = message;
 
       if (command === "fetchAnalyzedData" || command === "refresh") {
-        const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+        this.baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
         // Disable Cache temporarily
         // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
         // if (!storedAnalyzedData) {
 
-        const analyzedData = await fetchClusterNodes(baseBranchName);
-        context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+        const analyzedData = await fetchClusterNodes(
+          this.baseBranchName
+          // TODO
+          /* this.gitLogCount */
+        );
+        context.workspaceState.update(`${ANALYZE_DATA_KEY}_${this.baseBranchName}`, analyzedData);
 
         const resMessage = {
-            command,
-            payload: analyzedData,
+          command,
+          payload: analyzedData,
         };
 
         await this.respondToMessage(resMessage);
@@ -59,6 +69,27 @@ export default class WebviewLoader implements vscode.Disposable {
         if (colorCode.primary) {
           setPrimaryColor(colorCode.primary);
         }
+      }
+
+      if (command === "fetchMoreGitLog") {
+        const { offset, limit } = JSON.parse(payload || "") ?? {};
+
+        const newGitLogCount = +(limit ?? 0);
+        this.gitLogCount = this.gitLogCount + newGitLogCount;
+        console.log("view -> engine 메시지 : ", { offset, limit, newGitLogCount });
+
+        // TODO : CSM 가공 (이어붙이기)
+        const analyzedData = await fetchClusterNodes(
+          this.baseBranchName
+          /* offset */
+          /* this.gitLogCount, +(limit ?? 0) */
+        );
+        const resMessage = {
+          command,
+          payload: { newGitLogCount, analyzedData },
+        };
+
+        await this.respondToMessage(resMessage);
       }
     });
 
