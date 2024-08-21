@@ -1,3 +1,5 @@
+@import "styles/app";
+
 .temporal-filter {
   display: flex;
   flex-direction: column;
@@ -40,8 +42,8 @@
 }
 
 .filter {
-  font-weight: 600;
-  font-size: 0.825rem;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-caption;
 
   .date-from,
   .date-to {
@@ -51,13 +53,13 @@
     border-radius: 3px;
     color: white;
     background: rgba(255, 255, 255, 0.09);
-    font-weight: 300;
-    font-size: 0.825rem;
+    font-weight: $font-weight-light;
+    font-size: $font-size-caption;
   }
 }
 
 .temporal-filter__label {
-  font-size: 10px;
-  font-weight: 500;
+  font-size: $font-size-title;
+  font-weight: $font-weight-semibold;
   fill: white;
 }

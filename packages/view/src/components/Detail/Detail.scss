@@ -1,11 +1,11 @@
-@import "styles/_pallete";
+@import "styles/app";
 
 .detail__summary__container {
   display: flex;
   justify-content: space-between;
   margin: 15px 0 20px;
   align-items: center;
-  font-size: 12px;
+  font-size: $font-size-caption;
 
   .divider {
     margin-right: 1rem;
@@ -50,7 +50,7 @@
   flex-direction: column;
   row-gap: 7px;
   padding: 0 20px;
-  font-size: 12px;
+  font-size: $font-size-body;
 
   .commit-item {
     width: 100%;
@@ -142,7 +142,7 @@
   background: $white;
   padding: 8px 16px;
   text-align: center;
-  font-size: 10px;
+  font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
   color: $gray-900;

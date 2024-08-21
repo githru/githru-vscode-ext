@@ -1,8 +1,15 @@
+@import "styles/app";
+
 .selected-container {
   display: flex;
   align-items: center;
   gap: 15px;
   width: 100%;
+
+  p {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+  }
 }
 
 .selected-content {

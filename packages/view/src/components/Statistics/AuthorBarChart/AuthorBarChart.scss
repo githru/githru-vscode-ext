@@ -1,10 +1,15 @@
-@import "styles/_pallete";
+@import "styles/app";
 
 .author-bar-chart__container {
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  p {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+  }
 }
 
 .author-bar-chart__header {
@@ -12,7 +17,7 @@
   text-align: right;
 
   & .select-box {
-    font-size: 10px;
+    font-size: $font-size-caption;
     background: transparent;
     border: 1px solid $white;
     border-radius: 5px;
@@ -35,7 +40,7 @@
 
   .axis {
     color: $white;
-    font-weight: bold;
+    font-weight: $font-weight-semibold;
 
     &.x-axis {
       .tick {
@@ -69,9 +74,9 @@
       .name {
         fill: $white;
         stroke: none;
-        font-size: 10px;
+        font-size: $font-size-caption;
         text-anchor: start;
-        font-weight: normal;
+        font-weight: $font-weight-semibold;
       }
     }
   }
@@ -83,16 +88,16 @@
   background: $white;
   padding: 8px 16px;
   text-align: center;
-  font-size: 10px;
+  font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
   color: $gray-900;
 
   .selected {
     color: var(--primary-color);
-    font-weight: bold;
+    font-weight: $font-weight-semibold;
   }
   .name {
-    font-weight: bold;
+    font-weight: $font-weight-semibold;
   }
 }

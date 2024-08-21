@@ -1,10 +1,11 @@
+@import "styles/app";
+
 .branch-selector {
   display: flex;
   flex-direction: row;
   gap: 1rem;
   align-items: center;
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: $font-weight-semibold;
 
   .select-box {
     background-color: white;
