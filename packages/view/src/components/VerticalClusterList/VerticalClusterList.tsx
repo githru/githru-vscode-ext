@@ -8,9 +8,7 @@ const VerticalClusterList = () => {
   return (
     <div className="vertical-cluster-list">
       <FilteredAuthors />
-      <div className="vertical-cluster-list__content">
-        <Summary />
-      </div>
+      <Summary />
     </div>
   );
 };
