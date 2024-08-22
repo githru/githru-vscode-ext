@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "generator-code": "^1.6.10",
+    "react-refresh": "^0.14.2",
     "yo": "^1.4.5"
   }
 }
