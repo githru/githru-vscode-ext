@@ -7,12 +7,17 @@
   padding-left: 20px;
   padding-top: 5px;
   width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 
   .cluster-summary__cluster {
     display: flex;
     align-items: center;
+    column-gap: 10px;
+
     .toggle-contents-button {
-      padding: 5px 15px;
+      padding: 10px 15px;
       border: none;
       background-color: transparent;
       cursor: pointer;
@@ -28,6 +33,11 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      &.selected {
+        border-radius: 20px;
+        background-color: lighten($gray-900, 5);
+      }
     }
 
     .toggle-contents-container {
@@ -100,7 +110,7 @@
   overflow: auto;
   height: 220px;
   max-height: 280px;
-  padding: 0px 30px;
+  padding: 10px 30px;
 }
 
 .sort-button {

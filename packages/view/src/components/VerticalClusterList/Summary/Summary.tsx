@@ -49,7 +49,11 @@ const Summary = () => {
                 clusterSizes={[clusterSizes[index]]}
               />
             </div>
-            <div className="cluster-summary__info-wrapper">
+            <div
+              className={`cluster-summary__info-wrapper ${
+                selectedClusterId.includes(cluster.clusterId) ? "selected" : ""
+              }`}
+            >
               <button
                 type="button"
                 className="toggle-contents-button"
