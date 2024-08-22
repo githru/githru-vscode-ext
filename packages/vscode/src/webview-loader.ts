@@ -76,7 +76,7 @@ export default class WebviewLoader implements vscode.Disposable {
 
         const newGitLogCount = +(limit ?? 0);
         this.gitLogCount = this.gitLogCount + newGitLogCount;
-        console.log("view -> engine 메시지 : ", { offset, limit, newGitLogCount });
+        console.log("[view -> engine] message : ", { offset, limit, newGitLogCount });
 
         // TODO : CSM 가공 (이어붙이기)
         const analyzedData = await fetchClusterNodes(

@@ -47,7 +47,7 @@ const App = () => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent<RemoteGitHubInfo & GitLogPayload>) => {
       const message = event.data;
-      console.log("engine -> view 메시지 : ", { message });
+      console.log("[engine -> view] message : ", { message });
       if (message.data) {
         setOwner(message.data.owner);
         setRepo(message.data.repo);
@@ -56,7 +56,7 @@ const App = () => {
       // TODO : 커맨드명이 패키지 공통으로 쓰이고 있기 때문에, enum 등으로 전역 관리하는 것도 좋을 것 같습니다.
       if (message.command === "fetchMoreGitLog") {
         const newGitLogCount = JSON.parse(message.payload as unknown as string).newGitLogCount as string;
-        setCurrentGitLogCount((p) => p + +newGitLogCount);
+        setCurrentGitLogCount((p) => p + Number(newGitLogCount));
       }
     };
 
@@ -92,7 +92,7 @@ const App = () => {
               ideAdapter.sendFetchMoreGitLogMessage(100);
             }}
           >
-            로그 더 불러오기 (현재 {currentGitLogCount}개)
+            Fetch More Git Logs (current : {currentGitLogCount} logs)
           </button>
 
           <RefreshButton />
