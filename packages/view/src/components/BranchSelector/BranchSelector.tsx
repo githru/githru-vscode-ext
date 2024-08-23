@@ -1,4 +1,3 @@
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import type { SelectChangeEvent } from "@mui/material/Select";
@@ -24,18 +23,13 @@ const BranchSelector = () => {
         sx={{ m: 1, minWidth: 120 }}
         size="small"
       >
-        <InputLabel id="branch-select-small-label">Branches</InputLabel>
         <Select
-          labelId="branch-select-small-label"
-          id="branch-select-small"
           value={selectedBranch}
-          label="Branches"
+          displayEmpty
           onChange={handleChangeSelect}
           className="select-box"
+          inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {branchList?.map((option) => (
             <MenuItem
               key={option}
