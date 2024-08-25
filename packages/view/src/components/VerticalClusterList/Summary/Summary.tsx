@@ -11,14 +11,14 @@ import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { ClusterGraph } from "../ClusterGraph";
 import { getClusterSizes } from "../ClusterGraph/ClusterGraph.util";
-import { CLUSTER_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
+import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
 
 import { usePreLoadAuthorImg } from "./Summary.hook";
 import { getInitData, getClusterIds, getClusterById } from "./Summary.util";
 import { Content } from "./Content";
 
 const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
-const EXPANDED_ROW_HEIGHT = 280;
+const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
 
 const Summary = () => {
   const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
