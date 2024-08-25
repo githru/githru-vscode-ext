@@ -1,20 +1,8 @@
 @import "styles/app";
 
-.selected-container {
+.selected__author {
   display: flex;
   align-items: center;
-  gap: 15px;
-  width: 100%;
-
-  p {
-    font-size: $font-size-title;
-    font-weight: $font-weight-semibold;
-  }
-}
-
-.selected-content {
-  display: flex;
   flex-wrap: wrap;
-  box-sizing: border-box;
-  align-items: center;
+  gap: 5px;
 }

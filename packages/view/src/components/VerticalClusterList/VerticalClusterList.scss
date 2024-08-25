@@ -1,12 +1,26 @@
+@import "styles/app";
+
 .vertical-cluster-list {
   display: flex;
   flex-direction: column;
 }
 
-.vertical-cluster-list__content {
+.selected__container {
   display: flex;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 20px;
+  padding: 0 10px 20px;
+  width: 100%;
+
+  & .selected__content {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    p {
+      font-size: $font-size-title;
+      font-weight: $font-weight-semibold;
+    }
+  }
 }

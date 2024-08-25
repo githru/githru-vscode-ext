@@ -1,16 +1,23 @@
-import "./VerticalClusterList.scss";
-
+import { useGlobalData } from "hooks";
 import { FilteredAuthors } from "components/FilteredAuthors";
+import { FilteredClusters } from "components/FilteredClusters";
 
 import { Summary } from "./Summary";
 
+import "./VerticalClusterList.scss";
+
 const VerticalClusterList = () => {
+  const { selectedData } = useGlobalData();
+
   return (
     <div className="vertical-cluster-list">
-      <FilteredAuthors />
-      <div className="vertical-cluster-list__content">
-        <Summary />
-      </div>
+      {selectedData.length > 0 && (
+        <div className="selected__container">
+          <FilteredAuthors />
+          <FilteredClusters />
+        </div>
+      )}
+      <Summary />
     </div>
   );
 };
