@@ -54,5 +54,5 @@ export const getSummaryCommitList = (arr: CommitNode[]) => {
     commitList.push(arr[i]);
   }
 
-  return commitList.reverse();
+  return commitList;
 };
