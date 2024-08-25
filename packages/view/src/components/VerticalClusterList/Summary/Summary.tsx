@@ -33,9 +33,6 @@ const Summary = () => {
     const selected = getClusterById(data, clusterId);
     setSelectedData((prevState: ClusterNode[]) => {
       const newState = selectedDataUpdater(selected, clusterId)(prevState);
-      if (listRef.current) {
-        listRef.current.recomputeRowHeights();
-      }
       return newState;
     });
   };
