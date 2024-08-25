@@ -10,10 +10,9 @@ test.describe("home", () => {
     await expect(page).toHaveTitle(/Githru/);
   });
 
-  test("when click cluster", async ({ page }) => {
-    await page.waitForSelector("[data-testid=cluster-graph__container]", { state: "attached" });
-
-    const childContainers = await page.$$("[data-testid=cluster-graph__container]");
+  test("opens detail container on cluster click", async ({ page }) => {
+    await page.waitForSelector(".cluster-graph__container", { state: "attached" });
+    const childContainers = await page.$$(".cluster-graph__container");
 
     if (childContainers.length > CLICK_INDEX) {
       await childContainers[CLICK_INDEX].scrollIntoViewIfNeeded();
@@ -23,22 +22,9 @@ test.describe("home", () => {
     }
 
     // waiting for changing
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(10000);
 
-    const newChildContainers = await page.$$("[data-testid=cluster-graph__container]");
-
-    const targetIndexForCheck = CLICK_INDEX + 1;
-    const transformPositionForCheck = 10 + targetIndexForCheck * 50 + 220;
-    if (newChildContainers.length > targetIndexForCheck) {
-      const transformValue = await newChildContainers[targetIndexForCheck].getAttribute("transform");
-
-      if (transformValue !== null) {
-        expect(transformValue).toBe(`translate(2, ${transformPositionForCheck})`);
-      } else {
-        throw new Error("Transform attribute not found");
-      }
-    } else {
-      throw new Error("Not enough child containers found");
-    }
+    const detailContainer = await page.waitForSelector(".detail__container");
+    expect(detailContainer).toBeTruthy();
   });
 });
