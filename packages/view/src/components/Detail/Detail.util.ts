@@ -47,17 +47,12 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
 };
 
 export const getSummaryCommitList = (arr: CommitNode[]) => {
-  const res = [];
+  const commitList: CommitNode[] = [];
   const SUMMARY_COMMIT_LIST_PREVIEW_LENGTH = 5;
-  for (
-    let item = arr.length - 1;
-    arr.length >= SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
-      ? item > arr.length - 1 - SUMMARY_COMMIT_LIST_PREVIEW_LENGTH
-      : item >= 0;
-    item -= 1
-  ) {
-    res.push(arr[item]);
+
+  for (let i = 0; i < SUMMARY_COMMIT_LIST_PREVIEW_LENGTH && i < arr.length; i += 1) {
+    commitList.push(arr[i]);
   }
 
-  return res;
+  return commitList.reverse();
 };
