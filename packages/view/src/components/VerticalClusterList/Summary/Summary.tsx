@@ -70,6 +70,11 @@ const Summary = () => {
             data={[data[index]]}
             clusterSizes={[clusterSizes[index]]}
           />
+          <div
+            className={`cluster-summary__info-wrapper ${
+              selectedClusterId.includes(cluster.clusterId) ? "selected" : ""
+            }`}
+          />
         </div>
         <div className="cluster-summary__info-wrapper">
           <button
@@ -116,67 +121,6 @@ const Summary = () => {
 
   return (
     <div className="cluster-summary__container">
-<<<<<<< HEAD
-      {clusters.map((cluster: Cluster, index: number) => {
-        return (
-          <div
-            role="presentation"
-            className="cluster-summary__cluster"
-            key={cluster.clusterId}
-          >
-            <div className="cluster-summary__graph-wrapper">
-              <ClusterGraph
-                data={[data[index]]}
-                clusterSizes={[clusterSizes[index]]}
-              />
-            </div>
-            <div
-              className={`cluster-summary__info-wrapper ${
-                selectedClusterId.includes(cluster.clusterId) ? "selected" : ""
-              }`}
-            >
-              <button
-                type="button"
-                className="toggle-contents-button"
-                onClick={onClickClusterSummary(cluster.clusterId)}
-              >
-                <div className="toggle-contents-container">
-                  <div className="name-box">
-                    {authSrcMap &&
-                      cluster.summary.authorNames.map((authorArray: string[]) => {
-                        return authorArray.map((authorName: string) => (
-                          <Author
-                            key={authorName}
-                            name={authorName}
-                            src={authSrcMap[authorName]}
-                          />
-                        ));
-                      })}
-                  </div>
-                  <Content
-                    content={cluster.summary.content}
-                    clusterId={cluster.clusterId}
-                    selectedClusterId={selectedClusterId}
-                  />
-                </div>
-              </button>
-              {selectedClusterId.includes(cluster.clusterId) && (
-                <div
-                  className="detail__container"
-                  ref={detailRef}
-                >
-                  <Detail
-                    selectedData={selectedData}
-                    clusterId={cluster.clusterId}
-                    authSrcMap={authSrcMap}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
-=======
       <AutoSizer>
         {({ width, height }) => (
           <List
@@ -190,7 +134,6 @@ const Summary = () => {
           />
         )}
       </AutoSizer>
->>>>>>> 9a32273 (feat(view): Summary 컴포넌트 react-virtualized 적용)
     </div>
   );
 };
