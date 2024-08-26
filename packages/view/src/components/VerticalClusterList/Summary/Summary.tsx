@@ -32,8 +32,7 @@ const Summary = () => {
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(data, clusterId);
     setSelectedData((prevState: ClusterNode[]) => {
-      const newState = selectedDataUpdater(selected, clusterId)(prevState);
-      return newState;
+      return selectedDataUpdater(selected, clusterId)(prevState);
     });
   };
 
