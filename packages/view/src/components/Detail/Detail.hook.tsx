@@ -12,8 +12,8 @@ const useToggleHook = (init = false): UseToggleHook => {
 };
 
 export const useCommitListHide = (commitNodeListInCluster: CommitNode[]) => {
-  const list = getSummaryCommitList(commitNodeListInCluster);
-  const strech = commitNodeListInCluster;
+  const list = getSummaryCommitList(commitNodeListInCluster).reverse();
+  const strech = commitNodeListInCluster.reverse();
   const [toggle, handleToggle] = useToggleHook();
   const commitNodeList = toggle ? strech : list;
 
