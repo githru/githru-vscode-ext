@@ -31,14 +31,11 @@ view → engine → vscode 순서대로 빌드를 시작합니다.
     ![](./getting-started-ko/3.png)
    ![](./getting-started-ko/4.png)
 
-4. debug mode 로 실행된 vscode(githru의 vscode패키지) 의 settings 에 진입합니다. (단축키 : `ctrl + ,`)
-   ![](./getting-started-ko/5.png)
-
-5. settings 화면에서 "githru" 검색을 통해 githru 설정화면에 진입한 다음,  
-   githru engine 에서 사용할 github access token 를 입력합니다.  
-   (토큰 발급 참고자료 : https://docs.github.com/ko/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)  
-    ![](./getting-started-ko/6.png)
-
-6. debug mode 로 실행된 vscode(githru의 vscode패키지) 의 하단 상태표시줄에 "githru" 텍스트 버튼을 통해 githru 화면에 진입합니다.  
+4. debug mode 로 실행된 vscode(githru의 vscode패키지) 의 하단 상태표시줄에 "githru" 텍스트 버튼을 통해 githru 화면에 진입합니다.  
    ![](./getting-started-ko/7.png)
+
+5. "확장 'githru-vscode-ext'은(는) GitHub을(를) 사용하여 로그인하려고 합니다."라는 메시지가 뜨면, "허용" 버튼을 클릭하고 외부 페이지에서 GitHub 로그인합니다.
+   ![](./getting-started-ko/login-popup.png)
+
+6. 로그인이 완료되면, vscode(githru의 vscode패키지) 에서 githru 화면이 뜹니다.
    ![](./getting-started-ko/8.png)
