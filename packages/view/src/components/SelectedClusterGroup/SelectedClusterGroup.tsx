@@ -54,16 +54,14 @@ const SelectedClusterGroup = () => {
         }}
         onClose={closeClusterGroup}
       >
-        {selectedClusters.map((selectedCluster) => {
-          return (
-            <li key={selectedCluster.clusterId}>
-              <Chip
-                label={selectedCluster.summary.content.message}
-                onDelete={deselectCluster(selectedCluster.clusterId)}
-              />
-            </li>
-          );
-        })}
+        {selectedClusters.map((selectedCluster) => (
+          <li key={selectedCluster.clusterId}>
+            <Chip
+              label={selectedCluster.summary.content.message}
+              onDelete={deselectCluster(selectedCluster.clusterId)}
+            />
+          </li>
+        ))}
       </Menu>
     </div>
   );
