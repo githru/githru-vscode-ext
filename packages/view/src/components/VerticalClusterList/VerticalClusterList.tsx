@@ -1,6 +1,6 @@
 import { useGlobalData } from "hooks";
 import { FilteredAuthors } from "components/FilteredAuthors";
-import { FilteredClusters } from "components/FilteredClusters";
+import { SelectedClusterGroup } from "components/SelectedClusterGroup";
 
 import { Summary } from "./Summary";
 
@@ -14,7 +14,7 @@ const VerticalClusterList = () => {
       {selectedData.length > 0 && (
         <div className="selected__container">
           <FilteredAuthors />
-          <FilteredClusters />
+          <SelectedClusterGroup />
         </div>
       )}
       <Summary />
