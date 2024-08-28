@@ -17,6 +17,11 @@
       text-transform: none;
       background-color: var(--primary-color);
     }
+
+    span {
+      color: var(--primary-color);
+      filter: invert(100) grayscale(100) contrast(100);
+    }
   }
 
   .line-charts-svg {
