@@ -3,14 +3,13 @@
 .temporal-filter {
   display: flex;
   flex-direction: column;
+  padding: 1rem;
 
   .line-charts {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    padding: 1rem;
-    height: 140px;
-    align-content: space-around;
+    gap: 1rem;
 
     .reset-button {
       width: 3rem;
@@ -23,7 +22,6 @@
   .line-charts-svg {
     height: 100%;
     width: 100%;
-    overflow: visible;
   }
 
   .line-chart-wrap {
