@@ -1,0 +1,22 @@
+@import "styles/app";
+
+.selected__cluster {
+  & .MuiMenu-paper {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  & .MuiMenu-list {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  & .MuiChip-root {
+    width: 200px;
+    text-overflow: ellipsis;
+    justify-content: space-between;
+    margin: 5px;
+    background-color: $gray-300;
+  }
+}
