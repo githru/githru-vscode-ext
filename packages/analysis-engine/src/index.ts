@@ -91,3 +91,4 @@ export class AnalysisEngine {
 }
 
 export default AnalysisEngine;
+export { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "./constant";
