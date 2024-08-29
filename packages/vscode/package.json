@@ -62,11 +62,6 @@
     "configuration": {
       "title": "Githru",
       "properties": {
-        "githru.github.token": {
-          "type": "string",
-          "default": "",
-          "description": "Insert your GitHub Token for GitHub API."
-        },
         "githru.color.primary": {
           "type": "string",
           "default": "#ff8272",
