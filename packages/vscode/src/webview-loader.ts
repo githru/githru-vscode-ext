@@ -15,13 +15,8 @@ export default class WebviewLoader implements vscode.Disposable {
     fetcher: GithruFetcherMap
   ) {
     const { fetchClusterNodes, fetchBranches, fetchCurrentBranch } = fetcher;
-    const viewColumn = vscode.ViewColumn.One;
 
-     //캐시 초기화
-     console.log("Initialize cache data");
-     context.workspaceState.keys().forEach(key => {
-       context.workspaceState.update(key, undefined);
-     });
+    const viewColumn = vscode.ViewColumn.One;
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -31,52 +26,55 @@ export default class WebviewLoader implements vscode.Disposable {
 
     const icon_path = vscode.Uri.file(path.join(this.extensionPath, "images", "logo.png"));
     this._panel.iconPath = icon_path;
-
+    let analyzedData;
     this._panel.webview.onDidReceiveMessage(async (message: { command: string; payload?: string }) => {
-      const { command, payload } = message;
+      try {
+        const { command, payload } = message;
 
-      if (command === "fetchAnalyzedData" || command === "refresh") {
-        const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
-        const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
-        let analyzedData = storedAnalyzedData;
-        if (!storedAnalyzedData) {
-          console.log("No cache Data");
-          console.log("baseBranchName : ",baseBranchName);
-          analyzedData = await fetchClusterNodes(baseBranchName);
-          context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
-        }else console.log("Cache data exists");
+        if (command === "fetchAnalyzedData" || command === "refresh") {
+          const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+          // Disable Cache temporarily
+          // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
 
-        // 현재 캐싱된 Branch
-        console.log("Current Stored data");
-        context.workspaceState.keys().forEach(key=>{
-            console.log(key);
-        })
+          // if (!storedAnalyzedData) {
+          try {
+            analyzedData = await fetchClusterNodes(baseBranchName);
+            context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
 
+            const resMessage = {
+              command,
+              payload: analyzedData,
+            };
 
-        const resMessage = {
-            command,
-            payload: analyzedData,
-        };
-
-        await this.respondToMessage(resMessage);
-      }
-
-      if (command === "fetchBranchList") {
-        const branches = await fetchBranches();
-        await this.respondToMessage({
-          ...message,
-          payload: branches,
-        });
-      }
-
-      if (command === "updatePrimaryColor") {
-        const colorCode = payload && JSON.parse(payload);
-        if (colorCode.primary) {
-          setPrimaryColor(colorCode.primary);
+            await this.respondToMessage(resMessage);
+          } catch (e) {
+            console.error("Error fetching analyzed data:", e);
+            throw e;
+          }
         }
+
+        if (command === "fetchBranchList") {
+          const branches = await fetchBranches();
+          await this.respondToMessage({
+            ...message,
+            payload: branches,
+          });
+        }
+
+        if (command === "updatePrimaryColor") {
+          const colorCode = payload && JSON.parse(payload);
+          if (colorCode.primary) {
+            setPrimaryColor(colorCode.primary);
+          }
+        }
+      } catch (e) {
+        console.error("An error occurred while processing the webview message:", e);
       }
     });
-
+    if (!analyzedData) {
+      this.dispose();
+      throw new Error("Project not connected to Git.");
+    }
     this._panel.webview.html = this.getWebviewContent(this._panel.webview);
   }
 
