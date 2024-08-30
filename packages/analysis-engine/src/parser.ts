@@ -1,6 +1,6 @@
 import { getCommitMessageType } from "./commit.util";
-import type { CommitRaw } from "./types";
 import { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "./constant";
+import type { CommitRaw } from "./types";
 
 export default function getCommitRaws(log: string) {
   if (!log) return [];
