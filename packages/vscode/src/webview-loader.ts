@@ -15,8 +15,13 @@ export default class WebviewLoader implements vscode.Disposable {
     fetcher: GithruFetcherMap
   ) {
     const { fetchClusterNodes, fetchBranches, fetchCurrentBranch } = fetcher;
-
     const viewColumn = vscode.ViewColumn.One;
+
+    //캐시 초기화
+    console.log("Initialize cache data");
+    context.workspaceState.keys().forEach((key) => {
+      context.workspaceState.update(key, undefined);
+    });
 
     this._panel = vscode.window.createWebviewPanel("WebviewLoader", "githru-view", viewColumn, {
       enableScripts: true,
@@ -33,13 +38,24 @@ export default class WebviewLoader implements vscode.Disposable {
 
         if (command === "fetchAnalyzedData" || command === "refresh") {
           const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
-          // Disable Cache temporarily
-          // const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(`${ANALYZE_DATA_KEY}_${baseBranchName}`);
-
-          // if (!storedAnalyzedData) {
           try {
-            analyzedData = await fetchClusterNodes(baseBranchName);
-            context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+            const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+            const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(
+              `${ANALYZE_DATA_KEY}_${baseBranchName}`
+            );
+            let analyzedData = storedAnalyzedData;
+            if (!storedAnalyzedData) {
+              console.log("No cache Data");
+              console.log("baseBranchName : ", baseBranchName);
+              analyzedData = await fetchClusterNodes(baseBranchName);
+              context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+            } else console.log("Cache data exists");
+
+            // 현재 캐싱된 Branch
+            console.log("Current Stored data");
+            context.workspaceState.keys().forEach((key) => {
+              console.log(key);
+            });
 
             const resMessage = {
               command,
