@@ -111,6 +111,7 @@
     "reflect-metadata": "^0.1.13",
     "svg-parser": "^2.0.4",
     "ts-jest": "^29.1.1",
-    "tsyringe": "^4.7.0"
+    "tsyringe": "^4.7.0",
+    "zustand": "^4.5.5"
   }
 }
