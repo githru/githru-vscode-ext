@@ -3,15 +3,14 @@ import { useMemo, useState } from "react";
 
 import { GlobalDataContext, type DateFilterRange } from "hooks";
 import type { ClusterNode } from "types";
+import { useLoadingStore } from "store";
 
 export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
-  const [loading, setLoading] = useState(false);
-
   const [data, setData] = useState<ClusterNode[]>([]);
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
   const [filteredRange, setFilteredRange] = useState<DateFilterRange>(undefined);
-
+  const { setLoading } = useLoadingStore((state) => state);
   const [branchList, setBranchList] = useState<string[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<string>(branchList?.[0]);
   const [owner, setOwner] = useState<string>("");
@@ -38,8 +37,6 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       setFilteredData,
       selectedData,
       setSelectedData,
-      loading,
-      setLoading,
       branchList,
       setBranchList,
       selectedBranch,
@@ -51,7 +48,7 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       repo,
       setRepo,
     }),
-    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, loading, owner, repo]
+    [data, filteredRange, filteredData, selectedData, branchList, selectedBranch, owner, repo]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;
