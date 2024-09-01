@@ -6,9 +6,11 @@ import Select from "@mui/material/Select";
 import { useGlobalData } from "hooks";
 import { sendFetchAnalyzedDataCommand } from "services";
 import "./BranchSelector.scss";
+import { useLoadingStore } from "store";
 
 const BranchSelector = () => {
-  const { branchList, selectedBranch, setSelectedBranch, setLoading } = useGlobalData();
+  const { branchList, selectedBranch, setSelectedBranch } = useGlobalData();
+  const { setLoading } = useLoadingStore((state) => state);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setSelectedBranch(event.target.value);

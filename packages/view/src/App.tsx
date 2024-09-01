@@ -11,11 +11,13 @@ import { useGlobalData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
+import { useLoadingStore } from "store";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
 
-  const { filteredData, handleChangeAnalyzedData, handleChangeBranchList, loading, setLoading } = useGlobalData();
+  const { filteredData, handleChangeAnalyzedData, handleChangeBranchList } = useGlobalData();
+  const { loading, setLoading } = useLoadingStore((state) => state);
 
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
