@@ -66,11 +66,9 @@ const App = () => {
   return (
     <>
       <div className="header-container">
+        <ThemeSelector />
         <BranchSelector />
-        <div className="header-buttons">
-          <ThemeSelector />
-          <RefreshButton />
-        </div>
+        <RefreshButton />
       </div>
       <div className="top-container">
         <TemporalFilter />
