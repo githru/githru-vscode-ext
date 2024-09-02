@@ -3,3 +3,4 @@ node_modules
 gh-pages/
 .vscode-test/
 out
+src/test/utils/test-repo
