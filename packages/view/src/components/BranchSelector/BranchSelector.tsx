@@ -25,7 +25,6 @@ const BranchSelector = () => {
       >
         <Select
           value={selectedBranch}
-          displayEmpty
           onChange={handleChangeSelect}
           className="select-box"
           inputProps={{ "aria-label": "Without label" }}
