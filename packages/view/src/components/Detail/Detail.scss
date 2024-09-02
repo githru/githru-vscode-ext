@@ -112,7 +112,7 @@
       width: 6em;
       position: relative;
 
-      span:hover {
+      a:hover {
         cursor: pointer;
         .commit-id__tooltip {
           display: inline-block;
