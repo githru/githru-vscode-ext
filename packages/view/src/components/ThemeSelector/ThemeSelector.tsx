@@ -1,7 +1,3 @@
-// 1. 코드리뷰 (변수명, 로직 등) - 특히 theme colors를 가져오는 방식
-// 2. localStorage에 저장 못 하는 이슈.
-// 3. 컬러 배치를 어떻게 해야 할지 ? (primary, secondary의 영역)
-
 import { useEffect, useState } from "react";
 import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
