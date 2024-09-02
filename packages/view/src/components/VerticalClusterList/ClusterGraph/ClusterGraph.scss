@@ -13,23 +13,23 @@
   .cluster-graph-container__box {
     rx: 5;
     stroke-width: 1;
-    stroke: var(--primary-color);
+    stroke: var(--color-primary);
     fill: transparent;
   }
 
   .cluster-graph-container__commit-amount-cluster {
     rx: 5;
-    fill: var(--primary-color);
+    fill: var(--color-primary);
   }
 }
 
 .cluster-graph__connector-line {
-  stroke: var(--primary-color);
+  stroke: var(--color-primary);
   stroke-width: 1;
 }
 
 .circle-group {
-  fill: var(--primary-color);
+  fill: var(--color-primary);
 }
 
 .sub-graph-tooltip {

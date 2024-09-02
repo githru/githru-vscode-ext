@@ -15,7 +15,7 @@
       width: 3rem;
       margin-right: 1rem;
       text-transform: none;
-      background-color: var(--primary-color);
+      background-color: var(--color-tertiary);
     }
 
     span {
@@ -27,6 +27,9 @@
   .line-charts-svg {
     height: 100%;
     width: 100%;
+    > g > text {
+      fill: var(--color-tertiary);
+    }
   }
 
   .line-chart-wrap {
@@ -40,7 +43,7 @@
 
   .line-chart {
     overflow: visible;
-    fill: var(--primary-color);
+    fill: var(--color-primary);
   }
 }
 

@@ -20,7 +20,7 @@
       border: none;
       background-color: transparent;
       cursor: pointer;
-      color: $white;
+      color: var(--color-text-white);
       width: 100%;
 
       &:hover {
@@ -56,7 +56,7 @@
       background-color: transparent;
       border: none;
       font-size: 24px;
-      color: var(--primary-color);
+      color: var(--color-primary);
       visibility: hidden;
       cursor: pointer;
 
@@ -91,6 +91,17 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          a {
+            text-decoration: none;
+            color: var(--color-lightgray);
+            &:visited {
+              color: var(--color-lightgray);
+            }
+            &:hover {
+              color: var(--color-primary);
+            }
+          }
         }
       }
 
@@ -113,7 +124,7 @@
 }
 
 .sort-button {
-  color: var(--primary-color);
+  color: var(--color-primary);
   cursor: pointer;
   position: absolute;
   right: 26%;
