@@ -7,9 +7,11 @@ import { throttle } from "utils";
 import { useGlobalData } from "hooks";
 import "./RefreshButton.scss";
 import { sendRefreshDataCommand } from "services";
+import { useLoadingStore } from "store";
 
 const RefreshButton = () => {
-  const { loading, setLoading, selectedBranch } = useGlobalData();
+  const { selectedBranch } = useGlobalData();
+  const { loading, setLoading } = useLoadingStore((state) => state);
 
   const refreshHandler = throttle(() => {
     setLoading(true);

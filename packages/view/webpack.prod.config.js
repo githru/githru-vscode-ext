@@ -30,6 +30,7 @@ const config = {
       styles: path.resolve(__dirname, "src/styles/"),
       types: path.resolve(__dirname, "src/types/"),
       hooks: path.resolve(__dirname, "src/hooks/"),
+      store: path.resolve(__dirname, "src/store/"),
     },
   },
   module: {

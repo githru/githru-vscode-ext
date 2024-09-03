@@ -15,11 +15,11 @@ import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
 import { createBrush, drawBrush, resetBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
+import { useLoadingStore } from "store";
 
 const TemporalFilter = () => {
-  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading } =
-    useGlobalData();
-
+  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData } = useGlobalData();
+  const { loading } = useLoadingStore((state) => state);
   const brushGroupRef = useRef<SVGGElement | null>(null);
   const brushRef = useRef<d3.BrushBehavior<unknown>>();
 
