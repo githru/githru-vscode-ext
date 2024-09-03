@@ -61,14 +61,12 @@
     .bar {
       &:hover {
         rect {
-          fill: transparent;
-          stroke: var(--primary-color);
-          stroke-width: 2;
+          fill: var(--color-tertiary);
         }
       }
 
       rect {
-        fill: var(--primary-color);
+        fill: var(--color-secondary);
       }
 
       .name {
@@ -94,7 +92,7 @@
   color: $gray-900;
 
   .selected {
-    color: var(--primary-color);
+    color: var(--color-primary);
     font-weight: $font-weight-semibold;
   }
   .name {

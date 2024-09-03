@@ -1,6 +1,17 @@
 :root {
   --color-black: #000000;
   --color-white: #ffffff;
+  --color-lightgray: #bdbdbd;
+  --color-darkgray: #3e3e3e;
+  --color-text-white: #f8f8f8;
+}
+
+html[custom-type="hacker-blue"] {
+  --color-primary: #456cf7;
+  --color-secondary: #465070;
+  --color-tertiary: #6c60f0;
+  --color-success: #1fc7a9;
+  --color-failed: #ee2479;
 }
 
 html[custom-type="aqua"] {
@@ -11,15 +22,7 @@ html[custom-type="aqua"] {
   --color-failed: #ee2479;
 }
 
-html[custom-type="hacker-blue"] {
-  --color-primary: #456cf7;
-  --color-secondary: #0c216f;
-  --color-tertiary: #6c60f0;
-  --color-success: #1fc7a9;
-  --color-failed: #ee2479;
-}
-
-html[custom-type="cotton"] {
+html[custom-type="cotton-candy"] {
   --color-primary: #ffcccb;
   --color-secondary: #feffd1;
   --color-tertiary: #8979ca;
