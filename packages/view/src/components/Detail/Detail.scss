@@ -21,6 +21,7 @@
       position: relative;
       margin-right: 10px;
       display: inline-flex;
+      align-items: center;
       gap: 4px;
 
       &:last-child {
@@ -30,11 +31,11 @@
   }
 
   .additions {
-    color: green;
+    color: var(--color-success);
   }
 
   .deletions {
-    color: red;
+    color: var(--color-failed);
   }
 }
 
@@ -112,11 +113,22 @@
       width: 6em;
       position: relative;
 
+      a {
+        text-decoration: none;
+        color: var(--color-lightgray);
+        &:visited {
+          color: var(--color-lightgray);
+        }
+        &:hover {
+          color: var(--color-primary);
+          .commit-id__tooltip {
+            display: inline-block;
+          }
+        }
+      }
+
       a:hover {
         cursor: pointer;
-        .commit-id__tooltip {
-          display: inline-block;
-        }
       }
     }
   }
@@ -127,7 +139,7 @@
   margin: 0 auto;
   border: none;
   background: none;
-  color: var(--primary-color);
+  color: var(--color-tertiary);
   cursor: pointer;
 
   &:hover {
