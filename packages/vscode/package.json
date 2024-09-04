@@ -7,7 +7,7 @@
     "url": "https://github.com/githru/githru-vscode-ext",
     "type": "git"
   },
-  "version": "0.7.0",
+  "version": "0.7.1",
   "engines": {
     "vscode": "^1.67.0"
   },
@@ -84,7 +84,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "dependencies": {
-    "@githru-vscode-ext/analysis-engine": "^0.7.0",
+    "@githru-vscode-ext/analysis-engine": "^0.7.1",
     "@octokit/rest": "^20.0.1",
     "node-fetch": "^3.3.2"
   },
