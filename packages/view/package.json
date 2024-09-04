@@ -1,6 +1,6 @@
 {
   "name": "@githru-vscode-ext/view",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "view module for githru",
   "engines": {
     "node": ">=16",
