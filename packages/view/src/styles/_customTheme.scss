@@ -1,47 +1,48 @@
 :root {
-  --color-black: #000000;
-  --color-white: #ffffff;
-  --color-lightgray: #bdbdbd;
-  --color-darkgray: #3e3e3e;
+  --color-black: #010b13;
+  --color-white: #f8f8f8;
+  --color-light-gray: #b4bac6;
+  --color-medium-gray: #757880;
+  --color-dark-gray: #363a41;
   --color-text-white: #f8f8f8;
+}
+
+html[custom-type="githru"] {
+  --color-primary: #f59fc0;
+  --color-secondary: #7b71b2;
+  --color-tertiary: #ffe9a5;
+  --color-success: #07bebe;
+  --color-failed: #ee2479;
 }
 
 html[custom-type="hacker-blue"] {
   --color-primary: #456cf7;
-  --color-secondary: #465070;
+  --color-secondary: #3f4c73;
   --color-tertiary: #6c60f0;
   --color-success: #1fc7a9;
   --color-failed: #ee2479;
 }
 
 html[custom-type="aqua"] {
-  --color-primary: #25d4bf;
+  --color-primary: #51decd;
   --color-secondary: #0687a3;
-  --color-tertiary: #35ffff;
-  --color-success: #0373b2;
+  --color-tertiary: #a7ffff;
+  --color-success: #008cde;
   --color-failed: #ee2479;
 }
 
 html[custom-type="cotton-candy"] {
   --color-primary: #ffcccb;
   --color-secondary: #feffd1;
-  --color-tertiary: #8979ca;
+  --color-tertiary: #a39aeb;
   --color-success: #7ad5c4;
   --color-failed: #ff8bbc;
 }
 
-html[custom-type="githru"] {
-  --color-primary: #f14f8c;
-  --color-secondary: #8421c9;
-  --color-tertiary: #ffcb7d;
-  --color-success: #07bebe;
-  --color-failed: #ee2479;
-}
-
 html[custom-type="mono"] {
-  --color-primary: #5f6f86;
+  --color-primary: #68788f;
   --color-secondary: #3a4776;
-  --color-tertiary: #9499c3;
-  --color-success: #42b8b8;
-  --color-failed: #ee2479;
+  --color-tertiary: #9aaed1;
+  --color-success: #6cafaf;
+  --color-failed: #aa4b72;
 }

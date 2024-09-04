@@ -9,21 +9,21 @@
 
 .selector__container {
   position: absolute;
-  top: 30px;
+  top: 2.5rem;
   left: 0;
-  padding: 24px;
-  background-color: var(--color-darkgray);
-  border-radius: 5px 40px 40px 40px;
+  padding: 20px;
+  background-color: var(--color-dark-gray);
+  border-radius: 0.3rem 1.5rem 1.5rem 1.5rem;
   z-index: 10;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
   > div {
     display: flex;
     justify-content: space-between;
-    gap: 4px;
+    gap: 2px;
     &:nth-child(1) {
       font-size: $font-size-title;
       font-weight: $font-weight-semibold;
@@ -39,14 +39,15 @@
   flex-direction: column;
   align-items: center;
   justify-items: center;
-  gap: 24px;
+  gap: 1rem;
   padding: 10px;
   box-sizing: border-box;
+
 
   &:hover,
   &--selected {
     @extend .theme-icon;
-    background-color: #363636;
+    background-color: #4f5662;
     border-radius: 10px;
     cursor: pointer;
   }

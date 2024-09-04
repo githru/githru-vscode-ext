@@ -8,9 +8,9 @@ const themes = [
     title: "Githru",
     value: "githru",
     colors: {
-      primary: "#f14f8c",
-      secondary: "#8421c9",
-      tertiary: "#ffcb7d",
+      primary: "#f59fc0",
+      secondary: "#7b71b2",
+      tertiary: "#ffe9a5",
     },
   },
   {
@@ -18,7 +18,7 @@ const themes = [
     value: "hacker-blue",
     colors: {
       primary: "#456cf7",
-      secondary: "#0c216f",
+      secondary: "#3f4c73",
       tertiary: "#6c60f0",
     },
   },
@@ -26,9 +26,9 @@ const themes = [
     title: "Aqua",
     value: "aqua",
     colors: {
-      primary: "#25d4bf",
+      primary: "#51decd",
       secondary: "#0687a3",
-      tertiary: "#35ffff",
+      tertiary: "#a7ffff",
     },
   },
   {
@@ -37,7 +37,7 @@ const themes = [
     colors: {
       primary: "#ffcccb",
       secondary: "#feffd1",
-      tertiary: "#8979ca",
+      tertiary: "#a39aeb",
     },
   },
 
@@ -45,9 +45,9 @@ const themes = [
     title: "Mono",
     value: "mono",
     colors: {
-      primary: "#5f6f86",
+      primary: "#68788f",
       secondary: "#3a4776",
-      tertiary: "#9499c3",
+      tertiary: "#9aaed1",
     },
   },
 ];
