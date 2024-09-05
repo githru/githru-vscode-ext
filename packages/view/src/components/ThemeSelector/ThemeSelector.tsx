@@ -8,9 +8,9 @@ const themes = [
     title: "Githru",
     value: "githru",
     colors: {
-      primary: "#f59fc0",
-      secondary: "#7b71b2",
-      tertiary: "#ffe9a5",
+      primary: "#e06091",
+      secondary: "#8840bb",
+      tertiary: "#ffd08a",
     },
   },
   {
