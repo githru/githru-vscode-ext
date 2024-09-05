@@ -9,7 +9,7 @@ import "./BranchSelector.scss";
 import { useLoadingStore } from "store";
 
 const BranchSelector = () => {
-  const { branchList, selectedBranch, setSelectedBranch } = useGlobalData();
+  const { selectedBranch, setSelectedBranch } = useGlobalData();
   const { setLoading } = useLoadingStore((state) => state);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
@@ -17,6 +17,8 @@ const BranchSelector = () => {
     setLoading(true);
     sendFetchAnalyzedDataCommand(event.target.value);
   };
+
+  const branchList = ["hi", "hello"];
 
   return (
     <div className="branch-selector">
@@ -30,6 +32,23 @@ const BranchSelector = () => {
           onChange={handleChangeSelect}
           className="select-box"
           inputProps={{ "aria-label": "Without label" }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: "#212121",
+                color: "white",
+                "& .MuiMenuItem-root": {
+                  backgroundColor: "#212121 !important ",
+                  "&:hover": {
+                    backgroundColor: "#333333 !important",
+                  },
+                },
+                "& .MuiMenuItem-root.Mui-selected": {
+                  backgroundColor: "#333333 !important",
+                },
+              },
+            },
+          }}
         >
           {branchList?.map((option) => (
             <MenuItem

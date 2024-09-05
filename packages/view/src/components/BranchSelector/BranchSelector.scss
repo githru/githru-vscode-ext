@@ -8,6 +8,17 @@
   font-weight: $font-weight-semibold;
 
   .select-box {
-    background-color: white;
+    background-color: #212121;
+    border: 1px solid var(--color-white);
+    color: var(--color-white);
+    height: 30px;
+
+    & .MuiSvgIcon-root {
+      color: var(--color-white);
+    }
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border: none;
+    }
   }
 }
