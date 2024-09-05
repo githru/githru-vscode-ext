@@ -9,7 +9,7 @@ import "./BranchSelector.scss";
 import { useLoadingStore } from "store";
 
 const BranchSelector = () => {
-  const { selectedBranch, setSelectedBranch } = useGlobalData();
+  const { branchList, selectedBranch, setSelectedBranch } = useGlobalData();
   const { setLoading } = useLoadingStore((state) => state);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
@@ -17,8 +17,6 @@ const BranchSelector = () => {
     setLoading(true);
     sendFetchAnalyzedDataCommand(event.target.value);
   };
-
-  const branchList = ["hi", "hello"];
 
   return (
     <div className="branch-selector">
