@@ -10,12 +10,14 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 1rem;
+    position: relative;
 
     .reset-button {
       width: 3rem;
-      margin-right: 1rem;
       text-transform: none;
       background-color: var(--color-tertiary);
+      position: absolute;
+      top: 0;
     }
 
     span {

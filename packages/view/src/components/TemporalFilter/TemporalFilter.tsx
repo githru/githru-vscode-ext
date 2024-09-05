@@ -6,6 +6,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 import { Button } from "@mui/material";
 
 import { useGlobalData } from "hooks";
+import { useLoadingStore } from "store";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -15,7 +16,6 @@ import { useWindowResize } from "./TemporalFilter.hook";
 import type { BrushXSelection } from "./LineChartBrush";
 import { createBrush, drawBrush, resetBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
-import { useLoadingStore } from "store";
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData } = useGlobalData();
