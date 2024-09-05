@@ -36,12 +36,16 @@ describe("commit message type", () => {
 });
 
 describe("getCommitRaws", () => {
-  const testCommitLines = [
-    `${COMMIT_SEPARATOR}a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}commit message`,
-    `${COMMIT_SEPARATOR}a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}commit message`,
-    `${COMMIT_SEPARATOR}a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}commit message`,
-    `${COMMIT_SEPARATOR}a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}commit message`,
-    `${COMMIT_SEPARATOR}a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}commit message`,
+  const testAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`
+
+  const testCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
+
+  const testCommitHashAndRefs = [
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4`,
   ];
 
   const expectedBranches = [
@@ -110,9 +114,9 @@ describe("getCommitRaws", () => {
     commitMessageType: "",
   };
 
-  testCommitLines.forEach((mockLog, index) => {
+  testCommitHashAndRefs.forEach((hashAndRefs, index) => {
     it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const result = getCommitRaws(mockLog);
+      const result = getCommitRaws(`${COMMIT_SEPARATOR}${hashAndRefs}${testAuthorAndCommitter}${testCommitMessage}`);
       const expectedResult = {
         ...commonExpectatedResult,
         branches: expectedBranches[index],
@@ -125,7 +129,7 @@ describe("getCommitRaws", () => {
 
   testCommitFileChanges.forEach((mockLog, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mock = `${COMMIT_SEPARATOR}${testCommitLines[0]}\n${mockLog}`;
+      const mock = `${COMMIT_SEPARATOR}${testCommitHashAndRefs[0]}${testAuthorAndCommitter}${testCommitMessage}\n${mockLog}`;
       const result = getCommitRaws(mock);
       const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
