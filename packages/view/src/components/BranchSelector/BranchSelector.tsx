@@ -30,6 +30,23 @@ const BranchSelector = () => {
           onChange={handleChangeSelect}
           className="select-box"
           inputProps={{ "aria-label": "Without label" }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: "#212121",
+                color: "white",
+                "& .MuiMenuItem-root": {
+                  backgroundColor: "#212121 !important ",
+                  "&:hover": {
+                    backgroundColor: "#333333 !important",
+                  },
+                },
+                "& .MuiMenuItem-root.Mui-selected": {
+                  backgroundColor: "#333333 !important",
+                },
+              },
+            },
+          }}
         >
           {branchList?.map((option) => (
             <MenuItem
