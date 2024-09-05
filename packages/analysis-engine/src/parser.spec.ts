@@ -127,9 +127,9 @@ describe("getCommitRaws", () => {
     });
   });
 
-  testCommitFileChanges.forEach((mockLog, index) => {
+  testCommitFileChanges.forEach((fileChange, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mock = `${COMMIT_SEPARATOR}${testCommitHashAndRefs[0]}${testAuthorAndCommitter}${testCommitMessage}\n${mockLog}`;
+      const mock = `${COMMIT_SEPARATOR}${testCommitHashAndRefs[0]}${testAuthorAndCommitter}${testCommitMessage}\n${fileChange}`;
       const result = getCommitRaws(mock);
       const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
