@@ -36,7 +36,7 @@ describe("commit message type", () => {
 });
 
 describe("getCommitRaws", () => {
-  const testAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`
+  const testAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
 
   const testCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
 
