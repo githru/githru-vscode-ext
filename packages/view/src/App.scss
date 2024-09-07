@@ -1,11 +1,12 @@
-// FIXME
+@import "styles/app";
+
 :root {
   --primary-color: #ff8272;
 }
 
 body {
-  background: #212121;
-  color: #fff;
+  background: $color-background;
+  color: $color-white;
 }
 
 .header-container {
