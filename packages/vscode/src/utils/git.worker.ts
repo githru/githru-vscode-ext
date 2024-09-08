@@ -20,23 +20,6 @@ async function getPartialGitLog() {
         `-n ${limitCount}`,
     ];
 
-
-    // resolveSpawnOutput(
-    //     cp.spawn(gitPath, args, {
-    //     cwd: currentWorkspacePath,
-    //     env: Object.assign({}, process.env),
-    //     })
-    // ).then((values) => {
-    //     const [status, stdout, stderr] = values;
-    //     if (status === 0 && parentPort !== null) {
-    //     parentPort.postMessage(stdout.toString());
-    //     } else {
-    //     if (parentPort !== null) parentPort.postMessage(stderr);
-    //     }
-    // }).catch(error => {
-    //     console.error('Spawn Error:', error);
-    // });
-
     resolveSpawnOutput(
         cp.spawn(gitPath, args, {
             cwd: currentWorkspacePath,
