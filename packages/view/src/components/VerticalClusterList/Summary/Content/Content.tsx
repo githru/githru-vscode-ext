@@ -36,7 +36,7 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
       return acc;
     }, []);
     setLinkedStr(newLinkedStr);
-  }, []);
+  }, [content]);
 
   return (
     <>

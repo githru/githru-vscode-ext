@@ -13,6 +13,7 @@ import { FIRST_SHOW_NUM } from "./Detail.const";
 import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
+import { useGlobalData } from "hooks";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
@@ -49,11 +50,11 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
+  const { repo, owner } = useGlobalData();
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
-
   if (!selectedData) return null;
 
   return (
@@ -84,15 +85,15 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                 </span>
               </div>
               <div className="commit-id">
-                <span
+                <a
+                  href={`https://github.com/${owner}/${repo}/commit/${id}`}
                   onClick={handleCommitIdCopy(id)}
-                  role="button"
                   tabIndex={0}
                   onKeyDown={handleCommitIdCopy(id)}
                 >
                   {id.slice(0, 6)}
                   <span className="commit-id__tooltip">{id}</span>
-                </span>
+                </a>
               </div>
             </li>
           );

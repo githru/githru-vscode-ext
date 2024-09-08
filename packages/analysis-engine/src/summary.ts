@@ -4,9 +4,8 @@ const apiKey = process.env.GEMENI_API_KEY || '';
 const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
 
 export async function getSummary(csmNodes: CommitRaw[]) {
-  const commitMessages = csmNodes.map((csmNode) => csmNode.message).join(', ');
+  const commitMessages = csmNodes.map((csmNode) => csmNode.message.split('\n')[0]).join(', ');
 
-  console.log(commitMessages, 'apiKey');
   try {
     const response = await fetch(apiUrl + apiKey, {
       method: "POST",

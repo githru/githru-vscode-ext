@@ -9,21 +9,21 @@ import { selectedDataUpdater } from "components/VerticalClusterList/VerticalClus
 import { getInitData, getClusterById } from "components/VerticalClusterList/Summary/Summary.util";
 import { useGlobalData } from "hooks";
 
-import "./FilteredClusters.scss";
+import "./SelectedClusterGroup.scss";
 
-const FilteredClusters = () => {
+const SelectedClusterGroup = () => {
   const { selectedData, setSelectedData } = useGlobalData();
   const selectedClusters = getInitData(selectedData);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const isOpen = Boolean(anchorEl);
+  const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
+  const isOpen = Boolean(menuAnchorElement);
 
-  const openSelectedList = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const openClusterGroup = (event: MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchorElement(event.currentTarget);
   };
 
-  const closeSelectedList = () => {
-    setAnchorEl(null);
+  const closeClusterGroup = () => {
+    setMenuAnchorElement(null);
   };
 
   const deselectCluster = (clusterId: number) => () => {
@@ -34,39 +34,37 @@ const FilteredClusters = () => {
   return (
     <div className="selected__content">
       <Button
-        id="selected-list-button"
-        aria-controls={isOpen ? "selected-list" : undefined}
+        id="cluster-group-button"
+        aria-controls={isOpen ? "cluster-group-box" : undefined}
         aria-expanded={isOpen ? "true" : undefined}
         aria-haspopup="true"
         sx={{ color: "inherit", padding: 0, textTransform: "none" }}
-        onClick={openSelectedList}
+        onClick={openClusterGroup}
       >
-        <p>Clusters</p>
+        <p>Selected Nodes</p>
         <ArrowDropDownRoundedIcon />
       </Button>
       <Menu
         className="selected__cluster"
-        id="selected-list"
-        anchorEl={anchorEl}
+        id="cluster-group-box"
+        anchorEl={menuAnchorElement}
         open={isOpen}
         MenuListProps={{
-          "aria-labelledby": "selected-list-button",
+          "aria-labelledby": "cluster-group-button",
         }}
-        onClose={closeSelectedList}
+        onClose={closeClusterGroup}
       >
-        {selectedClusters.map((selectedCluster) => {
-          return (
-            <li key={selectedCluster.clusterId}>
-              <Chip
-                label={selectedCluster.summary.content.message}
-                onDelete={deselectCluster(selectedCluster.clusterId)}
-              />
-            </li>
-          );
-        })}
+        {selectedClusters.map((selectedCluster) => (
+          <li key={selectedCluster.clusterId}>
+            <Chip
+              label={selectedCluster.summary.content.message}
+              onDelete={deselectCluster(selectedCluster.clusterId)}
+            />
+          </li>
+        ))}
       </Menu>
     </div>
   );
 };
 
-export default FilteredClusters;
+export default SelectedClusterGroup;
