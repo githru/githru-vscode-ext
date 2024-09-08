@@ -1,6 +1,8 @@
-import type { ChangeEvent, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
+import type { SelectChangeEvent } from "@mui/material";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 import type { ClusterNode, AuthorInfo } from "types";
 import { useGlobalData } from "hooks";
@@ -207,27 +209,53 @@ const AuthorBarChart = () => {
     setSelectedAuthor,
   ]);
 
-  const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setMetric(e.target.value as MetricType);
+  const handleChangeMetric = (event: SelectChangeEvent): void => {
+    setMetric(event.target.value as MetricType);
   };
 
   return (
     <div className="author-bar-chart__container">
       <p>Author Bar Chart</p>
       <div className="author-bar-chart__header">
-        <select
-          className="select-box"
-          onChange={handleChangeMetric}
+        <FormControl
+          sx={{ m: 1, minWidth: 120 }}
+          size="small"
         >
-          {METRIC_TYPE.map((option) => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option === METRIC_TYPE[0] ? `${option} #` : option}
-            </option>
-          ))}
-        </select>
+          <Select
+            value={metric}
+            className="select-box"
+            onChange={handleChangeMetric}
+            inputProps={{ "aria-label": "Without label" }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  marginTop: "1px",
+                  backgroundColor: "#212121",
+                  color: "white",
+                  "& .MuiMenuItem-root": {
+                    fontSize: "12px",
+                    backgroundColor: "#212121 !important ",
+                    "&:hover": {
+                      backgroundColor: "#333333 !important",
+                    },
+                  },
+                  "& .MuiMenuItem-root.Mui-selected": {
+                    backgroundColor: "#333333 !important",
+                  },
+                },
+              },
+            }}
+          >
+            {METRIC_TYPE.map((option) => (
+              <MenuItem
+                key={option}
+                value={option}
+              >
+                {option === METRIC_TYPE[0] ? `${option} #` : option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       <svg
         className="author-bar-chart"
