@@ -7,6 +7,7 @@ import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
+  fetchGitLogInParallel,
   findGit,
   getBranches,
   getCurrentBranchName,
@@ -74,7 +75,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const initialBaseBranchName = await fetchCurrentBranch();
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
+        console.time('Multi log')
+        const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+        console.timeEnd('Multi log')
+
+        // console.time('Single log')
+        // const testGitLog = await getGitLog(gitPath, currentWorkspacePath);
+        // console.timeEnd('Single log')
+
+        
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
         const { owner, repo: initialRepo } = getRepo(gitConfig);
         webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
