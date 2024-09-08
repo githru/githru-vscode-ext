@@ -16,20 +16,20 @@
   width: 100%;
   text-align: right;
 
-  & .select-box {
-    font-size: $font-size-caption;
-    background: transparent;
-    border: 1px solid $white;
-    border-radius: 5px;
-    width: fit-content;
-    padding: 0 10px;
+  .select-box {
+    background-color: #212121;
+    border: 1px solid var(--color-white);
+    color: var(--color-white);
     height: 25px;
-    color: $white;
-    outline: none;
-    text-align: center;
+    width: 100px;
+    font-size: $font-size-caption;
 
-    option {
-      background: $gray-900;
+    & .MuiSvgIcon-root {
+      color: var(--color-white);
+    }
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border: none;
     }
   }
 }
