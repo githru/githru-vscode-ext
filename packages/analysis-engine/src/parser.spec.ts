@@ -36,30 +36,17 @@ describe("commit message type", () => {
 });
 
 describe("getCommitRaws", () => {
-  const testAuthorCommitter = [
-    "John Park",
-    "mail@gmail.com",
-    "Sun Sep 4 20:17:59 2022 +0900",
-    "John Park 2",
-    "mail2@gmail.com",
-    "Sun Sep 5 20:17:59 2022 +0900",
+  const testAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
+
+  const testCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
+
+  const testCommitHashAndRefs = [
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0`,
+    `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4`,
   ];
-
-  const testRefs = [
-    "HEAD",
-    "HEAD -> main, origin/main, origin/HEAD",
-    "HEAD, tag: v1.0.0",
-    "HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0",
-    "HEAD, tag: v2.0.0, tag: v1.4",
-  ];
-
-  const testCommitHash = ["a", "b"];
-
-  const testCommitMessage = "commit message";
-
-  const testCommitLines = testRefs.map((ref) =>
-    [...testCommitHash, ref, ...testAuthorCommitter, testCommitMessage].join(GIT_LOG_SEPARATOR)
-  );
 
   const expectedBranches = [
     ["HEAD"],
@@ -114,11 +101,11 @@ describe("getCommitRaws", () => {
     parents: ["b"],
     branches: ["HEAD"],
     tags: [],
-    author: { name: testAuthorCommitter[0], email: testAuthorCommitter[1] },
-    authorDate: new Date(testAuthorCommitter[2]),
-    committer: { name: testAuthorCommitter[3], email: testAuthorCommitter[4] },
-    committerDate: new Date(testAuthorCommitter[5]),
-    message: testCommitMessage,
+    author: { name: "John Park", email: "mail@gmail.com" },
+    authorDate: new Date("Sun Sep 4 20:17:59 2022 +0900"),
+    committer: { name: "John Park 2", email: "mail2@gmail.com" },
+    committerDate: new Date("Sun Sep 5 20:17:59 2022 +0900"),
+    message: "commit message",
     differenceStatistic: {
       totalInsertionCount: 0,
       totalDeletionCount: 0,
@@ -127,9 +114,9 @@ describe("getCommitRaws", () => {
     commitMessageType: "",
   };
 
-  testCommitLines.forEach((mockLog, index) => {
+  testCommitHashAndRefs.forEach((hashAndRefs, index) => {
     it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const result = getCommitRaws(COMMIT_SEPARATOR + mockLog);
+      const result = getCommitRaws(`${COMMIT_SEPARATOR}${hashAndRefs}${testAuthorAndCommitter}${testCommitMessage}`);
       const expectedResult = {
         ...commonExpectatedResult,
         branches: expectedBranches[index],
@@ -140,9 +127,9 @@ describe("getCommitRaws", () => {
     });
   });
 
-  testCommitFileChanges.forEach((mockLog, index) => {
+  testCommitFileChanges.forEach((fileChange, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mock = `${COMMIT_SEPARATOR}${testCommitLines[0]}\n${mockLog}`;
+      const mock = `${COMMIT_SEPARATOR}${testCommitHashAndRefs[0]}${testAuthorAndCommitter}${testCommitMessage}\n${fileChange}`;
       const result = getCommitRaws(mock);
       const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
