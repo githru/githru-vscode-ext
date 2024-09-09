@@ -1622,7 +1622,7 @@
                 "insertions": 40,
                 "deletions": 0
               },
-              "packages/view/src/assets/styles/_pallete.scss": {
+              "packages/view/src/assets/styles/_pallette.scss": {
                 "insertions": 295,
                 "deletions": 0
               },
@@ -1648,7 +1648,7 @@
               }
             }
           },
-          "message": "Merge pull request #20 from jeonghye-choi/feat/styles/n/nfeat: add style pallete"
+          "message": "Merge pull request #20 from jeonghye-choi/feat/styles/n/nfeat: add style pallette"
         },
         "clusterId": 10
       },
@@ -1882,13 +1882,13 @@
             "insertions": 295,
             "deletions": 0,
             "files": {
-              "packages/view/src/styles/_pallete.scss": {
+              "packages/view/src/styles/_pallette.scss": {
                 "insertions": 295,
                 "deletions": 0
               }
             }
           },
-          "message": "feat: add color palletes with levels"
+          "message": "feat: add color pallettes with levels"
         },
         "clusterId": 10
       }
@@ -2047,7 +2047,7 @@
                 "insertions": 40,
                 "deletions": 0
               },
-              "packages/view/src/assets/styles/_pallete.scss": {
+              "packages/view/src/assets/styles/_pallette.scss": {
                 "insertions": 295,
                 "deletions": 0
               },
@@ -2493,7 +2493,7 @@
                 "insertions": 40,
                 "deletions": 0
               },
-              "packages/view/src/assets/styles/_pallete.scss": {
+              "packages/view/src/assets/styles/_pallette.scss": {
                 "insertions": 295,
                 "deletions": 0
               },
