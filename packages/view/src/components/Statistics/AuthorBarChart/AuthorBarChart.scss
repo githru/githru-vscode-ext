@@ -19,17 +19,17 @@
   & .select-box {
     font-size: $font-size-caption;
     background: transparent;
-    border: 1px solid $white;
+    border: 1px solid $color-white;
     border-radius: 5px;
     width: fit-content;
     padding: 0 10px;
     height: 25px;
-    color: $white;
+    color: $color-white;
     outline: none;
     text-align: center;
 
     option {
-      background: $gray-900;
+      background: $color-dark-gray;
     }
   }
 }
@@ -39,7 +39,7 @@
   margin: 20px 40px 40px;
 
   .axis {
-    color: $white;
+    color: $color-white;
     font-weight: $font-weight-semibold;
 
     &.x-axis {
@@ -50,7 +50,7 @@
 
     &.x-axis {
       .x-axis-label {
-        fill: $white;
+        fill: $color-white;
       }
     }
   }
@@ -70,7 +70,7 @@
       }
 
       .name {
-        fill: $white;
+        fill: $color-white;
         stroke: none;
         font-size: $font-size-caption;
         text-anchor: start;
@@ -83,13 +83,13 @@
 .author-bar-chart__tooltip {
   display: none;
   position: absolute;
-  background: $white;
+  background: $color-white;
   padding: 8px 16px;
   text-align: center;
   font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
-  color: $gray-900;
+  color: $color-dark-gray;
 
   .selected {
     color: var(--color-primary);

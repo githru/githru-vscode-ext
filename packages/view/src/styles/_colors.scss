@@ -1,39 +1,46 @@
-@import "pallette";
+$color-white: #f7f7f7;
+$color-black: #010818;
+$color-light-gray: #b4bac6;
+$color-medium-gray: #757880;
+$color-dark-gray: #3c4048;
+$color-background: #222324;
 
-$color--dark: $white;
-$color--light: $black;
+html[custom-type="githru"] {
+  --color-primary: #e06091;
+  --color-secondary: #8840bb;
+  --color-tertiary: #ffd08a;
+  --color-success: #07bebe;
+  --color-failed: #ee2479;
+}
 
-$danger-color--dark: #ff4444;
-$danger-color--light: #cc0000;
+html[custom-type="hacker-blue"] {
+  --color-primary: #456cf7;
+  --color-secondary: #3f4c73;
+  --color-tertiary: #6c60f0;
+  --color-success: #1fc7a9;
+  --color-failed: #ee2479;
+}
 
-$warning-color--dark: #ffbb33;
-$warning-color--light: #ff8800;
+html[custom-type="aqua"] {
+  --color-primary: #51decd;
+  --color-secondary: #0687a3;
+  --color-tertiary: #a7ffff;
+  --color-success: #008cde;
+  --color-failed: #ee2479;
+}
 
-$success-color--dark: #00c851;
-$success-color--light: #007e33;
+html[custom-type="cotton-candy"] {
+  --color-primary: #ffcccb;
+  --color-secondary: #feffd1;
+  --color-tertiary: #a39aeb;
+  --color-success: #7ad5c4;
+  --color-failed: #ff8bbc;
+}
 
-$info-color--dark: #33b5e5;
-$info-color--light: #0099cc;
-
-$brand--primary--dark: $blue-light-A200;
-$brand--primary--light: $blue-light-A700;
-
-$highlight-color--dark: transparentize($brand--primary--light, 0.1);
-$highlight-color--light: transparentize($brand--primary--light, 0.1);
-
-//GRADIENTS
-@mixin linear-gradient($from, $to) {
-  background: $to;
-  background: -moz-linear-gradient(top, $from 0%, $to 100%);
-  background: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0%, $from),
-    color-stop(100%, $to)
-  );
-  background: -webkit-linear-gradient(top, $from 0%, $to 100%);
-  background: -o-linear-gradient(top, $from 0%, $to 100%);
-  background: linear-gradient(to bottom, $from 0%, $to 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#{$from}, endColorstr=#{$to});
+html[custom-type="mono"] {
+  --color-primary: #68788f;
+  --color-secondary: #3a4776;
+  --color-tertiary: #9aaed1;
+  --color-success: #6cafaf;
+  --color-failed: #aa4b72;
 }
