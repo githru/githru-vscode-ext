@@ -1,11 +1,16 @@
 import dayjs from "dayjs";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import CommitRoundedIcon from "@mui/icons-material/CommitRounded";
-import RestorePageRoundedIcon from "@mui/icons-material/RestorePageRounded";
+import {
+  AddCircleRounded,
+  RemoveCircleRounded,
+  PersonRounded,
+  CommitRounded,
+  RestorePageRounded,
+  ExpandMoreRounded,
+  ExpandLessRounded,
+} from "@mui/icons-material";
 
 import { Author } from "components/@common/Author";
+import { useGlobalData } from "hooks";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -13,7 +18,6 @@ import { FIRST_SHOW_NUM } from "./Detail.const";
 import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
-import { useGlobalData } from "hooks";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
@@ -21,11 +25,11 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   });
 
   const summaryItems: DetailSummaryItem[] = [
-    { name: "authors", count: authorLength, icon: <PersonRoundedIcon sx={{ fontSize: 18 }} /> },
-    { name: "commits", count: commitLength, icon: <CommitRoundedIcon sx={{ fontSize: 18 }} /> },
-    { name: "changed files", count: fileLength, icon: <RestorePageRoundedIcon sx={{ fontSize: 18 }} /> },
-    { name: "additions", count: insertions, icon: <AddCircleRoundedIcon sx={{ fontSize: 18 }} /> },
-    { name: "deletions", count: deletions, icon: <RemoveCircleRoundedIcon sx={{ fontSize: 18 }} /> },
+    { name: "authors", count: authorLength, icon: <PersonRounded sx={{ fontSize: 18 }} /> },
+    { name: "commits", count: commitLength, icon: <CommitRounded sx={{ fontSize: 18 }} /> },
+    { name: "changed files", count: fileLength, icon: <RestorePageRounded sx={{ fontSize: 18 }} /> },
+    { name: "additions", count: insertions, icon: <AddCircleRounded sx={{ fontSize: 18 }} /> },
+    { name: "deletions", count: deletions, icon: <RemoveCircleRounded sx={{ fontSize: 18 }} /> },
   ];
 
   return (
@@ -105,7 +109,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
           className="toggle-button"
           onClick={handleToggle}
         >
-          {toggle ? "Hide ..." : "Read More ..."}
+          {toggle ? <ExpandLessRounded /> : <ExpandMoreRounded />}
         </button>
       )}
     </>

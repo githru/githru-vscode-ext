@@ -33,7 +33,7 @@
       flex-direction: column;
       width: 100%;
 
-      &.selected {
+      &.expanded {
         border-radius: 25px;
         background-color: lighten($gray-900, 5);
       }
