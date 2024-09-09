@@ -14,7 +14,7 @@ const FilteredAuthors = () => {
   const addedAuthors = new Set();
 
   return (
-    <div className="selected__content">
+    <div className="selected">
       <p>Authors:</p>
       <div className="selected__author">
         {authSrcMap &&
