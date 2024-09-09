@@ -1,4 +1,5 @@
-import type { CommitRaw } from "./types";
+import type PluginOctokit from "./pluginOctokit";
+import type { CommitRaw, StemDict } from "./types";
 
 const apiKey = process.env.GEMENI_API_KEY || '';
 const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
@@ -27,6 +28,19 @@ export async function getSummary(csmNodes: CommitRaw[]) {
     console.error("Error fetching summary:", error);
     return undefined;
   }
+}
+
+export async function getLatestCommitSummary(stemDict: StemDict, baseBranchName: string) {
+  const nodes = stemDict.get(baseBranchName)?.nodes?.map(({commit}) => commit);
+
+  return await getSummary(nodes ? nodes?.slice(-10) : [])
+}
+
+export async function getCurrentUserCommitSummary(stemDict: StemDict, baseBranchName: string, octokit: PluginOctokit) {
+  const { data } = await octokit.rest.users.getAuthenticated();
+  const currentUserNodes = stemDict.get(baseBranchName)?.nodes?.filter(({commit}) => commit.author.name === data.login || commit.author.name === data.name)?.map(({commit}) => commit);
+
+  return await getSummary(currentUserNodes ? currentUserNodes?.slice(-10) : [])
 }
 
 const prompt = `Proceed with the task of summarising the contents of the commit message provided.
