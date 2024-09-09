@@ -6,6 +6,7 @@ import CommitRoundedIcon from "@mui/icons-material/CommitRounded";
 import RestorePageRoundedIcon from "@mui/icons-material/RestorePageRounded";
 
 import { Author } from "components/@common/Author";
+import { useGlobalData } from "hooks";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -13,7 +14,6 @@ import { FIRST_SHOW_NUM } from "./Detail.const";
 import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
-import { useGlobalData } from "hooks";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
