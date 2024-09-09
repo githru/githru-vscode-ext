@@ -1,19 +1,19 @@
 @import "styles/app";
 
-.detail__summary__container {
+.detail__summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: $font-size-caption;
 
-  .divider {
+  .detail__summary__divider {
     margin-right: 1rem;
     flex-grow: 10;
     height: 0;
     border: 1px solid $white;
   }
 
-  .detail__summary {
+  .detail__summary__list {
     flex-grow: 0.1;
     text-align: right;
 
@@ -40,25 +40,25 @@
 }
 
 @media (max-width: 1080px) {
-  .detail__summary__item__name {
+  .detail__summary__item-name {
     display: none;
   }
 }
 
-.detail__commit-list__container {
+.detail__commit-list {
   display: flex;
   flex-direction: column;
   row-gap: 7px;
   padding: 20px;
   font-size: $font-size-body;
 
-  .commit-item {
+  .detail__commit-item {
     width: 100%;
     display: flex;
     justify-content: space-between;
     color: $gray-600;
 
-    .commit-detail {
+    .commit-item__detail {
       color: $white;
       display: flex;
       justify-content: space-between;
@@ -66,19 +66,19 @@
       width: 100%;
       padding-left: 5px;
 
-      .avatar-message {
+      .commit-item__avatar-message {
         display: flex;
         align-items: center;
         width: 100%;
 
-        .message-container {
+        .commit-item__message-container {
           position: relative;
           overflow: visible;
           flex-grow: 1;
           padding-right: 50px;
           width: auto;
 
-          .message {
+          .commit-item__message {
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
@@ -100,13 +100,14 @@
         }
       }
 
-      .author-date {
+      .commit-item__author-date {
         display: block;
         position: relative;
         white-space: nowrap;
       }
     }
-    .commit-id {
+
+    .commit-item__commit-id {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -134,7 +135,7 @@
   }
 }
 
-.toggle-button {
+.detail__toggle-button {
   display: flex;
   margin: 0 auto;
   border: none;
