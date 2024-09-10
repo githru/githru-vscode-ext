@@ -95,6 +95,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                   <Tooltip
                     placement="right"
                     title={id}
+                    PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
                   >
                     <p>{`${id.slice(0, 6)}...`}</p>
                   </Tooltip>

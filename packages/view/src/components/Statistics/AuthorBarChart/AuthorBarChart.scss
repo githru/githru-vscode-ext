@@ -87,7 +87,7 @@
   font-size: $font-size-caption;
   text-align: center;
   line-height: 1.5;
-  background: $color-medium-gray;
+  background-color: rgba($color-dark-gray, 0.9);
   color: $color-white;
 
   .selected {

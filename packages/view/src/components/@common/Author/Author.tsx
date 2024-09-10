@@ -9,6 +9,7 @@ const Author = ({ name, src }: AuthorInfo) => {
     <Tooltip
       title={name}
       placement="top-start"
+      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
     >
       <a
         href={`${GITHUB_URL}/${name}`}
