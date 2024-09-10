@@ -17,15 +17,14 @@
   text-align: right;
 
   .select-box {
-    background-color: #212121;
-    border: 1px solid var(--color-white);
-    color: var(--color-white);
+    border: 1px solid $color-white;
+    color: $color-white;
     height: 25px;
     width: 100px;
     font-size: $font-size-caption;
 
     & .MuiSvgIcon-root {
-      color: var(--color-white);
+      color: $color-white;
     }
 
     &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -39,7 +38,7 @@
   margin: 20px 40px 40px;
 
   .axis {
-    color: $white;
+    color: $color-white;
     font-weight: $font-weight-semibold;
 
     &.x-axis {
@@ -50,7 +49,7 @@
 
     &.x-axis {
       .x-axis-label {
-        fill: $white;
+        fill: $color-white;
       }
     }
   }
@@ -70,7 +69,7 @@
       }
 
       .name {
-        fill: $white;
+        fill: $color-white;
         stroke: none;
         font-size: $font-size-caption;
         text-anchor: start;
@@ -83,13 +82,13 @@
 .author-bar-chart__tooltip {
   display: none;
   position: absolute;
-  background: $white;
+  background: $color-white;
   padding: 8px 16px;
   text-align: center;
   font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
-  color: $gray-900;
+  color: $color-dark-gray;
 
   .selected {
     color: var(--color-primary);

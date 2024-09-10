@@ -10,7 +10,7 @@
     margin-right: 1rem;
     flex-grow: 10;
     height: 0;
-    border: 1px solid $white;
+    border: 1px solid $color-white;
   }
 
   .detail__summary {
@@ -56,10 +56,10 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    color: $gray-600;
+    color: $color-medium-gray;
 
     .commit-detail {
-      color: $white;
+      color: $color-white;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -83,7 +83,7 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             overflow: hidden;
-            color: $white;
+            color: $color-white;
             margin: 0 4px 0 15px;
 
             &:hover {
@@ -92,7 +92,7 @@
               overflow: visible;
               position: absolute;
               z-index: 10;
-              background-color: lighten($gray-900, 5);
+              background-color: $color-dark-gray;
               padding-bottom: 5px;
               top: -7px;
             }
@@ -115,9 +115,9 @@
 
       a {
         text-decoration: none;
-        color: var(--color-lightgray);
+        color: $color-light-gray;
         &:visited {
-          color: var(--color-lightgray);
+          color: $color-light-gray;
         }
         &:hover {
           color: var(--color-primary);
@@ -143,19 +143,19 @@
   cursor: pointer;
 
   &:hover {
-    color: $gray-300;
+    color: $color-light-gray;
   }
 }
 
 .commit-id__tooltip {
   display: none;
   position: absolute;
-  background: $white;
+  background: $color-white;
   padding: 8px 16px;
   text-align: center;
   font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
-  color: $gray-900;
+  color: $color-dark-gray;
   transform: translateY(20%) translateX(-120%);
 }
