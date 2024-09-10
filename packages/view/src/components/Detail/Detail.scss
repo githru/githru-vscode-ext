@@ -100,7 +100,7 @@
         }
       }
 
-      .author-date {
+      .commit-date {
         display: block;
         position: relative;
         white-space: nowrap;
@@ -121,14 +121,7 @@
         }
         &:hover {
           color: var(--color-primary);
-          .commit-id__tooltip {
-            display: inline-block;
-          }
         }
-      }
-
-      a:hover {
-        cursor: pointer;
       }
     }
   }
@@ -147,15 +140,3 @@
   }
 }
 
-.commit-id__tooltip {
-  display: none;
-  position: absolute;
-  background: $color-white;
-  padding: 8px 16px;
-  text-align: center;
-  font-size: $font-size-caption;
-  line-height: 1.5;
-  border-radius: 5px;
-  color: $color-dark-gray;
-  transform: translateY(20%) translateX(-120%);
-}

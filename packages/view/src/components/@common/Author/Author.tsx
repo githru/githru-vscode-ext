@@ -1,6 +1,8 @@
 import { Tooltip, Avatar } from "@mui/material";
-import { GITHUB_URL } from "../../../constants/constants";
+
 import type { AuthorInfo } from "types";
+
+import { GITHUB_URL } from "../../../constants/constants";
 
 const Author = ({ name, src }: AuthorInfo) => {
   return (

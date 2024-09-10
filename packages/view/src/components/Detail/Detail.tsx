@@ -4,8 +4,10 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import CommitRoundedIcon from "@mui/icons-material/CommitRounded";
 import RestorePageRoundedIcon from "@mui/icons-material/RestorePageRounded";
+import { Tooltip } from "@mui/material";
 
 import { Author } from "components/@common/Author";
+import { useGlobalData } from "hooks";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -13,7 +15,6 @@ import { FIRST_SHOW_NUM } from "./Detail.const";
 import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
-import { useGlobalData } from "hooks";
 
 const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
@@ -80,7 +81,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                     <span className="message">{message}</span>
                   </div>
                 </div>
-                <span className="author-date">
+                <span className="commit-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>
               </div>
@@ -91,8 +92,12 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                   tabIndex={0}
                   onKeyDown={handleCommitIdCopy(id)}
                 >
-                  {id.slice(0, 6)}
-                  <span className="commit-id__tooltip">{id}</span>
+                  <Tooltip
+                    placement="right"
+                    title={id}
+                  >
+                    <p>{`${id.slice(0, 6)}...`}</p>
+                  </Tooltip>
                 </a>
               </div>
             </li>
