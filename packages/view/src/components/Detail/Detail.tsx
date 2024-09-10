@@ -30,16 +30,16 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
 
   return (
     <div className="detail__summary">
-      <div className="detail__summary__divider" />
-      <div className="detail__summary__list">
+      <div className="detail__summary-divider" />
+      <div className="detail__summary-list">
         {summaryItems.map(({ name, count, icon }) => (
           <span
             key={name}
-            className="detail__summary__item"
+            className="detail__summary-item"
           >
             {icon}
             <strong className={name}>{count.toLocaleString("en")} </strong>
-            <span className="detail__summary__item-name">{count <= 1 ? name.slice(0, -1) : name}</span>
+            <span className="detail__summary-item-name">{count <= 1 ? name.slice(0, -1) : name}</span>
           </span>
         ))}
       </div>

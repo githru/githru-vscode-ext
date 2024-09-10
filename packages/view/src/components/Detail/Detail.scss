@@ -6,18 +6,18 @@
   align-items: center;
   font-size: $font-size-caption;
 
-  .detail__summary__divider {
+  .detail__summary-divider {
     margin-right: 1rem;
     flex-grow: 10;
     height: 0;
     border: 1px solid $white;
   }
 
-  .detail__summary__list {
+  .detail__summary-list {
     flex-grow: 0.1;
     text-align: right;
 
-    .detail__summary__item {
+    .detail__summary-item {
       position: relative;
       margin-right: 10px;
       display: inline-flex;
@@ -40,7 +40,7 @@
 }
 
 @media (max-width: 1080px) {
-  .detail__summary__item-name {
+  .detail__summary-item-name {
     display: none;
   }
 }
