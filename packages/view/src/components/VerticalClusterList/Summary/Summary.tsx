@@ -59,7 +59,7 @@ const Summary = () => {
       <div
         key={key}
         style={style}
-        className={`cluster-summary__item${isExpanded ? " cluster-summary__item--is-expanded" : ""}`}
+        className="cluster-summary__item"
       >
         <div className="cluster-summary__graph">
           <ClusterGraph
@@ -67,7 +67,7 @@ const Summary = () => {
             clusterSizes={[clusterSizes[index]]}
           />
         </div>
-        <div className={`cluster-summary__info${isExpanded ? " cluster-summary__info--is-expanded" : ""}`}>
+        <div className={`cluster-summary__info${isExpanded ? "--expanded" : ""}`}>
           <button
             type="button"
             className="summary"

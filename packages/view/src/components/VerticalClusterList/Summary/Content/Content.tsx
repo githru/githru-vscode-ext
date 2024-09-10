@@ -45,10 +45,8 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
         <div className="summary__commit-message">{linkedStr}</div>
         {content.count > 0 && <span className="summary__more-commit">+ {content.count} more</span>}
       </div>
-      <div className="summary__toggle">
-        <ArrowDropDownCircleRoundedIcon
-          className={selectedClusterId.includes(clusterId) ? "summary__toggle--visible" : ""}
-        />
+      <div className={`summary__toggle${selectedClusterId.includes(clusterId) ? "--visible" : ""}`}>
+        <ArrowDropDownCircleRoundedIcon />
       </div>
     </>
   );

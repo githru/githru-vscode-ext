@@ -23,7 +23,8 @@
     flex-direction: column;
     width: 100%;
 
-    &--is-expanded {
+    &--expanded {
+      @extend .cluster-summary__info;
       border-radius: 25px;
       background-color: lighten($gray-900, 5);
     }
@@ -106,6 +107,7 @@
     cursor: pointer;
 
     &--visible {
+      @extend .summary__toggle;
       visibility: visible;
       transform: rotate(180deg);
     }
