@@ -1,5 +1,9 @@
 @import "styles/app";
 
+.cluster-graph {
+  display: block;
+}
+
 .cluster-graph__container {
   cursor: pointer;
   min-width: 84px;
