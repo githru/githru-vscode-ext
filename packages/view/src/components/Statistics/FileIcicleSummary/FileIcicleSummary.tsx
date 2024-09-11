@@ -71,7 +71,8 @@ const drawIcicleTree = async ($target: RefObject<SVGSVGElement>, data: FileChang
     .attr("pointer-events", "none")
     .attr("x", 10)
     .attr("y", 25)
-    .attr("fill-opacity", (d) => +labelVisible(d));
+    .attr("fill-opacity", (d) => +labelVisible(d))
+    .attr("class", "file-icicle-summary__label");
 
   text.append("tspan").text((d) => d.data.name);
 
@@ -137,8 +138,11 @@ const FileIcicleSummary = () => {
 
   return (
     <div className="file-icicle-summary">
-      <p className="file-icicle-title">File Summary</p>
-      <svg ref={$summary} />
+      <p className="file-icicle-summary__title">File Summary</p>
+      <svg
+        className="file-icicle-summary__chart"
+        ref={$summary}
+      />
     </div>
   );
 };
