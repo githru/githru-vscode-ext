@@ -215,7 +215,7 @@ const AuthorBarChart = () => {
 
   return (
     <div className="author-bar-chart__container">
-      <p>Author Bar Chart</p>
+      <p className="author-bar-chart__title">Author Bar Chart</p>
       <div className="author-bar-chart__header">
         <FormControl
           sx={{ m: 1, minWidth: 120 }}
