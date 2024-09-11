@@ -1,22 +1,22 @@
 @import "styles/app";
 
-.author-bar-chart__container {
+.author-bar-chart {
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  p {
+  &__title {
     font-size: $font-size-title;
     font-weight: $font-weight-semibold;
   }
-}
 
-.author-bar-chart__header {
-  width: 100%;
-  text-align: right;
+  &__header {
+    width: 100%;
+    text-align: right;
+  }
 
-  & .select-box {
+  &__select {
     font-size: $font-size-caption;
     background: transparent;
     border: 1px solid $white;
@@ -28,17 +28,17 @@
     outline: none;
     text-align: center;
 
-    option {
+    .author-bar-chart__metric {
       background: $gray-900;
     }
   }
-}
 
-.author-bar-chart {
-  overflow: visible;
-  margin: 20px 40px 40px;
+  &__chart {
+    overflow: visible;
+    margin: 20px 40px 40px;
+  }
 
-  .axis {
+  &__axis {
     color: $white;
     font-weight: $font-weight-semibold;
 
@@ -46,19 +46,17 @@
       .tick {
         display: none;
       }
-    }
-
-    &.x-axis {
-      .x-axis-label {
+      
+      .x-axis__label {
         fill: $white;
       }
     }
   }
 
-  .bars {
+  &__container {
     cursor: pointer;
 
-    .bar {
+    .author-bar-chart__bar {
       &:hover {
         rect {
           fill: var(--color-tertiary);
@@ -69,7 +67,7 @@
         fill: var(--color-secondary);
       }
 
-      .name {
+      .author-bar-chart__name {
         fill: $white;
         stroke: none;
         font-size: $font-size-caption;
@@ -78,24 +76,25 @@
       }
     }
   }
-}
 
-.author-bar-chart__tooltip {
-  display: none;
-  position: absolute;
-  background: $white;
-  padding: 8px 16px;
-  text-align: center;
-  font-size: $font-size-caption;
-  line-height: 1.5;
-  border-radius: 5px;
-  color: $gray-900;
+  &__tooltip {
+    display: none;
+    position: absolute;
+    background: $white;
+    padding: 8px 16px;
+    text-align: center;
+    font-size: $font-size-caption;
+    line-height: 1.5;
+    border-radius: 5px;
+    color: $gray-900;
 
-  .selected {
-    color: var(--color-primary);
-    font-weight: $font-weight-semibold;
-  }
-  .name {
-    font-weight: $font-weight-semibold;
+    .author-bar-chart__name {
+      font-weight: $font-weight-semibold;
+    }
+
+    .author-bar-chart__count {
+      color: var(--color-primary);
+      font-weight: $font-weight-semibold;
+    }
   }
 }
