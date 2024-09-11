@@ -6,10 +6,12 @@
     "build:all": "npm run build --workspaces",
     "deploy:all": "npm run deploy --workspaces",
     "test:all": "npm run test --workspaces",
-    "lint": "eslint '**/*.{js,ts,tsx}'",
-    "lint:fix": "npm run lint --fix",
+    "lint": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
     "prettier": "prettier '**/*.{ts,tsx,json,yaml,md}' --check",
-    "prettier:fix": "prettier '**/*.{ts,tsx,json,yaml,md}' --write"
+    "prettier:fix": "prettier '**/*.{ts,tsx,json,yaml,md}' --write",
+    "prepare": "husky install",
+    "lint-staged": "npm run lint-staged --workspaces --if-present"
   },
   "author": "githru team",
   "license": "MIT",
