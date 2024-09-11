@@ -55,13 +55,13 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
   private _getPullRequest = async (pullNumber: number) => {
     const { owner, repo } = this;
 
-    const pullRequestDetail:PullsListResponseData = await this.rest.pulls.get({
+    const pullRequestDetail: PullsListResponseData = await this.rest.pulls.get({
       owner,
       repo,
       pull_number: pullNumber,
     });
 
-    const pullRequestCommits:PullsListCommitsResponseData = await this.rest.pulls.listCommits({
+    const pullRequestCommits: PullsListCommitsResponseData = await this.rest.pulls.listCommits({
       owner,
       repo,
       pull_number: pullNumber,
@@ -73,11 +73,12 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
     };
   };
 
-
-  public getPullRequests = async (): Promise<{
-    detail: PullsListResponseData,
-    commitDetails: PullsListCommitsResponseData
-  }[]> => {
+  public getPullRequests = async (): Promise<
+    {
+      detail: PullsListResponseData;
+      commitDetails: PullsListCommitsResponseData;
+    }[]
+  > => {
     const { owner, repo } = this;
 
     const { data } = await this.rest.pulls.list({

@@ -1,10 +1,10 @@
 import type { CommitRaw } from "./types";
 
-const apiKey = process.env.GEMENI_API_KEY || '';
+const apiKey = process.env.GEMENI_API_KEY || "";
 const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
 
 export async function getSummary(csmNodes: CommitRaw[]) {
-  const commitMessages = csmNodes.map((csmNode) => csmNode.message.split('\n')[0]).join(', ');
+  const commitMessages = csmNodes.map((csmNode) => csmNode.message.split("\n")[0]).join(", ");
 
   try {
     const response = await fetch(apiUrl + apiKey, {
@@ -13,7 +13,7 @@ export async function getSummary(csmNodes: CommitRaw[]) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contents: [{parts: [{text: `${prompt} \n${commitMessages}`}]}],
+        contents: [{ parts: [{ text: `${prompt} \n${commitMessages}` }] }],
       }),
     });
 
@@ -53,4 +53,4 @@ Output format:
 - {prefix (if any)}:{commit summary3}
 ‘’
 
-Commits:`
+Commits:`;
