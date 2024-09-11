@@ -32,8 +32,9 @@ const SelectedClusterGroup = () => {
   };
 
   return (
-    <div className="selected__content">
+    <div className="selected-clusters">
       <Button
+        className="selected-clusters__label"
         id="cluster-group-button"
         aria-controls={isOpen ? "cluster-group-box" : undefined}
         aria-expanded={isOpen ? "true" : undefined}
@@ -41,11 +42,11 @@ const SelectedClusterGroup = () => {
         sx={{ color: "inherit", padding: 0, textTransform: "none" }}
         onClick={openClusterGroup}
       >
-        <p>Selected Nodes</p>
+        Selected Nodes
         <ArrowDropDownRoundedIcon />
       </Button>
       <Menu
-        className="selected__cluster"
+        className="selected-clusters__dropdown"
         id="cluster-group-box"
         anchorEl={menuAnchorElement}
         open={isOpen}
@@ -57,6 +58,7 @@ const SelectedClusterGroup = () => {
         {selectedClusters.map((selectedCluster) => (
           <li key={selectedCluster.clusterId}>
             <Chip
+              className="selected-clusters__item"
               label={selectedCluster.summary.content.message}
               onDelete={deselectCluster(selectedCluster.clusterId)}
             />
