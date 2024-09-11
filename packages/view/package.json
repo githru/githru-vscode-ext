@@ -13,7 +13,8 @@
     "test": "jest",
     "test:e2e": "playwright test",
     "lint": "eslint src --ext ts",
-    "lint:fix": "eslint src --ext ts --fix"
+    "lint:fix": "eslint src --ext ts --fix",
+    "lint-staged": "lint-staged"
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +78,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.0.1",
     "sass": "^1.77.4",
     "sass-loader": "^13.0.2",
@@ -115,5 +118,13 @@
     "ts-jest": "^29.1.1",
     "tsyringe": "^4.7.0",
     "zustand": "^4.5.5"
+  },
+  "lint-staged": {
+    "packages/**/src/**/*.{ts,tsx}": [
+      "eslint"
+    ],
+    "**/*.{ts,tsx,json,yaml,md}": [
+      "prettier --check"
+    ]
   }
 }
