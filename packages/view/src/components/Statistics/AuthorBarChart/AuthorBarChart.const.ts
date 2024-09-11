@@ -1,5 +1,5 @@
 export const DIMENSIONS = {
-  width: 200,
+  width: 250,
   height: 200,
   margins: 60,
 };

@@ -35,10 +35,10 @@
 .sub-graph-tooltip {
   position: absolute;
   z-index: 10;
-  background: $white;
+  background: $color-white;
   padding: 8px 16px;
   font-size: $font-size-caption;
   line-height: 1.5;
   border-radius: 5px;
-  color: $gray-900;
+  color: $color-dark-gray;
 }

@@ -35,6 +35,7 @@ const BranchSelector = () => {
               sx: {
                 backgroundColor: "#212121",
                 color: "white",
+                marginTop: "1px",
                 "& .MuiMenuItem-root": {
                   backgroundColor: "#212121 !important ",
                   "&:hover": {

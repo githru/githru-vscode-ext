@@ -20,12 +20,12 @@
       border: none;
       background-color: transparent;
       cursor: pointer;
-      color: var(--color-text-white);
+      color: $color-white;
       width: 100%;
 
       &:hover {
         border-radius: 40px;
-        background-color: lighten($gray-800, 5);
+        background-color: $color-dark-gray;
       }
     }
     .cluster-summary__info-wrapper {
@@ -35,7 +35,7 @@
 
       &.expanded {
         border-radius: 25px;
-        background-color: lighten($gray-900, 5);
+        background-color: $color-dark-gray;
       }
     }
 
@@ -94,9 +94,9 @@
 
           a {
             text-decoration: none;
-            color: var(--color-light-gray);
+            color: $color-light-gray;
             &:visited {
-              color: var(--color-light-gray);
+              color: $color-light-gray;
             }
             &:hover {
               color: var(--color-primary);
@@ -130,6 +130,6 @@
   right: 26%;
   top: 34%;
   &:hover {
-    color: white;
+    color: $color-white;
   }
 }

@@ -5,31 +5,30 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
 
-  p {
-    font-size: $font-size-title;
-    font-weight: $font-weight-semibold;
-  }
+.author-bar-chart__title {
+  font-size: $font-size-title;
+  font-weight: $font-weight-semibold;
 }
 
 .author-bar-chart__header {
   width: 100%;
   text-align: right;
 
-  & .select-box {
-    font-size: $font-size-caption;
-    background: transparent;
-    border: 1px solid $white;
-    border-radius: 5px;
-    width: fit-content;
-    padding: 0 10px;
+  .select-box {
+    border: 1px solid $color-white;
+    color: $color-white;
     height: 25px;
-    color: $white;
-    outline: none;
-    text-align: center;
+    width: 100px;
+    font-size: $font-size-caption;
 
-    option {
-      background: $gray-900;
+    & .MuiSvgIcon-root {
+      color: $color-white;
+    }
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border: none;
     }
   }
 }
@@ -39,8 +38,7 @@
   margin: 20px 40px 40px;
 
   .axis {
-    color: $white;
-    font-weight: $font-weight-semibold;
+    color: $color-white;
 
     &.x-axis {
       .tick {
@@ -50,7 +48,7 @@
 
     &.x-axis {
       .x-axis-label {
-        fill: $white;
+        fill: $color-white;
       }
     }
   }
@@ -70,7 +68,7 @@
       }
 
       .name {
-        fill: $white;
+        fill: $color-white;
         stroke: none;
         font-size: $font-size-caption;
         text-anchor: start;
@@ -83,17 +81,17 @@
 .author-bar-chart__tooltip {
   display: none;
   position: absolute;
-  background: $white;
   padding: 8px 16px;
-  text-align: center;
-  font-size: $font-size-caption;
-  line-height: 1.5;
   border-radius: 5px;
-  color: $gray-900;
+  font-size: $font-size-caption;
+  text-align: center;
+  line-height: 1.5;
+  background-color: rgba($color-dark-gray, 0.9);
+  color: $color-white;
 
   .selected {
-    color: var(--color-primary);
     font-weight: $font-weight-semibold;
+    color: var(--color-primary);
   }
   .name {
     font-weight: $font-weight-semibold;

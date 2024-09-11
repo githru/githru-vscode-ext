@@ -8,6 +8,7 @@ import {
   ExpandMoreRounded,
   ExpandLessRounded,
 } from "@mui/icons-material";
+import { Tooltip } from "@mui/material";
 
 import { Author } from "components/@common/Author";
 import { useGlobalData } from "hooks";
@@ -84,7 +85,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                     <span className="message">{message}</span>
                   </div>
                 </div>
-                <span className="author-date">
+                <span className="commit-date">
                   {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
                 </span>
               </div>
@@ -95,8 +96,13 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                   tabIndex={0}
                   onKeyDown={handleCommitIdCopy(id)}
                 >
-                  {id.slice(0, 6)}
-                  <span className="commit-id__tooltip">{id}</span>
+                  <Tooltip
+                    placement="right"
+                    title={id}
+                    PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+                  >
+                    <p>{`${id.slice(0, 6)}...`}</p>
+                  </Tooltip>
                 </a>
               </div>
             </li>
