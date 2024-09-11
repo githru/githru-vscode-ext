@@ -1,12 +1,13 @@
 import type PluginOctokit from "./pluginOctokit";
 import type { CommitRaw, StemDict } from "./types";
 
-const apiKey = process.env.GEMENI_API_KEY || '';
+const apiKey = process.env.GEMENI_API_KEY || "";
 const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
 
 export async function getSummary(csmNodes: CommitRaw[]) {
-  const commitMessages = csmNodes.map((csmNode) => csmNode.message.split('\n')[0]).join(', ');
+  const commitMessages = csmNodes.map((csmNode) => csmNode.message.split("\n")[0]).join(", ");
 
+  console.log("commitMessages: ", commitMessages);
   try {
     const response = await fetch(apiUrl + apiKey, {
       method: "POST",
@@ -14,7 +15,7 @@ export async function getSummary(csmNodes: CommitRaw[]) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contents: [{parts: [{text: `${prompt} \n${commitMessages}`}]}],
+        contents: [{ parts: [{ text: `${prompt} \n${commitMessages}` }] }],
       }),
     });
 
@@ -31,16 +32,27 @@ export async function getSummary(csmNodes: CommitRaw[]) {
 }
 
 export async function getLatestCommitSummary(stemDict: StemDict, baseBranchName: string) {
-  const nodes = stemDict.get(baseBranchName)?.nodes?.map(({commit}) => commit);
+  const nodes = stemDict
+    .get(baseBranchName)
+    ?.nodes?.map(({ commit }) => commit)
+    .filter(({ message }) => !message.includes("Merge branch") && !message.includes("Merge pull request"));
 
-  return await getSummary(nodes ? nodes?.slice(-10) : [])
+  return await getSummary(nodes ? nodes?.slice(-10) : []);
 }
 
 export async function getCurrentUserCommitSummary(stemDict: StemDict, baseBranchName: string, octokit: PluginOctokit) {
   const { data } = await octokit.rest.users.getAuthenticated();
-  const currentUserNodes = stemDict.get(baseBranchName)?.nodes?.filter(({commit}) => commit.author.name === data.login || commit.author.name === data.name)?.map(({commit}) => commit);
+  const currentUserNodes = stemDict
+    .get(baseBranchName)
+    ?.nodes?.filter(
+      ({ commit: { author, message } }) =>
+        (author.name === data.login || author.name === data.name) &&
+        !message.includes("Merge branch") &&
+        !message.includes("Merge pull request")
+    )
+    ?.map(({ commit }) => commit);
 
-  return await getSummary(currentUserNodes ? currentUserNodes?.slice(-10) : [])
+  return await getSummary(currentUserNodes ? currentUserNodes?.slice(-10) : []);
 }
 
 const prompt = `Proceed with the task of summarising the contents of the commit message provided.
@@ -67,4 +79,4 @@ Output format:
 - {prefix (if any)}:{commit summary3}
 ‘’
 
-Commits:`
+Commits:`;
