@@ -57,8 +57,7 @@ export const drawSubGraph = (
     .attr("r", circleRadius)
     .on("mouseover", (_, { clusterData, circleIndex }) => {
       const { commitNodeList } = clusterData.cluster;
-      const targetIndex = commitNodeList.length - 1 - circleIndex;
-      const info = commitNodeList[targetIndex].commit.message;
+      const info = commitNodeList[circleIndex].commit.message;
       tooltip.text(info);
       return tooltip.style("visibility", "visible");
     })

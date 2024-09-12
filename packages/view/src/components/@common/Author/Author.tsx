@@ -1,12 +1,15 @@
 import { Tooltip, Avatar } from "@mui/material";
-import { GITHUB_URL } from "../../../constants/constants";
+
 import type { AuthorInfo } from "types";
+
+import { GITHUB_URL } from "../../../constants/constants";
 
 const Author = ({ name, src }: AuthorInfo) => {
   return (
     <Tooltip
       title={name}
       placement="top-start"
+      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
     >
       <a
         href={`${GITHUB_URL}/${name}`}

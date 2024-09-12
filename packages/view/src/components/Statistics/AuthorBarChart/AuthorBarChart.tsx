@@ -1,6 +1,8 @@
-import type { ChangeEvent, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
+import type { SelectChangeEvent } from "@mui/material";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 import type { ClusterNode, AuthorInfo } from "types";
 import { useGlobalData } from "hooks";
@@ -209,8 +211,8 @@ const AuthorBarChart = () => {
     setSelectedAuthor,
   ]);
 
-  const handleChangeMetric = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setMetric(e.target.value as MetricType);
+  const handleChangeMetric = (event: SelectChangeEvent): void => {
+    setMetric(event.target.value as MetricType);
   };
 
   return (
