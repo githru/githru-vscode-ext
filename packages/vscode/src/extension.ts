@@ -42,6 +42,7 @@ export async function activate(context: vscode.ExtensionContext) {
         myStatusBarItem.text = `$(check) ${projectName}`;
         return;
       }
+
       const gitPath = (await findGit()).path;
 
       const currentWorkspaceUri = vscode.workspace.workspaceFolders?.[0].uri;
@@ -57,6 +58,7 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
+
       const fetchCurrentBranch = async () => {
         let branchName;
         try {
@@ -76,6 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
+
         const { owner, repo: initialRepo } = getRepo(gitConfig);
         webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
         const repo = initialRepo[0];
@@ -89,8 +92,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
 
         const { isPRSuccess, csmDict } = await engine.analyzeGit();
-        if (isPRSuccess) console.log("crawling PR failed");
-
+        if (isPRSuccess) console.log("crawling PR Success");
         return mapClusterNodesFrom(csmDict);
       };
 
@@ -99,6 +101,7 @@ export async function activate(context: vscode.ExtensionContext) {
         fetchBranches,
         fetchCurrentBranch,
       });
+
       currentPanel = webLoader.getPanel();
 
       currentPanel?.onDidDispose(
@@ -121,6 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage(error.message);
       } else {
         vscode.window.showErrorMessage((error as Error).message);
+        myStatusBarItem.text = `$(diff-review-close) ${projectName}`;
       }
     }
   });

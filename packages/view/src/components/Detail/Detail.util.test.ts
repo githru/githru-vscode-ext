@@ -220,7 +220,7 @@ test("getSummaryCommitList test", () => {
 
   expect(result1).not.toBeUndefined();
   expect(result1).toHaveLength(3);
-  expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
+  expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
   expect(result1[1].commit.id).toBe(fakeCommitNodeListInCluster[1].commit.id);
-  expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
+  expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
 });
