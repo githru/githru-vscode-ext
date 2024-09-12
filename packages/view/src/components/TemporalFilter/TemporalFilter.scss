@@ -22,12 +22,12 @@
       &:hover {
         background-color: var(--color-secondary);
       }
-    }
-  }
 
-  &__reset-text {
-    color: var(--color-tertiary);
-    filter: invert(100) grayscale(100) contrast(100);
+      & .temporal-filter__button-text {
+        color: $color-black;
+        font-weight: $font-weight-semibold;
+      }
+    }
   }
 
   &__chart {
@@ -54,10 +54,4 @@
     font-weight: $font-weight-light;
     font-size: $font-size-caption;
   }
-}
-
-.temporal-filter__label {
-  font-size: $font-size-title;
-  font-weight: $font-weight-semibold;
-  fill: $color-white;
 }

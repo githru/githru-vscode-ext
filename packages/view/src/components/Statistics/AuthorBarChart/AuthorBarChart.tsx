@@ -219,20 +219,45 @@ const AuthorBarChart = () => {
     <div className="author-bar-chart">
       <p className="author-bar-chart__title">Author Bar Chart</p>
       <div className="author-bar-chart__header">
-        <select
-          className="author-bar-chart__select"
-          onChange={handleChangeMetric}
+        <FormControl
+          sx={{ m: 1, minWidth: 120 }}
+          size="small"
         >
-          {METRIC_TYPE.map((option) => (
-            <option
-              className="author-bar-chart__metric"
-              key={option}
-              value={option}
-            >
-              {option === METRIC_TYPE[0] ? `${option} #` : option}
-            </option>
-          ))}
-        </select>
+          <Select
+            className="author-bar-chart__select-box"
+            value={metric}
+            onChange={handleChangeMetric}
+            inputProps={{ "aria-label": "Without label" }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  marginTop: "1px",
+                  backgroundColor: "#212121",
+                  color: "white",
+                  "& .MuiMenuItem-root": {
+                    fontSize: "12px",
+                    backgroundColor: "#212121 !important ",
+                    "&:hover": {
+                      backgroundColor: "#333333 !important",
+                    },
+                  },
+                  "& .MuiMenuItem-root.Mui-selected": {
+                    backgroundColor: "#333333 !important",
+                  },
+                },
+              },
+            }}
+          >
+            {METRIC_TYPE.map((option) => (
+              <MenuItem
+                key={option}
+                value={option}
+              >
+                {option === METRIC_TYPE[0] ? `${option} #` : option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       <svg
         className="author-bar-chart__chart"

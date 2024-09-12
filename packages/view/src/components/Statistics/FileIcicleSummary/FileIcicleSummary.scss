@@ -10,7 +10,7 @@
   }
 
   &__label {
-    fill: var(--color-primary);
-    filter: invert(100) grayscale(100) contrast(100);
+    color: $color-black;
+    font-weight: $font-weight-semibold;
   }
 }

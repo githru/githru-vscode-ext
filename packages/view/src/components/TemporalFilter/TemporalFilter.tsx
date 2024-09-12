@@ -160,7 +160,7 @@ const TemporalFilter = () => {
             size="small"
             className="temporal-filter__reset-button"
           >
-            <span className="temporal-filter__reset-text">Reset</span>
+            <span className="temporal-filter__button-text">Reset</span>
           </Button>
         )}
         <svg

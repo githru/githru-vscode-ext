@@ -98,8 +98,14 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                   onKeyDown={handleCommitIdCopy(id)}
                   className="commit-id__link"
                 >
-                  {id.slice(0, 6)}
-                  <span className="commit-id__tooltip">{id}</span>
+                  <Tooltip
+                    className="commit-id__tooltip"
+                    placement="right"
+                    title={id}
+                    PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+                  >
+                    <p>{`${id.slice(0, 6)}...`}</p>
+                  </Tooltip>
                 </a>
               </div>
             </li>

@@ -58,7 +58,7 @@
     justify-content: space-between;
     color: $color-medium-gray;
 
-    .commit-detail {
+    .commit-item__detail {
       color: $color-white;
       display: flex;
       justify-content: space-between;
@@ -100,7 +100,7 @@
         }
       }
 
-      .commit-date {
+      .commit-item__author-date {
         display: block;
         position: relative;
         white-space: nowrap;
@@ -114,12 +114,14 @@
       width: 6em;
       position: relative;
 
-      a {
+      .commit-id__link {
         text-decoration: none;
         color: $color-light-gray;
+
         &:visited {
           color: $color-light-gray;
         }
+
         &:hover {
           color: var(--color-primary);
         }

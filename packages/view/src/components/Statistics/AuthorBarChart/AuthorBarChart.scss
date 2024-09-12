@@ -5,7 +5,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
 
   &__title {
     font-size: $font-size-title;
@@ -17,7 +16,7 @@
     text-align: right;
   }
 
-  &__select {
+  & &__select-box {
     border: 1px solid $color-white;
     color: $color-white;
     height: 25px;
@@ -76,23 +75,25 @@
     }
   }
 
-&__tooltip {
-  display: none;
-  position: absolute;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-size: $font-size-caption;
-  text-align: center;
-  line-height: 1.5;
-  background-color: rgba($color-dark-gray, 0.9);
-  color: $color-white;
+  &__tooltip {
+    display: none;
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: $font-size-caption;
+    text-align: center;
+    line-height: 1.5;
+    background-color: rgba($color-dark-gray, 0.9);
+    color: $color-white;
+    pointer-events: none;
 
-  .author-bar-chart__name {
-    font-weight: $font-weight-semibold;
-  }
+    .author-bar-chart__name {
+      font-weight: $font-weight-semibold;
+    }
 
-  .author-bar-chart__count {
-    font-weight: $font-weight-semibold;
-    color: var(--color-primary);
+    .author-bar-chart__count {
+      font-weight: $font-weight-semibold;
+      color: var(--color-primary);
+    }
   }
 }
