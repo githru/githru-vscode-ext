@@ -1,15 +1,17 @@
 import type PluginOctokit from "./pluginOctokit";
 import type { CommitRaw, StemDict } from "./types";
 
-const apiKey = process.env.GEMENI_API_KEY || "";
-const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
+const API_KEY = process.env.GEMENI_API_KEY || "";
+const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
+const MERGE_BRANCH = "Merge branch";
+const MERGE_PULL_REQUEST = "Merge pull request";
 
-export async function getSummary(csmNodes: CommitRaw[]) {
+async function getSummary(csmNodes: CommitRaw[]) {
   const commitMessages = csmNodes.map((csmNode) => csmNode.message.split("\n")[0]).join(", ");
 
   console.log("commitMessages: ", commitMessages);
   try {
-    const response = await fetch(apiUrl + apiKey, {
+    const response = await fetch(API_URL + API_KEY, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,11 +33,15 @@ export async function getSummary(csmNodes: CommitRaw[]) {
   }
 }
 
+function isNonMergeCommit(message: string) {
+  return !message.includes(MERGE_BRANCH) && !message.includes(MERGE_PULL_REQUEST);
+}
+
 export async function getLatestCommitSummary(stemDict: StemDict, baseBranchName: string) {
   const nodes = stemDict
     .get(baseBranchName)
     ?.nodes?.map(({ commit }) => commit)
-    .filter(({ message }) => !message.includes("Merge branch") && !message.includes("Merge pull request"));
+    .filter(({ message }) => isNonMergeCommit(message));
 
   return await getSummary(nodes ? nodes?.slice(-10) : []);
 }
@@ -46,9 +52,7 @@ export async function getCurrentUserCommitSummary(stemDict: StemDict, baseBranch
     .get(baseBranchName)
     ?.nodes?.filter(
       ({ commit: { author, message } }) =>
-        (author.name === data.login || author.name === data.name) &&
-        !message.includes("Merge branch") &&
-        !message.includes("Merge pull request")
+        (author.name === data.login || author.name === data.name) && isNonMergeCommit(message)
     )
     ?.map(({ commit }) => commit);
 
