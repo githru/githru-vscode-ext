@@ -1,6 +1,10 @@
 import * as cp from "child_process";
 import * as fs from "fs";
+import os from 'os';
 import * as path from "path";
+import { Worker } from 'worker_threads';
+
+
 
 export interface GitExecutable {
   readonly path: string;
@@ -154,6 +158,7 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 
 export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
+
     const args = [
       "--no-pager",
       "log",
@@ -181,6 +186,68 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
     });
   });
 }
+
+export async function getLogCount(gitPath: string, currentWorkspacePath: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+        const args = [
+        "rev-list",
+        "--count",
+        "--all",
+        ];
+
+    resolveSpawnOutput(
+        cp.spawn(gitPath, args, {
+            cwd: currentWorkspacePath,
+            env: Object.assign({}, process.env),
+        })
+        ).then(([status, stdout, stderr]) => {
+        const { code, error } = status;
+
+        if (code === 0 && !error) {
+            const commitCount = parseInt(stdout.toString().trim(), 10); // Buffer를 문자열로 변환 후 숫자로 변환
+            resolve(commitCount); // 숫자를 반환
+        } else {
+            reject(stderr);
+        }
+        });
+    });
+}
+
+
+export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
+  const numCores = os.cpus().length;
+  const numberOfThreads = Math.max(1, numCores - 1)
+  const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
+  console.log("total logs", totalCnt);
+  const chunkSize = Math.ceil(totalCnt/ numberOfThreads);
+  const promises: Promise<string>[] = [];
+
+  for (let i = 0; i < numberOfThreads; i++) {
+    const skipCount = i * chunkSize;
+    const limitCount = chunkSize;
+
+    console.log('__dirname:', __dirname);
+    const worker = new Worker(path.resolve(__dirname, './worker.js'), {
+      workerData: {
+        gitPath,
+        currentWorkspacePath,
+        skipCount,
+        limitCount,
+      },
+    });
+
+    promises.push(
+      new Promise((resolve, reject) => {
+        worker.on('message', resolve);
+        worker.on('error', reject);
+      })
+    );
+  }
+
+  return Promise.all(promises).then((logs) => logs.join('\n'));
+}
+
+
 
 export async function getGitConfig(
   gitPath: string,

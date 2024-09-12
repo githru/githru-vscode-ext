@@ -12,7 +12,8 @@
       }
     ],
     "simple-import-sort/exports": "error",
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "error",
+    "import/no-commonjs": "off"
   },
   "overrides": [
     {
