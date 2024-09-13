@@ -8,6 +8,8 @@ import { sendFetchAnalyzedDataCommand } from "services";
 import "./BranchSelector.scss";
 import { useLoadingStore } from "store";
 
+import { SLICE_LENGTH } from "./BranchSelector.const";
+
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch } = useGlobalData();
   const { setLoading } = useLoadingStore((state) => state);
@@ -53,8 +55,9 @@ const BranchSelector = () => {
             <MenuItem
               key={option}
               value={option}
+              title={option}
             >
-              {option}
+              {option.length <= SLICE_LENGTH ? option : `${option.slice(0, SLICE_LENGTH)}...`}
             </MenuItem>
           ))}
         </Select>
