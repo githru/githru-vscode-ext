@@ -36,11 +36,11 @@ describe("commit message type", () => {
 });
 
 describe("getCommitRaws", () => {
-  const testAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
+  const mockAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
 
-  const testCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
+  const mockCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
 
-  const testCommitHashAndRefs = [
+  const mockCommitHashAndRefs = [
     `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`,
     `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`,
     `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`,
@@ -58,7 +58,7 @@ describe("getCommitRaws", () => {
 
   const expectedTags = [[], [], ["v1.0.0"], ["v2.0.0"], ["v2.0.0", "v1.4"]];
 
-  const testCommitFileChanges = [
+  const mockCommitFileChanges = [
     "10\t0\ta.ts\n1\t0\tREADME.md",
     "3\t3\ta.ts",
     "4\t0\ta.ts",
@@ -114,9 +114,9 @@ describe("getCommitRaws", () => {
     commitMessageType: "",
   };
 
-  testCommitHashAndRefs.forEach((hashAndRefs, index) => {
+  mockCommitHashAndRefs.forEach((mockHashAndRefs, index) => {
     it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const result = getCommitRaws(`${COMMIT_SEPARATOR}${hashAndRefs}${testAuthorAndCommitter}${testCommitMessage}`);
+      const result = getCommitRaws(`${COMMIT_SEPARATOR}${mockHashAndRefs}${mockAuthorAndCommitter}${mockCommitMessage}`);
       const expectedResult = {
         ...commonExpectatedResult,
         branches: expectedBranches[index],
@@ -127,9 +127,9 @@ describe("getCommitRaws", () => {
     });
   });
 
-  testCommitFileChanges.forEach((fileChange, index) => {
+  mockCommitFileChanges.forEach((mockFileChange, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mock = `${COMMIT_SEPARATOR}${testCommitHashAndRefs[0]}${testAuthorAndCommitter}${testCommitMessage}\n${fileChange}`;
+      const mock = `${COMMIT_SEPARATOR}${mockCommitHashAndRefs[0]}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockFileChange}`;
       const result = getCommitRaws(mock);
       const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
