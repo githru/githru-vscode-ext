@@ -2,14 +2,15 @@
 
 .file-icicle-summary {
   width: 16rem;
-  text {
-    filter: invert(100) grayscale(100) contrast(100);
+
+  &__title {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 1rem;
+  }
+
+  &__label {
+    color: $color-black;
     font-weight: $font-weight-semibold;
   }
-}
-
-.file-icicle-title {
-  font-size: $font-size-title;
-  font-weight: $font-weight-semibold;
-  margin-bottom: 1rem;
 }

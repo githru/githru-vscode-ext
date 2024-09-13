@@ -7,7 +7,7 @@
   align-items: center;
   font-weight: $font-weight-semibold;
 
-  .select-box {
+  & &__select-box {
     border: 1px solid $color-white;
     color: $color-white;
     height: 30px;

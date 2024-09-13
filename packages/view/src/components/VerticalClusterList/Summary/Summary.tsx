@@ -59,43 +59,41 @@ const Summary = () => {
       <div
         key={key}
         style={style}
-        className={`cluster-summary__cluster ${isExpanded ? "expanded" : ""}`}
+        className="cluster-summary__item"
       >
-        <div className="cluster-summary__graph-wrapper">
+        <div className="cluster-summary__graph">
           <ClusterGraph
             data={[data[index]]}
             clusterSizes={[clusterSizes[index]]}
           />
         </div>
-        <div className={`cluster-summary__info-wrapper ${isExpanded ? "expanded" : ""}`}>
+        <div className={`cluster-summary__info${isExpanded ? "--expanded" : ""}`}>
           <button
             type="button"
-            className="toggle-contents-button"
+            className="summary"
             onClick={onClickClusterSummary(cluster.clusterId)}
           >
-            <div className="toggle-contents-container">
-              <div className="name-box">
-                {authSrcMap &&
-                  cluster.summary.authorNames.map((authorArray: string[]) => {
-                    return authorArray.map((authorName: string) => (
-                      <Author
-                        key={authorName}
-                        name={authorName}
-                        src={authSrcMap[authorName]}
-                      />
-                    ));
-                  })}
-              </div>
-              <Content
-                content={cluster.summary.content}
-                clusterId={cluster.clusterId}
-                selectedClusterId={selectedClusterId}
-              />
+            <div className="summary__author">
+              {authSrcMap &&
+                cluster.summary.authorNames.map((authorArray: string[]) => {
+                  return authorArray.map((authorName: string) => (
+                    <Author
+                      key={authorName}
+                      name={authorName}
+                      src={authSrcMap[authorName]}
+                    />
+                  ));
+                })}
             </div>
+            <Content
+              content={cluster.summary.content}
+              clusterId={cluster.clusterId}
+              selectedClusterId={selectedClusterId}
+            />
           </button>
           {isExpanded && (
             <div
-              className="detail__container"
+              className="detail"
               ref={detailRef}
             >
               <Detail
@@ -111,7 +109,7 @@ const Summary = () => {
   };
 
   return (
-    <div className="cluster-summary__container">
+    <div className="vertical-cluster-list__body">
       <AutoSizer>
         {({ width, height }) => (
           <List
@@ -122,6 +120,7 @@ const Summary = () => {
             rowHeight={getRowHeight}
             rowRenderer={rowRenderer}
             overscanRowCount={15}
+            className="cluster-summary"
           />
         )}
       </AutoSizer>

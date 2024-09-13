@@ -1,6 +1,6 @@
 @import "styles/app";
 
-.cluster-summary__container {
+.vertical-cluster-list__body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -9,127 +9,114 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+}
 
-  .cluster-summary__cluster {
+.cluster-summary {
+  &__item {
     display: flex;
     align-items: center;
     column-gap: 10px;
+  }
 
-    .toggle-contents-button {
-      padding: 10px 15px;
-      border: none;
-      background-color: transparent;
-      cursor: pointer;
-      color: $color-white;
-      width: 100%;
+  &__info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
-      &:hover {
-        border-radius: 40px;
-        background-color: $color-dark-gray;
-      }
-    }
-    .cluster-summary__info-wrapper {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-
-      &.expanded {
-        border-radius: 25px;
-        background-color: $color-dark-gray;
-      }
-    }
-
-    .toggle-contents-container {
-      display: flex;
-      align-items: center;
-    }
-
-    :hover .collapsible-icon {
-      visibility: visible;
-    }
-
-    .collapsible-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 8px;
-      background-color: transparent;
-      border: none;
-      font-size: 24px;
-      color: var(--color-primary);
-      visibility: hidden;
-      cursor: pointer;
-
-      & .show {
-        visibility: visible;
-        transform: rotate(180deg);
-      }
-    }
-
-    .name-box {
-      display: flex;
-      justify-content: center;
-    }
-
-    .cluster-summary__contents {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: $font-size-body;
-      gap: 10px;
-
-      .commit-message__wrapper {
-        flex-grow: 1;
-        padding-left: 15px;
-        text-align: left;
-        cursor: pointer;
-        // "width: 0" makes the "commit-message" ellipsis reponsive
-        width: 0;
-
-        .commit-message {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-
-          a {
-            text-decoration: none;
-            color: $color-light-gray;
-            &:visited {
-              color: $color-light-gray;
-            }
-            &:hover {
-              color: var(--color-primary);
-            }
-          }
-        }
-      }
-
-      .more-commit-count {
-        text-align: right;
-        font-size: $font-size-caption;
-      }
+    &--expanded {
+      @extend .cluster-summary__info;
+      border-radius: 25px;
+      background-color: $color-dark-gray;
     }
   }
 }
-.cluster-graph {
-  display: block;
+
+.summary {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: $color-white;
+  width: 100%;
+
+  &:hover {
+    border-radius: 40px;
+    background-color: $color-dark-gray;
+
+    .summary__toggle {
+      visibility: visible;
+    }
+  }
+
+  &__author {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $font-size-body;
+    gap: 10px;
+  }
+
+  &__commit-message {
+    flex-grow: 1;
+    padding-left: 15px;
+    text-align: left;
+    cursor: pointer;
+    // "width: 0" makes the "commit-message" ellipsis reponsive
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__commit-link {
+    text-decoration: none;
+    color: $color-light-gray;
+
+    &:visited {
+      color: $color-light-gray;
+    }
+    
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &__more-commit {
+    text-align: right;
+    font-size: $font-size-caption;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--color-primary);
+    visibility: hidden;
+    cursor: pointer;
+
+    &--visible {
+      @extend .summary__toggle;
+      visibility: visible;
+      transform: rotate(180deg);
+    }
+  }
 }
 
-.detail__container {
+.detail {
   overflow: auto;
   height: 220px;
   max-height: 280px;
   padding: 10px 30px;
-}
-
-.sort-button {
-  color: var(--color-primary);
-  cursor: pointer;
-  position: absolute;
-  right: 26%;
-  top: 34%;
-  &:hover {
-    color: $color-white;
-  }
 }

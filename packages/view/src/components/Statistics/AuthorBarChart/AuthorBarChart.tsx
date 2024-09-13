@@ -59,10 +59,10 @@ const AuthorBarChart = () => {
 
     const xAxisGroup = svg
       .append("g")
-      .attr("class", "axis x-axis")
+      .attr("class", "author-bar-chart__axis x-axis")
       .style("transform", `translateY(${DIMENSIONS.height}px)`);
-    const yAxisGroup = svg.append("g").attr("class", "axis y-axis");
-    const barGroup = svg.append("g").attr("class", "bars");
+    const yAxisGroup = svg.append("g").attr("class", "author-bar-chart__axis y-axis");
+    const barGroup = svg.append("g").attr("class", "author-bar-chart__container");
 
     // Scales
     const xScale = d3
@@ -87,7 +87,7 @@ const AuthorBarChart = () => {
 
     xAxisGroup
       .append("text")
-      .attr("class", "x-axis-label")
+      .attr("class", "x-axis__label")
       .style("transform", `translate(${DIMENSIONS.width / 2}px, ${DIMENSIONS.margins - 10}px)`)
       .text(`${metric} # / Total ${metric} # (%)`);
 
@@ -98,14 +98,16 @@ const AuthorBarChart = () => {
         .style("left", `${e.pageX - 70}px`)
         .style("top", `${e.pageY - 120}px`)
         .html(
-          `<p class="name">${d.name}</p>
-              <p>${metric}: 
-                <span class="selected">
-                  ${d[metric].toLocaleString()}
-                </span> 
-                / ${totalMetricValues.toLocaleString()} 
-                (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
-              </p>`
+          `
+          <p class="author-bar-chart__name">${d.name}</p>
+          <p>${metric}: 
+            <span class="author-bar-chart__count">
+              ${d[metric].toLocaleString()}
+            </span> 
+            / ${totalMetricValues.toLocaleString()} 
+            (${((d[metric] / totalMetricValues) * 100).toFixed(1)}%) 
+          </p>
+          `
         );
     };
 
@@ -160,7 +162,7 @@ const AuthorBarChart = () => {
         (enter) =>
           enter
             .append("g")
-            .attr("class", "bar")
+            .attr("class", "author-bar-chart__bar")
             .append("rect")
             .attr("width", xScale.bandwidth())
             .attr("height", 0)
@@ -181,7 +183,7 @@ const AuthorBarChart = () => {
       .attr("y", (d: AuthorDataType) => yScale(d[metric]));
 
     // Draw author thumbnails
-    const barElements = d3.selectAll(".bar").nodes();
+    const barElements = d3.selectAll(".author-bar-chart__bar").nodes();
     if (!barElements.length) return;
 
     barElements.forEach(async (barElement, i) => {
@@ -189,7 +191,7 @@ const AuthorBarChart = () => {
       const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: AuthorInfo) => res.src);
       bar
         .append("image")
-        .attr("class", "profile-image")
+        .attr("class", "author-bar-chart__profile-image")
         .attr("xlink:href", profileImgSrc ?? "")
         .attr("x", (d: AuthorDataType) => (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7)
         .attr("y", 204)
@@ -214,7 +216,7 @@ const AuthorBarChart = () => {
   };
 
   return (
-    <div className="author-bar-chart__container">
+    <div className="author-bar-chart">
       <p className="author-bar-chart__title">Author Bar Chart</p>
       <div className="author-bar-chart__header">
         <FormControl
@@ -222,8 +224,8 @@ const AuthorBarChart = () => {
           size="small"
         >
           <Select
+            className="author-bar-chart__select-box"
             value={metric}
-            className="select-box"
             onChange={handleChangeMetric}
             inputProps={{ "aria-label": "Without label" }}
             MenuProps={{
@@ -258,7 +260,7 @@ const AuthorBarChart = () => {
         </FormControl>
       </div>
       <svg
-        className="author-bar-chart"
+        className="author-bar-chart__chart"
         ref={svgRef}
       />
       <div

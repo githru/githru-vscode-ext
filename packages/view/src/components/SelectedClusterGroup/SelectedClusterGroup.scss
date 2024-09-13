@@ -1,22 +1,33 @@
 @import "styles/app";
 
-.selected__cluster {
-  & .MuiMenu-paper {
-    max-height: 250px;
-    overflow-y: auto;
-  }
+.selected-clusters {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
 
-  & .MuiMenu-list {
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
+  & &__label {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
   }
+  
+  &__dropdown {
+    .MuiMenu-paper {
+      max-height: 250px;
+      overflow-y: auto;
+    }
 
-  & .MuiChip-root {
-    width: 200px;
-    text-overflow: ellipsis;
-    justify-content: space-between;
-    margin: 5px;
-    background-color: $color-light-gray;
+    .MuiMenu-list {
+      display: flex;
+      flex-direction: column;
+      padding: 5px;
+    }
+
+    .selected-clusters__item {
+      width: 200px;
+      text-overflow: ellipsis;
+      justify-content: space-between;
+      margin: 5px;
+      background-color: $color-light-gray;
+    }
   }
 }

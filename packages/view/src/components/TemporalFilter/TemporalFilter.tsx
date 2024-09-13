@@ -149,7 +149,7 @@ const TemporalFilter = () => {
         cssOverride={loaderStyle}
       />
       <div
-        className="line-charts"
+        className="temporal-filter__container"
         ref={wrapperRef}
       >
         {filteredRange && (
@@ -158,13 +158,13 @@ const TemporalFilter = () => {
             variant="contained"
             onClick={resetBrushHandler}
             size="small"
-            className="reset-button"
+            className="temporal-filter__reset-button"
           >
-            <span>Reset</span>
+            <span className="temporal-filter__button-text">Reset</span>
           </Button>
         )}
         <svg
-          className="line-charts-svg"
+          className="temporal-filter__chart"
           ref={ref}
         />
       </div>
