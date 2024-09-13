@@ -40,6 +40,7 @@ describe("getCommitRaws", () => {
 
   const mockCommitMessage = `${GIT_LOG_SEPARATOR}commit message`;
 
+  const mockCommitHashAndRef = `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`;
   const mockCommitHashAndRefs = [
     `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`,
     `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`,
@@ -58,6 +59,7 @@ describe("getCommitRaws", () => {
 
   const expectedTags = [[], [], ["v1.0.0"], ["v2.0.0"], ["v2.0.0", "v1.4"]];
 
+  const mockCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
   const mockCommitFileChanges = [
     "10\t0\ta.ts\n1\t0\tREADME.md",
     "3\t3\ta.ts",
@@ -65,7 +67,15 @@ describe("getCommitRaws", () => {
     "0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts",
   ];
 
-  const expectedFileChanged: DifferenceStatistic[] = [
+  const expectedFileChange: DifferenceStatistic = {
+    totalInsertionCount: 11,
+    totalDeletionCount: 0,
+    fileDictionary: {
+      "a.ts": { insertionCount: 10, deletionCount: 0 },
+      "README.md": { insertionCount: 1, deletionCount: 0 },
+    },
+  };
+  const expectedFileChanges: DifferenceStatistic[] = [
     {
       totalInsertionCount: 11,
       totalDeletionCount: 0,
@@ -130,11 +140,22 @@ describe("getCommitRaws", () => {
 
   mockCommitFileChanges.forEach((mockFileChange, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mockLog = `${COMMIT_SEPARATOR}${mockCommitHashAndRefs[0]}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockFileChange}`;
+      const mockLog = `${COMMIT_SEPARATOR}${mockCommitHashAndRef}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockFileChange}`;
       const result = getCommitRaws(mockLog);
-      const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
+      const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanges[index] };
 
       expect(result).toEqual([expectedResult]);
     });
+  });
+
+  it(`should parse gitlog to commitRaw(multiple commits)`, () => {
+    const mockLog = `${COMMIT_SEPARATOR}${mockCommitHashAndRef}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockCommitFileChange}${COMMIT_SEPARATOR}${mockCommitHashAndRefs[0]}${mockAuthorAndCommitter}${mockCommitMessage}`;
+    const result = getCommitRaws(mockLog);
+    const expectedResult = [
+      { ...commonExpectatedResult, differenceStatistic: expectedFileChange },
+      { ...commonExpectatedResult, sequence: 1},
+    ];
+
+    expect(result).toEqual(expectedResult);
   });
 });
