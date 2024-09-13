@@ -3,24 +3,13 @@
 .vertical-cluster-list {
   display: flex;
   flex-direction: column;
-}
 
-.selected__container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 20px;
-  padding: 0 10px 20px;
-  width: 100%;
-
-  & .selected__content {
+  &__header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    column-gap: 10px;
-
-    p {
-      font-size: $font-size-title;
-      font-weight: $font-weight-semibold;
-    }
+    column-gap: 20px;
+    padding: 0 10px 20px;
+    width: 100%;
   }
 }

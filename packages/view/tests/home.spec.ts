@@ -24,7 +24,7 @@ test.describe("home", () => {
     // waiting for changing
     await page.waitForTimeout(10000);
 
-    const detailContainer = await page.waitForSelector(".detail__container");
+    const detailContainer = await page.waitForSelector(".detail");
     expect(detailContainer).toBeTruthy();
   });
 });

@@ -26,7 +26,7 @@ const RefreshButton = () => {
       sx={{ color: "white" }}
     >
       <ReplayCircleFilledRoundedIcon
-        className={cn("refresh-button-icon", { "refresh-button-icon--loading": loading })}
+        className={cn("refresh-button__icon", { "refresh-button__icon--loading": loading })}
       />
     </IconButton>
   );

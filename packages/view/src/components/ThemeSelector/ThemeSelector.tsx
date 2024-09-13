@@ -77,21 +77,21 @@ const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
       onClick={onClick}
       role="presentation"
     >
-      <div className="icon__container">
+      <div className="theme-icon__container">
         <div
-          className="icon"
+          className="theme-icon__color"
           style={{ backgroundColor: colors.primary }}
         />
         <div
-          className="icon"
+          className="theme-icon__color"
           style={{ backgroundColor: colors.secondary }}
         />
         <div
-          className="icon"
+          className="theme-icon__color"
           style={{ backgroundColor: colors.tertiary }}
         />
       </div>
-      <p>{title}</p>
+      <p className="theme-icon__title">{title}</p>
     </div>
   );
 };
@@ -111,15 +111,15 @@ const ThemeSelector = () => {
     <div className="theme-selector">
       <AutoAwesomeIcon onClick={() => setOpen(true)} />
       {open && (
-        <div className="selector__container">
-          <div>
+        <div className="theme-selector__container">
+          <div className="theme-selector__header">
             <p>Theme</p>
             <CloseIcon
               fontSize="small"
               onClick={() => setOpen(false)}
             />
           </div>
-          <div>
+          <div className="theme-selector__list">
             {themes.map((theme) => (
               <ThemeIcons
                 key={theme.value}

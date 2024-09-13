@@ -14,9 +14,9 @@ const FilteredAuthors = () => {
   const addedAuthors = new Set();
 
   return (
-    <div className="selected__content">
-      <p>Authors:</p>
-      <div className="selected__author">
+    <div className="filtered-authors">
+      <p className="filtered-authors__label">Authors:</p>
+      <div className="filtered-authors__author">
         {authSrcMap &&
           selectedClusters.map((selectedCluster) => {
             return selectedCluster.summary.authorNames.map((authorArray: string[]) => {

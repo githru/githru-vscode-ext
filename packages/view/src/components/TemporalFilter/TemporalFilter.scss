@@ -5,47 +5,37 @@
   flex-direction: column;
   padding: 1rem;
 
-  .line-charts {
+  &__container {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 1rem;
     position: relative;
 
-    .reset-button {
+    .temporal-filter__reset-button {
       width: 3rem;
       text-transform: none;
       background-color: var(--color-tertiary);
       position: absolute;
       top: 0;
-    }
 
-    span {
-      filter: invert(100) grayscale(100) contrast(100);
-      font-weight: $font-weight-semibold;
+      &:hover {
+        background-color: var(--color-secondary);
+      }
+
+      & .temporal-filter__button-text {
+        color: $color-black;
+        font-weight: $font-weight-semibold;
+      }
     }
   }
 
-  .line-charts-svg {
+  &__chart {
     height: 100%;
     width: 100%;
     > g > text {
       fill: var(--color-tertiary);
     }
-  }
-
-  .line-chart-wrap {
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 20px;
-    margin: auto 0;
-  }
-
-  .line-chart {
-    overflow: visible;
-    fill: var(--color-primary);
   }
 }
 
@@ -64,10 +54,4 @@
     font-weight: $font-weight-light;
     font-size: $font-size-caption;
   }
-}
-
-.temporal-filter__label {
-  font-size: $font-size-title;
-  font-weight: $font-weight-semibold;
-  fill: $color-white;
 }

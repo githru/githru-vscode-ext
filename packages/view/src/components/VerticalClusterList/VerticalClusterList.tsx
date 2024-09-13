@@ -12,7 +12,7 @@ const VerticalClusterList = () => {
   return (
     <div className="vertical-cluster-list">
       {selectedData.length > 0 && (
-        <div className="selected__container">
+        <div className="vertical-cluster-list__header">
           <FilteredAuthors />
           <SelectedClusterGroup />
         </div>

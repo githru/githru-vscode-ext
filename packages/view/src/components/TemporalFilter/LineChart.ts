@@ -41,7 +41,11 @@ const drawLineChart = (
   chartTitle: string
 ) => {
   const width = chartWidth - margin.left - margin.right;
-  const svg = d3.select(refTarget).append("g").attr("transform", `translate(${margin.left}, ${startHeight})`);
+  const svg = d3
+    .select(refTarget)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${startHeight})`)
+    .attr("class", "cloc-line-chart");
 
   // TODO cleanup으로 옮기기
   svg.selectAll("*").remove();
@@ -78,9 +82,9 @@ const drawLineChart = (
       .call(xAxis);
   }
 
-  svg.append("path").datum(lineChartData).attr("class", "cloc-line-chart").attr("d", area);
+  svg.append("path").datum(lineChartData).attr("class", "cloc-line-chart__chart").attr("d", area);
 
-  svg.append("text").text(chartTitle).attr("class", "temporal-filter__label").attr("x", 0).attr("y", 15);
+  svg.append("text").text(chartTitle).attr("class", "cloc-line-chart__label").attr("x", 0).attr("y", 15);
 
   return xScale;
 };
