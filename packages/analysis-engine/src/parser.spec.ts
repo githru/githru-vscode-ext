@@ -116,7 +116,8 @@ describe("getCommitRaws", () => {
 
   mockCommitHashAndRefs.forEach((mockHashAndRefs, index) => {
     it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const result = getCommitRaws(`${COMMIT_SEPARATOR}${mockHashAndRefs}${mockAuthorAndCommitter}${mockCommitMessage}`);
+      const mockLog = `${COMMIT_SEPARATOR}${mockHashAndRefs}${mockAuthorAndCommitter}${mockCommitMessage}`;
+      const result = getCommitRaws(mockLog);
       const expectedResult = {
         ...commonExpectatedResult,
         branches: expectedBranches[index],
@@ -129,8 +130,8 @@ describe("getCommitRaws", () => {
 
   mockCommitFileChanges.forEach((mockFileChange, index) => {
     it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mock = `${COMMIT_SEPARATOR}${mockCommitHashAndRefs[0]}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockFileChange}`;
-      const result = getCommitRaws(mock);
+      const mockLog = `${COMMIT_SEPARATOR}${mockCommitHashAndRefs[0]}${mockAuthorAndCommitter}${mockCommitMessage}\n${mockFileChange}`;
+      const result = getCommitRaws(mockLog);
       const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanged[index] };
 
       expect(result).toEqual([expectedResult]);
