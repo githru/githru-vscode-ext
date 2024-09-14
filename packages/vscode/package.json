@@ -81,8 +81,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "lint:fix": "eslint src --ext ts --fix",
-    "test:e2e": "node ./out/test/runTest.js",
-    "test:unit": "jest"
+    "test": "jest"
   },
   "dependencies": {
     "@githru-vscode-ext/analysis-engine": "^0.7.0",
