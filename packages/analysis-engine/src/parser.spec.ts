@@ -48,13 +48,13 @@ describe("getCommitRaws", () => {
     `${GIT_LOG_SEPARATOR}${GIT_LOG_SEPARATOR}`,
   ];
   const expectedCommitMessages = [
-  'commit message title',
-  'commit message title\ncommit message',
-  'commit message title\n\ncommit message body',
-  'commit message title\n\n\ncommit message body',
-  '',
+    "commit message title",
+    "commit message title\ncommit message",
+    "commit message title\n\ncommit message body",
+    "commit message title\n\n\ncommit message body",
+    "",
   ];
-  const expectedCommitMessageBody = "commit message title\n\ncommit message body"
+  const expectedCommitMessageBody = "commit message title\n\ncommit message body";
 
   const mockCommitHashAndRef = `a${GIT_LOG_SEPARATOR}b${GIT_LOG_SEPARATOR}HEAD`;
   const mockCommitHashAndRefs = [
@@ -169,7 +169,7 @@ describe("getCommitRaws", () => {
     const result = getCommitRaws(mockLog);
     const expectedResult = [
       { ...commonExpectatedResult, differenceStatistic: expectedFileChange },
-      { ...commonExpectatedResult, sequence: 1},
+      { ...commonExpectatedResult, sequence: 1 },
     ];
 
     expect(result).toEqual(expectedResult);
@@ -185,10 +185,14 @@ describe("getCommitRaws", () => {
     });
   });
 
-  it (`should parse gitlog to commitRaw(commit message body and file change)`, () => {
+  it(`should parse gitlog to commitRaw(commit message body and file change)`, () => {
     const mockLog = `${COMMIT_SEPARATOR}${mockCommitHashAndRef}${mockAuthorAndCommitter}${mockCommitMessageAndBody}\n${mockCommitFileChange}`;
     const result = getCommitRaws(mockLog);
-    const expectedResult = { ...commonExpectatedResult, message: expectedCommitMessageBody, differenceStatistic: expectedFileChange };
+    const expectedResult = {
+      ...commonExpectatedResult,
+      message: expectedCommitMessageBody,
+      differenceStatistic: expectedFileChange,
+    };
 
     expect(result).toEqual([expectedResult]);
   });
