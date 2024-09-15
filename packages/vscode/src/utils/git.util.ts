@@ -168,9 +168,8 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
         "%ce",
         "%cd", // committer name, committer email and committer date
         "%B", // commit message  (subject and body)
-      ].join(GIT_LOG_SEPARATOR)
-      + GIT_LOG_SEPARATOR
-      ;
+      ].join(GIT_LOG_SEPARATOR) +
+      GIT_LOG_SEPARATOR;
     const args = [
       "--no-pager",
       "log",
