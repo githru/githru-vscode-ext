@@ -11,10 +11,8 @@ export default function getCommitRaws(log: string) {
   const commitRaws: CommitRaw[] = [];
   // skip the first empty element
   for (let commitIdx = 1; commitIdx < commits.length; commitIdx += 1) {
-    const commitLines = commits[commitIdx].split(EOL_REGEX);
-
     // step 1: Extract commitData from the first line of the commit
-    const commitData = commitLines[0].split(GIT_LOG_SEPARATOR);
+    const commitData = commits[commitIdx].split(GIT_LOG_SEPARATOR);
     // Extract branch and tag data from commitData[2]
     const refs = commitData[2].replace(" -> ", ", ").split(", ");
     const [branches, tags]: string[][] = refs.reduce(
@@ -56,9 +54,14 @@ export default function getCommitRaws(log: string) {
     };
 
     // step 2: Extract diffStats from the rest of the commit
-    for (let diffIdx = 1; diffIdx < commitLines.length; diffIdx += 1) {
-      if (commitLines[diffIdx] === "") continue;
-      const [insertions, deletions, path] = commitLines[diffIdx].split("\t");
+    if (!commitData[10]) {
+      commitRaws.push(commitRaw);
+      continue;
+    }
+    const diffStats = commitData[10].split(EOL_REGEX);
+    for (let diffIdx = 1; diffIdx < diffStats.length; diffIdx += 1) {
+      if (diffStats[diffIdx] === "") continue;
+      const [insertions, deletions, path] = diffStats[diffIdx].split("\t");
       const numberedInsertions = insertions === "-" ? 0 : Number(insertions);
       const numberedDeletions = deletions === "-" ? 0 : Number(deletions);
       commitRaw.differenceStatistic.totalInsertionCount += numberedInsertions;
