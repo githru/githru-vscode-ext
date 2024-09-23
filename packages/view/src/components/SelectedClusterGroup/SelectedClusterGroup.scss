@@ -3,30 +3,30 @@
 .selected-clusters {
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 0.625rem;
 
   & &__label {
     font-size: $font-size-title;
     font-weight: $font-weight-semibold;
   }
-  
+
   &__dropdown {
     .MuiMenu-paper {
-      max-height: 250px;
+      max-height: 15.625rem;
       overflow-y: auto;
     }
 
     .MuiMenu-list {
       display: flex;
       flex-direction: column;
-      padding: 5px;
+      padding: 0.3125rem;
     }
 
     .selected-clusters__item {
-      width: 200px;
+      width: 12.5rem;
       text-overflow: ellipsis;
       justify-content: space-between;
-      margin: 5px;
+      margin: 0.3125rem;
       background-color: $color-light-gray;
     }
   }
