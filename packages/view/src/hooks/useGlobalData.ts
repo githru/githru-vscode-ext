@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { createContext, useContext } from "react";
 
-import type { ClusterNode, IDESentEvents } from "types";
+import type { ClusterNode } from "types";
 
 type GlobalDataState = {
   data: ClusterNode[];
@@ -9,15 +9,12 @@ type GlobalDataState = {
   selectedData: ClusterNode[];
   setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
   setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
-  branchList: string[];
-  setBranchList: Dispatch<SetStateAction<string[]>>;
-  selectedBranch: string;
-  setSelectedBranch: Dispatch<SetStateAction<string>>;
   owner: string;
   setOwner: Dispatch<SetStateAction<string>>;
   repo: string;
   setRepo: Dispatch<SetStateAction<string>>;
-} & IDESentEvents;
+  handleChangeAnalyzedData: (analyzedData: ClusterNode[]) => void;
+}; // handleChangeBranchList를 임시로 제외 -> 추후 GlobalDataContext를 삭제할 예정
 
 export const GlobalDataContext = createContext<GlobalDataState | undefined>(undefined);
 

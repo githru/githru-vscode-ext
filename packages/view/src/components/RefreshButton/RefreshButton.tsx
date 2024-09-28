@@ -4,13 +4,12 @@ import ReplayCircleFilledRoundedIcon from "@mui/icons-material/ReplayCircleFille
 import { IconButton } from "@mui/material";
 
 import { throttle } from "utils";
-import { useGlobalData } from "hooks";
 import "./RefreshButton.scss";
 import { sendRefreshDataCommand } from "services";
-import { useLoadingStore } from "store";
+import { useBranchStore, useLoadingStore } from "store";
 
 const RefreshButton = () => {
-  const { selectedBranch } = useGlobalData();
+  const { selectedBranch } = useBranchStore();
   const { loading, setLoading } = useLoadingStore((state) => state);
 
   const refreshHandler = throttle(() => {
