@@ -10,7 +10,7 @@ import { useBranchStore, useLoadingStore } from "store";
 
 const RefreshButton = () => {
   const { selectedBranch } = useBranchStore();
-  const { loading, setLoading } = useLoadingStore((state) => state);
+  const { loading, setLoading } = useLoadingStore();
 
   const refreshHandler = throttle(() => {
     setLoading(true);

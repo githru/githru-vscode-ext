@@ -18,7 +18,7 @@ const App = () => {
 
   const { filteredData, handleChangeAnalyzedData } = useGlobalData();
   const { handleChangeBranchList } = useBranchStore();
-  const { loading, setLoading } = useLoadingStore((state) => state);
+  const { loading, setLoading } = useLoadingStore();
 
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 

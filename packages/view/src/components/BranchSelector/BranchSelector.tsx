@@ -11,7 +11,7 @@ import { SLICE_LENGTH } from "./BranchSelector.const";
 
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch } = useBranchStore();
-  const { setLoading } = useLoadingStore((state) => state);
+  const { setLoading } = useLoadingStore();
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setSelectedBranch(event.target.value);

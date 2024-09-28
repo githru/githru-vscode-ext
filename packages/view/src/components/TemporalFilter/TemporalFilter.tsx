@@ -19,7 +19,7 @@ import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.con
 
 const TemporalFilter = () => {
   const { data, filteredData, setFilteredData, setSelectedData } = useGlobalData();
-  const { loading } = useLoadingStore((state) => state);
+  const { loading } = useLoadingStore();
   const { filteredRange, setFilteredRange } = useFilteredRangeStore();
   const brushGroupRef = useRef<SVGGElement | null>(null);
   const brushRef = useRef<d3.BrushBehavior<unknown>>();

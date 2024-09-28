@@ -9,7 +9,7 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
   const [data, setData] = useState<ClusterNode[]>([]);
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
-  const { setLoading } = useLoadingStore((state) => state);
+  const { setLoading } = useLoadingStore();
   const [owner, setOwner] = useState<string>("");
   const [repo, setRepo] = useState<string>("");
 
