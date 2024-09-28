@@ -3,21 +3,12 @@ import { createContext, useContext } from "react";
 
 import type { ClusterNode, IDESentEvents } from "types";
 
-export type DateFilterRange =
-  | {
-      fromDate: string;
-      toDate: string;
-    }
-  | undefined;
-
 type GlobalDataState = {
   data: ClusterNode[];
-  filteredRange: DateFilterRange;
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
   setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
   setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
-  setFilteredRange: Dispatch<SetStateAction<DateFilterRange>>;
   branchList: string[];
   setBranchList: Dispatch<SetStateAction<string[]>>;
   selectedBranch: string;
