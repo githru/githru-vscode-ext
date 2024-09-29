@@ -57,12 +57,6 @@ describe("getCommitRaws", () => {
   const expectedCommitMessageBody = "commit message title\n\ncommit message body";
 
   const fakeCommitHash = `a${GIT_LOG_SEPARATOR}b`;
-  const fakeCommitHashs = [`a${GIT_LOG_SEPARATOR}`, `c${GIT_LOG_SEPARATOR}b`, `d${GIT_LOG_SEPARATOR}e f`];
-  const expectedCommitHashs = [
-    { id: "a", parents: [""] },
-    { id: "c", parents: ["b"] },
-    { id: "d", parents: ["e", "f"] },
-  ];
 
   const fakeCommitRef = `${GIT_LOG_SEPARATOR}HEAD`;
   const fakeCommitRefs = [
@@ -148,18 +142,34 @@ describe("getCommitRaws", () => {
     commitMessageType: "",
   };
 
-  fakeCommitHashs.forEach((fakeHash, index) => {
-    it(`should parse gitlog to commitRaw(hash)`, () => {
-      const mockLog = `${COMMIT_SEPARATOR}${fakeHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`;
-      const result = getCommitRaws(mockLog);
-      const expectedResult = {
+  it.each([
+    [
+      `${COMMIT_SEPARATOR}${`a${GIT_LOG_SEPARATOR}`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
         ...commonExpectatedResult,
-        id: expectedCommitHashs[index].id,
-        parents: expectedCommitHashs[index].parents,
-      };
-
-      expect(result).toEqual([expectedResult]);
-    });
+        id: "a",
+        parents: [""],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${`c${GIT_LOG_SEPARATOR}b`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        id: "c",
+        parents: ["b"],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${`d${GIT_LOG_SEPARATOR}e f`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        id: "d",
+        parents: ["e", "f"],
+      },
+    ],
+  ])("should parse gitlog to commitRaw(hash)", (mockLog, expectedResult) => {
+    const result = getCommitRaws(mockLog);
+    expect(result).toEqual([expectedResult]);
   });
 
   fakeCommitRefs.forEach((fakeRefs, index) => {
