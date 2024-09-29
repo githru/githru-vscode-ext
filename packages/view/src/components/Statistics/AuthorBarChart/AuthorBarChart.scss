@@ -1,22 +1,22 @@
 @import "styles/app";
 
-.author-bar-chart__container {
+.author-bar-chart {
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
 
-.author-bar-chart__title {
-  font-size: $font-size-title;
-  font-weight: $font-weight-semibold;
-}
+  &__title {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+  }
 
-.author-bar-chart__header {
-  width: 100%;
-  text-align: right;
+  &__header {
+    width: 100%;
+    text-align: right;
+  }
 
-  .select-box {
+  & &__select-box {
     border: 1px solid $color-white;
     color: $color-white;
     height: 25px;
@@ -31,32 +31,30 @@
       border: none;
     }
   }
-}
 
-.author-bar-chart {
-  overflow: visible;
-  margin: 20px 40px 40px;
+  &__chart {
+    overflow: visible;
+    margin: 20px 40px 40px;
+  }
 
-  .axis {
+  &__axis {
     color: $color-white;
 
     &.x-axis {
       .tick {
         display: none;
       }
-    }
-
-    &.x-axis {
-      .x-axis-label {
+      
+      .x-axis__label {
         fill: $color-white;
       }
     }
   }
 
-  .bars {
+  &__container {
     cursor: pointer;
 
-    .bar {
+    .author-bar-chart__bar {
       &:hover {
         rect {
           fill: var(--color-tertiary);
@@ -67,7 +65,7 @@
         fill: var(--color-secondary);
       }
 
-      .name {
+      .author-bar-chart__name {
         fill: $color-white;
         stroke: none;
         font-size: $font-size-caption;
@@ -76,24 +74,26 @@
       }
     }
   }
-}
 
-.author-bar-chart__tooltip {
-  display: none;
-  position: absolute;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-size: $font-size-caption;
-  text-align: center;
-  line-height: 1.5;
-  background-color: rgba($color-dark-gray, 0.9);
-  color: $color-white;
+  &__tooltip {
+    display: none;
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: $font-size-caption;
+    text-align: center;
+    line-height: 1.5;
+    background-color: rgba($color-dark-gray, 0.9);
+    color: $color-white;
+    pointer-events: none;
 
-  .selected {
-    font-weight: $font-weight-semibold;
-    color: var(--color-primary);
-  }
-  .name {
-    font-weight: $font-weight-semibold;
+    .author-bar-chart__name {
+      font-weight: $font-weight-semibold;
+    }
+
+    .author-bar-chart__count {
+      font-weight: $font-weight-semibold;
+      color: var(--color-primary);
+    }
   }
 }

@@ -1,44 +1,48 @@
 @import "styles/app";
 
-.cluster-graph__container {
-  cursor: pointer;
-  min-width: 84px;
+.cluster-graph {
+  display: block;
 
-  &:hover {
-    .cluster-graph-container__box {
-      stroke-width: 3;
+  &__container {
+    cursor: pointer;
+    min-width: 84px;
+
+    &:hover {
+      .cluster-graph__cluster-box {
+        stroke-width: 3;
+      }
     }
   }
 
-  .cluster-graph-container__box {
+  &__cluster-box {
     rx: 5;
     stroke-width: 1;
     stroke: var(--color-primary);
     fill: transparent;
   }
 
-  .cluster-graph-container__commit-amount-cluster {
+  &__commit-amount {
     rx: 5;
     fill: var(--color-primary);
   }
-}
 
-.cluster-graph__connector-line {
-  stroke: var(--color-primary);
-  stroke-width: 1;
-}
+  &__connector-line {
+    stroke: var(--color-primary);
+    stroke-width: 1;
+  }
 
-.circle-group {
-  fill: var(--color-primary);
-}
-
-.sub-graph-tooltip {
-  position: absolute;
-  z-index: 10;
-  background: $color-white;
-  padding: 8px 16px;
-  font-size: $font-size-caption;
-  line-height: 1.5;
-  border-radius: 5px;
-  color: $color-dark-gray;
+  &__circle {
+    fill: var(--color-primary);
+  }
+  
+  &__tooltip {
+    position: absolute;
+    z-index: 10;
+    background: $color-white;
+    padding: 8px 16px;
+    font-size: $font-size-caption;
+    line-height: 1.5;
+    border-radius: 5px;
+    color: $color-dark-gray;
+  }
 }

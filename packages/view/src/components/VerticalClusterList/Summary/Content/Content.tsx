@@ -24,6 +24,7 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
           <a
             href={linkIssues}
             key={`issues-${matchedStr}`}
+            className="summary__commit-link"
           >
             {matchedStr}
           </a>
@@ -40,18 +41,12 @@ const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
 
   return (
     <>
-      <div className="cluster-summary__contents">
-        <div className="commit-message__wrapper">
-          <div className="commit-message">{linkedStr}</div>
-        </div>
-        {content.count > 0 && <span className="more-commit-count">+ {content.count} more</span>}
+      <div className="summary__content">
+        <div className="summary__commit-message">{linkedStr}</div>
+        {content.count > 0 && <span className="summary__more-commit">+ {content.count} more</span>}
       </div>
-      <div className="collapsible-icon">
-        {selectedClusterId.includes(clusterId) ? (
-          <ArrowDropDownCircleRoundedIcon className="show" />
-        ) : (
-          <ArrowDropDownCircleRoundedIcon />
-        )}
+      <div className={`summary__toggle${selectedClusterId.includes(clusterId) ? "--visible" : ""}`}>
+        <ArrowDropDownCircleRoundedIcon />
       </div>
     </>
   );

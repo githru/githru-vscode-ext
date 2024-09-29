@@ -9,7 +9,7 @@ import { GRAPH_WIDTH } from "../ClusterGraph.const";
 const tooltip = d3
   .select("body")
   .append("div")
-  .attr("class", "sub-graph-tooltip")
+  .attr("class", "cluster-graph__tooltip")
   .style("visibility", "hidden")
   .text("Tooltip");
 
@@ -48,10 +48,10 @@ export const drawSubGraph = (
   const circleRadius = 5;
 
   d3.select(svgRef.current)
-    .selectAll(".circle-group")
+    .selectAll(".cluster-graph__circle")
     .data(allCirclePositions)
     .join("circle")
-    .attr("class", "circle-group")
+    .attr("class", "cluster-graph__circle")
     .attr("cx", GRAPH_WIDTH / 2 + 2)
     .attr("cy", (d) => d.y)
     .attr("r", circleRadius)

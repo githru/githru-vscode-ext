@@ -1,4 +1,4 @@
 {
-  "branchList": ["main", "develop", "release", "origin/HEAD"],
+  "branchList": ["main", "develop", "release", "origin/HEAD", "feature/SelectedClusterGroup"],
   "head": "main"
 }

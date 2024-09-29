@@ -7,7 +7,7 @@ export const drawClusterBox = (
 ) => {
   container
     .append("rect")
-    .attr("class", "cluster-graph-container__box")
+    .attr("class", "cluster-graph__cluster-box")
     .attr("width", graphWidth)
     .attr("height", clusterHeight);
 };
