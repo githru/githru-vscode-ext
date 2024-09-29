@@ -59,23 +59,6 @@ describe("getCommitRaws", () => {
   const fakeCommitHash = `a${GIT_LOG_SEPARATOR}b`;
 
   const fakeCommitRef = `${GIT_LOG_SEPARATOR}HEAD`;
-  const fakeCommitRefs = [
-    `${GIT_LOG_SEPARATOR}HEAD`,
-    `${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`,
-    `${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`,
-    `${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0`,
-    `${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4`,
-  ];
-
-  const expectedBranches = [
-    ["HEAD"],
-    ["HEAD", "main", "origin/main", "origin/HEAD"],
-    ["HEAD"],
-    ["HEAD", "main", "origin/main", "origin/HEAD"],
-    ["HEAD"],
-  ];
-
-  const expectedTags = [[], [], ["v1.0.0"], ["v2.0.0"], ["v2.0.0", "v1.4"]];
 
   const fakeCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
   const fakeCommitFileChanges = [
@@ -172,18 +155,50 @@ describe("getCommitRaws", () => {
     expect(result).toEqual([expectedResult]);
   });
 
-  fakeCommitRefs.forEach((fakeRefs, index) => {
-    it(`should parse gitlog to commitRaw(branch, tag)`, () => {
-      const mockLog = `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeRefs}${fakeAuthorAndCommitter}${fakeCommitMessage}`;
-      const result = getCommitRaws(mockLog);
-      const expectedResult = {
+  it.each([
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
         ...commonExpectatedResult,
-        branches: expectedBranches[index],
-        tags: expectedTags[index],
-      };
-
-      expect(result).toEqual([expectedResult]);
-    });
+        branches: ["HEAD"],
+        tags: [],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
+        tags: [],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        branches: ["HEAD"],
+        tags: ["v1.0.0"],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
+        tags: ["v2.0.0"],
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        branches: ["HEAD"],
+        tags: ["v2.0.0", "v1.4"],
+      },
+    ],
+  ])("should parse gitlog to commitRaw(branch, tag)", (mockLog, expectedResult) => {
+    const result = getCommitRaws(mockLog);
+    expect(result).toEqual([expectedResult]);
   });
 
   fakeCommitFileChanges.forEach((fakeFileChange, index) => {
