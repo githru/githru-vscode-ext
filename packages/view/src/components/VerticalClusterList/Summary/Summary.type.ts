@@ -19,6 +19,7 @@ export type Summary = {
 export type Cluster = {
   clusterId: number;
   summary: Summary;
+  latestReleaseTag: string;
 };
 
 export type AuthSrcMap = Record<string, string>;
