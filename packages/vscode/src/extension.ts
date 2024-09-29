@@ -87,7 +87,8 @@ export async function activate(context: vscode.ExtensionContext) {
         const { owner, repo: initialRepo } = getRepo(gitConfig);
         webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
         const repo = initialRepo[0];
-        const engine = new AnalysisEngine({
+        const engine = AnalysisEngine.getInstance();
+        engine.initialize({
           isDebugMode: true,
           gitLog,
           owner,

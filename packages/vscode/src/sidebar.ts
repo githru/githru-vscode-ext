@@ -1,3 +1,4 @@
+import AnalysisEngine from "@githru-vscode-ext/analysis-engine";
 import type * as vscode from "vscode";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -17,7 +18,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   }
 
   private async callApi(apiNumber: number): Promise<string> {
-    // 여기에 실제 API 호출 로직을 구현합니다.
+    const engine = AnalysisEngine.getInstance();
+    try {
+      const summary = await engine.geminiCommitSummary();
+      console.log("Commit summary:", summary);
+    } catch (error) {
+      console.error("Error getting commit summary:", error);
+    }
     return `API ${apiNumber} 호출 결과`;
   }
 

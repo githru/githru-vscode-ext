@@ -8,6 +8,7 @@ import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
+import type { CommitNode } from "./types";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
@@ -19,19 +20,24 @@ type AnalysisEngineArgs = {
 };
 
 export class AnalysisEngine {
+  private static instance: AnalysisEngine | null = null;
   private gitLog!: string;
-
   private isDebugMode?: boolean;
-
   private octokit!: PluginOctokit;
-
   private baseBranchName!: string;
+  private nodes?: CommitNode[];
+  private isInitialized: boolean = false;
 
-  constructor(args: AnalysisEngineArgs) {
-    this.insertArgs(args);
+  private constructor() {}
+
+  public static getInstance(): AnalysisEngine {
+    if (!AnalysisEngine.instance) {
+      AnalysisEngine.instance = new AnalysisEngine();
+    }
+    return AnalysisEngine.instance;
   }
 
-  private insertArgs = (args: AnalysisEngineArgs) => {
+  public initialize(args: AnalysisEngineArgs): void {
     const { isDebugMode, gitLog, owner, repo, auth, baseBranchName } = args;
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
@@ -46,9 +52,22 @@ export class AnalysisEngine {
       },
     });
     this.octokit = container.resolve(PluginOctokit);
-  };
+    this.isInitialized = true;
+  }
 
-  public analyzeGit = async () => {
+  private checkInitialization() {
+    if (!this.isInitialized) {
+      throw new Error("AnalysisEngine is not initialized. Call initialize() first.");
+    }
+  }
+
+  public async analyzeGit() {
+    this.checkInitialization();
+
+    if (!this.gitLog) {
+      throw new Error("AnalysisEngine is not initialized. Call initialize() first.");
+    }
+
     let isPRSuccess = true;
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
 
@@ -75,20 +94,26 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
-    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({commit}) => commit);
-    const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
-    if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
+    this.nodes = stemDict.get(this.baseBranchName)?.nodes;
 
     return {
       isPRSuccess,
       csmDict,
     };
-  };
+  }
 
-  public updateArgs = (args: AnalysisEngineArgs) => {
+  public updateArgs(args: AnalysisEngineArgs) {
     if (container.isRegistered("OctokitOptions")) container.clearInstances();
-    this.insertArgs(args);
-  };
+    this.initialize(args);
+  }
+
+  public async geminiCommitSummary() {
+    this.checkInitialization();
+    if (!this.nodes) {
+      throw new Error("No commits available. Run analyzeGit() first.");
+    }
+    return await getSummary(this.nodes.slice(-10).map(({ commit }) => commit));
+  }
 }
 
 export default AnalysisEngine;
