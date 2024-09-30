@@ -37,7 +37,6 @@ describe("commit message type", () => {
 
 describe("getCommitRaws", () => {
   const fakeAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
-
   const fakeCommitMessage = `${GIT_LOG_SEPARATOR}commit message${GIT_LOG_SEPARATOR}`;
   const fakeCommitMessageAndBody = `${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`;
   const fakeCommitMessages = [
@@ -61,12 +60,6 @@ describe("getCommitRaws", () => {
   const fakeCommitRef = `${GIT_LOG_SEPARATOR}HEAD`;
 
   const fakeCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
-  const fakeCommitFileChanges = [
-    "10\t0\ta.ts\n1\t0\tREADME.md",
-    "3\t3\ta.ts",
-    "4\t0\ta.ts",
-    "0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts",
-  ];
 
   const expectedFileChange: DifferenceStatistic = {
     totalInsertionCount: 11,
@@ -76,35 +69,6 @@ describe("getCommitRaws", () => {
       "README.md": { insertionCount: 1, deletionCount: 0 },
     },
   };
-  const expectedFileChanges: DifferenceStatistic[] = [
-    {
-      totalInsertionCount: 11,
-      totalDeletionCount: 0,
-      fileDictionary: {
-        "a.ts": { insertionCount: 10, deletionCount: 0 },
-        "README.md": { insertionCount: 1, deletionCount: 0 },
-      },
-    },
-    {
-      totalInsertionCount: 3,
-      totalDeletionCount: 3,
-      fileDictionary: { "a.ts": { insertionCount: 3, deletionCount: 3 } },
-    },
-    {
-      totalInsertionCount: 4,
-      totalDeletionCount: 0,
-      fileDictionary: { "a.ts": { insertionCount: 4, deletionCount: 0 } },
-    },
-    {
-      totalInsertionCount: 5,
-      totalDeletionCount: 9,
-      fileDictionary: {
-        "a.ts": { insertionCount: 0, deletionCount: 6 },
-        "b.ts": { insertionCount: 2, deletionCount: 0 },
-        "c.ts": { insertionCount: 3, deletionCount: 3 },
-      },
-    },
-  ];
 
   const commonExpectatedResult: CommitRaw = {
     sequence: 0,
@@ -201,14 +165,61 @@ describe("getCommitRaws", () => {
     expect(result).toEqual([expectedResult]);
   });
 
-  fakeCommitFileChanges.forEach((fakeFileChange, index) => {
-    it(`should parse gitlog to commitRaw(file changed)`, () => {
-      const mockLog = `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${fakeFileChange}`;
-      const result = getCommitRaws(mockLog);
-      const expectedResult = { ...commonExpectatedResult, differenceStatistic: expectedFileChanges[index] };
-
-      expect(result).toEqual([expectedResult]);
-    });
+  it.each([
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"10\t0\ta.ts\n1\t0\tREADME.md"}`,
+      {
+        ...commonExpectatedResult,
+        differenceStatistic: {
+          totalInsertionCount: 11,
+          totalDeletionCount: 0,
+          fileDictionary: {
+            "a.ts": { insertionCount: 10, deletionCount: 0 },
+            "README.md": { insertionCount: 1, deletionCount: 0 },
+          },
+        },
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"3\t3\ta.ts"}`,
+      {
+        ...commonExpectatedResult,
+        differenceStatistic: {
+          totalInsertionCount: 3,
+          totalDeletionCount: 3,
+          fileDictionary: { "a.ts": { insertionCount: 3, deletionCount: 3 } },
+        },
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"4\t0\ta.ts"}`,
+      {
+        ...commonExpectatedResult,
+        differenceStatistic: {
+          totalInsertionCount: 4,
+          totalDeletionCount: 0,
+          fileDictionary: { "a.ts": { insertionCount: 4, deletionCount: 0 } },
+        },
+      },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"}`,
+      {
+        ...commonExpectatedResult,
+        differenceStatistic: {
+          totalInsertionCount: 5,
+          totalDeletionCount: 9,
+          fileDictionary: {
+            "a.ts": { insertionCount: 0, deletionCount: 6 },
+            "b.ts": { insertionCount: 2, deletionCount: 0 },
+            "c.ts": { insertionCount: 3, deletionCount: 3 },
+          },
+        },
+      },
+    ],
+  ])("should parse gitlog to commitRaw(file changed)", (mockLog, expectedResult) => {
+    const result = getCommitRaws(mockLog);
+    expect(result).toEqual([expectedResult]);
   });
 
   it(`should parse gitlog to commitRaw(multiple commits)`, () => {
