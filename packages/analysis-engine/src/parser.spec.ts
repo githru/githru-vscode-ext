@@ -39,20 +39,6 @@ describe("getCommitRaws", () => {
   const fakeAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
   const fakeCommitMessage = `${GIT_LOG_SEPARATOR}commit message${GIT_LOG_SEPARATOR}`;
   const fakeCommitMessageAndBody = `${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`;
-  const fakeCommitMessages = [
-    `${GIT_LOG_SEPARATOR}commit message title${GIT_LOG_SEPARATOR}`,
-    `${GIT_LOG_SEPARATOR}commit message title\ncommit message${GIT_LOG_SEPARATOR}`,
-    `${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`,
-    `${GIT_LOG_SEPARATOR}commit message title\n\n\ncommit message body${GIT_LOG_SEPARATOR}`,
-    `${GIT_LOG_SEPARATOR}${GIT_LOG_SEPARATOR}`,
-  ];
-  const expectedCommitMessages = [
-    "commit message title",
-    "commit message title\ncommit message",
-    "commit message title\n\ncommit message body",
-    "commit message title\n\n\ncommit message body",
-    "",
-  ];
   const expectedCommitMessageBody = "commit message title\n\ncommit message body";
 
   const fakeCommitHash = `a${GIT_LOG_SEPARATOR}b`;
@@ -233,14 +219,30 @@ describe("getCommitRaws", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  fakeCommitMessages.forEach((fakeMessage, index) => {
-    it(`should parse gitlog to commitRaw(commit message)`, () => {
-      const mockLog = `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeMessage}`;
-      const result = getCommitRaws(mockLog);
-      const expectedResult = { ...commonExpectatedResult, message: expectedCommitMessages[index] };
-
-      expect(result).toEqual([expectedResult]);
-    });
+  it.each([
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title${GIT_LOG_SEPARATOR}`}`,
+      { ...commonExpectatedResult, message: "commit message title" },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\ncommit message${GIT_LOG_SEPARATOR}`}`,
+      { ...commonExpectatedResult, message: "commit message title\ncommit message" },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`}`,
+      { ...commonExpectatedResult, message: "commit message title\n\ncommit message body" },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\n\n\ncommit message body${GIT_LOG_SEPARATOR}`}`,
+      { ...commonExpectatedResult, message: "commit message title\n\n\ncommit message body" },
+    ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}${GIT_LOG_SEPARATOR}`}`,
+      { ...commonExpectatedResult, message: "" },
+    ],
+  ])("should parse gitlog to commitRaw(commit message)", (mockLog, expectedResult) => {
+    const result = getCommitRaws(mockLog);
+    expect(result).toEqual([expectedResult]);
   });
 
   it(`should parse gitlog to commitRaw(commit message body and file change)`, () => {
