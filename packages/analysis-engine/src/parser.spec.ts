@@ -39,22 +39,9 @@ describe("getCommitRaws", () => {
   const fakeAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
   const fakeCommitMessage = `${GIT_LOG_SEPARATOR}commit message${GIT_LOG_SEPARATOR}`;
   const fakeCommitMessageAndBody = `${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`;
-  const expectedCommitMessageBody = "commit message title\n\ncommit message body";
-
   const fakeCommitHash = `a${GIT_LOG_SEPARATOR}b`;
-
   const fakeCommitRef = `${GIT_LOG_SEPARATOR}HEAD`;
-
   const fakeCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
-
-  const expectedFileChange: DifferenceStatistic = {
-    totalInsertionCount: 11,
-    totalDeletionCount: 0,
-    fileDictionary: {
-      "a.ts": { insertionCount: 10, deletionCount: 0 },
-      "README.md": { insertionCount: 1, deletionCount: 0 },
-    },
-  };
 
   const commonExpectatedResult: CommitRaw = {
     sequence: 0,
@@ -73,6 +60,15 @@ describe("getCommitRaws", () => {
       fileDictionary: {},
     },
     commitMessageType: "",
+  };
+  const expectedCommitMessageBody = "commit message title\n\ncommit message body";
+  const expectedFileChange: DifferenceStatistic = {
+    totalInsertionCount: 11,
+    totalDeletionCount: 0,
+    fileDictionary: {
+      "a.ts": { insertionCount: 10, deletionCount: 0 },
+      "README.md": { insertionCount: 1, deletionCount: 0 },
+    },
   };
 
   it.each([
