@@ -217,9 +217,11 @@ export async function getLogCount(gitPath: string, currentWorkspacePath: string)
 
 export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
   const numCores = os.cpus().length;
-  const numberOfThreads = Math.max(1, numCores - 1)
+  
   const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
-  console.log("total logs", totalCnt);
+  let numberOfThreads = 1;
+  if(totalCnt > 1000) numberOfThreads = Math.max(numCores/2,1);
+  console.log("thread nums ",numberOfThreads);
   const chunkSize = Math.ceil(totalCnt/ numberOfThreads);
   const promises: Promise<string>[] = [];
 

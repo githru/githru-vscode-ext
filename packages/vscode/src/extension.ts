@@ -77,9 +77,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const initialBaseBranchName = await fetchCurrentBranch();
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        console.time('Multi log')
+        const startTime = Date.now();
         const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
-        console.timeEnd('Multi log')
+        const endTime = Date.now();
+        const elapsedTime = (endTime - startTime) / 1000;
+        console.log(`${elapsedTime.toFixed(3)}s`);
 
         
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
