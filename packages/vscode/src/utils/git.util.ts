@@ -188,7 +188,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
 }
 
 export async function getLogCount(gitPath: string, currentWorkspacePath: string): Promise<number> {
-    const decimal = 10;
+    const BASE_10 = 10;
     return new Promise((resolve, reject) => {
         const args = [
         "rev-list",
@@ -205,7 +205,7 @@ export async function getLogCount(gitPath: string, currentWorkspacePath: string)
         const { code, error } = status;
 
         if (code === 0 && !error) {
-            const commitCount = parseInt(stdout.toString().trim(), decimal); // Buffer를 문자열로 변환 후 숫자로 변환
+            const commitCount = parseInt(stdout.toString().trim(), BASE_10); // Buffer를 문자열로 변환 후 숫자로 변환
             resolve(commitCount); // 숫자를 반환
         } else {
             reject(stderr);
