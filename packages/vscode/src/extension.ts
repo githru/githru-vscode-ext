@@ -81,10 +81,6 @@ export async function activate(context: vscode.ExtensionContext) {
         const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
         console.timeEnd('Multi log')
 
-        // console.time('Single log')
-        // const testGitLog = await getGitLog(gitPath, currentWorkspacePath);
-        // console.timeEnd('Single log')
-
         
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
 
