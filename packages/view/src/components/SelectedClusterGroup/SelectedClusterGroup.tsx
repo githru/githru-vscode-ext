@@ -35,6 +35,7 @@ const SelectedClusterGroup = () => {
             <li key={selectedCluster.clusterId}>
               <Chip
                 className="selected-clusters__item"
+                title={selectedCluster.summary.content.message}
                 label={selectedCluster.summary.content.message}
                 onDelete={deselectCluster(selectedCluster.clusterId)}
               />
