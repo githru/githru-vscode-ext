@@ -7,7 +7,7 @@ import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
-import { getSummary } from "./summary";
+import { getCurrentUserCommitSummary, getLatestCommitSummary } from "./summary";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
@@ -75,9 +75,11 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
-    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({commit}) => commit);
-    const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
-    if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
+    const latestCommitSummary = await getLatestCommitSummary(stemDict, this.baseBranchName);
+    if (this.isDebugMode) console.log("latestCommitSummary: ", latestCommitSummary);
+
+    const currentUserCommitSummary = await getCurrentUserCommitSummary(stemDict, this.baseBranchName, this.octokit);
+    if (this.isDebugMode) console.log("currentUserCommitSummary: ", currentUserCommitSummary);
 
     return {
       isPRSuccess,
