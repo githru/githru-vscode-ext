@@ -87,10 +87,11 @@ export default class WebviewLoader implements vscode.Disposable {
         console.error("An error occurred while processing the webview message:", e);
       }
     });
-    if (!analyzedData) {
-      this.dispose();
-      throw new Error("Project not connected to Git.");
-    }
+    //FIXME - For repositories where git exists, analyzedData is initially assigned as undefined.
+    // if (!analyzedData) {
+    //   this.dispose();
+    //   throw new Error("Project not connected to Git.");
+    // }
     this._panel.webview.html = this.getWebviewContent(this._panel.webview);
   }
 
