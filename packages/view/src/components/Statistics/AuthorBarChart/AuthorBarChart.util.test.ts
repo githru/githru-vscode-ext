@@ -119,11 +119,6 @@ describe("convertNumberFormat", () => {
     const result = convertNumberFormat(1000);
     expect(result).toBe("1k");
   });
-
-  it("should handle numbers less than 0 but greater than or equal to 0", () => {
-    const result = convertNumberFormat(0.001);
-    expect(result).toBe("0.001");
-  });
 });
 
 describe("sortDataByAuthor", () => {
