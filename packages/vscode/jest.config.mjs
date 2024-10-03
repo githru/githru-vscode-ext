@@ -1,6 +1,4 @@
-import type { Config } from "@jest/types";
-
-const config: Config.InitialOptions = {
+const config = {
   preset: "ts-jest",
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/", "/out/"],
