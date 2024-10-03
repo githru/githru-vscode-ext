@@ -119,51 +119,6 @@ mockSpawn.mockImplementation(() => {
 describe("getGitLog util test with mock data", () => {
   it("should return the correct git log output", async () => {
     const result = await getGitLog("git", "/mocked/path/to/repo");
-
-    expect(result).toContain("commit 1234567890abcdef1234567890abcdef12345678");
-    expect(result).toContain("Author: Mock User <mock@example.com>");
-    expect(result).toContain("Commit: Mock Committer <committer@example.com>");
-    expect(result).toContain("Initial commit");
-    expect(result).toContain("README.md");
-    expect(result).toContain("script.sh");
-    expect(result).toContain("old_file.txt");
-
-    expect(result).toContain("commit abcdef1234567890abcdef1234567890abcdef12 (tag: v1.0.0)");
-    expect(result).toContain("Author: Release Manager <release@example.com>");
-    expect(result).toContain("Release version 1.0.0");
-    expect(result).toContain("src/main.js");
-    expect(result).toContain("src/utils.js");
-
-    expect(result).toContain("commit 0987654321fedcba0987654321fedcba09876543 (feature-branch)");
-    expect(result).toContain("Author: Feature Developer <feature@example.com>");
-    expect(result).toContain("Implement new feature");
-    expect(result).toContain("src/feature.js");
-    expect(result).toContain("src/new_file.js");
-    expect(result).toContain("docs/feature_docs.md");
-
-    expect(result).toContain("commit fedcba0987654321fedcba0987654321fedcba09 (origin/feature-branch)");
-    expect(result).toContain("Refactor feature implementation");
-    expect(result).toContain("src/feature.js");
-    expect(result).toContain("src/new_file.js");
-    expect(result).toContain("docs/feature_docs.md");
-
-    expect(result).toContain("commit 5678901234abcdef5678901234abcdef56789012 (hotfix-branch)");
-    expect(result).toContain("Author: Hotfix Developer <hotfix@example.com>");
-    expect(result).toContain("Apply hotfix for critical bug");
-    expect(result).toContain("src/critical_fix.js");
-    expect(result).toContain("src/main.js");
-
-    expect(result).toContain("commit 234567890abcdef234567890abcdef234567890 (HEAD -> main)");
-    expect(result).toContain("Merge feature-branch into main");
-    expect(result).toContain("src/feature.js");
-    expect(result).toContain("src/new_file.js");
-    expect(result).toContain("docs/feature_docs.md");
-
-    expect(result).toContain("commit abcdef0123456789abcdef0123456789abcdef01 (tag: v1.1.0)");
-    expect(result).toContain("Author: Release Manager <release@example.com>");
-    expect(result).toContain("Release version 1.1.0 with new feature");
-    expect(result).toContain("src/main.js");
-    expect(result).toContain("src/feature.js");
-    expect(result).toContain("docs/release_notes.md");
+    return expect(result).toEqual(mockGitLogData);
   });
 });
