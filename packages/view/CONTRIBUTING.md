@@ -190,7 +190,7 @@ VerticalClusterList
 
 ### Theme
 - Grayscale 외 색상은 각 테마에서 지정하여 사용합니다.
-- 테마는 githru(default), hacker blue, aqua, cotton candy, mono 총 5가지로 구성됩니다. ()
+- 테마는 githru(default), hacker blue, aqua, cotton candy, mono 총 5가지로 구성됩니다.
 - 각 테마는 다음 색상을 포함합니다:
   - primary, secondary, tertiary
   - 성공을 나타내는 success (푸른 계열)
