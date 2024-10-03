@@ -10,8 +10,6 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
   const [filteredData, setFilteredData] = useState<ClusterNode[]>(data);
   const [selectedData, setSelectedData] = useState<ClusterNode[]>([]);
   const { setLoading } = useLoadingStore();
-  const [owner, setOwner] = useState<string>("");
-  const [repo, setRepo] = useState<string>("");
 
   const handleChangeAnalyzedData = (analyzedData: ClusterNode[]) => {
     setData(analyzedData);
@@ -28,12 +26,8 @@ export const GlobalDataProvider = ({ children }: PropsWithChildren) => {
       selectedData,
       setSelectedData,
       handleChangeAnalyzedData,
-      owner,
-      setOwner,
-      repo,
-      setRepo,
     }),
-    [data, filteredData, selectedData, owner, repo]
+    [data, filteredData, selectedData]
   );
 
   return <GlobalDataContext.Provider value={value}>{children}</GlobalDataContext.Provider>;

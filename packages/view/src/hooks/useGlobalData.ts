@@ -9,10 +9,6 @@ type GlobalDataState = {
   selectedData: ClusterNode[];
   setFilteredData: Dispatch<SetStateAction<ClusterNode[]>>;
   setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
-  owner: string;
-  setOwner: Dispatch<SetStateAction<string>>;
-  repo: string;
-  setRepo: Dispatch<SetStateAction<string>>;
   handleChangeAnalyzedData: (analyzedData: ClusterNode[]) => void;
 }; // handleChangeBranchList를 임시로 제외 -> 추후 GlobalDataContext를 삭제할 예정
 

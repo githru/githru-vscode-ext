@@ -11,7 +11,7 @@ import { useGlobalData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useBranchStore, useLoadingStore } from "store";
+import { useBranchStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -19,7 +19,8 @@ const App = () => {
   const { filteredData, handleChangeAnalyzedData } = useGlobalData();
   const { handleChangeBranchList } = useBranchStore();
   const { loading, setLoading } = useLoadingStore();
-
+  const { setOwner } = useOwnerStore();
+  const { setRepo } = useRepoStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -37,7 +38,6 @@ const App = () => {
     }
   }, [handleChangeAnalyzedData, handleChangeBranchList, ideAdapter, setLoading]);
 
-  const { setOwner, setRepo } = useGlobalData();
   useEffect(() => {
     const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
       const message = event.data;
