@@ -19,8 +19,7 @@ body {
 }
 
 .middle-container {
-  display: grid;
-  grid-template-columns: 4fr 2fr;
+  display: flex;
   height: calc(100vh - 200px);
   padding: 20px;
 }
