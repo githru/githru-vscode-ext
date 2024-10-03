@@ -1,7 +1,7 @@
 import type { ClusterNode } from "types";
 import type { Commit } from "types/Commit";
 
-import { getDataByAuthor } from "./AuthorBarChart.util";
+import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import type { AuthorDataType } from "./AuthorBarChart.type";
 
 describe("getDataByAuthor", () => {
@@ -89,5 +89,22 @@ describe("getDataByAuthor", () => {
         deletion: 2,
       },
     ] as AuthorDataType[]);
+  });
+});
+
+describe("sortDataByName", () => {
+  it("should return 1 when nameA is lexicographically smaller than nameB", () => {
+    const result = sortDataByName("apple", "banana");
+    expect(result).toBe(1);
+  });
+
+  it("should return -1 when nameA is lexicographically larger than nameB", () => {
+    const result = sortDataByName("banana", "apple");
+    expect(result).toBe(-1);
+  });
+
+  it("should return 0 when nameA is equal to nameB", () => {
+    const result = sortDataByName("apple", "APPLE");
+    expect(result).toBe(0);
   });
 });
