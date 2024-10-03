@@ -1,6 +1,6 @@
-import { useGlobalData } from "hooks";
+import { useDataStore } from "store";
 
 export const useGetSelectedData = () => {
-  const { filteredData, selectedData } = useGlobalData();
+  const { filteredData, selectedData } = useDataStore();
   return selectedData.length ? selectedData : filteredData;
 };

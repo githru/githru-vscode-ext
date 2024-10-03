@@ -7,16 +7,16 @@ import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
-import { useGlobalData } from "hooks";
+import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useBranchStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
+import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
-
-  const { filteredData, handleChangeAnalyzedData } = useGlobalData();
+  const { handleChangeAnalyzedData } = useAnalayzedData();
+  const { filteredData } = useDataStore();
   const { handleChangeBranchList } = useBranchStore();
   const { loading, setLoading } = useLoadingStore();
   const { setOwner } = useOwnerStore();

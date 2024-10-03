@@ -4,12 +4,11 @@ import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 
 import { selectedDataUpdater } from "components/VerticalClusterList/VerticalClusterList.util";
 import { getInitData, getClusterById } from "components/VerticalClusterList/Summary/Summary.util";
-import { useGlobalData } from "hooks";
-
 import "./SelectedClusterGroup.scss";
+import { useDataStore } from "store";
 
 const SelectedClusterGroup = () => {
-  const { selectedData, setSelectedData } = useGlobalData();
+  const { selectedData, setSelectedData } = useDataStore();
   const selectedClusters = getInitData(selectedData);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

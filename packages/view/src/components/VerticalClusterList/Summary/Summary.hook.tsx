@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { useGlobalData } from "hooks";
+import { useDataStore } from "store";
 
 import { getAuthSrcMap } from "./Summary.util";
 import type { AuthSrcMap } from "./Summary.type";
 
 export const usePreLoadAuthorImg = () => {
-  const { data } = useGlobalData();
+  const { data } = useDataStore();
   const [authSrcMap, setAuthSrcMap] = useState<AuthSrcMap | null>(null);
 
   useEffect(() => {

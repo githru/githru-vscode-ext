@@ -4,7 +4,7 @@ import { List, AutoSizer } from "react-virtualized";
 
 import type { ClusterNode } from "types";
 import { Detail } from "components";
-import { useGlobalData } from "hooks";
+import { useDataStore } from "store";
 
 import "./Summary.scss";
 import { Author } from "../../@common/Author";
@@ -21,7 +21,7 @@ const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
 const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
 
 const Summary = () => {
-  const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
+  const { filteredData: data, selectedData, setSelectedData } = useDataStore();
   const clusters = getInitData(data);
   const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();

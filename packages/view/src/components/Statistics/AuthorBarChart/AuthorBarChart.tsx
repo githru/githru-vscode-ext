@@ -4,8 +4,8 @@ import * as d3 from "d3";
 import type { SelectChangeEvent } from "@mui/material";
 import { FormControl, MenuItem, Select } from "@mui/material";
 
+import { useDataStore } from "store";
 import type { ClusterNode, AuthorInfo } from "types";
-import { useGlobalData } from "hooks";
 import { getAuthorProfileImgSrc } from "utils/author";
 
 import { useGetSelectedData } from "../Statistics.hook";
@@ -17,7 +17,7 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
-  const { data: totalData, filteredData, setSelectedData, setFilteredData } = useGlobalData();
+  const { data: totalData, filteredData, setSelectedData, setFilteredData } = useDataStore();
 
   const rawData = useGetSelectedData();
   const svgRef = useRef<SVGSVGElement>(null);
