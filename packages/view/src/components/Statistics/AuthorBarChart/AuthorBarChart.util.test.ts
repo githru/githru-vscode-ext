@@ -2,6 +2,7 @@ import type { ClusterNode } from "types";
 import type { Commit } from "types/Commit";
 
 import { getDataByAuthor } from "./AuthorBarChart.util";
+import type { AuthorDataType } from "./AuthorBarChart.type";
 
 describe("getDataByAuthor", () => {
   it("should return empty array if no data is provided", () => {
@@ -87,6 +88,6 @@ describe("getDataByAuthor", () => {
         insertion: 3,
         deletion: 2,
       },
-    ]);
+    ] as AuthorDataType[]);
   });
 });
