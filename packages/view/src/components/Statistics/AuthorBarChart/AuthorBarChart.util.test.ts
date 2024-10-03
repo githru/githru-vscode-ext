@@ -1,7 +1,7 @@
 import type { ClusterNode } from "types";
 import type { Commit } from "types/Commit";
 
-import { getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
+import { convertNumberFormat, getDataByAuthor, sortDataByName } from "./AuthorBarChart.util";
 import type { AuthorDataType } from "./AuthorBarChart.type";
 
 describe("getDataByAuthor", () => {
@@ -106,5 +106,22 @@ describe("sortDataByName", () => {
   it("should return 0 when nameA is equal to nameB", () => {
     const result = sortDataByName("apple", "APPLE");
     expect(result).toBe(0);
+  });
+});
+
+describe("convertNumberFormat", () => {
+  it("should return the number as a string if it's between 0 and 1", () => {
+    const result = convertNumberFormat(0.5);
+    expect(result).toBe("0.5");
+  });
+
+  it("should format numbers greater than 1", () => {
+    const result = convertNumberFormat(1000);
+    expect(result).toBe("1k");
+  });
+
+  it("should handle numbers less than 0 but greater than or equal to 0", () => {
+    const result = convertNumberFormat(0.001);
+    expect(result).toBe("0.001");
   });
 });
