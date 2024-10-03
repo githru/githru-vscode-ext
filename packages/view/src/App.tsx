@@ -16,7 +16,7 @@ import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoSt
 const App = () => {
   const initRef = useRef<boolean>(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
-  const { filteredData } = useDataStore();
+  const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
   const { loading, setLoading } = useLoadingStore();
   const { setOwner } = useOwnerStore();
@@ -29,7 +29,6 @@ const App = () => {
         handleChangeAnalyzedData,
         handleChangeBranchList,
       };
-
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();

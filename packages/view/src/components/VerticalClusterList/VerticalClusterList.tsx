@@ -7,7 +7,7 @@ import { Summary } from "./Summary";
 import "./VerticalClusterList.scss";
 
 const VerticalClusterList = () => {
-  const { selectedData } = useDataStore();
+  const selectedData = useDataStore((state) => state.selectedData);
 
   return (
     <div className="vertical-cluster-list">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import Chip from "@mui/material/Chip";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 
@@ -8,7 +9,9 @@ import "./SelectedClusterGroup.scss";
 import { useDataStore } from "store";
 
 const SelectedClusterGroup = () => {
-  const { selectedData, setSelectedData } = useDataStore();
+  const [selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.selectedData, state.setSelectedData])
+  );
   const selectedClusters = getInitData(selectedData);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

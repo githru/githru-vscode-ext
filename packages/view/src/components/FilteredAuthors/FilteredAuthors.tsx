@@ -6,7 +6,7 @@ import { useDataStore } from "store";
 import "./FilteredAuthors.scss";
 
 const FilteredAuthors = () => {
-  const { selectedData } = useDataStore();
+  const selectedData = useDataStore((state) => state.selectedData);
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusters = getInitData(selectedData);
 

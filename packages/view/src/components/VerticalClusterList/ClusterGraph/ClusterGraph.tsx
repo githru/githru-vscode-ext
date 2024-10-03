@@ -1,4 +1,5 @@
 import React from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { useDataStore } from "store";
 import type { ClusterGraphProps } from "types/ClusterGraphProps";
@@ -10,7 +11,9 @@ import { useHandleClusterGraph } from "./ClusterGraph.hook";
 import "./ClusterGraph.scss";
 
 const ClusterGraph: React.FC<ClusterGraphProps> = ({ data, clusterSizes }) => {
-  const { selectedData, setSelectedData } = useDataStore();
+  const [selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.selectedData, state.setSelectedData])
+  );
   const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight = getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
 

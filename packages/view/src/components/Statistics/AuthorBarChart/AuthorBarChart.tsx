@@ -1,5 +1,6 @@
 import type { MouseEvent } from "react";
 import { useRef, useEffect, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import * as d3 from "d3";
 import type { SelectChangeEvent } from "@mui/material";
 import { FormControl, MenuItem, Select } from "@mui/material";
@@ -17,7 +18,9 @@ import { DIMENSIONS, METRIC_TYPE } from "./AuthorBarChart.const";
 import "./AuthorBarChart.scss";
 
 const AuthorBarChart = () => {
-  const { data: totalData, filteredData, setSelectedData, setFilteredData } = useDataStore();
+  const [totalData, filteredData, setSelectedData, setFilteredData] = useDataStore(
+    useShallow((state) => [state.data, state.filteredData, state.setSelectedData, state.setFilteredData])
+  );
 
   const rawData = useGetSelectedData();
   const svgRef = useRef<SVGSVGElement>(null);
