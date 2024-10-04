@@ -17,6 +17,7 @@ export default function getCommitRaws(log: string) {
     const refs = commitData[2].replace(" -> ", ", ").split(", ");
     const [branches, tags]: string[][] = refs.reduce(
       ([branches, tags], ref) => {
+        if (ref === "") return [branches, tags];
         if (ref.startsWith("tag: ")) {
           tags.push(ref.replace("tag: ", ""));
         } else {
