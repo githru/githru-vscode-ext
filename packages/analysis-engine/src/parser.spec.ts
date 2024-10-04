@@ -142,6 +142,14 @@ describe("getCommitRaws", () => {
         tags: ["v2.0.0", "v1.4"],
       },
     ],
+    [
+      `${COMMIT_SEPARATOR}${fakeCommitHash}${GIT_LOG_SEPARATOR}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      {
+        ...commonExpectatedResult,
+        branches: [],
+        tags: [],
+      },
+    ],
   ])("should parse gitlog to commitRaw(branch, tag)", (mockLog, expectedResult) => {
     const result = getCommitRaws(mockLog);
     expect(result).toEqual([expectedResult]);
