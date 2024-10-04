@@ -44,12 +44,12 @@ mockSpawn.mockImplementation(() => {
   };
 });
 
-describe("getGitLog util test with dynamic number of threads", () => {
+describe("getGitLog util test", () => {
   afterEach(() => {
     mockSpawnCallCount = 0; // initailize call count
   });
 
-  it("should return the combined git log output from dynamic number of threads", async () => {
+  it("should return the combined git log output from number of threads", async () => {
     const result = await getGitLog("git", "/mocked/path/to/repo");
 
     const expectedData = Array.from({ length: mockSpawnCallCount }) // Create an array with length equal to call count
