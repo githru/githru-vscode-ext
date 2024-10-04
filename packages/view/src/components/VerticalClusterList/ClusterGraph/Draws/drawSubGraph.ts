@@ -1,6 +1,8 @@
 import * as d3 from "d3";
 import type { RefObject } from "react";
 
+import { pxToRem } from "utils";
+
 import type { ClusterGraphElement } from "../ClusterGraph.type";
 import { getStartYEndY } from "../ClusterGraph.util";
 import { GRAPH_WIDTH } from "../ClusterGraph.const";
@@ -62,7 +64,7 @@ export const drawSubGraph = (
       return tooltip.style("visibility", "visible");
     })
     .on("mousemove", (event) => {
-      return tooltip.style("top", `${event.pageY - 10}px`).style("left", `${event.pageX + 10}px`);
+      return tooltip.style("top", pxToRem(event.pageY - 10)).style("left", pxToRem(event.pageX + 10));
     })
     .on("mouseout", () => {
       return tooltip.style("visibility", "hidden");
