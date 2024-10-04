@@ -71,7 +71,9 @@
               }
             }
           },
-          "message": "Added node.js.yml"
+          "message": "Added node.js.yml",
+          "tags": ["v1.0.0,"],
+          "releaseTags": ["v1.0.0,"]
         },
         "clusterId": 1
       }
@@ -10645,7 +10647,9 @@
               }
             }
           },
-          "message": "Merge pull request #159 from vgihan/main/n/nfix(view): modify variable height ClusterGraph transition & update scroll"
+          "message": "Merge pull request #159 from vgihan/main/n/nfix(view): modify variable height ClusterGraph transition & update scroll",
+          "tags": ["v1.1.0"],
+          "releaseTags": ["v1.1.0"]
         },
         "clusterId": 91
       },
@@ -10821,7 +10825,9 @@
               }
             }
           },
-          "message": "fix(view): modify variable height detail problem"
+          "message": "fix(view): modify variable height detail problem",
+          "tags": ["v1.2.0"],
+          "releaseTags": ["v1.2.0"]
         },
         "clusterId": 91
       }
@@ -10936,7 +10942,9 @@
               }
             }
           },
-          "message": "style(view): fit summary height and delete animation (#163)"
+          "message": "style(view): fit summary height and delete animation (#163)",
+          "tags": ["v1.3.0"],
+          "releaseTags": ["v1.3.0"]
         },
         "clusterId": 94
       }

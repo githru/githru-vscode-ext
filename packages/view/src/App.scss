@@ -19,10 +19,9 @@ body {
 }
 
 .middle-container {
-  display: grid;
-  grid-template-columns: 4fr 2fr;
-  height: calc(100vh - 12.5rem);
-  padding: 1.25rem;
+  display: flex;
+  height: calc(100vh - 200px);
+  padding: 20px;
 }
 
 .no-commits-container {

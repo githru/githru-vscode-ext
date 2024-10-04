@@ -104,7 +104,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                     title={id}
                     PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
                   >
-                    <p>{`${id.slice(0, 6)}...`}</p>
+                    <p>{`${id.slice(0, 6)}`}</p>
                   </Tooltip>
                 </a>
               </div>

@@ -85,6 +85,7 @@ const Summary = () => {
                   ));
                 })}
             </div>
+            <div>{cluster.latestReleaseTag}</div>
             <Content
               content={cluster.summary.content}
               clusterId={cluster.clusterId}
