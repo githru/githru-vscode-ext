@@ -59,6 +59,30 @@ export async function getCurrentUserCommitSummary(stemDict: StemDict, baseBranch
   return await getSummary(currentUserNodes ? currentUserNodes?.slice(-10) : []);
 }
 
+export async function getDiffSummary(stemDict: StemDict, baseBranchName: string) {
+  const mainNodes = stemDict.get("main")?.nodes;
+  const currentNodes = stemDict.get(baseBranchName)?.nodes;
+
+  if (!mainNodes || !currentNodes) {
+    return "";
+  }
+
+  const mainCommit = mainNodes.slice(-1)[0].commit;
+  const currentCommit = currentNodes.slice(-1)[0].commit;
+
+  const mainCommitMessage = mainCommit.message.split("\n")[0];
+  const currentCommitMessage = currentCommit.message.split("\n")[0];
+
+  if (mainCommitMessage === currentCommitMessage) {
+    return "No changes";
+  }
+
+  const mainCommitSummary = await getSummary([mainCommit]);
+  const currentCommitSummary = await getSummary([currentCommit]);
+
+  return `main: ${mainCommitSummary}\n${baseBranchName}: ${currentCommitSummary}`;
+}
+
 const prompt = `Proceed with the task of summarising the contents of the commit message provided.
 
 Procedure:

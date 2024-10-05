@@ -7,7 +7,7 @@ import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
-import { getCurrentUserCommitSummary, getLatestCommitSummary } from "./summary";
+import { getCurrentUserCommitSummary, getDiffSummary, getLatestCommitSummary } from "./summary";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
@@ -80,6 +80,9 @@ export class AnalysisEngine {
 
     const currentUserCommitSummary = await getCurrentUserCommitSummary(stemDict, this.baseBranchName, this.octokit);
     if (this.isDebugMode) console.log("currentUserCommitSummary: ", currentUserCommitSummary);
+
+    const diffSummary = await getDiffSummary(stemDict, this.baseBranchName);
+    if (this.isDebugMode) console.log("diffSummary: ", diffSummary);
 
     return {
       isPRSuccess,
