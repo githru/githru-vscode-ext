@@ -1,5 +1,11 @@
 import type PluginOctokit from "./pluginOctokit";
-import type { CommitRaw, StemDict } from "./types";
+import {
+  type CommitMessageType,
+  CommitMessageTypeList,
+  type CommitRaw,
+  type DifferenceStatistic,
+  type StemDict,
+} from "./types";
 
 const API_KEY = process.env.GEMENI_API_KEY || "";
 const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=";
@@ -59,28 +65,92 @@ export async function getCurrentUserCommitSummary(stemDict: StemDict, baseBranch
   return await getSummary(currentUserNodes ? currentUserNodes?.slice(-10) : []);
 }
 
-export async function getDiffSummary(stemDict: StemDict, baseBranchName: string) {
-  const mainNodes = stemDict.get("main")?.nodes;
-  const currentNodes = stemDict.get(baseBranchName)?.nodes;
-
-  if (!mainNodes || !currentNodes) {
-    return "";
+function parseCommitMessageType(message: string): CommitMessageType {
+  const firstLine = message.split("\n")[0].toLowerCase();
+  for (const type of CommitMessageTypeList) {
+    if (firstLine.startsWith(type + ":")) {
+      return type;
+    }
   }
+  return "chore"; // Default type if no match found
+}
 
-  const mainCommit = mainNodes.slice(-1)[0].commit;
-  const currentCommit = currentNodes.slice(-1)[0].commit;
+async function getDiffCommits(
+  octokit: PluginOctokit,
+  owner: string,
+  repo: string,
+  baseBranch: string = "main",
+  compareBranch: string = "HEAD"
+): Promise<CommitRaw[]> {
+  try {
+    const response = await octokit.rest.repos.compareCommits({
+      owner,
+      repo,
+      base: baseBranch,
+      head: compareBranch,
+    });
 
-  const mainCommitMessage = mainCommit.message.split("\n")[0];
-  const currentCommitMessage = currentCommit.message.split("\n")[0];
+    return await Promise.all(
+      response.data.commits.map(async (commit, index) => {
+        const detailedCommit = await octokit.rest.repos.getCommit({
+          owner,
+          repo,
+          ref: commit.sha,
+        });
 
-  if (mainCommitMessage === currentCommitMessage) {
-    return "No changes";
+        const differenceStatistic: DifferenceStatistic = {
+          totalInsertionCount: 0,
+          totalDeletionCount: 0,
+          fileDictionary: {},
+        };
+
+        detailedCommit.data.files?.forEach((file) => {
+          differenceStatistic.totalInsertionCount += file.additions;
+          differenceStatistic.totalDeletionCount += file.deletions;
+          differenceStatistic.fileDictionary[file.filename] = {
+            insertionCount: file.additions,
+            deletionCount: file.deletions,
+          };
+        });
+
+        return {
+          sequence: index + 1,
+          id: commit.sha,
+          parents: commit.parents.map((parent) => parent.sha),
+          branches: [], // GitHub API doesn't provide this information directly
+          tags: [], // GitHub API doesn't provide this information directly
+          author: {
+            name: commit.commit.author?.name ?? "",
+            email: commit.commit.author?.email ?? "",
+          },
+          authorDate: new Date(commit.commit.author?.date ?? ""),
+          committer: {
+            name: commit.commit.committer?.name ?? "",
+            email: commit.commit.committer?.email ?? "",
+          },
+          committerDate: new Date(commit.commit.committer?.date ?? ""),
+          message: commit.commit.message,
+          differenceStatistic,
+          commitMessageType: parseCommitMessageType(commit.commit.message),
+        };
+      })
+    );
+  } catch (error) {
+    console.error("Error fetching commit differences:", (error as Error).message);
+    return [];
   }
+}
 
-  const mainCommitSummary = await getSummary([mainCommit]);
-  const currentCommitSummary = await getSummary([currentCommit]);
+export async function getDiffSummary(
+  octokit: PluginOctokit,
+  owner: string,
+  repo: string,
+  baseBranch: string = "main",
+  compareBranch: string = "HEAD"
+) {
+  const diffCommits = await getDiffCommits(octokit, owner, repo, baseBranch, compareBranch);
 
-  return `main: ${mainCommitSummary}\n${baseBranchName}: ${currentCommitSummary}`;
+  return await getSummary(diffCommits);
 }
 
 const prompt = `Proceed with the task of summarising the contents of the commit message provided.

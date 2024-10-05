@@ -81,7 +81,7 @@ export class AnalysisEngine {
     const currentUserCommitSummary = await getCurrentUserCommitSummary(stemDict, this.baseBranchName, this.octokit);
     if (this.isDebugMode) console.log("currentUserCommitSummary: ", currentUserCommitSummary);
 
-    const diffSummary = await getDiffSummary(stemDict, this.baseBranchName);
+    const diffSummary = await getDiffSummary(this.octokit);
     if (this.isDebugMode) console.log("diffSummary: ", diffSummary);
 
     return {
