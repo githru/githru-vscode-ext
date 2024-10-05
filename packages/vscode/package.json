@@ -62,10 +62,10 @@
     "configuration": {
       "title": "Githru",
       "properties": {
-        "githru.color.primary": {
+        "githru.theme": {
           "type": "string",
-          "default": "#ff8272",
-          "description": "Insert your primary color."
+          "default": "githru",
+          "description": "Insert your theme name: githru, hacker-blue, aqua, cotton-candy, mono"
         }
       }
     }

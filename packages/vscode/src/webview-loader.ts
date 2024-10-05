@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
-import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
+import { getTheme, setTheme } from "./setting-repository";
 import type { ClusterNode } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
@@ -77,10 +77,10 @@ export default class WebviewLoader implements vscode.Disposable {
           });
         }
 
-        if (command === "updatePrimaryColor") {
+        if (command === "updateCustomTheme") {
           const colorCode = payload && JSON.parse(payload);
-          if (colorCode.primary) {
-            setPrimaryColor(colorCode.primary);
+          if (colorCode.theme) {
+            setTheme(colorCode.theme);
           }
         }
       } catch (e) {

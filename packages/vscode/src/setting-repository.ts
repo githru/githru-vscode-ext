@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 const SETTING_PROPERTY_NAMES = {
   GITHUB_TOKEN: "githru.github.token",
-  PRIMARY_COLOR: "githru.color.primary",
+  THEME: "githru.theme",
 };
 
 export const getGithubToken = async (secrets: vscode.SecretStorage) => {
@@ -14,22 +14,21 @@ export const setGithubToken = async (secrets: vscode.SecretStorage, newGithubTok
 };
 
 export const deleteGithubToken = async (secrets: vscode.SecretStorage) => {
-    return await secrets.delete(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
-}
-
-export const setPrimaryColor = (color: string) => {
-  const configuration = vscode.workspace.getConfiguration();
-  configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, color);
+  return await secrets.delete(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
 };
 
-export const getPrimaryColor = (): string => {
+export const setTheme = async (newTheme: string) => {
   const configuration = vscode.workspace.getConfiguration();
-  const primaryColor = configuration.get(SETTING_PROPERTY_NAMES.PRIMARY_COLOR) as string;
+  configuration.update(SETTING_PROPERTY_NAMES.THEME, newTheme);
+};
 
-  if (!primaryColor) {
-    configuration.update(SETTING_PROPERTY_NAMES.PRIMARY_COLOR, "#ff8272");
-    return "#ff8272";
-  } else {
-    return primaryColor;
+export const getTheme = async (): Promise<string> => {
+  const configuration = vscode.workspace.getConfiguration();
+  const theme = configuration.get(SETTING_PROPERTY_NAMES.THEME) as string;
+
+  if (!theme) {
+    await setTheme("githru");
+    return "githru";
   }
+  return theme;
 };

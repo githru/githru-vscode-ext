@@ -49,10 +49,10 @@ export default class VSCodeIDEAdapter implements IDEPort {
     this.sendMessageToIDE(message);
   }
 
-  public setPrimaryColor(color: string) {
+  public setCustomTheme(theme: string) {
     const message: IDEMessage = {
-      command: "updatePrimaryColor",
-      payload: JSON.stringify({ primary: color }),
+      command: "updateCustomTheme",
+      payload: JSON.stringify({ theme }),
     };
     this.sendMessageToIDE(message);
   }
