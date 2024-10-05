@@ -3,7 +3,23 @@ import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
 
-const themes = [
+import { setCustomTheme } from "services";
+
+type ThemeInfo = {
+  title: string;
+  value: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+  };
+};
+
+type ThemeIconsProps = ThemeInfo & {
+  onClick: () => void;
+};
+
+const themeInfo: ThemeInfo[] = [
   {
     title: "Githru",
     value: "githru",
@@ -51,17 +67,6 @@ const themes = [
     },
   },
 ];
-
-type ThemeIconsProps = {
-  title: string;
-  value: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-  };
-  onClick: () => void;
-};
 
 const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
   const [isSelected, setIsSelected] = useState<string>("");
