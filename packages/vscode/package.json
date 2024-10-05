@@ -29,7 +29,7 @@
   ],
   "activationEvents": [
     "*",
-    "onView:mySidebar"
+    "onView:githruSidebar"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -73,18 +73,18 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "mySidebarView",
-          "title": "My Sidebar",
-          "icon": "path/to/icon.svg"
+          "id": "githruSidebarView",
+          "title": "Githru Sidebar",
+          "icon": "images/logo.png"
         }
       ]
     },
     "views": {
-      "mySidebarView": [
+      "githruSidebarView": [
         {
           "type": "webview",
-          "id": "mySidebar",
-          "name": "My Sidebar"
+          "id": "githruSidebar",
+          "name": "Githru Sidebar"
         }
       ]
     }

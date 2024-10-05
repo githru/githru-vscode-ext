@@ -28,7 +28,7 @@ function normalizeFsPath(fsPath: string) {
 export async function activate(context: vscode.ExtensionContext) {
   const provider = new SidebarProvider(context.extensionUri);
 
-  context.subscriptions.push(vscode.window.registerWebviewViewProvider("mySidebar", provider));
+  context.subscriptions.push(vscode.window.registerWebviewViewProvider("githruSidebar", provider));
 
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
