@@ -13,9 +13,22 @@ export default function getCommitRaws(log: string) {
   for (let commitIdx = 1; commitIdx < commits.length; commitIdx += 1) {
     // step 1: Extract commitData from the first line of the commit
     const commitData = commits[commitIdx].split(GIT_LOG_SEPARATOR);
-    // Extract branch and tag data from commitData[2]
-    const refs = commitData[2].replace(" -> ", ", ").split(", ");
-    const [branches, tags]: string[][] = refs.reduce(
+    const [
+      id,
+      parents,
+      refs,
+      authorName,
+      authorEmail,
+      authorDate,
+      committerName,
+      committerEmail,
+      committerDate,
+      message,
+      diffStats,
+    ] = commitData;
+    // Extract branch and tag data from refs
+    const refsArray = refs.replace(" -> ", ", ").split(", ");
+    const [branches, tags]: string[][] = refsArray.reduce(
       ([branches, tags], ref) => {
         if (ref === "") return [branches, tags];
         if (ref.startsWith("tag: ")) {
@@ -31,22 +44,22 @@ export default function getCommitRaws(log: string) {
     // make base commitRaw object
     const commitRaw: CommitRaw = {
       sequence: commitIdx - 1,
-      id: commitData[0],
-      parents: commitData[1].split(" "),
-      branches, // commitData[2] is already split into branches and tags
+      id,
+      parents: parents.split(" "),
+      branches,
       tags,
       author: {
-        name: commitData[3],
-        email: commitData[4],
+        name: authorName,
+        email: authorEmail,
       },
-      authorDate: new Date(commitData[5]),
+      authorDate: new Date(authorDate),
       committer: {
-        name: commitData[6],
-        email: commitData[7],
+        name: committerName,
+        email: committerEmail,
       },
-      committerDate: new Date(commitData[8]),
-      message: commitData[9],
-      commitMessageType: getCommitMessageType(commitData[9]),
+      committerDate: new Date(committerDate),
+      message,
+      commitMessageType: getCommitMessageType(message),
       differenceStatistic: {
         totalInsertionCount: 0,
         totalDeletionCount: 0,
@@ -55,14 +68,15 @@ export default function getCommitRaws(log: string) {
     };
 
     // step 2: Extract diffStats from the rest of the commit
-    if (!commitData[10]) {
+    if (!diffStats) {
       commitRaws.push(commitRaw);
       continue;
     }
-    const diffStats = commitData[10].split(EOL_REGEX);
-    for (let diffIdx = 1; diffIdx < diffStats.length; diffIdx += 1) {
-      if (diffStats[diffIdx] === "") continue;
-      const [insertions, deletions, path] = diffStats[diffIdx].split("\t");
+    const diffStatsArray = diffStats.split(EOL_REGEX);
+    // pass the first empty element
+    for (let diffIdx = 1; diffIdx < diffStatsArray.length; diffIdx += 1) {
+      if (diffStatsArray[diffIdx] === "") continue;
+      const [insertions, deletions, path] = diffStatsArray[diffIdx].split("\t");
       const numberedInsertions = insertions === "-" ? 0 : Number(insertions);
       const numberedDeletions = deletions === "-" ? 0 : Number(deletions);
       commitRaw.differenceStatistic.totalInsertionCount += numberedInsertions;
