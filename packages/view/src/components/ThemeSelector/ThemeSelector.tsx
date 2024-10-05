@@ -104,7 +104,7 @@ const ThemeSelector = () => {
   };
 
   useEffect(() => {
-    document.documentElement.setAttribute("custom-type", "githru");
+    document.documentElement.setAttribute("custom-type", window.theme);
   }, []);
 
   return (
