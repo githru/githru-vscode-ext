@@ -1,4 +1,4 @@
-import AnalysisEngine from "@githru-vscode-ext/analysis-engine";
+import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
 import type * as vscode from "vscode";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
