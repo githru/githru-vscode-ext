@@ -3,14 +3,14 @@ import type { Dispatch, SetStateAction } from "react";
 
 import type { ClusterNode } from "types";
 
-interface DataState {
+type DataState = {
   data: ClusterNode[];
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
   setData: (data: ClusterNode[]) => void;
   setFilteredData: (filteredData: ClusterNode[]) => void;
   setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
-}
+};
 
 export const useDataStore = create<DataState>((set) => ({
   data: [],
