@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
@@ -98,6 +98,7 @@ const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
 
 const ThemeSelector = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const themeSelectorRef = useRef<HTMLDivElement>(null);
 
   const handleTheme = (value: string) => {
     setCustomTheme(value);
@@ -105,11 +106,26 @@ const ThemeSelector = () => {
   };
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (themeSelectorRef.current && !themeSelectorRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     document.documentElement.setAttribute("custom-type", window.theme);
   }, []);
 
   return (
-    <div className="theme-selector">
+    <div
+      className="theme-selector"
+      ref={themeSelectorRef}
+    >
       <AutoAwesomeIcon onClick={() => setIsOpen(true)} />
       {isOpen && (
         <div className="theme-selector__container">
