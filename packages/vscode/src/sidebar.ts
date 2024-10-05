@@ -38,9 +38,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 <title>API Caller</title>
             </head>
             <body>
-                <button onclick="callApi(1)">API 1</button>
-                <button onclick="callApi(2)">API 2</button>
-                <button onclick="callApi(3)">API 3</button>
+                <button onclick="callApi(1)">Call AI Analyze 1</button>
+                <button onclick="callApi(2)">Call AI Analyze 2</button>
+                <button onclick="callApi(3)">Call AI Analyze 3</button>
                 <div id="result"></div>
 
                 <script>
