@@ -1,15 +1,21 @@
 @import "styles/app";
 
-.cloc-line-chart-wrap {
+.cloc-line-chart {
   height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 20px;
   margin: auto 0;
-}
 
-.cloc-line-chart {
-  overflow: visible;
-  fill: var(--color-primary);
+  &__chart {
+    overflow: visible;
+    fill: var(--color-primary);
+  }
+
+  &__label {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+    fill: white;
+  }
 }

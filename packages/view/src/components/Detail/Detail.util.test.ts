@@ -46,6 +46,8 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "feat(webview): add typescript structure",
+      tags: [],
+      releaseTags: [],
     },
     seq: 0,
     clusterId: 4,
@@ -123,6 +125,8 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "feat(vscode): launch webview for webviewApp",
+      tags: [],
+      releaseTags: [],
     },
     clusterId: 4,
     seq: 1,
@@ -196,6 +200,8 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "setup(vscode): add webview loader",
+      tags: [],
+      releaseTags: [],
     },
     seq: 2,
     clusterId: 4,
@@ -220,7 +226,7 @@ test("getSummaryCommitList test", () => {
 
   expect(result1).not.toBeUndefined();
   expect(result1).toHaveLength(3);
-  expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
+  expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
   expect(result1[1].commit.id).toBe(fakeCommitNodeListInCluster[1].commit.id);
-  expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
+  expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
 });

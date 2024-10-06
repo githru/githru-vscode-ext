@@ -7,9 +7,11 @@ import { throttle } from "utils";
 import { useGlobalData } from "hooks";
 import "./RefreshButton.scss";
 import { sendRefreshDataCommand } from "services";
+import { useLoadingStore } from "store";
 
 const RefreshButton = () => {
-  const { loading, setLoading, selectedBranch } = useGlobalData();
+  const { selectedBranch } = useGlobalData();
+  const { loading, setLoading } = useLoadingStore((state) => state);
 
   const refreshHandler = throttle(() => {
     setLoading(true);
@@ -24,7 +26,7 @@ const RefreshButton = () => {
       sx={{ color: "white" }}
     >
       <ReplayCircleFilledRoundedIcon
-        className={cn("refresh-button-icon", { "refresh-button-icon--loading": loading })}
+        className={cn("refresh-button__icon", { "refresh-button__icon--loading": loading })}
       />
     </IconButton>
   );

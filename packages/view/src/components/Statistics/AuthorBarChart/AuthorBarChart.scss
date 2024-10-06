@@ -1,64 +1,60 @@
 @import "styles/app";
 
-.author-bar-chart__container {
+.author-bar-chart {
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  p {
+  &__title {
     font-size: $font-size-title;
     font-weight: $font-weight-semibold;
   }
-}
 
-.author-bar-chart__header {
-  width: 100%;
-  text-align: right;
+  &__header {
+    width: 100%;
+    text-align: right;
+  }
 
-  & .select-box {
-    font-size: $font-size-caption;
-    background: transparent;
-    border: 1px solid $white;
-    border-radius: 5px;
-    width: fit-content;
-    padding: 0 10px;
+  & &__select-box {
+    border: 1px solid $color-white;
+    color: $color-white;
     height: 25px;
-    color: $white;
-    outline: none;
-    text-align: center;
+    width: 100px;
+    font-size: $font-size-caption;
 
-    option {
-      background: $gray-900;
+    & .MuiSvgIcon-root {
+      color: $color-white;
+    }
+
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border: none;
     }
   }
-}
 
-.author-bar-chart {
-  overflow: visible;
-  margin: 20px 40px 40px;
+  &__chart {
+    overflow: visible;
+    margin: 20px 40px 40px;
+  }
 
-  .axis {
-    color: $white;
-    font-weight: $font-weight-semibold;
+  &__axis {
+    color: $color-white;
 
     &.x-axis {
       .tick {
         display: none;
       }
-    }
-
-    &.x-axis {
-      .x-axis-label {
-        fill: $white;
+      
+      .x-axis__label {
+        fill: $color-white;
       }
     }
   }
 
-  .bars {
+  &__container {
     cursor: pointer;
 
-    .bar {
+    .author-bar-chart__bar {
       &:hover {
         rect {
           fill: var(--color-tertiary);
@@ -69,8 +65,8 @@
         fill: var(--color-secondary);
       }
 
-      .name {
-        fill: $white;
+      .author-bar-chart__name {
+        fill: $color-white;
         stroke: none;
         font-size: $font-size-caption;
         text-anchor: start;
@@ -78,24 +74,26 @@
       }
     }
   }
-}
 
-.author-bar-chart__tooltip {
-  display: none;
-  position: absolute;
-  background: $white;
-  padding: 8px 16px;
-  text-align: center;
-  font-size: $font-size-caption;
-  line-height: 1.5;
-  border-radius: 5px;
-  color: $gray-900;
+  &__tooltip {
+    display: none;
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: $font-size-caption;
+    text-align: center;
+    line-height: 1.5;
+    background-color: rgba($color-dark-gray, 0.9);
+    color: $color-white;
+    pointer-events: none;
 
-  .selected {
-    color: var(--color-primary);
-    font-weight: $font-weight-semibold;
-  }
-  .name {
-    font-weight: $font-weight-semibold;
+    .author-bar-chart__name {
+      font-weight: $font-weight-semibold;
+    }
+
+    .author-bar-chart__count {
+      font-weight: $font-weight-semibold;
+      color: var(--color-primary);
+    }
   }
 }

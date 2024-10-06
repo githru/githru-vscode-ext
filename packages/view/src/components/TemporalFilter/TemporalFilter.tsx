@@ -6,6 +6,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 import { Button } from "@mui/material";
 
 import { useGlobalData } from "hooks";
+import { useLoadingStore } from "store";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -17,9 +18,8 @@ import { createBrush, drawBrush, resetBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData, loading } =
-    useGlobalData();
-
+  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData } = useGlobalData();
+  const { loading } = useLoadingStore((state) => state);
   const brushGroupRef = useRef<SVGGElement | null>(null);
   const brushRef = useRef<d3.BrushBehavior<unknown>>();
 
@@ -149,7 +149,7 @@ const TemporalFilter = () => {
         cssOverride={loaderStyle}
       />
       <div
-        className="line-charts"
+        className="temporal-filter__container"
         ref={wrapperRef}
       >
         {filteredRange && (
@@ -158,13 +158,13 @@ const TemporalFilter = () => {
             variant="contained"
             onClick={resetBrushHandler}
             size="small"
-            className="reset-button"
+            className="temporal-filter__reset-button"
           >
-            <span>Reset</span>
+            <span className="temporal-filter__button-text">Reset</span>
           </Button>
         )}
         <svg
-          className="line-charts-svg"
+          className="temporal-filter__chart"
           ref={ref}
         />
       </div>
