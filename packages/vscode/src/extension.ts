@@ -53,6 +53,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
 
+      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+
       const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
@@ -76,14 +78,9 @@ export async function activate(context: vscode.ExtensionContext) {
       };
 
       const initialBaseBranchName = await fetchCurrentBranch();
-      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const startTime = Date.now();
-        const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
-        const endTime = Date.now();
-        const elapsedTime = (endTime - startTime) / 1000;
-        console.log(`${elapsedTime.toFixed(3)}s`);
+    
 
-        
+      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
 
         const { owner, repo: initialRepo } = getRepo(gitConfig);
