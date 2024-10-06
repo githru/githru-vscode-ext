@@ -3,7 +3,7 @@
 .filtered-authors {
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 0.625rem;
 
   .filtered-authors__label {
     font-size: $font-size-title;
@@ -14,6 +14,6 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 0.3125rem;
   }
 }
