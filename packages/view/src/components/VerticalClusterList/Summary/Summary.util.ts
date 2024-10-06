@@ -77,6 +77,7 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
           count: clusterNode.commitNodeList.length - 1,
         },
       },
+      clusterTags: [],
       latestReleaseTag: "",
     };
 
@@ -94,12 +95,17 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
 
       // get releaseTags in cluster commitNodeList
       commitNode.commit.releaseTags?.map((tag) => {
-        clusterTags.push(tag);
+        if (clusterTags.indexOf(tag) === -1) {
+          clusterTags.push(tag);
+        }
         return clusterTags;
       });
 
       return commitNode;
     });
+
+    // set release tag in cluster
+    cluster.clusterTags = clusterTags;
 
     // set latset release tag
     const latestReleaseTag = getCommitLatestTag(clusterTags);
