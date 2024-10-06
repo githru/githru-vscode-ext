@@ -136,9 +136,9 @@ VerticalClusterList
     ㄴ Graph.const.ts
 ```
 
-### css
+### CSS
 
-- css naming은 [BEM method](https://getbem.com/naming/)을 따릅니다.
+- CSS naming은 [BEM method](https://getbem.com/naming/)을 따릅니다.
 
   예시:
 
@@ -157,7 +157,7 @@ VerticalClusterList
   padding: 10px 0px;
   ```
 
-### type naming
+### Type Naming
 
 - Component Props 이름은 component name + `Prop` 형식을 따릅니다.
 
@@ -181,22 +181,40 @@ VerticalClusterList
 
 # Manifesto
 
-## 색상
+## [색상](https://github.com/githru/githru-vscode-ext/blob/main/packages/view/src/styles/_colors.scss)
 
-좀 더 자세한 논의는 issue [#84](https://github.com/githru/githru-vscode-ext/issues/84)를 참고해주시기 바랍니다.
+### Grayscale
+- white, black, light gray, medium gray, dark gray, background 총 5가지 색상을 사용합니다.
+- white와 black은 주로 폰트 색상으로 사용합니다.
+- light gray, medium gray, dark gray는 명도에 따라 각 컴포넌트의 배경 색상으로 지정됩니다.
 
-- body background-color
-- Main theme color
-- sub color
-- font color
+### Theme
+- Grayscale 외 색상은 각 테마에서 지정하여 사용합니다.
+- 테마는 githru(default), hacker blue, aqua, cotton candy, mono 총 5가지로 구성됩니다.
+- 각 테마는 다음 색상을 포함합니다:
+  - primary, secondary, tertiary
+  - 성공을 나타내는 success (푸른 계열)
+  - 실패, 경고를 나타내는 failed (붉은 계열)
 
-## 폰트
+## [폰트](https://github.com/githru/githru-vscode-ext/blob/main/packages/view/src/styles/_font.scss)
+### Font Size
+- Title: 1rem (16px)
+- Body(default): 0.875rem (14px)
+- Caption: 0.75rem (12px)
 
-- font family
-- font size
-- 각 컴포넌트에서 사용하는 font size 단위
+### Font Weight
+- Light: 300
+- Regular(default): 400
+- Semibold: 600
+- Extrabold: 800
 
-  좀 더 자세한 논의는 discussion [#99](https://github.com/githru/githru-vscode-ext/discussions/99)를 참고해주시기 바랍니다.
+
+### Line Height
+- Base(default): 1.62
+- Title: 1.15
+- Quote: 1.3
+- Button: 1
+
 
 ## Unit 테스트 코드 작성
 
