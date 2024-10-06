@@ -5,6 +5,7 @@ import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } 
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
+import { SidebarProvider } from "./sidebar";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
   findGit,
@@ -25,6 +26,10 @@ function normalizeFsPath(fsPath: string) {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
+  const provider = new SidebarProvider(context.extensionUri);
+
+  context.subscriptions.push(vscode.window.registerWebviewViewProvider("githruSidebar", provider));
+
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -82,7 +87,8 @@ export async function activate(context: vscode.ExtensionContext) {
         const { owner, repo: initialRepo } = getRepo(gitConfig);
         webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
         const repo = initialRepo[0];
-        const engine = new AnalysisEngine({
+        const engine = AnalysisEngine.getInstance();
+        engine.initialize({
           isDebugMode: true,
           gitLog,
           owner,

@@ -28,7 +28,8 @@
     "visual analytics"
   ],
   "activationEvents": [
-    "*"
+    "*",
+    "onView:githruSidebar"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -68,6 +69,24 @@
           "description": "Insert your primary color."
         }
       }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "githruSidebarView",
+          "title": "Githru Sidebar",
+          "icon": "images/logo.png"
+        }
+      ]
+    },
+    "views": {
+      "githruSidebarView": [
+        {
+          "type": "webview",
+          "id": "githruSidebar",
+          "name": "Githru Sidebar"
+        }
+      ]
     }
   },
   "scripts": {
