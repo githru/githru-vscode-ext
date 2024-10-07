@@ -53,14 +53,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const currentWorkspacePath = normalizeFsPath(currentWorkspaceUri.fsPath);
 
-      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
-
       const githubToken: string | undefined = await getGithubToken(secrets);
       if (!githubToken) {
         throw new GithubTokenUndefinedError("Cannot find your GitHub token. Retrying github authentication...");
       }
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
+
+      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
 
       const fetchCurrentBranch = async () => {
         let branchName;
