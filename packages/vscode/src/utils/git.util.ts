@@ -220,8 +220,15 @@ export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePat
   
   const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
   let numberOfThreads = 1;
-  if(totalCnt > 1000) numberOfThreads = Math.max(numCores/2,1);
-  console.log("thread nums ",numberOfThreads);
+
+  const taskThreshold = 1000;
+  const coreCountThreshold = 4;
+
+if (totalCnt > taskThreshold) {
+  if (numCores < coreCountThreshold) numberOfThreads = 2;
+  else numberOfThreads = 3;
+}
+ 
   const chunkSize = Math.ceil(totalCnt/ numberOfThreads);
   const promises: Promise<string>[] = [];
 

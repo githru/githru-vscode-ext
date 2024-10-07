@@ -60,6 +60,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
 
+      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+
       const fetchCurrentBranch = async () => {
         let branchName;
         try {
@@ -76,14 +78,9 @@ export async function activate(context: vscode.ExtensionContext) {
       };
 
       const initialBaseBranchName = await fetchCurrentBranch();
-      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const startTime = Date.now();
-        const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
-        const endTime = Date.now();
-        const elapsedTime = (endTime - startTime) / 1000;
-        console.log(`${elapsedTime.toFixed(3)}s`);
+    
 
-        
+      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
 
         const { owner, repo: initialRepo } = getRepo(gitConfig);
