@@ -2,14 +2,15 @@
 
 .vertical-cluster-list {
   display: flex;
+  flex: 1;
   flex-direction: column;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    column-gap: 20px;
-    padding: 0 10px 20px;
+    column-gap: 1.25rem;
+    padding: 0 0.625rem 1.25rem;
     width: 100%;
   }
 }
