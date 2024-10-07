@@ -8,20 +8,20 @@ body {
 .header-container {
   position: relative;
   display: flex;
-  height: 60px;
+  height: 3.75rem;
   justify-content: space-between;
   align-items: center;
-  padding: 0 12px 0 20px;
+  padding: 0 0.75rem 0 1.25rem;
 }
 
 .top-container {
-  height: 220px;
+  height: 13.75rem;
 }
 
 .middle-container {
   display: flex;
-  height: calc(100vh - 200px);
-  padding: 20px;
+  height: calc(100vh - 12.5rem);
+  padding: 1.25rem;
 }
 
 .no-commits-container {
@@ -29,9 +29,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 350px);
+  height: calc(100vh - 21.875rem);
 
   h1 {
-    margin: 40px 0 0 0;
+    margin: 2.5rem 0 0 0;
   }
 }
