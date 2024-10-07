@@ -3,9 +3,28 @@ import { parentPort, workerData } from 'worker_threads';
 
 import { resolveSpawnOutput } from './git.util'
 
-const { gitPath, currentWorkspacePath, skipCount, limitCount } = workerData;
+const { gitPath, currentWorkspacePath, skipCount, limitCount,COMMIT_SEPARATOR,GIT_LOG_SEPARATOR } = workerData;
+
+    
+
 
 async function getPartialGitLog() {
+    const gitLogFormat =
+      COMMIT_SEPARATOR +
+      [
+        "%H", // commit hash (id)
+        "%P", // parent hashes
+        "%D", // ref names (branches, tags)
+        "%an", // author name
+        "%ae", // author email
+        "%ad", // author date
+        "%cn",
+        "%ce",
+        "%cd", // committer name, committer email and committer date
+        "%B", // commit message  (subject and body)
+      ].join(GIT_LOG_SEPARATOR) +
+      GIT_LOG_SEPARATOR;
+
     const args = [
         '--no-pager',
         'log',
@@ -13,7 +32,7 @@ async function getPartialGitLog() {
         '--parents',
         '--numstat',
         '--date-order',
-        '--pretty=fuller',
+        `--pretty=format:${gitLogFormat}`,
         '--decorate',
         '-c',
         `--skip=${skipCount}`,

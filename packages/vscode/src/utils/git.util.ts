@@ -259,6 +259,8 @@ if (totalCnt > taskThreshold) {
         currentWorkspacePath,
         skipCount,
         limitCount,
+        COMMIT_SEPARATOR, 
+        GIT_LOG_SEPARATOR 
       },
     });
 
