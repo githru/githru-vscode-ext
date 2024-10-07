@@ -8,9 +8,9 @@
   font-weight: $font-weight-semibold;
 
   & &__select-box {
-    border: 1px solid $color-white;
+    border: 0.0625rem solid $color-white;
     color: $color-white;
-    height: 30px;
+    height: 1.875rem;
 
     & .MuiSvgIcon-root {
       color: $color-white;

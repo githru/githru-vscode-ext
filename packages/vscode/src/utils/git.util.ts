@@ -1,3 +1,4 @@
+import { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "@githru-vscode-ext/analysis-engine";
 import * as cp from "child_process";
 import * as fs from "fs";
 import os from 'os';
@@ -158,6 +159,21 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 
 export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
+    const gitLogFormat =
+      COMMIT_SEPARATOR +
+      [
+        "%H", // commit hash (id)
+        "%P", // parent hashes
+        "%D", // ref names (branches, tags)
+        "%an", // author name
+        "%ae", // author email
+        "%ad", // author date
+        "%cn",
+        "%ce",
+        "%cd", // committer name, committer email and committer date
+        "%B", // commit message  (subject and body)
+      ].join(GIT_LOG_SEPARATOR) +
+      GIT_LOG_SEPARATOR;
 
     const args = [
       "--no-pager",
@@ -166,7 +182,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
       "--parents",
       "--numstat",
       "--date-order",
-      "--pretty=fuller",
+      `--pretty=format:${gitLogFormat}`,
       "--decorate",
       "-c",
     ];

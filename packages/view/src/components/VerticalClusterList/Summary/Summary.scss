@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding-left: 10px;
+  padding-left: 0.625rem;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
@@ -15,7 +15,7 @@
   &__item {
     display: flex;
     align-items: center;
-    column-gap: 10px;
+    column-gap: 0.625rem;
   }
 
   &__info {
@@ -25,7 +25,7 @@
 
     &--expanded {
       @extend .cluster-summary__info;
-      border-radius: 25px;
+      border-radius: 1.5625rem;
       background-color: $color-dark-gray;
     }
   }
@@ -34,7 +34,7 @@
 .summary {
   display: flex;
   align-items: center;
-  padding: 10px 15px;
+  padding: 0.625rem 0.9375rem;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -42,7 +42,7 @@
   width: 100%;
 
   &:hover {
-    border-radius: 40px;
+    border-radius: 2.5rem;
     background-color: $color-dark-gray;
 
     .summary__toggle {
@@ -61,12 +61,12 @@
     align-items: center;
     justify-content: space-between;
     font-size: $font-size-body;
-    gap: 10px;
+    gap: 0.625rem;
   }
 
   &__commit-message {
     flex-grow: 1;
-    padding-left: 15px;
+    padding-left: 0.9375rem;
     text-align: left;
     cursor: pointer;
     // "width: 0" makes the "commit-message" ellipsis reponsive
@@ -83,7 +83,7 @@
     &:visited {
       color: $color-light-gray;
     }
-    
+
     &:hover {
       color: var(--color-primary);
     }
@@ -98,10 +98,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 8px;
+    margin-left: 0.5rem;
     background-color: transparent;
     border: none;
-    font-size: 24px;
+    font-size: 1.5rem;
     color: var(--color-primary);
     visibility: hidden;
     cursor: pointer;
@@ -116,7 +116,7 @@
 
 .detail {
   overflow: auto;
-  height: 220px;
-  max-height: 280px;
-  padding: 10px 30px;
+  height: 13.75rem;
+  max-height: 17.5rem;
+  padding: 0.625rem 1.875rem;
 }

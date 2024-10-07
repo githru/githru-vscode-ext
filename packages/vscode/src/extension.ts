@@ -60,7 +60,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
 
-      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+      // const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+      const gitLog = await getGitLog(gitPath, currentWorkspacePath);
 
       const fetchCurrentBranch = async () => {
         let branchName;
