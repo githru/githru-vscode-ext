@@ -17,10 +17,10 @@
   }
 
   & &__select-box {
-    border: 1px solid $color-white;
+    border: 0.0625rem solid $color-white;
     color: $color-white;
-    height: 25px;
-    width: 100px;
+    height: 1.5625rem;
+    width: 6.25rem;
     font-size: $font-size-caption;
 
     & .MuiSvgIcon-root {
@@ -34,7 +34,7 @@
 
   &__chart {
     overflow: visible;
-    margin: 20px 40px 40px;
+    margin: 1.25rem 2.5rem 2.5rem;
   }
 
   &__axis {
@@ -44,7 +44,7 @@
       .tick {
         display: none;
       }
-      
+
       .x-axis__label {
         fill: $color-white;
       }
@@ -78,8 +78,8 @@
   &__tooltip {
     display: none;
     position: absolute;
-    padding: 8px 16px;
-    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3125rem;
     font-size: $font-size-caption;
     text-align: center;
     line-height: 1.5;

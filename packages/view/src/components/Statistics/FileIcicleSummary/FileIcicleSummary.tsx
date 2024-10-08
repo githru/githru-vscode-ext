@@ -3,6 +3,8 @@ import type { HierarchyRectangularNode } from "d3";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 
+import { pxToRem } from "utils";
+
 import { PRIMARY_COLOR_VARIABLE_NAME } from "../../../constants/constants";
 import { useGetSelectedData } from "../Statistics.hook";
 
@@ -44,7 +46,7 @@ const drawIcicleTree = async ($target: RefObject<SVGSVGElement>, data: FileChang
   const svg = d3
     .select($target.current)
     .attr("viewBox", [0, 0, WIDTH, HEIGHT])
-    .style("font", `${FONT_SIZE}px sans-serif`);
+    .style("font", `${pxToRem(FONT_SIZE)} sans-serif`);
 
   // Position each partitions
   const cell = svg
