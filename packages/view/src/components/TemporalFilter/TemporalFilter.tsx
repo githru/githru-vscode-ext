@@ -1,12 +1,12 @@
 import "reflect-metadata";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
-import * as d3 from "d3";
 import BounceLoader from "react-spinners/BounceLoader";
+import * as d3 from "d3";
+import { useShallow } from "zustand/react/shallow";
 import { Button } from "@mui/material";
 
-import { useGlobalData } from "hooks";
-import { useLoadingStore } from "store";
+import { useLoadingStore, useFilteredRangeStore, useDataStore } from "store";
 
 import { filterDataByDate, getMinMaxDate, lineChartTimeFormatter, sortBasedOnCommitNode } from "./TemporalFilter.util";
 import "./TemporalFilter.scss";
@@ -18,8 +18,13 @@ import { createBrush, drawBrush, resetBrush } from "./LineChartBrush";
 import { BRUSH_MARGIN, TEMPORAL_FILTER_LINE_CHART_STYLES } from "./LineChart.const";
 
 const TemporalFilter = () => {
-  const { data, filteredData, setFilteredData, filteredRange, setFilteredRange, setSelectedData } = useGlobalData();
-  const { loading } = useLoadingStore((state) => state);
+  const [data, filteredData, setFilteredData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.data, state.filteredData, state.setFilteredData, state.setSelectedData])
+  );
+  const [loading] = useLoadingStore(useShallow((state) => [state.loading]));
+  const [filteredRange, setFilteredRange] = useFilteredRangeStore(
+    useShallow((state) => [state.filteredRange, state.setFilteredRange])
+  );
   const brushGroupRef = useRef<SVGGElement | null>(null);
   const brushRef = useRef<d3.BrushBehavior<unknown>>();
 

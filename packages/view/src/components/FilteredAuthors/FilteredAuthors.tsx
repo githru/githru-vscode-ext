@@ -1,12 +1,12 @@
 import { Author } from "components/@common/Author";
 import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
 import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
-import { useGlobalData } from "hooks";
+import { useDataStore } from "store";
 
 import "./FilteredAuthors.scss";
 
 const FilteredAuthors = () => {
-  const { selectedData } = useGlobalData();
+  const selectedData = useDataStore((state) => state.selectedData);
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusters = getInitData(selectedData);
 
