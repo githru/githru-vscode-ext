@@ -10,5 +10,5 @@ export default interface IDEPort {
   sendRefreshDataMessage: (payload?: string) => void;
   sendFetchAnalyzedDataMessage: (payload?: string) => void;
   sendFetchBranchListMessage: () => void;
-  setPrimaryColor: (color: string) => void;
+  setCustomTheme: (theme: string) => void;
 }

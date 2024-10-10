@@ -54,10 +54,10 @@ export default class FakeIDEAdapter implements IDEPort {
     this.sendMessageToMe(message);
   }
 
-  public setPrimaryColor(color: string) {
+  public setCustomTheme(color: string) {
     sessionStorage.setItem("PRIMARY_COLOR", color);
     const message: IDEMessage = {
-      command: "updatePrimaryColor",
+      command: "updateCustomTheme",
     };
     this.sendMessageToMe(message);
   }
@@ -76,10 +76,10 @@ export default class FakeIDEAdapter implements IDEPort {
           command,
           payload: JSON.stringify(fakeBranchList),
         };
-      case "updatePrimaryColor":
+      case "updateCustomTheme":
         return {
           command,
-          payload: sessionStorage.getItem("PRIMARY_COLOR") as string,
+          payload: sessionStorage.getItem("CUSTOM_THEME") as string,
         };
       default:
         return {
