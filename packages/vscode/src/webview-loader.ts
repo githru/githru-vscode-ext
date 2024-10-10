@@ -37,13 +37,12 @@ export default class WebviewLoader implements vscode.Disposable {
         const { command, payload } = message;
 
         if (command === "fetchAnalyzedData" || command === "refresh") {
-          const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
           try {
             const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
             const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(
               `${ANALYZE_DATA_KEY}_${baseBranchName}`
             );
-            let analyzedData = storedAnalyzedData;
+            analyzedData = storedAnalyzedData;
             if (!storedAnalyzedData) {
               console.log("No cache Data");
               console.log("baseBranchName : ", baseBranchName);
