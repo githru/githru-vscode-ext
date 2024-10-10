@@ -36,7 +36,7 @@ function tagToNumber(tag: string, maxLength: number): number {
  * @param tags
  * @returns
  */
-function getCommitLatestTag(tags: string[]): string {
+export function getCommitLatestTag(tags: string[]): string {
   if (!Array.isArray(tags) || tags.length === 0) return "";
 
   const validTags = tags.filter((tag) => isValidReleaseTag(tag));
@@ -77,7 +77,7 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
           count: clusterNode.commitNodeList.length - 1,
         },
       },
-      latestReleaseTag: "",
+      clusterTags: [],
     };
 
     const clusterTags: string[] = [];
@@ -94,16 +94,17 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
 
       // get releaseTags in cluster commitNodeList
       commitNode.commit.releaseTags?.map((tag) => {
-        clusterTags.push(tag);
+        if (clusterTags.indexOf(tag) === -1) {
+          clusterTags.push(tag);
+        }
         return clusterTags;
       });
 
       return commitNode;
     });
 
-    // set latset release tag
-    const latestReleaseTag = getCommitLatestTag(clusterTags);
-    cluster.latestReleaseTag = latestReleaseTag;
+    // set release tag in cluster
+    cluster.clusterTags = clusterTags;
 
     // remove name overlap
     const authorsSet = cluster.summary.authorNames.reduce((set, authorArray) => {
