@@ -7,6 +7,7 @@ import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
 import { mapClusterNodesFrom } from "./utils/csm.mapper";
 import {
+  fetchGitLogInParallel,
   findGit,
   getBranches,
   getCurrentBranchName,
@@ -59,6 +60,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
 
+      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+
       const fetchCurrentBranch = async () => {
         let branchName;
         try {
@@ -75,8 +78,9 @@ export async function activate(context: vscode.ExtensionContext) {
       };
 
       const initialBaseBranchName = await fetchCurrentBranch();
+    
+
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
 
         const { owner, repo: initialRepo } = getRepo(gitConfig);
