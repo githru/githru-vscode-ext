@@ -3,7 +3,6 @@ import type { CommitRaw, DifferenceStatistic } from "./types";
 
 export default function getCommitRaws(log: string) {
   if (!log) return [];
-  console.log(log);
   const EOL_REGEX = /\r?\n/;
   const COMMIT_SEPARATOR = new RegExp(`${EOL_REGEX.source}{4}`);
   const COMMIT_MESSAGE_BODY_INDENTATION = "    ";
@@ -11,10 +10,6 @@ export default function getCommitRaws(log: string) {
   // step 0: Split log into commits
   const commits = log.substring(2).split(COMMIT_SEPARATOR);
   const commitRaws: CommitRaw[] = [];
-  console.log("length: ", commits.length);
-  console.log(commits[0]);
-  console.log("-----------------");
-  console.log(commits[commits.length - 1]);
   for (let commitIdx = 0; commitIdx < commits.length; commitIdx += 1) {
     // step 1: Extract commitData
     const commitData = commits[commitIdx].split(EOL_REGEX);
