@@ -12,6 +12,7 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
 import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
+import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -53,7 +54,7 @@ const App = () => {
   if (loading) {
     return (
       <BounceLoader
-        color="#ff8272"
+        color={THEME_INFO[window.theme as keyof typeof THEME_INFO].colors.primary}
         loading={loading}
         cssOverride={{
           position: "fixed",
