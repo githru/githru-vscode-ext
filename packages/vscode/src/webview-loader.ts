@@ -92,7 +92,7 @@ export default class WebviewLoader implements vscode.Disposable {
     //   this.dispose();
     //   throw new Error("Project not connected to Git.");
     // }
-    this.setWebviewContent();
+    this._panel.webview.html = this.getWebviewContent(this._panel.webview);
   }
 
   dispose() {
@@ -111,12 +111,12 @@ export default class WebviewLoader implements vscode.Disposable {
     });
   }
 
-  private async getWebviewContent(webview: vscode.Webview): Promise<string> {
+  private getWebviewContent(webview: vscode.Webview) {
     const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
     const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
     // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
-    const theme = await getTheme();
+    const theme = getTheme();
     const returnString = `
             <!DOCTYPE html>
             <html lang="en">
@@ -139,12 +139,6 @@ export default class WebviewLoader implements vscode.Disposable {
             </html>
         `;
     return returnString;
-  }
-
-  private async setWebviewContent() {
-    if (this._panel) {
-      this._panel.webview.html = await this.getWebviewContent(this._panel.webview);
-    }
   }
 
   public setGlobalOwnerAndRepo(owner: string, repo: string) {
