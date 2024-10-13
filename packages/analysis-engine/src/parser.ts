@@ -41,39 +41,39 @@ export default function getCommitRaws(log: string) {
     );
 
     // step 3: Extract message and diffStats
-    let messageAndDiffStatsIdx = 0;
-    let message = "";
+    let messageSubject = "";
+    let messageBody = "";
     const diffStats: DifferenceStatistic = {
       totalInsertionCount: 0,
       totalDeletionCount: 0,
       fileDictionary: {},
     };
-    // Extract message
-    while (messageAndDiffStatsIdx < messageAndDiffStats.length && messageAndDiffStats[messageAndDiffStatsIdx] !== "") {
-      const line = messageAndDiffStats[messageAndDiffStatsIdx];
-      if (line.startsWith(COMMIT_MESSAGE_BODY_INDENTATION)) message += "\n" + line.trim();
-      else message += line;
-      messageAndDiffStatsIdx++;
-    }
-    // Extract diffStats
-    while (messageAndDiffStatsIdx < messageAndDiffStats.length) {
-      const line = messageAndDiffStats[messageAndDiffStatsIdx];
-      if (line === "") {
-        messageAndDiffStatsIdx++;
+    for (let idx = 0; idx < messageAndDiffStats.length; idx++) {
+      const line = messageAndDiffStats[idx];
+      if (idx === 0)
+        // message subject
+        messageSubject = line;
+      else if (line.startsWith(COMMIT_MESSAGE_BODY_INDENTATION)) {
+        // message body (add newline if not first line)
+        messageBody += idx === 1 ? line.trim() : `\n${line.trim()}`;
+      } else if (line === "")
+        // pass empty line
         continue;
+      else {
+        // diffStats
+        const [insertions, deletions, path] = line.split("\t");
+        const numberedInsertions = insertions === "-" ? 0 : Number(insertions);
+        const numberedDeletions = deletions === "-" ? 0 : Number(deletions);
+        diffStats.totalInsertionCount += numberedInsertions;
+        diffStats.totalDeletionCount += numberedDeletions;
+        diffStats.fileDictionary[path] = {
+          insertionCount: numberedInsertions,
+          deletionCount: numberedDeletions,
+        };
       }
-      const [insertions, deletions, path] = line.split("\t");
-      const numberedInsertions = insertions === "-" ? 0 : Number(insertions);
-      const numberedDeletions = deletions === "-" ? 0 : Number(deletions);
-      diffStats.totalInsertionCount += numberedInsertions;
-      diffStats.totalDeletionCount += numberedDeletions;
-      diffStats.fileDictionary[path] = {
-        insertionCount: numberedInsertions,
-        deletionCount: numberedDeletions,
-      };
-      messageAndDiffStatsIdx++;
     }
 
+    const message = messageBody === "" ? messageSubject : `${messageSubject}\n${messageBody}`;
     // step 4: Construct commitRaw
     const commitRaw: CommitRaw = {
       sequence: commitIdx,
