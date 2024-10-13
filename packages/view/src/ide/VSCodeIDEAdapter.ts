@@ -49,9 +49,9 @@ export default class VSCodeIDEAdapter implements IDEPort {
     this.sendMessageToIDE(message);
   }
 
-  public setCustomTheme(theme: string) {
+  public sendUpdateThemeMessage(theme: string) {
     const message: IDEMessage = {
-      command: "updateCustomTheme",
+      command: "updateTheme",
       payload: JSON.stringify({ theme }),
     };
     this.sendMessageToIDE(message);

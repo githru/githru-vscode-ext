@@ -77,10 +77,10 @@ export default class WebviewLoader implements vscode.Disposable {
           });
         }
 
-        if (command === "updateCustomTheme") {
-          const colorCode = payload && JSON.parse(payload);
-          if (colorCode.theme) {
-            setTheme(colorCode.theme);
+        if (command === "updateTheme") {
+          const themeInfo = payload && JSON.parse(payload);
+          if (themeInfo.theme) {
+            setTheme(themeInfo.theme);
           }
         }
       } catch (e) {

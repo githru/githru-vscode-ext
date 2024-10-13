@@ -17,9 +17,9 @@ export const deleteGithubToken = async (secrets: vscode.SecretStorage) => {
   return await secrets.delete(SETTING_PROPERTY_NAMES.GITHUB_TOKEN);
 };
 
-export const setTheme = (newTheme: string) => {
+export const setTheme = (theme: string) => {
   const configuration = vscode.workspace.getConfiguration();
-  configuration.update(SETTING_PROPERTY_NAMES.THEME, newTheme);
+  configuration.update(SETTING_PROPERTY_NAMES.THEME, theme);
 };
 
 export const getTheme = () => {

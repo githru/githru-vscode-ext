@@ -3,7 +3,7 @@ import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { setCustomTheme } from "services";
+import { sendUpdateThemeCommand } from "services";
 
 import { THEME_INFO } from "./ThemeSelector.const";
 import type { ThemeInfo } from "./ThemeSelector.type";
@@ -16,7 +16,7 @@ const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
   const [selectedItem, setSelectedItem] = useState<string>("");
 
   useEffect(() => {
-    const selectedTheme = document.documentElement.getAttribute("custom-type");
+    const selectedTheme = document.documentElement.getAttribute("theme");
     if (selectedTheme) setSelectedItem(selectedTheme);
   }, []);
 
@@ -45,9 +45,9 @@ const ThemeSelector = () => {
   const themeSelectorRef = useRef<HTMLDivElement>(null);
 
   const handleTheme = (value: string) => {
-    setCustomTheme(value);
+    sendUpdateThemeCommand(value);
     window.theme = value;
-    document.documentElement.setAttribute("custom-type", value);
+    document.documentElement.setAttribute("theme", value);
   };
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const ThemeSelector = () => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute("custom-type", window.theme);
+    document.documentElement.setAttribute("theme", window.theme);
   }, []);
 
   return (
