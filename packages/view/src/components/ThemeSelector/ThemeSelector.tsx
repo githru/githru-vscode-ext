@@ -102,6 +102,7 @@ const ThemeSelector = () => {
 
   const handleTheme = (value: string) => {
     setCustomTheme(value);
+    window.theme = value;
     document.documentElement.setAttribute("custom-type", value);
   };
 
