@@ -1,4 +1,3 @@
-import { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "@githru-vscode-ext/analysis-engine";
 import * as cp from "child_process";
 import * as fs from "fs";
 import * as path from "path";
