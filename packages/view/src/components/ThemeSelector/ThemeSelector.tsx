@@ -5,68 +5,12 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { setCustomTheme } from "services";
 
-type ThemeInfo = {
-  title: string;
-  value: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-  };
-};
+import { THEME_INFO } from "./ThemeSelector.const";
+import type { ThemeInfo } from "./ThemeSelector.type";
 
-type ThemeIconsProps = ThemeInfo & {
+type ThemeIconsProps = ThemeInfo[keyof ThemeInfo] & {
   onClick: () => void;
 };
-
-const themeInfo: ThemeInfo[] = [
-  {
-    title: "Githru",
-    value: "githru",
-    colors: {
-      primary: "#e06091",
-      secondary: "#8840bb",
-      tertiary: "#ffd08a",
-    },
-  },
-  {
-    title: "Hacker Blue",
-    value: "hacker-blue",
-    colors: {
-      primary: "#456cf7",
-      secondary: "#3f4c73",
-      tertiary: "#6c60f0",
-    },
-  },
-  {
-    title: "Aqua",
-    value: "aqua",
-    colors: {
-      primary: "#51decd",
-      secondary: "#0687a3",
-      tertiary: "#a7ffff",
-    },
-  },
-  {
-    title: "Cotton Candy",
-    value: "cotton-candy",
-    colors: {
-      primary: "#ffcccb",
-      secondary: "#feffd1",
-      tertiary: "#a39aeb",
-    },
-  },
-
-  {
-    title: "Mono",
-    value: "mono",
-    colors: {
-      primary: "#68788f",
-      secondary: "#3a4776",
-      tertiary: "#9aaed1",
-    },
-  },
-];
 
 const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
   const [selectedItem, setSelectedItem] = useState<string>("");
@@ -138,7 +82,7 @@ const ThemeSelector = () => {
             />
           </div>
           <div className="theme-selector__list">
-            {themeInfo.map((theme) => (
+            {Object.entries(THEME_INFO).map(([_, theme]) => (
               <ThemeIcons
                 key={theme.value}
                 {...theme}
