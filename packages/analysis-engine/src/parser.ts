@@ -81,7 +81,7 @@ export default function getCommitRaws(log: string) {
 
     // step 4: Construct commitRaw
     const commitRaw: CommitRaw = {
-      sequence: commitIdx - 1,
+      sequence: commitIdx,
       id,
       parents: parents.split(" "),
       branches,
