@@ -13,16 +13,9 @@ type ThemeIconsProps = ThemeInfo[keyof ThemeInfo] & {
 };
 
 const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
-  const [selectedItem, setSelectedItem] = useState<string>("");
-
-  useEffect(() => {
-    const selectedTheme = document.documentElement.getAttribute("theme");
-    if (selectedTheme) setSelectedItem(selectedTheme);
-  }, []);
-
   return (
     <div
-      className={`theme-icon${selectedItem === value ? "--selected" : ""}`}
+      className={`theme-icon${window.theme === value ? "--selected" : ""}`}
       onClick={onClick}
       role="presentation"
     >
