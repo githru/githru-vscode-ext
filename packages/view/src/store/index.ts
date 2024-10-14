@@ -3,4 +3,5 @@ export * from "./filteredRange";
 export * from "./branch";
 export * from "./repo";
 export * from "./owner";
+export * from "./githubInfo";
 export * from "./data";

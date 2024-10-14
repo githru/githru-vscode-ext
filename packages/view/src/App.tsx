@@ -10,14 +10,14 @@ import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
-import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
+import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore } from "store";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
+  const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
@@ -26,6 +26,7 @@ const App = () => {
       const callbacks: IDESentEvents = {
         handleChangeAnalyzedData,
         handleChangeBranchList,
+        handleGithubInfo,
       };
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
