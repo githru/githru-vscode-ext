@@ -32,6 +32,7 @@ const App = () => {
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
       ideAdapter.sendFetchBranchListMessage();
+      ideAdapter.sendFetchGithubInfo();
       initRef.current = true;
     }
   }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
