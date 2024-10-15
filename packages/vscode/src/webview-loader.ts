@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
-import { getPrimaryColor, setPrimaryColor } from "./setting-repository";
+import { getTheme, setTheme } from "./setting-repository";
 import type { ClusterNode } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
@@ -77,10 +77,10 @@ export default class WebviewLoader implements vscode.Disposable {
           });
         }
 
-        if (command === "updatePrimaryColor") {
+        if (command === "updateCustomTheme") {
           const colorCode = payload && JSON.parse(payload);
-          if (colorCode.primary) {
-            setPrimaryColor(colorCode.primary);
+          if (colorCode.theme) {
+            setTheme(colorCode.theme);
           }
         }
       } catch (e) {
@@ -92,7 +92,7 @@ export default class WebviewLoader implements vscode.Disposable {
     //   this.dispose();
     //   throw new Error("Project not connected to Git.");
     // }
-    this._panel.webview.html = this.getWebviewContent(this._panel.webview);
+    this.setWebviewContent();
   }
 
   dispose() {
@@ -111,13 +111,12 @@ export default class WebviewLoader implements vscode.Disposable {
     });
   }
 
-  private getWebviewContent(webview: vscode.Webview): string {
+  private async getWebviewContent(webview: vscode.Webview): Promise<string> {
     const reactAppPathOnDisk = vscode.Uri.file(path.join(this.extensionPath, "dist", "webviewApp.js"));
     const reactAppUri = webview.asWebviewUri(reactAppPathOnDisk);
     // const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
-    const primaryColor = getPrimaryColor();
-
+    const theme = await getTheme();
     const returnString = `
             <!DOCTYPE html>
             <html lang="en">
@@ -127,7 +126,7 @@ export default class WebviewLoader implements vscode.Disposable {
                     <title>githru-vscode-ext webview</title>
                     <script>
                         window.isProduction = true;   
-                        window.primaryColor = "${primaryColor}";                     
+                        window.theme = "${theme}";                       
                     </script>
                 </head>
                 <body>
@@ -141,6 +140,13 @@ export default class WebviewLoader implements vscode.Disposable {
         `;
     return returnString;
   }
+
+  private async setWebviewContent() {
+    if (this._panel) {
+      this._panel.webview.html = await this.getWebviewContent(this._panel.webview);
+    }
+  }
+
   public setGlobalOwnerAndRepo(owner: string, repo: string) {
     if (this._panel) {
       this._panel.webview.postMessage({

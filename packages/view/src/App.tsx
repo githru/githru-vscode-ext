@@ -7,18 +7,20 @@ import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
-import { useGlobalData } from "hooks";
+import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useLoadingStore } from "store";
+import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
-
-  const { filteredData, handleChangeAnalyzedData, handleChangeBranchList } = useGlobalData();
-  const { loading, setLoading } = useLoadingStore((state) => state);
-
+  const { handleChangeAnalyzedData } = useAnalayzedData();
+  const filteredData = useDataStore((state) => state.filteredData);
+  const { handleChangeBranchList } = useBranchStore();
+  const { loading, setLoading } = useLoadingStore();
+  const { setOwner } = useOwnerStore();
+  const { setRepo } = useRepoStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -27,7 +29,6 @@ const App = () => {
         handleChangeAnalyzedData,
         handleChangeBranchList,
       };
-
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
@@ -36,7 +37,6 @@ const App = () => {
     }
   }, [handleChangeAnalyzedData, handleChangeBranchList, ideAdapter, setLoading]);
 
-  const { setOwner, setRepo } = useGlobalData();
   useEffect(() => {
     const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
       const message = event.data;

@@ -2,9 +2,9 @@ import { container } from "tsyringe";
 
 import type IDEPort from "ide/IDEPort";
 
-export const setPrimaryColor = (color: string) => {
+export const setCustomTheme = (color: string) => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-  ideAdapter.setPrimaryColor(color);
+  ideAdapter.setCustomTheme(color);
 };
 
 export const sendFetchAnalyzedDataCommand = (selectedBranch?: string) => {
