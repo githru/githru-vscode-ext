@@ -36,21 +36,13 @@ describe("commit message type", () => {
 
 describe("getCommitRaws", () => {
   const FRONT_NEW_LINE = "\n\n";
-  const COMMIT_MESSAGE_BODY_INDENTATION = "    ";
+  const INDENTATION = "    ";
 
-  const fakeAuthor = `John Park
-mail@gmail.com
-Sun Sep 4 20:17:59 2022 +0900`;
-  const fakeCommitter = `John Park 2
-mail2@gmail.com
-Sun Sep 5 20:17:59 2022 +0900`;
-  const fakeCommitMessage = `commit message
-${COMMIT_MESSAGE_BODY_INDENTATION}`;
-  const fakeCommitMessageAndBody = `commit message title
-
-${COMMIT_MESSAGE_BODY_INDENTATION}commit message body`;
-  const fakeCommitHash = `a
-b`;
+  const fakeAuthor = "John Park\nmail@gmail.com\nSun Sep 4 20:17:59 2022 +0900";
+  const fakeCommitter = `John Park 2\nmail2@gmail.com\nSun Sep 5 20:17:59 2022 +0900`;
+  const fakeCommitMessage = `commit message\n${INDENTATION}`;
+  const fakeCommitMessageAndBody = `commit message title\n${INDENTATION}\n${INDENTATION}commit message body`;
+  const fakeCommitHash = "a\nb";
   const fakeCommitRef = "HEAD";
   const fakeCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
 
@@ -84,13 +76,7 @@ b`;
 
   it.each([
     [
-      FRONT_NEW_LINE +
-        `a
-
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"a\n"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "a",
@@ -98,27 +84,15 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `c
-b
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"c\nd"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "c",
-        parents: ["b"],
+        parents: ["d"],
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `d
-e f
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"d\ne f"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "d",
@@ -132,12 +106,7 @@ ${fakeCommitMessage}`,
 
   it.each([
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-HEAD
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -145,12 +114,7 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-HEAD -> main, origin/main, origin/HEAD
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD -> main, origin/main, origin/HEAD"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
@@ -158,12 +122,7 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-HEAD, tag: v1.0.0
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD, tag: v1.0.0"}\n${fakeAuthor}\n${fakeCommitter}$\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -171,12 +130,7 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
@@ -184,12 +138,7 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-HEAD, tag: v2.0.0, tag: v1.4
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD, tag: v2.0.0, tag: v1.4"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -197,12 +146,7 @@ ${fakeCommitMessage}`,
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${""}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: [],
@@ -216,14 +160,7 @@ ${fakeCommitMessage}`,
 
   it.each([
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}
-10\t0\ta.ts
-1\t0\tREADME.md`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"10\t0\ta.ts\n1\t0\tREADME.md"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -237,13 +174,7 @@ ${fakeCommitMessage}
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}
-3\t3\ta.ts`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"3\t3\ta.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -254,13 +185,7 @@ ${fakeCommitMessage}
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}
-4\t0\ta.ts`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"4\t0\ta.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -271,15 +196,7 @@ ${fakeCommitMessage}
       },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}
-0\t6\ta.ts
-2\t0\tb.ts
-3\t3\tc.ts`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -299,25 +216,8 @@ ${fakeCommitMessage}
   });
 
   it(`should parse gitlog to commitRaw(multiple commits)`, () => {
-    const mockLog =
-      FRONT_NEW_LINE +
-      `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}
-${fakeCommitFileChange}
-
-
-
-${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessage}`;
-    console.log(mockLog);
+    const mockLog = `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${fakeCommitFileChange}\n\n\n\n${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`;
     const result = getCommitRaws(mockLog);
-    console.log(result);
     const expectedResult = [
       { ...commonExpectatedResult, differenceStatistic: expectedFileChange },
       { ...commonExpectatedResult, sequence: 1 },
@@ -328,56 +228,23 @@ ${fakeCommitMessage}`;
 
   it.each([
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-commit message title
-${COMMIT_MESSAGE_BODY_INDENTATION}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}`,
       { ...commonExpectatedResult, message: "commit message title" },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-commit message title
-${COMMIT_MESSAGE_BODY_INDENTATION}commit message body`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}${"commit message body"}`,
       { ...commonExpectatedResult, message: "commit message title\ncommit message body" },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-commit message title
-${COMMIT_MESSAGE_BODY_INDENTATION}
-${COMMIT_MESSAGE_BODY_INDENTATION}commit message body`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}\n${INDENTATION}${"commit message body"}`,
       { ...commonExpectatedResult, message: "commit message title\n\ncommit message body" },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-commit message title
-${COMMIT_MESSAGE_BODY_INDENTATION}
-${COMMIT_MESSAGE_BODY_INDENTATION}
-${COMMIT_MESSAGE_BODY_INDENTATION}commit message body`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}\n${INDENTATION}\n${INDENTATION}${"commit message body"}`,
       { ...commonExpectatedResult, message: "commit message title\n\n\ncommit message body" },
     ],
     [
-      FRONT_NEW_LINE +
-        `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-
-${COMMIT_MESSAGE_BODY_INDENTATION}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n\n${INDENTATION}`,
       { ...commonExpectatedResult, message: "" },
     ],
   ])("should parse gitlog to commitRaw(commit message)", (mockLog, expectedResult) => {
@@ -386,14 +253,7 @@ ${COMMIT_MESSAGE_BODY_INDENTATION}`,
   });
 
   it(`should parse gitlog to commitRaw(commit message body and file change)`, () => {
-    const mockLog =
-      FRONT_NEW_LINE +
-      `${fakeCommitHash}
-${fakeCommitRef}
-${fakeAuthor}
-${fakeCommitter}
-${fakeCommitMessageAndBody}
-${fakeCommitFileChange}`;
+    const mockLog = `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessageAndBody}\n${fakeCommitFileChange}`;
     const result = getCommitRaws(mockLog);
     const expectedResult = {
       ...commonExpectatedResult,
