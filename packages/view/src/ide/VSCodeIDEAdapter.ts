@@ -19,6 +19,8 @@ export default class VSCodeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payloadData);
         case "fetchBranchList":
           return events.handleChangeBranchList(payloadData);
+        case "fetchGithubInfo":
+          return events.handleGithubInfo(payloadData);
         default:
           console.log("Unknown Message");
       }
@@ -45,6 +47,13 @@ export default class VSCodeIDEAdapter implements IDEPort {
   public sendFetchBranchListMessage() {
     const message: IDEMessage = {
       command: "fetchBranchList",
+    };
+    this.sendMessageToIDE(message);
+  }
+
+  public sendFetchGithubInfo() {
+    const message: IDEMessage = {
+      command: "fetchGithubInfo",
     };
     this.sendMessageToIDE(message);
   }
