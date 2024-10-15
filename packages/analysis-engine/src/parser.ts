@@ -5,7 +5,7 @@ export default function getCommitRaws(log: string) {
   if (!log) return [];
   const EOL_REGEX = /\r?\n/;
   const COMMIT_SEPARATOR = new RegExp(`${EOL_REGEX.source}{4}`);
-  const COMMIT_MESSAGE_BODY_INDENTATION = "    ";
+  const INDENTATION = "    ";
 
   // step 0: Split log into commits
   const commits = log.substring(2).split(COMMIT_SEPARATOR);
@@ -53,7 +53,7 @@ export default function getCommitRaws(log: string) {
       if (idx === 0)
         // message subject
         messageSubject = line;
-      else if (line.startsWith(COMMIT_MESSAGE_BODY_INDENTATION)) {
+      else if (line.startsWith(INDENTATION)) {
         // message body (add newline if not first line)
         messageBody += idx === 1 ? line.trim() : `\n${line.trim()}`;
       } else if (line === "")
