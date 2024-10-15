@@ -171,7 +171,6 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
         "%w(0,0,4)%s", // commit message subject
         "%b", // commit message body
       ].join(GIT_LOG_SEPARATOR);
-    console.log("gitLogFormat: ", gitLogFormat);
     const args = [
       "--no-pager",
       "log",
