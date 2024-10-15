@@ -154,8 +154,6 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 
 export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const GIT_LOG_SEPARATOR = "%n"; // newline
-
     const gitLogFormat =
       "%n%n" +
       [
@@ -170,7 +168,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
         "%cd", // committer date
         "%w(0,0,4)%s", // commit message subject
         "%b", // commit message body
-      ].join(GIT_LOG_SEPARATOR);
+      ].join("%n");
     const args = [
       "--no-pager",
       "log",
