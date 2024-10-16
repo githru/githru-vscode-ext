@@ -14,7 +14,7 @@ export default class WebviewLoader implements vscode.Disposable {
     context: vscode.ExtensionContext,
     fetcher: GithruFetcherMap
   ) {
-    const { fetchClusterNodes, fetchBranches, fetchCurrentBranch } = fetcher;
+    const { fetchClusterNodes, fetchBranches, fetchCurrentBranch, fetchGithubInfo } = fetcher;
     const viewColumn = vscode.ViewColumn.One;
 
     //캐시 초기화
@@ -74,6 +74,14 @@ export default class WebviewLoader implements vscode.Disposable {
           await this.respondToMessage({
             ...message,
             payload: branches,
+          });
+        }
+        
+        if (command === "fetchGithubInfo") {
+          const githubInfo = await fetchGithubInfo();
+          await this.respondToMessage({ 
+            ...message,
+            payload: githubInfo,
           });
         }
 
@@ -156,4 +164,5 @@ type GithruFetcherMap = {
   fetchClusterNodes: GithruFetcher<ClusterNode[], [string]>;
   fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
   fetchCurrentBranch: GithruFetcher<string>;
+  fetchGithubInfo: GithruFetcher<{ owner: string; repo: string }>;
 };

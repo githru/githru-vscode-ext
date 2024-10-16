@@ -20,6 +20,8 @@ export default class FakeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
           return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
+        case "fetchGithubInfo":
+          return events.handleGithubInfo(payload ? JSON.parse(payload) : undefined);
         default:
           console.log("Unknown Message");
       }
@@ -50,6 +52,13 @@ export default class FakeIDEAdapter implements IDEPort {
   public sendFetchBranchListMessage() {
     const message: IDEMessage = {
       command: "fetchBranchList",
+    };
+    this.sendMessageToMe(message);
+  }
+
+  public sendFetchGithubInfo() {
+    const message: IDEMessage = {
+      command: "fetchGithubInfo",
     };
     this.sendMessageToMe(message);
   }

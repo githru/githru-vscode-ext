@@ -10,8 +10,9 @@ import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
+
 import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useBranchStore, useDataStore, useLoadingStore, useOwnerStore, useRepoStore } from "store";
+import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
@@ -19,9 +20,8 @@ const App = () => {
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
+  const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
-  const { setOwner } = useOwnerStore();
-  const { setRepo } = useRepoStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -29,27 +29,16 @@ const App = () => {
       const callbacks: IDESentEvents = {
         handleChangeAnalyzedData,
         handleChangeBranchList,
+        handleGithubInfo,
       };
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
       ideAdapter.sendFetchBranchListMessage();
+      ideAdapter.sendFetchGithubInfo();
       initRef.current = true;
     }
-  }, [handleChangeAnalyzedData, handleChangeBranchList, ideAdapter, setLoading]);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
-      const message = event.data;
-      if (message.data) {
-        setOwner(message.data.owner);
-        setRepo(message.data.repo);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
 
   if (loading) {
     return (
