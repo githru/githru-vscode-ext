@@ -10,8 +10,6 @@ import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
-
-import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
