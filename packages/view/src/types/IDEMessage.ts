@@ -13,4 +13,4 @@ export type IDEMessageCommandNames =
   | "fetchBranchList"
   | "fetchCurrentBranch"
   | "fetchGithubInfo"
-  | "updateCustomTheme";
+  | "updateTheme";

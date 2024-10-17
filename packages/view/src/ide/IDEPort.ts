@@ -11,5 +11,5 @@ export default interface IDEPort {
   sendFetchAnalyzedDataMessage: (payload?: string) => void;
   sendFetchBranchListMessage: () => void;
   sendFetchGithubInfo: () => void;
-  setCustomTheme: (theme: string) => void;
+  sendUpdateThemeMessage: (theme: string) => void;
 }
