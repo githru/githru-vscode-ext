@@ -84,11 +84,21 @@ test("getClusterIds test", () => {
   expect(result).toHaveLength(2);
 });
 
-test("getInitData test", () => {
+describe("getInitData test", () => {
   const result = getInitData(clusterNodeMockData);
 
-  expect(result).not.toBeUndefined();
-  expect(result[0].clusterId).toBe(0);
-  expect(result[0].summary.authorNames[0][0]).toBe("ytaek");
-  expect(result[0].summary.content.message).toBe("Initial commit");
+  test("getInitData test", () => {
+    expect(result).not.toBeUndefined();
+    expect(result[0].clusterId).toBe(0);
+    expect(result[0].summary.authorNames[0][0]).toBe("ytaek");
+    expect(result[0].summary.content.message).toBe("Initial commit");
+  });
+
+  test("클러스터의 커밋 작성자 이름이 중복되지 않는다.", () => {
+    const isUnique = result
+      .map((data) => data.summary.authorNames.length === new Set(data.summary.authorNames).size)
+      .every((value) => value === true);
+
+    expect(isUnique).toBe(true);
+  });
 });
