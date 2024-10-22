@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ArrowDropDownCircleRoundedIcon from "@mui/icons-material/ArrowDropDownCircleRounded";
 
-import { useGlobalData } from "hooks";
+import { useGithubInfo } from "store";
 
 import type { ContentProps } from "../Summary.type";
 
 const Content = ({ content, clusterId, selectedClusterId }: ContentProps) => {
-  const { owner, repo } = useGlobalData();
+  const { owner, repo } = useGithubInfo();
   const [linkedStr, setLinkedStr] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {

@@ -7,7 +7,7 @@
     "url": "https://github.com/githru/githru-vscode-ext",
     "type": "git"
   },
-  "version": "0.7.1",
+  "version": "0.7.2",
   "engines": {
     "vscode": "^1.67.0"
   },
@@ -62,10 +62,10 @@
     "configuration": {
       "title": "Githru",
       "properties": {
-        "githru.color.primary": {
+        "githru.theme": {
           "type": "string",
-          "default": "#ff8272",
-          "description": "Insert your primary color."
+          "default": "githru",
+          "description": "Insert your theme name: githru, hacker-blue, aqua, cotton-candy, mono"
         }
       }
     }
@@ -84,7 +84,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@githru-vscode-ext/analysis-engine": "^0.7.1",
+    "@githru-vscode-ext/analysis-engine": "^0.7.2",
     "@octokit/rest": "^20.0.1",
     "node-fetch": "^3.3.2"
   },

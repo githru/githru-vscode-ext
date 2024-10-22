@@ -59,8 +59,8 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       const fetchBranches = async () => await getBranches(gitPath, currentWorkspacePath);
-
-      const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath);
+      const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
+      const fetchGithubInfo = async () => getRepo(gitConfig);
 
       const fetchCurrentBranch = async () => {
         let branchName;
@@ -78,13 +78,10 @@ export async function activate(context: vscode.ExtensionContext) {
       };
 
       const initialBaseBranchName = await fetchCurrentBranch();
-    
 
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const gitConfig = await getGitConfig(gitPath, currentWorkspacePath, "origin");
-
+        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
         const { owner, repo: initialRepo } = getRepo(gitConfig);
-        webLoader.setGlobalOwnerAndRepo(owner, initialRepo);
         const repo = initialRepo[0];
         const engine = new AnalysisEngine({
           isDebugMode: true,
@@ -104,6 +101,7 @@ export async function activate(context: vscode.ExtensionContext) {
         fetchClusterNodes,
         fetchBranches,
         fetchCurrentBranch,
+        fetchGithubInfo,
       });
 
       currentPanel = webLoader.getPanel();

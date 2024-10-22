@@ -32,6 +32,11 @@ This extension contributes the following settings:
 Calling out known issues can help limit users opening duplicate issues against your extension. -->
 
 ## Release Notes
+### 0.7.2
+- Show TAG information
+- Update internal frameworks
+- UI enhancement, Bug Fix
+
 ### 0.7.1
 - Theme Selector!
 - Optimized UI Rendering

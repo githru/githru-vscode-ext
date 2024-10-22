@@ -1,1 +1,1 @@
-export * from "./useGlobalData";
+export * from "./useAnalayzedData";

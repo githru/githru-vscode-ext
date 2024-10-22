@@ -19,6 +19,8 @@ export default class VSCodeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payloadData);
         case "fetchBranchList":
           return events.handleChangeBranchList(payloadData);
+        case "fetchGithubInfo":
+          return events.handleGithubInfo(payloadData);
         default:
           console.log("Unknown Message");
       }
@@ -49,10 +51,17 @@ export default class VSCodeIDEAdapter implements IDEPort {
     this.sendMessageToIDE(message);
   }
 
-  public setPrimaryColor(color: string) {
+  public sendFetchGithubInfo() {
     const message: IDEMessage = {
-      command: "updatePrimaryColor",
-      payload: JSON.stringify({ primary: color }),
+      command: "fetchGithubInfo",
+    };
+    this.sendMessageToIDE(message);
+  }
+
+  public sendUpdateThemeMessage(theme: string) {
+    const message: IDEMessage = {
+      command: "updateTheme",
+      payload: JSON.stringify({ theme }),
     };
     this.sendMessageToIDE(message);
   }

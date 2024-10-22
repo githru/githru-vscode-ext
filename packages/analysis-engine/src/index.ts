@@ -77,7 +77,7 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
     const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
     if (this.isDebugMode) console.log("csmDict: ", csmDict);
-    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({commit}) => commit);
+    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({ commit }) => commit);
     const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
     if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
 
@@ -94,4 +94,3 @@ export class AnalysisEngine {
 }
 
 export default AnalysisEngine;
-export { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "./constant";

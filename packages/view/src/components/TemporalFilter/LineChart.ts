@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
+import { type DateFilterRange } from "store";
 
-import type { DateFilterRange } from "hooks";
 import "./LineChart.scss";
 
 export type LineChartDatum = {
