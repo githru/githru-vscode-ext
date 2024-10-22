@@ -249,8 +249,6 @@ export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePat
         currentWorkspacePath,
         skipCount,
         limitCount,
-        COMMIT_SEPARATOR,
-        GIT_LOG_SEPARATOR,
       },
     });
 

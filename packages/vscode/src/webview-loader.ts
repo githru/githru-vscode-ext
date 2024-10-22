@@ -17,7 +17,6 @@ export default class WebviewLoader implements vscode.Disposable {
     const { fetchClusterNodes, fetchBranches, fetchCurrentBranch, fetchGithubInfo } = fetcher;
     const viewColumn = vscode.ViewColumn.One;
 
-    //캐시 초기화
     console.log("Initialize cache data");
     context.workspaceState.keys().forEach((key) => {
       context.workspaceState.update(key, undefined);
@@ -50,7 +49,6 @@ export default class WebviewLoader implements vscode.Disposable {
               context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
             } else console.log("Cache data exists");
 
-            // 현재 캐싱된 Branch
             console.log("Current Stored data");
             context.workspaceState.keys().forEach((key) => {
               console.log(key);
@@ -75,10 +73,10 @@ export default class WebviewLoader implements vscode.Disposable {
             payload: branches,
           });
         }
-        
+
         if (command === "fetchGithubInfo") {
           const githubInfo = await fetchGithubInfo();
-          await this.respondToMessage({ 
+          await this.respondToMessage({
             ...message,
             payload: githubInfo,
           });
