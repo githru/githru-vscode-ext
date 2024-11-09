@@ -53,7 +53,9 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
 
     const commitRaws = getCommitRaws(this.gitLog);
-    if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
+    if (this.isDebugMode){
+      console.log("commitRaws: ", commitRaws);
+    }
 
     const commitDict = buildCommitDict(commitRaws);
     if (this.isDebugMode) console.log("commitDict: ", commitDict);
