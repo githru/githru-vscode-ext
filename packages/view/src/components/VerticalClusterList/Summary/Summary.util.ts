@@ -36,7 +36,7 @@ function tagToNumber(tag: string, maxLength: number): number {
  * @param tags
  * @returns
  */
-function getCommitLatestTag(tags: string[]): string {
+export function getCommitLatestTag(tags: string[]): string {
   if (!Array.isArray(tags) || tags.length === 0) return "";
 
   const validTags = tags.filter((tag) => isValidReleaseTag(tag));
@@ -66,37 +66,52 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
   const clusters: Cluster[] = [];
 
   data.map((clusterNode) => {
-    const { commit: clusterFirstCommit, clusterId } = clusterNode.commitNodeList[0];
-    const { message } = clusterFirstCommit;
+    const { message } = clusterNode.commitNodeList[0].commit;
+    const resultMsg = message.split("/n/n")[0];
+    const cluster: Cluster = {
+      clusterId: clusterNode.commitNodeList[0].clusterId,
+      summary: {
+        authorNames: [],
+        content: {
+          message: resultMsg,
+          count: clusterNode.commitNodeList.length - 1,
+        },
+      },
+      clusterTags: [],
+    };
+
     const clusterTags: string[] = [];
-    const authorSet: Set<string> = new Set();
+    const authorNameSet: Set<string> = new Set();
 
     clusterNode.commitNodeList.forEach((commitNode: CommitNode) => {
       // set names
       commitNode.commit.author.names.forEach((name) => {
-        authorSet.add(name.trim());
+        authorNameSet.add(name.trim());
       });
 
       // get releaseTags in cluster commitNodeList
-      commitNode.commit.releaseTags?.forEach((tag) => {
-        clusterTags.push(tag);
+      commitNode.commit.releaseTags?.map((tag) => {
+        if (clusterTags.indexOf(tag) === -1) {
+          clusterTags.push(tag);
+        }
+        return clusterTags;
       });
     });
+    cluster.summary.authorNames.push(Array.from(authorNameSet) as string[]);
 
-    // set latset release tag
-    const latestReleaseTag = getCommitLatestTag(clusterTags);
+    // set release tag in cluster
+    cluster.clusterTags = clusterTags;
 
-    const cluster: Cluster = {
-      clusterId: clusterId,
-      summary: {
-        authorNames: [Array.from(authorSet)],
-        content: {
-          message: message.split("/n/n")[0],
-          count: clusterNode.commitNodeList.length - 1,
-        },
-      },
-      latestReleaseTag: latestReleaseTag,
-    };
+    // remove name overlap
+    const authorsSet = cluster.summary.authorNames.reduce((set, authorArray) => {
+      authorArray.forEach((author) => {
+        set.add(author);
+      });
+      return set;
+    }, new Set());
+
+    cluster.summary.authorNames = [];
+    cluster.summary.authorNames.push(Array.from(authorsSet) as string[]);
 
     clusters.push(cluster);
     return cluster;

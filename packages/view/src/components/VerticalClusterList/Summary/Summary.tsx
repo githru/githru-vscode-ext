@@ -15,7 +15,7 @@ import { getClusterSizes } from "../ClusterGraph/ClusterGraph.util";
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
 
 import { usePreLoadAuthorImg } from "./Summary.hook";
-import { getInitData, getClusterIds, getClusterById } from "./Summary.util";
+import { getInitData, getClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
 import { Content } from "./Content";
 
 const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
@@ -88,7 +88,7 @@ const Summary = () => {
                   ));
                 })}
             </div>
-            <div>{cluster.latestReleaseTag}</div>
+            <div>{getCommitLatestTag(cluster.clusterTags)}</div>
             <Content
               content={cluster.summary.content}
               clusterId={cluster.clusterId}
