@@ -1,7 +1,8 @@
-import { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "@githru-vscode-ext/analysis-engine";
 import * as cp from "child_process";
 import * as fs from "fs";
+import os from "os";
 import * as path from "path";
+import { Worker } from "worker_threads";
 
 export interface GitExecutable {
   readonly path: string;
@@ -156,7 +157,7 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const gitLogFormat =
-      COMMIT_SEPARATOR +
+      "%n%n" +
       [
         "%H", // commit hash (id)
         "%P", // parent hashes
@@ -164,12 +165,12 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
         "%an", // author name
         "%ae", // author email
         "%ad", // author date
-        "%cn",
-        "%ce",
-        "%cd", // committer name, committer email and committer date
-        "%B", // commit message  (subject and body)
-      ].join(GIT_LOG_SEPARATOR) +
-      GIT_LOG_SEPARATOR;
+        "%cn", // committer name
+        "%ce", // committer email
+        "%cd", // committer date
+        "%w(0,0,4)%s", // commit message subject
+        "%b", // commit message body
+      ].join("%n");
     const args = [
       "--no-pager",
       "log",
@@ -196,6 +197,70 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
       }
     });
   });
+}
+
+export async function getLogCount(gitPath: string, currentWorkspacePath: string): Promise<number> {
+  const BASE_10 = 10;
+  return new Promise((resolve, reject) => {
+    const args = ["rev-list", "--count", "--all"];
+
+    resolveSpawnOutput(
+      cp.spawn(gitPath, args, {
+        cwd: currentWorkspacePath,
+        env: Object.assign({}, process.env),
+      })
+    ).then(([status, stdout, stderr]) => {
+      const { code, error } = status;
+
+      if (code === 0 && !error) {
+        const commitCount = parseInt(stdout.toString().trim(), BASE_10);
+        resolve(commitCount);
+      } else {
+        reject(stderr);
+      }
+    });
+  });
+}
+
+export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
+  const numCores = os.cpus().length;
+
+  const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
+  let numberOfThreads = 1;
+
+  const taskThreshold = 1000;
+  const coreCountThreshold = 4;
+
+  if (totalCnt > taskThreshold) {
+    if (numCores < coreCountThreshold) numberOfThreads = 2;
+    else numberOfThreads = 3;
+  }
+
+  const chunkSize = Math.ceil(totalCnt / numberOfThreads);
+  const promises: Promise<string>[] = [];
+
+  for (let i = 0; i < numberOfThreads; i++) {
+    const skipCount = i * chunkSize;
+    const limitCount = chunkSize;
+
+    const worker = new Worker(path.resolve(__dirname, "./worker.js"), {
+      workerData: {
+        gitPath,
+        currentWorkspacePath,
+        skipCount,
+        limitCount,
+      },
+    });
+
+    promises.push(
+      new Promise((resolve, reject) => {
+        worker.on("message", resolve);
+        worker.on("error", reject);
+      })
+    );
+  }
+
+  return Promise.all(promises).then((logs) => logs.join("\n"));
 }
 
 export async function getGitConfig(

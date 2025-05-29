@@ -81,16 +81,13 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
     };
 
     const clusterTags: string[] = [];
+    const authorNameSet: Set<string> = new Set();
 
-    clusterNode.commitNodeList.map((commitNode: CommitNode) => {
+    clusterNode.commitNodeList.forEach((commitNode: CommitNode) => {
       // set names
-      const authorSet: Set<string> = new Set();
-      commitNode.commit.author.names.map((name) => {
-        authorSet.add(name.trim());
-        return name.trim();
+      commitNode.commit.author.names.forEach((name) => {
+        authorNameSet.add(name.trim());
       });
-
-      cluster.summary.authorNames.push(Array.from(authorSet));
 
       // get releaseTags in cluster commitNodeList
       commitNode.commit.releaseTags?.map((tag) => {
@@ -99,9 +96,8 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
         }
         return clusterTags;
       });
-
-      return commitNode;
     });
+    cluster.summary.authorNames.push(Array.from(authorNameSet) as string[]);
 
     // set release tag in cluster
     cluster.clusterTags = clusterTags;

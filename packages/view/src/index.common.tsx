@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 
 import "./App.scss";
-import { GlobalDataProvider } from "./context/GlobalDataProvider";
+
 import App from "./App";
 
 export const initRender = () => {
@@ -10,9 +10,7 @@ export const initRender = () => {
   // TODO - StrictMode disabled temporarily to review performance of visualization.
   ReactDOM.createRoot(rootContainer).render(
     // <React.StrictMode>
-    <GlobalDataProvider>
-      <App />
-    </GlobalDataProvider>
+    <App />
     // </React.StrictMode>
   );
 };

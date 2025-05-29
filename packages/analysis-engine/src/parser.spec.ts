@@ -1,5 +1,4 @@
 import { getCommitMessageType } from "./commit.util";
-import { COMMIT_SEPARATOR, GIT_LOG_SEPARATOR } from "./constant";
 import getCommitRaws from "./parser";
 import type { CommitRaw, DifferenceStatistic } from "./types";
 
@@ -36,11 +35,15 @@ describe("commit message type", () => {
 });
 
 describe("getCommitRaws", () => {
-  const fakeAuthorAndCommitter = `${GIT_LOG_SEPARATOR}John Park${GIT_LOG_SEPARATOR}mail@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 4 20:17:59 2022 +0900${GIT_LOG_SEPARATOR}John Park 2${GIT_LOG_SEPARATOR}mail2@gmail.com${GIT_LOG_SEPARATOR}Sun Sep 5 20:17:59 2022 +0900`;
-  const fakeCommitMessage = `${GIT_LOG_SEPARATOR}commit message${GIT_LOG_SEPARATOR}`;
-  const fakeCommitMessageAndBody = `${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`;
-  const fakeCommitHash = `a${GIT_LOG_SEPARATOR}b`;
-  const fakeCommitRef = `${GIT_LOG_SEPARATOR}HEAD`;
+  const FRONT_NEW_LINE = "\n\n";
+  const INDENTATION = "    ";
+
+  const fakeAuthor = "John Park\nmail@gmail.com\nSun Sep 4 20:17:59 2022 +0900";
+  const fakeCommitter = `John Park 2\nmail2@gmail.com\nSun Sep 5 20:17:59 2022 +0900`;
+  const fakeCommitMessage = `commit message\n${INDENTATION}`;
+  const fakeCommitMessageAndBody = `commit message title\n${INDENTATION}\n${INDENTATION}commit message body`;
+  const fakeCommitHash = "a\nb";
+  const fakeCommitRef = "HEAD";
   const fakeCommitFileChange = "10\t0\ta.ts\n1\t0\tREADME.md";
 
   const commonExpectatedResult: CommitRaw = {
@@ -73,23 +76,23 @@ describe("getCommitRaws", () => {
 
   it.each([
     [
-      `${COMMIT_SEPARATOR}${`a${GIT_LOG_SEPARATOR}`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"a\n"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "a",
-        parents: [""],
+        parents: [],
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${`c${GIT_LOG_SEPARATOR}b`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"c\nd"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "c",
-        parents: ["b"],
+        parents: ["d"],
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${`d${GIT_LOG_SEPARATOR}e f`}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${"d\ne f"}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         id: "d",
@@ -103,7 +106,7 @@ describe("getCommitRaws", () => {
 
   it.each([
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -111,7 +114,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD -> main, origin/main, origin/HEAD"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
@@ -119,7 +122,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD, tag: v1.0.0`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD, tag: v1.0.0"}\n${fakeAuthor}\n${fakeCommitter}$\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -127,7 +130,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD -> main, origin/main, origin/HEAD, tag: v2.0.0"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD", "main", "origin/main", "origin/HEAD"],
@@ -135,7 +138,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${`${GIT_LOG_SEPARATOR}HEAD, tag: v2.0.0, tag: v1.4`}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${"HEAD, tag: v2.0.0, tag: v1.4"}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: ["HEAD"],
@@ -143,7 +146,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${GIT_LOG_SEPARATOR}${fakeAuthorAndCommitter}${fakeCommitMessage}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${""}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`,
       {
         ...commonExpectatedResult,
         branches: [],
@@ -157,7 +160,7 @@ describe("getCommitRaws", () => {
 
   it.each([
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"10\t0\ta.ts\n1\t0\tREADME.md"}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"10\t0\ta.ts\n1\t0\tREADME.md"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -171,7 +174,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"3\t3\ta.ts"}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"3\t3\ta.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -182,7 +185,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"4\t0\ta.ts"}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"4\t0\ta.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -193,7 +196,7 @@ describe("getCommitRaws", () => {
       },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${"0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${"0\t6\ta.ts\n2\t0\tb.ts\n3\t3\tc.ts"}`,
       {
         ...commonExpectatedResult,
         differenceStatistic: {
@@ -213,7 +216,7 @@ describe("getCommitRaws", () => {
   });
 
   it(`should parse gitlog to commitRaw(multiple commits)`, () => {
-    const mockLog = `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}\n${fakeCommitFileChange}${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessage}`;
+    const mockLog = `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${fakeCommitFileChange}\n\n\n\n${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}`;
     const result = getCommitRaws(mockLog);
     const expectedResult = [
       { ...commonExpectatedResult, differenceStatistic: expectedFileChange },
@@ -225,23 +228,23 @@ describe("getCommitRaws", () => {
 
   it.each([
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title${GIT_LOG_SEPARATOR}`}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}`,
       { ...commonExpectatedResult, message: "commit message title" },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\ncommit message${GIT_LOG_SEPARATOR}`}`,
-      { ...commonExpectatedResult, message: "commit message title\ncommit message" },
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}${"commit message body"}`,
+      { ...commonExpectatedResult, message: "commit message title\ncommit message body" },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\n\ncommit message body${GIT_LOG_SEPARATOR}`}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}\n${INDENTATION}${"commit message body"}`,
       { ...commonExpectatedResult, message: "commit message title\n\ncommit message body" },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}commit message title\n\n\ncommit message body${GIT_LOG_SEPARATOR}`}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${"commit message title"}\n${INDENTATION}\n${INDENTATION}\n${INDENTATION}${"commit message body"}`,
       { ...commonExpectatedResult, message: "commit message title\n\n\ncommit message body" },
     ],
     [
-      `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${`${GIT_LOG_SEPARATOR}${GIT_LOG_SEPARATOR}`}`,
+      `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n\n${INDENTATION}`,
       { ...commonExpectatedResult, message: "" },
     ],
   ])("should parse gitlog to commitRaw(commit message)", (mockLog, expectedResult) => {
@@ -250,7 +253,7 @@ describe("getCommitRaws", () => {
   });
 
   it(`should parse gitlog to commitRaw(commit message body and file change)`, () => {
-    const mockLog = `${COMMIT_SEPARATOR}${fakeCommitHash}${fakeCommitRef}${fakeAuthorAndCommitter}${fakeCommitMessageAndBody}\n${fakeCommitFileChange}`;
+    const mockLog = `${FRONT_NEW_LINE}${fakeCommitHash}\n${fakeCommitRef}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessageAndBody}\n${fakeCommitFileChange}`;
     const result = getCommitRaws(mockLog);
     const expectedResult = {
       ...commonExpectatedResult,

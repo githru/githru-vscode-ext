@@ -1,0 +1,9 @@
+blank_issues_enabled: true
+
+contact_links:
+  - name: Contributing Guide
+    url: https://github.com/githru/githru-vscode-ext/blob/main/CONTRIBUTING.md
+    about: 기여를 하시기 전에 본 문서를 참고해주세요.
+  - name: Documentation
+    url: https://github.com/githru/githru-vscode-ext/wiki
+    about: 참고 자료를 확인할 수 있습니다.

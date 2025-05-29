@@ -1,15 +1,17 @@
 import { useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import Chip from "@mui/material/Chip";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 
 import { selectedDataUpdater } from "components/VerticalClusterList/VerticalClusterList.util";
 import { getInitData, getClusterById } from "components/VerticalClusterList/Summary/Summary.util";
-import { useGlobalData } from "hooks";
-
 import "./SelectedClusterGroup.scss";
+import { useDataStore } from "store";
 
 const SelectedClusterGroup = () => {
-  const { selectedData, setSelectedData } = useGlobalData();
+  const [selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.selectedData, state.setSelectedData])
+  );
   const selectedClusters = getInitData(selectedData);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

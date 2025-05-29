@@ -11,7 +11,7 @@ import {
 import { Tooltip } from "@mui/material";
 
 import { Author } from "components/@common/Author";
-import { useGlobalData } from "hooks";
+import { useGithubInfo } from "store";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -56,7 +56,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
-  const { repo, owner } = useGlobalData();
+  const { owner, repo } = useGithubInfo();
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);

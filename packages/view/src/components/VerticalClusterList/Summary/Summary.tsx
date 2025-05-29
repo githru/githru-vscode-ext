@@ -1,10 +1,11 @@
 import { useRef, useEffect } from "react";
 import type { ListRowProps } from "react-virtualized";
 import { List, AutoSizer } from "react-virtualized";
+import { useShallow } from "zustand/react/shallow";
 
 import type { ClusterNode } from "types";
 import { Detail } from "components";
-import { useGlobalData } from "hooks";
+import { useDataStore } from "store";
 
 import "./Summary.scss";
 import { Author } from "../../@common/Author";
@@ -21,16 +22,18 @@ const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
 const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
 
 const Summary = () => {
-  const { filteredData: data, selectedData, setSelectedData } = useGlobalData();
-  const clusters = getInitData(data);
+  const [filteredData, selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.filteredData, state.selectedData, state.setSelectedData])
+  );
+  const clusters = getInitData(filteredData);
   const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusterId = getClusterIds(selectedData);
   const listRef = useRef<List>(null);
-  const clusterSizes = getClusterSizes(data);
+  const clusterSizes = getClusterSizes(filteredData);
 
   const onClickClusterSummary = (clusterId: number) => () => {
-    const selected = getClusterById(data, clusterId);
+    const selected = getClusterById(filteredData, clusterId);
     setSelectedData((prevState: ClusterNode[]) => {
       return selectedDataUpdater(selected, clusterId)(prevState);
     });
@@ -63,7 +66,7 @@ const Summary = () => {
       >
         <div className="cluster-summary__graph">
           <ClusterGraph
-            data={[data[index]]}
+            data={[filteredData[index]]}
             clusterSizes={[clusterSizes[index]]}
           />
         </div>

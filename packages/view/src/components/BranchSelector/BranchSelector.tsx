@@ -3,16 +3,15 @@ import FormControl from "@mui/material/FormControl";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import Select from "@mui/material/Select";
 
-import { useGlobalData } from "hooks";
 import { sendFetchAnalyzedDataCommand } from "services";
 import "./BranchSelector.scss";
-import { useLoadingStore } from "store";
+import { useBranchStore, useLoadingStore } from "store";
 
 import { SLICE_LENGTH } from "./BranchSelector.const";
 
 const BranchSelector = () => {
-  const { branchList, selectedBranch, setSelectedBranch } = useGlobalData();
-  const { setLoading } = useLoadingStore((state) => state);
+  const { branchList, selectedBranch, setSelectedBranch } = useBranchStore();
+  const { setLoading } = useLoadingStore();
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setSelectedBranch(event.target.value);

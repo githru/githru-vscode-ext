@@ -1,95 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
 
-const themes = [
-  {
-    title: "Githru",
-    value: "githru",
-    colors: {
-      primary: "#e06091",
-      secondary: "#8840bb",
-      tertiary: "#ffd08a",
-    },
-  },
-  {
-    title: "Hacker Blue",
-    value: "hacker-blue",
-    colors: {
-      primary: "#456cf7",
-      secondary: "#3f4c73",
-      tertiary: "#6c60f0",
-    },
-  },
-  {
-    title: "Aqua",
-    value: "aqua",
-    colors: {
-      primary: "#51decd",
-      secondary: "#0687a3",
-      tertiary: "#a7ffff",
-    },
-  },
-  {
-    title: "Cotton Candy",
-    value: "cotton-candy",
-    colors: {
-      primary: "#ffcccb",
-      secondary: "#feffd1",
-      tertiary: "#a39aeb",
-    },
-  },
+import { sendUpdateThemeCommand } from "services";
 
-  {
-    title: "Mono",
-    value: "mono",
-    colors: {
-      primary: "#68788f",
-      secondary: "#3a4776",
-      tertiary: "#9aaed1",
-    },
-  },
-];
+import { THEME_INFO } from "./ThemeSelector.const";
+import type { ThemeInfo } from "./ThemeSelector.type";
 
-type ThemeIconsProps = {
-  title: string;
-  value: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-  };
+type ThemeIconsProps = ThemeInfo[keyof ThemeInfo] & {
   onClick: () => void;
 };
 
 const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
-  const [isSelected, setIsSelected] = useState<string>("");
-
-  useEffect(() => {
-    const selectedTheme = document.documentElement.getAttribute("custom-type");
-    if (selectedTheme) setIsSelected(selectedTheme);
-  }, []);
-
   return (
     <div
-      className={`theme-icon${isSelected === value ? "--selected" : ""}`}
+      className={`theme-icon${window.theme === value ? "--selected" : ""}`}
       onClick={onClick}
       role="presentation"
     >
       <div className="theme-icon__container">
-        <div
-          className="theme-icon__color"
-          style={{ backgroundColor: colors.primary }}
-        />
-        <div
-          className="theme-icon__color"
-          style={{ backgroundColor: colors.secondary }}
-        />
-        <div
-          className="theme-icon__color"
-          style={{ backgroundColor: colors.tertiary }}
-        />
+        {Object.values(colors).map((color, index) => (
+          <div
+            key={Number(index)}
+            className="theme-icon__color"
+            style={{ backgroundColor: color }}
+          />
+        ))}
       </div>
       <p className="theme-icon__title">{title}</p>
     </div>
@@ -97,38 +34,54 @@ const ThemeIcons = ({ title, value, colors, onClick }: ThemeIconsProps) => {
 };
 
 const ThemeSelector = () => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const themeSelectorRef = useRef<HTMLDivElement>(null);
 
   const handleTheme = (value: string) => {
-    document.documentElement.setAttribute("custom-type", value);
+    sendUpdateThemeCommand(value);
+    window.theme = value;
+    document.documentElement.setAttribute("theme", value);
   };
 
   useEffect(() => {
-    document.documentElement.setAttribute("custom-type", "githru");
+    const handleClickOutside = (event: MouseEvent) => {
+      if (themeSelectorRef.current && !themeSelectorRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("theme", window.theme);
   }, []);
 
   return (
-    <div className="theme-selector">
-      <AutoAwesomeIcon onClick={() => setOpen(true)} />
-      {open && (
+    <div
+      className="theme-selector"
+      ref={themeSelectorRef}
+    >
+      <AutoAwesomeIcon onClick={() => setIsOpen(true)} />
+      {isOpen && (
         <div className="theme-selector__container">
           <div className="theme-selector__header">
             <p>Theme</p>
             <CloseIcon
               fontSize="small"
-              onClick={() => setOpen(false)}
+              onClick={() => setIsOpen(false)}
             />
           </div>
           <div className="theme-selector__list">
-            {themes.map((theme) => (
+            {Object.entries(THEME_INFO).map(([_, theme]) => (
               <ThemeIcons
                 key={theme.value}
-                title={theme.title}
-                value={theme.value}
-                colors={theme.colors}
+                {...theme}
                 onClick={() => {
                   handleTheme(theme.value);
-                  setOpen(false);
+                  setIsOpen(false);
                 }}
               />
             ))}

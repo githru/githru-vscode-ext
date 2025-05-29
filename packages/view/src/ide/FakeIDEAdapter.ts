@@ -20,6 +20,8 @@ export default class FakeIDEAdapter implements IDEPort {
           return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
           return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
+        case "fetchGithubInfo":
+          return events.handleGithubInfo(payload ? JSON.parse(payload) : undefined);
         default:
           console.log("Unknown Message");
       }
@@ -54,10 +56,17 @@ export default class FakeIDEAdapter implements IDEPort {
     this.sendMessageToMe(message);
   }
 
-  public setPrimaryColor(color: string) {
-    sessionStorage.setItem("PRIMARY_COLOR", color);
+  public sendFetchGithubInfo() {
     const message: IDEMessage = {
-      command: "updatePrimaryColor",
+      command: "fetchGithubInfo",
+    };
+    this.sendMessageToMe(message);
+  }
+
+  public sendUpdateThemeMessage(theme: string) {
+    sessionStorage.setItem("THEME", theme);
+    const message: IDEMessage = {
+      command: "updateTheme",
     };
     this.sendMessageToMe(message);
   }
@@ -76,10 +85,10 @@ export default class FakeIDEAdapter implements IDEPort {
           command,
           payload: JSON.stringify(fakeBranchList),
         };
-      case "updatePrimaryColor":
+      case "updateTheme":
         return {
           command,
-          payload: sessionStorage.getItem("PRIMARY_COLOR") as string,
+          payload: sessionStorage.getItem("CUSTOM_THEME") as string,
         };
       default:
         return {

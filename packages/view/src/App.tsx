@@ -7,18 +7,19 @@ import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
-import { useGlobalData } from "hooks";
+import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
-import type { RemoteGitHubInfo } from "types/RemoteGitHubInfo";
-import { useLoadingStore } from "store";
+import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore } from "store";
+import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
-
-  const { filteredData, handleChangeAnalyzedData, handleChangeBranchList } = useGlobalData();
-  const { loading, setLoading } = useLoadingStore((state) => state);
-
+  const { handleChangeAnalyzedData } = useAnalayzedData();
+  const filteredData = useDataStore((state) => state.filteredData);
+  const { handleChangeBranchList } = useBranchStore();
+  const { handleGithubInfo } = useGithubInfo();
+  const { loading, setLoading } = useLoadingStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -26,34 +27,21 @@ const App = () => {
       const callbacks: IDESentEvents = {
         handleChangeAnalyzedData,
         handleChangeBranchList,
+        handleGithubInfo,
       };
-
       setLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
       ideAdapter.sendFetchBranchListMessage();
+      ideAdapter.sendFetchGithubInfo();
       initRef.current = true;
     }
-  }, [handleChangeAnalyzedData, handleChangeBranchList, ideAdapter, setLoading]);
-
-  const { setOwner, setRepo } = useGlobalData();
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent<RemoteGitHubInfo>) => {
-      const message = event.data;
-      if (message.data) {
-        setOwner(message.data.owner);
-        setRepo(message.data.repo);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
 
   if (loading) {
     return (
       <BounceLoader
-        color="#ff8272"
+        color={THEME_INFO[window.theme as keyof typeof THEME_INFO].colors.primary}
         loading={loading}
         cssOverride={{
           position: "fixed",
