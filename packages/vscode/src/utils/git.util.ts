@@ -288,19 +288,33 @@ export async function getGitConfig(
 }
 
 export const getRepo = (gitRemoteConfig: string) => {
-  const gitRemoteConfigPattern =
-    /(?:https?|git)(?::\/\/(?:\w+@)?|@)(?:github\.com)(?:\/|:)(?:(?<owner>[^/]+?)\/(?<repo>[^/.]+))(?:\.git|\/)?(\S*)$/m;
-  const gitRemote = gitRemoteConfig.match(gitRemoteConfigPattern)?.groups;
+  const gitHubPattern =
+    /(?:https?|git)(?::\/\/(?:\w+@)?|@)(?:github\.com)(?:\/|:)(?:(?<owner>[^/]+?)\/(?<repo>[^/]+?))(?:\.git|\/)?$/m;
+  const azureDevOpsPattern =
+    /https:\/\/(?:\w+@)?dev\.azure\.com\/(?<owner>[^/]+?)\/(?<project>[^/]+?)\/_git\/(?<repo>[^/]+?)(?:\/)?$/m;
+  const patterns = [gitHubPattern, azureDevOpsPattern];
+
+  let gitRemote: { owner: string; repo: string } | null = null;
+
+  for (const pattern of patterns) {
+    const match = gitRemoteConfig.match(pattern);
+    if (!match?.groups) continue;
+
+    const { owner, repo } = match.groups;
+    if (owner && repo) {
+      const repoWithoutGit = repo.replace(/\.git$/, "");
+      gitRemote = { owner, repo: repoWithoutGit };
+      break;
+    }
+  }
+
   if (!gitRemote) {
-    throw new Error("git remote config should be: [https?://|git@]${domain}/${owner}/${repo}.git");
+    throw new Error(
+      `Invalid Git remote config format: "${gitRemoteConfig}". Expected format: [https?://|git@]github.com/owner/repo[.git] or https://organization@dev.azure.com/organization/project/_git/repository-name`
+    );
   }
 
-  const { owner, repo } = gitRemote;
-  if (!owner || !repo) {
-    throw new Error("no owner/repo");
-  }
-
-  return { owner, repo };
+  return gitRemote;
 };
 
 export async function getBranches(
