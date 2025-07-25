@@ -10,7 +10,7 @@ import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
-import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore } from "store";
+import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
@@ -20,6 +20,7 @@ const App = () => {
   const { handleChangeBranchList } = useBranchStore();
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
+  const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const App = () => {
   if (loading) {
     return (
       <BounceLoader
-        color={THEME_INFO[window.theme as keyof typeof THEME_INFO].colors.primary}
+        color={THEME_INFO[theme as keyof typeof THEME_INFO].colors.primary}
         loading={loading}
         cssOverride={{
           position: "fixed",
