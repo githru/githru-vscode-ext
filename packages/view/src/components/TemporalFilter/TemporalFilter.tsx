@@ -54,8 +54,8 @@ const TemporalFilter = () => {
 
       const clocValue = commit.diffStatistics.insertions + commit.diffStatistics.deletions;
 
-      commitMap.set(formattedDate, clocMapItem ? clocMapItem + 1 : 1);
-      clocMap.set(formattedDate, commitMapItem ? commitMapItem + clocValue : clocValue);
+      commitMap.set(formattedDate, commitMapItem ? commitMapItem + 1 : 1);
+      clocMap.set(formattedDate, clocMapItem ? clocMapItem + clocValue : clocValue);
     });
 
     const buildReturnArray = (map: Map<string, number>) =>
