@@ -36,10 +36,11 @@ const ThemeIcons = ({ title, value, colors, theme, onClick }: ThemeIconsProps) =
 };
 
 const ThemeSelector = () => {
-  const { theme, setTheme } = useThemeStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   const themeSelectorRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+
+  const { theme, setTheme } = useThemeStore();
 
   const handleTheme = (value: string) => {
     setTheme(value);
