@@ -173,6 +173,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
       ].join("%n");
     const args = [
       "--no-pager",
+      "-c", "core.quotepath=false",
       "log",
       "--all",
       "--parents",
