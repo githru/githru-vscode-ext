@@ -118,6 +118,6 @@
 .detail {
   overflow: auto;
   height: 13.75rem;
-  max-height: 17.5rem;
-  padding: 0.625rem 1.875rem;
+  max-height: fit-content;
+  padding: 0.625rem 1.075rem;
 }
