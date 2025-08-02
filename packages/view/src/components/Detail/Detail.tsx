@@ -75,7 +75,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
               className="detail__commit-item"
             >
               <div className="commit-item__detail">
-                <div className="commit-item__avatar-message">
+                <div className="commit-item__left">
                   {authSrcMap && (
                     <Author
                       name={author.names.toString()}
@@ -86,27 +86,29 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
                     <span className="commit-item__message">{message}</span>
                   </div>
                 </div>
-                <span className="commit-item__author-date">
-                  {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
-                </span>
-              </div>
-              <div className="commit-item__commit-id">
-                <a
-                  href={`https://github.com/${owner}/${repo}/commit/${id}`}
-                  onClick={handleCommitIdCopy(id)}
-                  tabIndex={0}
-                  onKeyDown={handleCommitIdCopy(id)}
-                  className="commit-id__link"
-                >
-                  <Tooltip
-                    className="commit-id__tooltip"
-                    placement="right"
-                    title={id}
-                    PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
-                  >
-                    <p>{`${id.slice(0, 6)}`}</p>
-                  </Tooltip>
-                </a>
+                <div className="commit-item__right">
+                  <span className="commit-item__author-date">
+                    {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
+                  </span>
+                  <div className="commit-item__commit-id">
+                    <a
+                      href={`https://github.com/${owner}/${repo}/commit/${id}`}
+                      onClick={handleCommitIdCopy(id)}
+                      tabIndex={0}
+                      onKeyDown={handleCommitIdCopy(id)}
+                      className="commit-id__link"
+                    >
+                      <Tooltip
+                        className="commit-id__tooltip"
+                        placement="right"
+                        title={id}
+                        PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+                      >
+                        <p>{id.slice(0, 6)}</p>
+                      </Tooltip>
+                    </a>
+                  </div>
+                </div>
               </div>
             </li>
           );
