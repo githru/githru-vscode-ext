@@ -28,6 +28,7 @@
       @extend .cluster-summary__info;
       border-radius: 1.5625rem;
       background-color: $color-dark-gray;
+      overflow: hidden;
     }
   }
 }
