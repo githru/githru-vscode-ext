@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 import type { DataType, GroupByType } from "./BarChart.type";
 
 const csvPath = "/boot/raw.csv";
 
-const BarChart: React.FC = () => {
+const BarChart = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [data, setData] = useState<DataType[]>([]);
   const [groupBy, setGroupBy] = useState<GroupByType>("source");
