@@ -12,8 +12,11 @@ const BarChart: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     d3.csv<DataType>(csvPath, d3.autoType)
       .then((raw) => {
+        if (!isMounted) return;
         const parsed = raw.map((d) => ({
           source: d.source as string,
           target: d.target as string,
@@ -23,9 +26,14 @@ const BarChart: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
+        if (!isMounted) return;
         console.error("CSV 로딩 실패:", err);
         setLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
