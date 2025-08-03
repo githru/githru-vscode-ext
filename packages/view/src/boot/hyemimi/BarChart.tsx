@@ -1,22 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-interface DataItem {
-  source: string;
-  target: string;
-  value: number;
-}
+import type { DataType } from "./BarChart.type";
 
 const csvPath = "/boot/raw.csv";
 
 const BarChart: React.FC = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [data, setData] = useState<DataItem[]>([]);
+  const [data, setData] = useState<DataType[]>([]);
   const [groupBy, setGroupBy] = useState<"source" | "target">("source");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    d3.csv<DataItem>(csvPath, d3.autoType)
+    d3.csv<DataType>(csvPath, d3.autoType)
       .then((raw) => {
         const parsed = raw.map((d) => ({
           source: d.source as string,
