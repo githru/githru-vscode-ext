@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 import type { DataType, GroupByType } from "./BarChart.type";
+import { HEIGHT, MARGIN, WIDTH } from "./BarChart.const";
 
 const csvPath = "/boot/raw.csv";
 
@@ -42,13 +43,10 @@ const BarChart = () => {
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const width = 700;
-    const height = 400;
-    const margin = { top: 20, right: 30, bottom: 50, left: 60 };
-    const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
+    const chartWidth = WIDTH - MARGIN.left - MARGIN.right;
+    const chartHeight = HEIGHT - MARGIN.top - MARGIN.bottom;
 
-    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+    const g = svg.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
     // 그룹핑 및 value 합계 계산
     const grouped = d3.rollup(
@@ -111,8 +109,8 @@ const BarChart = () => {
       ) : (
         <svg
           ref={svgRef}
-          width={700}
-          height={400}
+          width={WIDTH}
+          height={HEIGHT}
         />
       )}
     </div>
