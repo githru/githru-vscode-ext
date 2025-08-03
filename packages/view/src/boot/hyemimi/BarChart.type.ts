@@ -3,3 +3,5 @@ export type DataType = {
   target: string;
   value: number;
 };
+
+export type GroupByType = "source" | "target";

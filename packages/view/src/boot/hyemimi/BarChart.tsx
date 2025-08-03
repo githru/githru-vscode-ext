@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-import type { DataType } from "./BarChart.type";
+import type { DataType, GroupByType } from "./BarChart.type";
 
 const csvPath = "/boot/raw.csv";
 
 const BarChart: React.FC = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [data, setData] = useState<DataType[]>([]);
-  const [groupBy, setGroupBy] = useState<"source" | "target">("source");
+  const [groupBy, setGroupBy] = useState<GroupByType>("source");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const BarChart: React.FC = () => {
         Group by:{" "}
         <select
           value={groupBy}
-          onChange={(e) => setGroupBy(e.target.value as "source" | "target")}
+          onChange={(e) => setGroupBy(e.target.value as GroupByType)}
         >
           <option value="source">Source</option>
           <option value="target">Target</option>
