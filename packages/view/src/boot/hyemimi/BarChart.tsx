@@ -94,9 +94,10 @@ const BarChart: React.FC = () => {
 
   return (
     <div>
-      <label htmlFor="group by">
+      <label htmlFor="groupBy">
         Group by:{" "}
         <select
+          id="groupBy"
           value={groupBy}
           onChange={(e) => setGroupBy(e.target.value as GroupByType)}
         >
