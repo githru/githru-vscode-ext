@@ -38,7 +38,6 @@ const TemporalFilter = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
-  // 메모이제이션된 정렬된 데이터 - 원본 데이터가 변경될 때만 재계산
   const sortedData = useMemo(() => sortBasedOnCommitNode(data), [data]);
 
   // 메모이제이션된 필터링된 정렬 데이터 - 필터링된 데이터가 변경될 때만 재계산
