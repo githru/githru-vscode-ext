@@ -25,6 +25,8 @@ export const useBranchStore = create<BranchStore>((set) => ({
       branchList: branches.branchList,
       selectedBranch: !state.selectedBranch && branches.head ? branches.head : state.selectedBranch,
     }));
-    useLoadingStore.getState().setLoading(false);
+    setTimeout(() => {
+      useLoadingStore.getState().setLoading(false);
+    }, 1500);
   },
 }));
