@@ -4,34 +4,55 @@ import type { AuthorInfo } from "types";
 
 import { GITHUB_URL } from "../../../constants/constants";
 
+import { AVATAR_STYLE, TOOLTIP_STYLE } from "./Author.const";
+
+const isGitHubUser = (src: string): boolean => {
+  return src.startsWith(GITHUB_URL);
+};
+
+const getGitHubProfileUrl = (username: string): string => {
+  return `${GITHUB_URL}/${username}`;
+};
+
+const ClickableAvatar = ({ name, src }: AuthorInfo) => {
+  return (
+    <a
+      href={getGitHubProfileUrl(name)}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ textDecoration: "none" }}
+    >
+      <Avatar
+        alt={name}
+        src={src}
+        sx={{ ...AVATAR_STYLE, cursor: "pointer" }}
+      />
+    </a>
+  );
+};
+
+const StaticAvatar = ({ name, src }: AuthorInfo) => {
+  return (
+    <Avatar
+      alt={name}
+      src={src}
+      sx={AVATAR_STYLE}
+    />
+  );
+};
+
 const Author = ({ name, src }: AuthorInfo) => {
-  const isUser = src.includes(GITHUB_URL);
+  const AvatarComponent = isGitHubUser(src) ? ClickableAvatar : StaticAvatar;
   return (
     <Tooltip
       title={name}
       placement="top-start"
-      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+      PopperProps={{ sx: TOOLTIP_STYLE }}
     >
-      {isUser ? (
-        <a
-          href={`${GITHUB_URL}/${name}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
-        >
-          <Avatar
-            alt={name}
-            src={src}
-            sx={{ width: 30, height: 30, minWidth: 30, minHeight: 30, cursor: "pointer" }}
-          />
-        </a>
-      ) : (
-        <Avatar
-          alt={name}
-          src={src}
-          sx={{ width: 30, height: 30, minWidth: 30, minHeight: 30 }}
-        />
-      )}
+      <AvatarComponent
+        name={name}
+        src={src}
+      />
     </Tooltip>
   );
 };
