@@ -41,8 +41,21 @@ const StaticAvatar = ({ name, src }: AuthorInfo) => {
   );
 };
 
+const AvatarComponent = ({ name, src }: AuthorInfo) => {
+  return isGitHubUser(src) ? (
+    <ClickableAvatar
+      name={name}
+      src={src}
+    />
+  ) : (
+    <StaticAvatar
+      name={name}
+      src={src}
+    />
+  );
+};
+
 const Author = ({ name, src }: AuthorInfo) => {
-  const AvatarComponent = isGitHubUser(src) ? ClickableAvatar : StaticAvatar;
   return (
     <Tooltip
       title={name}
