@@ -19,7 +19,7 @@ const App = () => {
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
   const { handleGithubInfo } = useGithubInfo();
-  const { loading, setLoading } = useLoadingStore();
+  const { loading, setLoading, isBranchLoading, setIsBranchLoading } = useLoadingStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
@@ -30,15 +30,16 @@ const App = () => {
         handleGithubInfo,
       };
       setLoading(true);
+      setIsBranchLoading(true);
       ideAdapter.addIDESentEventListener(callbacks);
       ideAdapter.sendFetchAnalyzedDataMessage();
       ideAdapter.sendFetchBranchListMessage();
       ideAdapter.sendFetchGithubInfo();
       initRef.current = true;
     }
-  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
+  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading, setIsBranchLoading]);
 
-  if (loading) {
+  if (loading || isBranchLoading) {
     return (
       <BounceLoader
         color={THEME_INFO[window.theme as keyof typeof THEME_INFO].colors.primary}
