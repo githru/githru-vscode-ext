@@ -35,27 +35,28 @@ const TemporalFilter = () => {
     transform: "translate(-50%, 0)",
   };
 
-  const sortedData = sortBasedOnCommitNode(data);
-
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ref = useRef<SVGSVGElement>(null);
 
-  // TODO - Need to Refactor for reducing # of sorting tries.
-  const lineChartDataList: LineChartDatum[][] = useMemo(() => {
-    const sortedCommitData = sortBasedOnCommitNode(filteredData);
+  const sortedData = useMemo(() => sortBasedOnCommitNode(data), [data]);
 
+  // 메모이제이션된 필터링된 정렬 데이터 - 필터링된 데이터가 변경될 때만 재계산
+  const sortedFilteredData = useMemo(() => sortBasedOnCommitNode(filteredData), [filteredData]);
+
+  // 메모이제이션된 라인 차트 데이터 - 정렬된 필터링 데이터가 변경될 때만 재계산
+  const lineChartDataList: LineChartDatum[][] = useMemo(() => {
     const clocMap: Map<string, number> = new Map();
     const commitMap: Map<string, number> = new Map();
 
-    sortedCommitData.forEach(({ commit }) => {
+    sortedFilteredData.forEach(({ commit }) => {
       const formattedDate = lineChartTimeFormatter(new Date(commit.commitDate));
       const clocMapItem = clocMap.get(formattedDate);
       const commitMapItem = commitMap.get(formattedDate);
 
       const clocValue = commit.diffStatistics.insertions + commit.diffStatistics.deletions;
 
-      commitMap.set(formattedDate, clocMapItem ? clocMapItem + 1 : 1);
-      clocMap.set(formattedDate, commitMapItem ? commitMapItem + clocValue : clocValue);
+      commitMap.set(formattedDate, commitMapItem ? commitMapItem + 1 : 1);
+      clocMap.set(formattedDate, clocMapItem ? clocMapItem + clocValue : clocValue);
     });
 
     const buildReturnArray = (map: Map<string, number>) =>
@@ -67,7 +68,7 @@ const TemporalFilter = () => {
       });
 
     return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
-  }, [filteredData]);
+  }, [sortedFilteredData]);
 
   const windowSize = useWindowResize();
 
