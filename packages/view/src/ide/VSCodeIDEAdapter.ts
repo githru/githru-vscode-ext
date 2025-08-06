@@ -16,6 +16,7 @@ export default class VSCodeIDEAdapter implements IDEPort {
 
       switch (command) {
         case "fetchAnalyzedData":
+        case "refresh":
           return events.handleChangeAnalyzedData(payloadData);
         case "fetchBranchList":
           return events.handleChangeBranchList(payloadData);
