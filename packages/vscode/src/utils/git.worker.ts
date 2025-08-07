@@ -1,27 +1,12 @@
 import * as cp from "child_process";
 import { parentPort, workerData } from "worker_threads";
 
+import { GIT_LOG_FORMAT } from "./git.constants";
 import { resolveSpawnOutput } from "./git.util";
 
 const { gitPath, currentWorkspacePath, skipCount, limitCount } = workerData;
 
 async function getPartialGitLog() {
-  const gitLogFormat =
-    "%n%n" +
-    [
-      "%H", // commit hash (id)
-      "%P", // parent hashes
-      "%D", // ref names (branches, tags)
-      "%an", // author name
-      "%ae", // author email
-      "%ad", // author date
-      "%cn", // committer name
-      "%ce", // committer email
-      "%cd", // committer date
-      "%w(0,0,4)%s", // commit message subject
-      "%b", // commit message body
-    ].join("%n");
-
   const args = [
     "--no-pager",
     "log",
@@ -29,7 +14,7 @@ async function getPartialGitLog() {
     "--parents",
     "--numstat",
     "--date-order",
-    `--pretty=format:${gitLogFormat}`,
+    `--pretty=format:${GIT_LOG_FORMAT}`,
     "--decorate",
     "-c",
     `--skip=${skipCount}`,

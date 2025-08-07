@@ -4,6 +4,8 @@ import os from "os";
 import * as path from "path";
 import { Worker } from "worker_threads";
 
+import { CORE_COUNT_THRESHOLD, GIT_LOG_FORMAT, TASK_THRESHOLD, THREAD_COUNTS } from "./git.constants";
+
 export interface GitExecutable {
   readonly path: string;
   readonly version: string;
@@ -156,21 +158,6 @@ export async function getGitExecutableFromPaths(paths: string[]): Promise<GitExe
 
 export async function getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const gitLogFormat =
-      "%n%n" +
-      [
-        "%H", // commit hash (id)
-        "%P", // parent hashes
-        "%D", // ref names (branches, tags)
-        "%an", // author name
-        "%ae", // author email
-        "%ad", // author date
-        "%cn", // committer name
-        "%ce", // committer email
-        "%cd", // committer date
-        "%w(0,0,4)%s", // commit message subject
-        "%b", // commit message body
-      ].join("%n");
     const args = [
       "--no-pager",
       "-c", "core.quotepath=false",
@@ -179,7 +166,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
       "--parents",
       "--numstat",
       "--date-order",
-      `--pretty=format:${gitLogFormat}`,
+      `--pretty=format:${GIT_LOG_FORMAT}`,
       "--decorate",
       "-c",
     ];
@@ -223,19 +210,17 @@ export async function getLogCount(gitPath: string, currentWorkspacePath: string)
   });
 }
 
+export function determineThreadCount(totalCnt: number, numCores: number) {
+  if (totalCnt <= TASK_THRESHOLD) return THREAD_COUNTS.MIN;
+  if (numCores < CORE_COUNT_THRESHOLD) return THREAD_COUNTS.MEDIUM;
+  return THREAD_COUNTS.MAX;
+}
+
 export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
   const numCores = os.cpus().length;
 
   const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
-  let numberOfThreads = 1;
-
-  const taskThreshold = 1000;
-  const coreCountThreshold = 4;
-
-  if (totalCnt > taskThreshold) {
-    if (numCores < coreCountThreshold) numberOfThreads = 2;
-    else numberOfThreads = 3;
-  }
+  const numberOfThreads = determineThreadCount(totalCnt, numCores);
 
   const chunkSize = Math.ceil(totalCnt / numberOfThreads);
   const promises: Promise<string>[] = [];
