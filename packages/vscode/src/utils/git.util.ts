@@ -1,10 +1,9 @@
 import * as cp from "child_process";
 import * as fs from "fs";
-import os from "os";
 import * as path from "path";
-import { Worker } from "worker_threads";
 
-import { CORE_COUNT_THRESHOLD, GIT_LOG_FORMAT, TASK_THRESHOLD, THREAD_COUNTS } from "./git.constants";
+import { GIT_LOG_FORMAT } from "./git.constants";
+import { GitParallelWorkerManager } from "./git.parallel";
 
 export interface GitExecutable {
   readonly path: string;
@@ -210,43 +209,11 @@ export async function getLogCount(gitPath: string, currentWorkspacePath: string)
   });
 }
 
-export function determineThreadCount(totalCnt: number, numCores: number) {
-  if (totalCnt <= TASK_THRESHOLD) return THREAD_COUNTS.MIN;
-  if (numCores < CORE_COUNT_THRESHOLD) return THREAD_COUNTS.MEDIUM;
-  return THREAD_COUNTS.MAX;
-}
-
 export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
-  const numCores = os.cpus().length;
-
   const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
-  const numberOfThreads = determineThreadCount(totalCnt, numCores);
+  const workerManager = new GitParallelWorkerManager();
 
-  const chunkSize = Math.ceil(totalCnt / numberOfThreads);
-  const promises: Promise<string>[] = [];
-
-  for (let i = 0; i < numberOfThreads; i++) {
-    const skipCount = i * chunkSize;
-    const limitCount = chunkSize;
-
-    const worker = new Worker(path.resolve(__dirname, "./worker.js"), {
-      workerData: {
-        gitPath,
-        currentWorkspacePath,
-        skipCount,
-        limitCount,
-      },
-    });
-
-    promises.push(
-      new Promise((resolve, reject) => {
-        worker.on("message", resolve);
-        worker.on("error", reject);
-      })
-    );
-  }
-
-  return Promise.all(promises).then((logs) => logs.join("\n"));
+  return workerManager.executeParallelGitLog(gitPath, currentWorkspacePath, totalCnt);
 }
 
 export async function getGitConfig(
