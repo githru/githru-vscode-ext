@@ -2,6 +2,8 @@ import os from "os";
 import * as path from "path";
 import { Worker } from "worker_threads";
 
+import { WorkerThreadError } from "../errors/GitError";
+
 export const TASK_THRESHOLD = 1000;
 export const CORE_COUNT_THRESHOLD = 4;
 export const THREAD_COUNTS = {
@@ -74,9 +76,11 @@ export class GitParallelWorkerManager {
 
     return new Promise((resolve, reject) => {
       worker.on("message", (result: string) => resolve(result));
-      worker.on("error", (error: Error) => reject(new Error(`Worker error: ${error.message}`)));
+      worker.on("error", (error: Error) => {
+        reject(new WorkerThreadError(`Worker error: ${error.message}`, task));
+      });
       worker.on("exit", (code) => {
-        if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
+        if (code !== 0) reject(new WorkerThreadError(`Worker stopped with exit code ${code}`, task));
       });
     });
   }
@@ -90,6 +94,9 @@ export class GitParallelWorkerManager {
       const results = await Promise.all(promises);
 
       return results.join("\n");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new WorkerThreadError(`Unexpected error in executeParallelGitLog: ${errorMessage}`);
     } finally {
       await this.cleanup();
     }
