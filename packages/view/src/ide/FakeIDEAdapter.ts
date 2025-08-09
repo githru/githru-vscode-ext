@@ -17,6 +17,7 @@ export default class FakeIDEAdapter implements IDEPort {
 
       switch (command) {
         case "fetchAnalyzedData":
+        case "refresh":
           return events.handleChangeAnalyzedData(payload ? JSON.parse(payload) : undefined);
         case "fetchBranchList":
           return events.handleChangeBranchList(payload ? JSON.parse(payload) : undefined);
@@ -64,11 +65,16 @@ export default class FakeIDEAdapter implements IDEPort {
   }
 
   public sendUpdateThemeMessage(theme: string) {
-    sessionStorage.setItem("THEME", theme);
     const message: IDEMessage = {
       command: "updateTheme",
+      payload: JSON.stringify({ theme }),
     };
     this.sendMessageToMe(message);
+  }
+
+  private sendMessageToMe(message: IDEMessage) {
+    const convertedMessage = this.convertMessage(message);
+    window.postMessage(convertedMessage, "*");
   }
 
   private convertMessage(message: IDEMessage) {
@@ -76,6 +82,7 @@ export default class FakeIDEAdapter implements IDEPort {
 
     switch (command) {
       case "fetchAnalyzedData":
+      case "refresh":
         return {
           command,
           payload: JSON.stringify(fakeData),
@@ -95,9 +102,5 @@ export default class FakeIDEAdapter implements IDEPort {
           command,
         };
     }
-  }
-
-  private sendMessageToMe(message: IDEMessage) {
-    window.postMessage(this.convertMessage(message));
   }
 }
