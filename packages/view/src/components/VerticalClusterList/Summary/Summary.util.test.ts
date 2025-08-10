@@ -200,7 +200,14 @@ describe("getInitData test", () => {
   });
 });
 
-test("getCommitLatestTag test", () => {
-  const clusters = getInitData(clusterNodeMockData);
-  expect(getCommitLatestTag(clusters[2].clusterTags)).toBe("v1.2.0");
+describe("getCommitLatestTag test", () => {
+  test("should return empty string when clusterTags is empty", () => {
+    const clusters = getInitData(clusterNodeMockData);
+    expect(getCommitLatestTag(clusters[0].clusterTags)).toBe("");
+  });
+
+  test("Get the latest release tag from the cluster", () => {
+    const clusters = getInitData(clusterNodeMockData);
+    expect(getCommitLatestTag(clusters[2].clusterTags)).toBe("v1.2.0");
+  });
 });
