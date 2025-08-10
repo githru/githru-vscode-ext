@@ -208,7 +208,6 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
   },
 ];
 
-/** authorLength, fileLength, commitLength, insertions, deletions 검증 */
 test("getCommitListDetail test", () => {
   const result = getCommitListDetail({
     commitNodeListInCluster: fakeCommitNodeListInCluster,
@@ -224,19 +223,16 @@ test("getCommitListDetail test", () => {
   expect(result.releaseTagLength).toBe(2);
 });
 
-/** commit ID 검증 */
 test("getSummaryCommitList test", () => {
   const result1 = getSummaryCommitList(fakeCommitNodeListInCluster);
 
   expect(result1).not.toBeUndefined();
   expect(result1).toHaveLength(3);
 
-  // ID 검증
   expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
   expect(result1[1].commit.id).toBe(fakeCommitNodeListInCluster[1].commit.id);
   expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
 
-  // 태그 정보 검증
   expect(result1[0].commit.tags).toBe(fakeCommitNodeListInCluster[0].commit.tags);
   expect(result1[0].commit.releaseTags).toBe(fakeCommitNodeListInCluster[0].commit.releaseTags);
   expect(result1[1].commit.tags).toBe(fakeCommitNodeListInCluster[1].commit.tags);

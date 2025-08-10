@@ -24,7 +24,6 @@ const getChangeFileLength = (commitNodes: CommitNode[]) => {
   return getDataSetSize(commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat());
 };
 
-// 태그 관련 유틸함수 추가
 const getCommitListTagsLength = (commitNodes: CommitNode[]) => {
   return getDataSetSize(commitNodes.map((d) => d.commit.tags).flat());
 };
@@ -63,7 +62,6 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
   };
 };
 
-/** 커밋 목록을 반환하는 함수 */
 export const getSummaryCommitList = (arr: CommitNode[]) => {
   return arr.length > FIRST_SHOW_NUM ? arr.slice(0, FIRST_SHOW_NUM) : [...arr];
 };
