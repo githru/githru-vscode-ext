@@ -220,6 +220,8 @@ test("getCommitListDetail test", () => {
   expect(result.commitLength).toBe(3);
   expect(result.insertions).toBe(1100);
   expect(result.deletions).toBe(278);
+  expect(result.tagLength).toBe(9);
+  expect(result.releaseTagLength).toBe(2);
 });
 
 /** commit ID 검증 */
