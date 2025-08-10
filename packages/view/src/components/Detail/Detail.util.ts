@@ -32,8 +32,6 @@ const getCommitListReleaseTagsLength = (commitNodes: CommitNode[]) => {
   return getDataSetSize(commitNodes.map((d) => d.commit.releaseTags).flat());
 };
 
-
-
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
 export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDetail) => {
   const authorLength = getCommitListAuthorLength(commitNodeListInCluster);

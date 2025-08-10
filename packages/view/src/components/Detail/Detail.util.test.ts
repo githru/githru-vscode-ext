@@ -240,4 +240,3 @@ test("getSummaryCommitList test", () => {
   expect(result1[2].commit.tags).toBe(fakeCommitNodeListInCluster[2].commit.tags);
   expect(result1[2].commit.releaseTags).toBe(fakeCommitNodeListInCluster[2].commit.releaseTags);
 });
-
