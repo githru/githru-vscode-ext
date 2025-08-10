@@ -46,8 +46,8 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "feat(webview): add typescript structure",
-      tags: [],
-      releaseTags: [],
+      tags: ["v1.1.0", "feature", "typescript"],
+      releaseTags: ["v1.1.0"],
     },
     seq: 0,
     clusterId: 4,
@@ -125,8 +125,8 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "feat(vscode): launch webview for webviewApp",
-      tags: [],
-      releaseTags: [],
+      tags: ["v1.2.0", "vscode", "webview"],
+      releaseTags: ["v1.2.0"],
     },
     clusterId: 4,
     seq: 1,
@@ -200,7 +200,7 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
         },
       },
       message: "setup(vscode): add webview loader",
-      tags: [],
+      tags: ["setup", "initial", "webview-loader"],
       releaseTags: [],
     },
     seq: 2,
@@ -208,6 +208,7 @@ const fakeCommitNodeListInCluster: CommitNode[] = [
   },
 ];
 
+/** authorLength, fileLength, commitLength, insertions, deletions 검증 */
 test("getCommitListDetail test", () => {
   const result = getCommitListDetail({
     commitNodeListInCluster: fakeCommitNodeListInCluster,
@@ -221,12 +222,24 @@ test("getCommitListDetail test", () => {
   expect(result.deletions).toBe(278);
 });
 
+/** commit ID 검증 */
 test("getSummaryCommitList test", () => {
   const result1 = getSummaryCommitList(fakeCommitNodeListInCluster);
 
   expect(result1).not.toBeUndefined();
   expect(result1).toHaveLength(3);
+
+  // ID 검증
   expect(result1[0].commit.id).toBe(fakeCommitNodeListInCluster[0].commit.id);
   expect(result1[1].commit.id).toBe(fakeCommitNodeListInCluster[1].commit.id);
   expect(result1[2].commit.id).toBe(fakeCommitNodeListInCluster[2].commit.id);
+
+  // 태그 정보 검증
+  expect(result1[0].commit.tags).toBe(fakeCommitNodeListInCluster[0].commit.tags);
+  expect(result1[0].commit.releaseTags).toBe(fakeCommitNodeListInCluster[0].commit.releaseTags);
+  expect(result1[1].commit.tags).toBe(fakeCommitNodeListInCluster[1].commit.tags);
+  expect(result1[1].commit.releaseTags).toBe(fakeCommitNodeListInCluster[1].commit.releaseTags);
+  expect(result1[2].commit.tags).toBe(fakeCommitNodeListInCluster[2].commit.tags);
+  expect(result1[2].commit.releaseTags).toBe(fakeCommitNodeListInCluster[2].commit.releaseTags);
 });
+
