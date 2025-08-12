@@ -46,9 +46,9 @@
 }
 
 .detail__commit-list {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  row-gap: 0.4375rem;
   padding: 1.25rem;
   font-size: $font-size-body;
 
@@ -56,27 +56,32 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    row-gap: 0.4375rem;
+    align-items: flex-start;
     color: $color-medium-gray;
 
     .commit-item__detail {
       color: $color-white;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
+      flex-grow: 1;
       padding-left: 0.3125rem;
+      padding-bottom: 1rem;
 
-      .commit-item__avatar-message {
+      .commit-item__left {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        gap: 0.625rem;
         width: 100%;
 
         .commit-item__message-container {
           position: relative;
           overflow: visible;
           flex-grow: 1;
+          padding-top: 0.3rem;
           padding-right: 3.125rem;
-          width: auto;
 
           .commit-item__message {
             display: -webkit-box;
@@ -85,45 +90,46 @@
             overflow: hidden;
             color: $color-white;
             margin: 0 0.25rem 0 0.9375rem;
+            cursor: pointer;
 
             &:hover {
               display: block;
-              cursor: pointer;
+              -webkit-line-clamp: unset;
+              white-space: normal;
               overflow: visible;
-              position: absolute;
-              z-index: 10;
-              background-color: $color-dark-gray;
-              padding-bottom: 0.3125rem;
-              top: -0.4375rem;
             }
           }
         }
       }
 
-      .commit-item__author-date {
-        display: block;
-        position: relative;
+      .commit-item__right {
+        display: flex;
+        padding-top: 0.3rem;
+        align-items: flex-end;
+        text-align: right;
+        gap: 0.625rem;
         white-space: nowrap;
-      }
-    }
 
-    .commit-item__commit-id {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 6em;
-      position: relative;
+        .commit-item__commit-id {
+          width: fit-content;
 
-      .commit-id__link {
-        text-decoration: none;
-        color: $color-light-gray;
+          .commit-id__link {
+            text-decoration: none;
+            color: $color-light-gray;
 
-        &:visited {
-          color: $color-light-gray;
+            &:visited {
+              color: $color-light-gray;
+            }
+
+            &:hover {
+              color: var(--color-primary);
+            }
+          }
         }
 
-        &:hover {
-          color: var(--color-primary);
+        .commit-item__author-date {
+          display: block;
+          position: relative;
         }
       }
     }
