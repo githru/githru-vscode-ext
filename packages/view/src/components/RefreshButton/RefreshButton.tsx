@@ -10,11 +10,10 @@ import { useBranchStore, useLoadingStore } from "store";
 
 const RefreshButton = () => {
   const { selectedBranch } = useBranchStore();
-  const { loading, setLoading, setIsBranchLoading, isBranchLoading } = useLoadingStore();
+  const { loading, setLoading } = useLoadingStore();
 
   const refreshHandler = throttle(() => {
     setLoading(true);
-    setIsBranchLoading(true);
     sendRefreshDataCommand(selectedBranch);
   }, 3000);
 
@@ -22,11 +21,11 @@ const RefreshButton = () => {
     <IconButton
       className={cn("refresh-button")}
       onClick={refreshHandler}
-      disabled={loading || isBranchLoading}
+      disabled={loading}
       sx={{ color: "white" }}
     >
       <ReplayCircleFilledRoundedIcon
-        className={cn("refresh-button__icon", { "refresh-button__icon--loading": loading || isBranchLoading })}
+        className={cn("refresh-button__icon", { "refresh-button__icon--loading": loading })}
       />
     </IconButton>
   );

@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { useLoadingStore } from "./loading";
 
 export type BranchListPayload = {
   branchList: string[];
@@ -24,6 +23,5 @@ export const useBranchStore = create<BranchStore>((set) => ({
       branchList: branches.branchList,
       selectedBranch: !state.selectedBranch && branches.head ? branches.head : state.selectedBranch,
     }));
-    useLoadingStore.getState().setIsBranchLoading(false);
   },
 }));
