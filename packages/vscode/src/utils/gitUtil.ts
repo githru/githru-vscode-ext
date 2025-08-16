@@ -2,9 +2,9 @@ import * as cp from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-import { GIT_LOG_FORMAT } from "./git.constants";
-import { formatGitError } from "./git.error-handler";
-import { GitParallelWorkerManager } from "./git.parallel";
+import { GIT_LOG_FORMAT } from "./gitConstants";
+import { formatGitError } from "./gitErrorHandler";
+import { GitParallelWorkerManager } from "./gitParallel";
 
 export interface GitExecutable {
   readonly path: string;

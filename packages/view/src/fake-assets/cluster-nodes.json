@@ -8534,7 +8534,7 @@
                 "insertions": 11,
                 "deletions": 4
               },
-              "packages/vscode/src/utils/git.util.ts": {
+              "packages/vscode/src/utils/gitUtil.ts": {
                 "insertions": 159,
                 "deletions": 0
               },
@@ -8628,7 +8628,7 @@
                 "insertions": 3,
                 "deletions": 3
               },
-              "packages/vscode/src/utils/csm.mapper.ts": {
+              "packages/vscode/src/utils/csmMapper.ts": {
                 "insertions": 74,
                 "deletions": 0
               }
@@ -8685,7 +8685,7 @@
                 "insertions": 1,
                 "deletions": 1
               },
-              "packages/vscode/src/utils/csm.mapper.ts": {
+              "packages/vscode/src/utils/csmMapper.ts": {
                 "insertions": 2,
                 "deletions": 2
               }

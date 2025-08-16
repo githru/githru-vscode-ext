@@ -38,7 +38,7 @@ export class GitParallelWorkerManager {
     this.config = {
       taskThreshold: TASK_THRESHOLD,
       coreCountThreshold: CORE_COUNT_THRESHOLD,
-      workerScriptPath: path.resolve(__dirname, "./worker.js"),
+      workerScriptPath: path.resolve(__dirname, "./gitWorker.js"),
       ...config,
     };
   }

@@ -1,4 +1,4 @@
-import type { WorkerTask } from "../utils/git.parallel";
+import type { WorkerTask } from "../utils/gitParallel";
 
 export class GitError extends Error {
   constructor(

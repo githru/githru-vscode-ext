@@ -1,5 +1,5 @@
 import { GitError } from "../../errors/GitError";
-import { formatGitError } from "../../utils/git.error-handler";
+import { formatGitError } from "../../utils/gitErrorHandler";
 
 describe("formatGitError", () => {
   const mockCommand = ["git", "log", "--all"];

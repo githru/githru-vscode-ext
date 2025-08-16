@@ -1,9 +1,9 @@
 import * as cp from "child_process";
 import { parentPort, workerData } from "worker_threads";
 
-import { GIT_LOG_FORMAT } from "./git.constants";
-import { formatGitError } from "./git.error-handler";
-import { resolveSpawnOutput } from "./git.util";
+import { GIT_LOG_FORMAT } from "./gitConstants";
+import { formatGitError } from "./gitErrorHandler";
+import { resolveSpawnOutput } from "./gitUtil";
 
 const { gitPath, currentWorkspacePath, skipCount, limitCount } = workerData;
 

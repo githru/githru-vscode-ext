@@ -1,7 +1,7 @@
 import * as cp from "child_process";
 
 import { GitError } from "../../errors/GitError";
-import { getGitLog } from "../../utils/git.util";
+import { getGitLog } from "../../utils/gitUtil";
 
 const generateMockGitLogData = (index: number) => `
 commit ${index}1234567890abcdef1234567890abcdef${index}5678 (HEAD -> main)

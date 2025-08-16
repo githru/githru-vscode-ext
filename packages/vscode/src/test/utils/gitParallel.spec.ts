@@ -1,7 +1,7 @@
 import os from "os";
 import * as workerThreads from "worker_threads";
 
-import { GitParallelWorkerManager, type WorkerTask } from "../../utils/git.parallel";
+import { GitParallelWorkerManager, type WorkerTask } from "../../utils/gitParallel";
 
 jest.mock("os", () => ({
   default: { cpus: jest.fn() },
@@ -108,7 +108,7 @@ describe("GitParallelWorkerManager", () => {
     });
 
     beforeEach(async () => {
-      const { GitParallelWorkerManager } = await import("../../utils/git.parallel");
+      const { GitParallelWorkerManager } = await import("../../utils/gitParallel");
       errorWorkerManager = new GitParallelWorkerManager();
     });
 
