@@ -37,7 +37,7 @@ export function extractCommitData(commit: string) {
   };
 }
 
-export function parseRefsData(refs: string): ParsedRefs {
+export function extractBranchesAndTags(refs: string): ParsedRefs {
   if (!refs) return { branches: [], tags: [] };
 
   const refsArray = refs.replace(" -> ", ", ").split(", ");
@@ -55,7 +55,7 @@ export function parseRefsData(refs: string): ParsedRefs {
   );
 }
 
-export function parseDiffStatLine(line: string, diffStats: DifferenceStatistic) {
+export function processDiffStatLine(line: string, diffStats: DifferenceStatistic) {
   const [insertions, deletions, path] = line.split("\t");
   const numberedInsertions = insertions === "-" ? 0 : Number(insertions);
   const numberedDeletions = deletions === "-" ? 0 : Number(deletions);
@@ -68,7 +68,7 @@ export function parseDiffStatLine(line: string, diffStats: DifferenceStatistic) 
   };
 }
 
-export function parseMessageAndDiffStats(messageAndDiffStats: string[]): MessageAndDiffStats {
+export function extractMessageAndDiffStats(messageAndDiffStats: string[]): MessageAndDiffStats {
   let messageSubject = "";
   let messageBody = "";
   const diffStats: DifferenceStatistic = {
@@ -78,19 +78,19 @@ export function parseMessageAndDiffStats(messageAndDiffStats: string[]): Message
   };
 
   for (const [idx, line] of messageAndDiffStats.entries()) {
-    if (idx === 0)
-      // message subject
+    if (idx === 0) {
       messageSubject = line;
-    else if (line.startsWith(INDENTATION)) {
-      // message body (add newline if not first line)
-      messageBody += idx === 1 ? line.trim() : `\n${line.trim()}`;
-    } else if (line === "")
-      // pass empty line
       continue;
-    else {
-      // diffStats
-      parseDiffStatLine(line, diffStats);
     }
+
+    if (line.startsWith(INDENTATION)) {
+      messageBody += idx === 1 ? line.trim() : `\n${line.trim()}`;
+      continue;
+    }
+
+    if (line === "") continue;
+
+    processDiffStatLine(line, diffStats);
   }
 
   const message = messageBody === "" ? messageSubject : `${messageSubject}\n${messageBody}`;
@@ -101,7 +101,7 @@ export function createCommitRaw(
   commitIdx: number,
   commitData: ReturnType<typeof extractCommitData>,
   parsedRefs: ParsedRefs,
-  parsedMessage: ReturnType<typeof parseMessageAndDiffStats>
+  parsedMessage: ReturnType<typeof extractMessageAndDiffStats>
 ): CommitRaw {
   const { id, parents, authorName, authorEmail, authorDate, committerName, committerEmail, committerDate } = commitData;
   const { branches, tags } = parsedRefs;
@@ -135,8 +135,8 @@ export default function getCommitRaws(log: string): CommitRaw[] {
   const commits = splitLogIntoCommits(log);
   return commits.map((commit, idx) => {
     const commitData = extractCommitData(commit);
-    const parsedRefs = parseRefsData(commitData.refs);
-    const parsedMessage = parseMessageAndDiffStats(commitData.messageAndDiffStats);
+    const parsedRefs = extractBranchesAndTags(commitData.refs);
+    const parsedMessage = extractMessageAndDiffStats(commitData.messageAndDiffStats);
     return createCommitRaw(idx, commitData, parsedRefs, parsedMessage);
   });
 }
