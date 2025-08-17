@@ -1,5 +1,5 @@
 import { getCommitMessageType } from "./commit.util";
-import getCommitRaws from "./parser";
+import getCommitRaws, { extractCommitData, splitLogIntoCommits } from "./parser";
 import type { CommitRaw, DifferenceStatistic } from "./types";
 
 describe("commit message type", () => {
@@ -262,5 +262,57 @@ describe("getCommitRaws", () => {
     };
 
     expect(result).toEqual([expectedResult]);
+  });
+});
+
+describe("Parser unit tests", () => {
+  const INDENTATION = "    ";
+  const fakeId = "abc123";
+  const fakeParents = "parent1 parent2";
+  const fakeRefs = "HEAD -> main";
+  const fakeAuthor = "Daniel Lee\ndani@gmail.com\nSat Aug 09 20:17:59 2025 +0900";
+  const fakeCommitter = `Brian Lim\nbra@gmail.com\nSun Aug 10 20:17:59 2025 +0900`;
+  const fakeCommitMessage = `commit message\n${INDENTATION}body line`;
+  const fakeCommitFileChange = "10\t5\tfile.ts";
+
+  describe("splitLogIntoCommits", () => {
+    it.each([
+      ["\n\ncommit1\n\n\n\ncommit2\n\n\n\ncommit3", ["commit1", "commit2", "commit3"]],
+      ["\n\ncommit1", ["commit1"]],
+      ["\n\n", [""]],
+    ])("should split log into individual commits", (log, expectedResult) => {
+      const result = splitLogIntoCommits(log);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe("extractCommitData", () => {
+    it("should extract commit fields correctly", () => {
+      const mockCommit = `${fakeId}\n${fakeParents}\n${fakeRefs}\n${fakeAuthor}\n${fakeCommitter}\n${fakeCommitMessage}\n${fakeCommitFileChange}`;
+      const result = extractCommitData(mockCommit);
+      const expected = {
+        id: fakeId,
+        parents: fakeParents,
+        refs: fakeRefs,
+        authorName: "Daniel Lee",
+        authorEmail: "dani@gmail.com",
+        authorDate: "Sat Aug 09 20:17:59 2025 +0900",
+        committerName: "Brian Lim",
+        committerEmail: "bra@gmail.com",
+        committerDate: "Sun Aug 10 20:17:59 2025 +0900",
+        messageAndDiffStats: ["commit message", "    body line", "10\t5\tfile.ts"],
+      };
+
+      expect(result).toEqual(expected);
+    });
+
+    it("should handle commit with minimal data", () => {
+      const mockCommit = `${fakeId}\n\n\n${fakeAuthor}\n${fakeCommitter}`;
+      const result = extractCommitData(mockCommit);
+
+      expect(result.id).toBe(fakeId);
+      expect(result.refs).toBe("");
+      expect(result.messageAndDiffStats).toEqual([]);
+    });
   });
 });

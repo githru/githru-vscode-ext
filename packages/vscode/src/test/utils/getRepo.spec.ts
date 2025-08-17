@@ -1,4 +1,4 @@
-import { getRepo } from "../../utils/git.util";
+import { getRepo } from "../../utils/gitUtil";
 
 describe("getRepo", () => {
   describe("Valid Git URL formats", () => {

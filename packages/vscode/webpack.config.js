@@ -14,7 +14,7 @@ const extensionConfig = {
 
     entry: {
         extension: "./src/extension.ts", // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
-        worker: "./src/utils/git.worker.ts"
+        worker: "./src/utils/gitWorker.ts",
     },
     output: {
         // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
