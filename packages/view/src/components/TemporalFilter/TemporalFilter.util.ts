@@ -24,22 +24,28 @@ type FilterDataByDateProps = {
 };
 
 export function filterDataByDate({ data, fromDate, toDate }: FilterDataByDateProps): ClusterNode[] {
-  const filteredData = data
-    .map((clusterNode) => {
-      return clusterNode.commitNodeList.filter((commitNode: CommitNode) => {
-        return (
-          new Date(commitNode.commit.commitDate) >= new Date(`${fromDate} 00:00:00`) &&
-          new Date(commitNode.commit.commitDate) <= new Date(`${toDate} 23:59:59`)
-        );
-      });
-    })
-    .filter((commitNodeList) => commitNodeList.length > 0)
-    .map(
-      (commitNodeList): ClusterNode => ({
+  const fromTime = new Date(`${fromDate} 00:00:00`).getTime();
+  const toTime = new Date(`${toDate} 23:59:59`).getTime();
+
+  const filteredData: ClusterNode[] = [];
+
+  for (const clusterNode of data) {
+    const filteredCommits: CommitNode[] = [];
+    
+    for (const commitNode of clusterNode.commitNodeList) {
+      const commitTime = new Date(commitNode.commit.commitDate).getTime();
+      if (commitTime >= fromTime && commitTime <= toTime) {
+        filteredCommits.push(commitNode);
+      }
+    }
+    
+    if (filteredCommits.length > 0) {
+      filteredData.push({
         nodeTypeName: NODE_TYPES[1],
-        commitNodeList,
-      })
-    );
+        commitNodeList: filteredCommits,
+      });
+    }
+  }
 
   return filteredData.reverse();
 }
