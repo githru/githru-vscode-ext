@@ -40,14 +40,14 @@ const Summary = () => {
   };
 
   useEffect(() => {
-    detailRef.current?.scrollIntoView({
-      block: "center",
-      behavior: "smooth",
-    });
-    if (listRef.current) {
-      listRef.current.recomputeRowHeights();
+    if (selectedData.length > 0) {
+      detailRef.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
     }
-  }, [selectedData]);
+    listRef.current?.recomputeRowHeights();
+  }, [selectedClusterId]);
 
   const getRowHeight = ({ index }: { index: number }) => {
     const cluster = clusters[index];
