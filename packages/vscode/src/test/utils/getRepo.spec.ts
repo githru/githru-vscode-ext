@@ -53,6 +53,8 @@ describe("getRepo", () => {
     it.each(validTestCases)("%s", (_, url, expected) => {
       const result = getRepo(url);
       expect(result).toEqual(expected);
+      expect(typeof result.owner).toBe("string");
+      expect(typeof result.repo).toBe("string");
     });
   });
 
@@ -67,6 +69,16 @@ describe("getRepo", () => {
       expect(() => getRepo(invalidUrl)).toThrow(
         `Invalid Git remote config format: "${invalidUrl}". Expected format: [https?://|git@]github.com/owner/repo[.git] or https://organization@dev.azure.com/organization/project/_git/repository-name`
       );
+    });
+  });
+
+  describe("Return type contract", () => {
+    it("should return { owner: string, repo: string } object", () => {
+      const result = getRepo("https://github.com/owner/repo.git");
+      expect(result).toMatchObject({
+        owner: expect.any(String),
+        repo: expect.any(String),
+      });
     });
   });
 });
