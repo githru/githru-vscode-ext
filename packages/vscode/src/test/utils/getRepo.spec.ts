@@ -53,8 +53,6 @@ describe("getRepo", () => {
     it.each(validTestCases)("%s", (_, url, expected) => {
       const result = getRepo(url);
       expect(result).toEqual(expected);
-      expect(typeof result.owner).toBe("string");
-      expect(typeof result.repo).toBe("string");
     });
   });
 
@@ -75,6 +73,8 @@ describe("getRepo", () => {
   describe("Return type contract", () => {
     it("should return { owner: string, repo: string } object", () => {
       const result = getRepo("https://github.com/owner/repo.git");
+      // [의도] 과거 repo[0] 등 부분 문자열 사용으로 인한 버그가 발생했던 이력이 있었습니다.
+      // repo는 전체 저장소명(string)으로 반환되며, 반환된 저장소명 그대로 사용해야 합니다. (부분 문자열이나 repo[0] 사용 금지)
       expect(result).toMatchObject({
         owner: expect.any(String),
         repo: expect.any(String),
