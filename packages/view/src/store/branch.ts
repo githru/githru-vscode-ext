@@ -18,9 +18,10 @@ export const useBranchStore = create<BranchStore>((set) => ({
   selectedBranch: "",
   setBranchList: (branches) => set({ branchList: branches }),
   setSelectedBranch: (branch) => set({ selectedBranch: branch }),
-  handleChangeBranchList: (branches) =>
+  handleChangeBranchList: (branches) => {
     set((state) => ({
       branchList: branches.branchList,
       selectedBranch: !state.selectedBranch && branches.head ? branches.head : state.selectedBranch,
-    })),
+    }));
+  },
 }));
