@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "githru-mcp": {
+        "command": "node",
+        "args": [
+            "/ABSOLUTE/PATH/TO/githru-vscode-ext/packages/githru-mcp/dist/server.js"
+        ],
+        "env": {
+            "NODE_NO_WARNINGS": "1"
+        }
+        }
+    }
+}
