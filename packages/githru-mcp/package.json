@@ -1,0 +1,19 @@
+{
+    "name": "githru-mcp",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "main": "dist/server.js",
+    "scripts": {
+        "build": "tsc -p .",
+        "start": "node dist/server.js",
+        "dev": "ts-node-esm src/server.ts"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.17.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.5.4",
+        "ts-node": "^10.9.2"
+    }
+}
