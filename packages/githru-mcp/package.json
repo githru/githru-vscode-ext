@@ -3,11 +3,11 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
-    "main": "dist/server.js",
+    "main": "dist/index.js",
+    "module": "src/index.ts",
     "scripts": {
-        "build": "tsc -p .",
-        "start": "node dist/server.js",
-        "dev": "ts-node-esm src/server.ts"
+        "build": "npx @smithery/cli build",
+        "dev": "npx @smithery/cli dev"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.17.0"

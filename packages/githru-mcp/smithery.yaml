@@ -1,7 +1,9 @@
 # smithery.yaml
+runtime: "typescript"
+
 name: githru-mcp
 language: typescript
-entry: packages/githru-mcp/src/server.ts
+entry: packages/githru-mcp/src/index.ts
 
 build:
   install: npm ci
@@ -9,7 +11,7 @@ build:
   cwd: packages/githru-mcp
 
 run:
-  command: node dist/server.js
+  command: node dist/index.js
   cwd: packages/githru-mcp
 
 # (선택) 환경변수 예시
