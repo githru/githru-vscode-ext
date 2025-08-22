@@ -8,9 +8,9 @@
             "run",
             "@Kyoungwoong/githru-vscode-ext",
             "--key",
-            "3dc69e82-dd2a-4dd9-9e8c-3557f1781576",
+            "API KEY",
             "--profile",
-            "continuing-mouse-wL0uDr"
+            "CLAUDE PROFILE"
         ]
         }
     }
