@@ -1,6 +1,6 @@
 {
-	"name": "smithery-scaffold",
-	"version": "1.0.0",
+	"name": "githru-mcp-server1",
+	"version": "1.0.1",
 	"description": "",
 	"main": "index.js",
 	"module": "./src/index.ts",
