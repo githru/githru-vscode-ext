@@ -1,13 +1,17 @@
 {
     "mcpServers": {
-        "githru-mcp": {
-        "command": "node",
+        "githru-vscode-ext": {
+        "command": "npx",
         "args": [
-            "/ABSOLUTE/PATH/TO/githru-vscode-ext/packages/githru-mcp/dist/server.js"
-        ],
-        "env": {
-            "NODE_NO_WARNINGS": "1"
-        }
+            "-y",
+            "@smithery/cli@latest",
+            "run",
+            "@Kyoungwoong/githru-vscode-ext",
+            "--key",
+            "3dc69e82-dd2a-4dd9-9e8c-3557f1781576",
+            "--profile",
+            "continuing-mouse-wL0uDr"
+        ]
         }
     }
 }

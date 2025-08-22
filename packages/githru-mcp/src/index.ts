@@ -1,83 +1,115 @@
+/**
+ * 👋 Welcome to your Smithery project!
+ * To run your server, run "npm run dev"
+ *
+ * You might find these resources useful:
+ *
+ * 🧑‍💻 MCP's TypeScript SDK (helps you define your server)
+ * https://github.com/modelcontextprotocol/typescript-sdk
+ *
+ * 📝 smithery.yaml (defines user-level config, like settings or API keys)
+ * https://smithery.ai/docs/build/project-config/smithery-yaml
+ *
+ * 💻 smithery CLI (run "npx @smithery/cli dev" or explore other commands below)
+ * https://smithery.ai/docs/concepts/cli
+ */
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-// MCP 서버 인스턴스 생성
-const server = new McpServer({
-    name: "githru-mcp",
-    version: "0.0.1"
+// Optional: If you have user-level config, define it here
+// This should map to the config in your smithery.yaml file
+export const configSchema = z.object({
+  debug: z.boolean().default(false).describe("Enable debug logging"),
 });
 
-// ping 툴 등록
-server.registerTool(
-    "ping",
+export default function createStatelessServer({
+  config,
+  sessionId,
+}: {
+  config: z.infer<typeof configSchema>; // Define your config in smithery.yaml
+  sessionId: string; // Use the sessionId field for mapping requests to stateful processes
+}) {
+  const server = new McpServer({
+    name: "My MCP Server",
+    version: "1.0.0",
+  });
+
+  // Add a tool
+  server.tool(
+    "hello",
+    "Say hello to someone",
     {
-        title: "Ping",
-        description: "Health check tool",
-        inputSchema: {}
+      name: z.string().describe("Name to greet"),
     },
-    async () => {
-        return { content: [{ type: "text", text: "pong" }] };
+    async ({ name }) => {
+      return {
+        content: [{ type: "text", text: `Hello, ${name}!` }],
+      };
     }
-);
+  );
 
-// echo 툴 등록 (파라미터 받기 예제)
-server.registerTool(
-    "echo",
-    {
-        title: "Echo",
-        description: "Echoes back the input text",
-        inputSchema: {
-        text: z.string().describe("Text to echo back")
-        }
-    },
-    async ({ text }) => {
-        return { content: [{ type: "text", text: `Echo: ${text}` }] };
-    }
-);
+  // ping 툴 등록
+  server.registerTool(
+      "ping",
+      {
+          title: "Ping",
+          description: "Health check tool",
+          inputSchema: {}
+      },
+      async () => {
+          return { content: [{ type: "text", text: "pong" }] };
+      }
+  );
 
-// bmi_calculator 툴 등록
-server.registerTool(
-    "bmi_calculator",
-    {
-        title: "BMI Calculator",
-        description: "키(cm)와 몸무게(kg)를 입력받아 BMI 지수를 계산합니다.",
-        inputSchema: {
-        height: z.number().int().positive().describe("키 (cm 단위)"),
-        weight: z.number().int().positive().describe("몸무게 (kg 단위)")
-        }
-    },
+  // echo 툴 등록 (파라미터 받기 예제)
+  server.registerTool(
+      "echo",
+      {
+          title: "Echo",
+          description: "Echoes back the input text",
+          inputSchema: {
+          text: z.string().describe("Text to echo back")
+          }
+      },
+      async ({ text }) => {
+          return { content: [{ type: "text", text: `Echo: ${text}` }] };
+      }
+  );
 
-    async ({ height, weight }) => {
-        const hMeters = height / 100; // cm → m
-        const bmi = weight / (hMeters * hMeters);
-        let category = "Unknown";
-        if (bmi < 18.5) category = "Underweight";
-        else if (bmi < 24.9) category = "Normal weight";
-        else if (bmi < 29.9) category = "Overweight";
-        else category = "Obese";
+  // bmi_calculator 툴 등록
+  server.registerTool(
+      "bmi_calculator",
+      {
+          title: "BMI Calculator",
+          description: "키(cm)와 몸무게(kg)를 입력받아 BMI 지수를 계산합니다.",
+          inputSchema: {
+          height: z.number().int().positive().describe("키 (cm 단위)"),
+          weight: z.number().int().positive().describe("몸무게 (kg 단위)")
+          }
+      },
 
-    return {
-        content: [
-            {
-            type: "text",
-            text: `Height: ${height} cm, Weight: ${weight} kg\nBMI: ${bmi.toFixed(
-                2
-            )} (${category})`
-            }
-        ]
-        };
-    }
-);
+      async ({ height, weight }) => {
+          const hMeters = height / 100; // cm → m
+          const bmi = weight / (hMeters * hMeters);
+          let category = "Unknown";
+          if (bmi < 18.5) category = "Underweight";
+          else if (bmi < 24.9) category = "Normal weight";
+          else if (bmi < 29.9) category = "Overweight";
+          else category = "Obese";
 
-// 메인 실행 (STDIO 연결)
-async function main() {
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
+      return {
+          content: [
+              {
+              type: "text",
+              text: `Height: ${height} cm, Weight: ${weight} kg\nBMI: ${bmi.toFixed(
+                  2
+              )} (${category})`
+              }
+          ]
+          };
+      }
+  );
+
+  return server.server;
 }
-
-main().catch((err) => {
-  // stdout은 프로토콜 채널이므로 로그는 stderr로만 출력
-    console.error("Server error:", err);
-    process.exit(1);
-});

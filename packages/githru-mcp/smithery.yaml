@@ -1,9 +1,1 @@
-# smithery.yaml
-runtime: "typescript"
-
-name: githru-mcp
-entry: packages/githru-mcp/src/index.ts
-
-about:
-  description: "Githru MCP server test for Claude via Smithery"
-  # repository: "https://github.com/githru/githru-vscode-ext"
+runtime: typescript
