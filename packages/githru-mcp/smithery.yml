@@ -1,0 +1,22 @@
+# smithery.yaml
+name: githru-mcp
+language: typescript
+entry: packages/githru-mcp/src/server.ts
+
+build:
+  install: npm ci
+  command: npm run build
+  cwd: packages/githru-mcp
+
+run:
+  command: node dist/server.js
+  cwd: packages/githru-mcp
+
+# (선택) 환경변수 예시
+# env:
+#   ALLOWED_REPOS: "/abs/path1,/abs/path2"
+
+# (선택) 메타데이터
+about:
+  description: "Githru MCP server test for Claude via Smithery"
+  repository: "https://github.com/githru/githru-vscode-ext"
