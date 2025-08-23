@@ -12,7 +12,7 @@ githru-vscode-ext/
 └─ packages/
   └─ githru-mcp/
   ├─ src/
-  │ └─ server.ts
+  │ └─ index.ts
   ├─ smithery.yml
   ├─ package.json
   ├─ tsconfig.json
