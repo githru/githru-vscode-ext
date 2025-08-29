@@ -1,19 +1,22 @@
 {
-    "name": "githru-mcp",
-    "version": "0.0.1",
-    "private": true,
-    "type": "module",
-    "main": "dist/server.js",
-    "scripts": {
-        "build": "tsc -p .",
-        "start": "node dist/server.js",
-        "dev": "ts-node-esm src/server.ts"
-    },
-    "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.17.0"
-    },
-    "devDependencies": {
-        "typescript": "^5.5.4",
-        "ts-node": "^10.9.2"
-    }
+	"name": "githru-mcp-server1",
+	"version": "1.0.1",
+	"description": "",
+	"main": "index.js",
+	"module": "./src/index.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "npx @smithery/cli dev"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.12.1",
+		"zod": "^3.25.46"
+	},
+	"devDependencies": {
+		"@smithery/cli": "^1.2.4",
+		"tsx": "^4.19.4"
+	}
 }
