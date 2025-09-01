@@ -43,7 +43,7 @@ describe("GitParallelWorkerManager", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    workerManager = new GitParallelWorkerManager();
+    workerManager = new GitParallelWorkerManager("dummy/path/to/worker.js");
   });
 
   describe("Worker count calculation", () => {
@@ -109,7 +109,7 @@ describe("GitParallelWorkerManager", () => {
 
     beforeEach(async () => {
       const { GitParallelWorkerManager } = await import("../../utils/gitParallel");
-      errorWorkerManager = new GitParallelWorkerManager();
+      errorWorkerManager = new GitParallelWorkerManager("dummy/path/to/worker.js");
     });
 
     it("should throw an exception if the worker fails", async () => {
