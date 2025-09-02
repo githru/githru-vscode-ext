@@ -204,9 +204,13 @@ export async function getLogCount(gitPath: string, currentWorkspacePath: string)
   return parseInt(stdout.toString().trim(), BASE_10);
 }
 
-export async function fetchGitLogInParallel(gitPath: string, currentWorkspacePath: string): Promise<string> {
+export async function fetchGitLogInParallel(
+  gitPath: string,
+  currentWorkspacePath: string,
+  workerPath: string
+): Promise<string> {
   const totalCnt = await getLogCount(gitPath, currentWorkspacePath);
-  const workerManager = new GitParallelWorkerManager();
+  const workerManager = new GitParallelWorkerManager(workerPath);
   return workerManager.executeParallelGitLog(gitPath, currentWorkspacePath, totalCnt);
 }
 
