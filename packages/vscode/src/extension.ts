@@ -35,7 +35,9 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-    console.time("Githru-Launch-Time");
+    if (context.extensionMode === vscode.ExtensionMode.Development) {
+      console.time("Githru-Launch-Time");
+    }
     myStatusBarItem.text = `$(sync~spin) ${projectName}`;
     try {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
@@ -119,7 +121,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
       subscriptions.push(webLoader);
       myStatusBarItem.text = `$(check) ${projectName}`;
-      console.timeEnd("Githru-Launch-Time");
+      if (context.extensionMode === vscode.ExtensionMode.Development) {
+        console.timeEnd("Githru-Launch-Time");
+      }
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {
