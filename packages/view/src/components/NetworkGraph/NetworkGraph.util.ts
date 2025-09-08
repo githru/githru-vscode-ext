@@ -33,20 +33,20 @@ export function processNetworkGraphData(
   const contributorStats = new Map<
     string,
     {
-      commits: number;
-      totalChanges: number;
+      commitCount: number;
+      totalChangeCount: number;
       files: Set<string>;
-      lastActivity: Date;
+      lastActivityDate: Date;
     }
   >();
 
   const fileStats = new Map<
     string,
     {
-      commits: number;
-      totalChanges: number;
+      commitCount: number;
+      totalChangeCount: number;
       contributors: Set<string>;
-      lastModified: Date;
+      lastModifiedDate: Date;
     }
   >();
 
@@ -60,17 +60,17 @@ export function processNetworkGraphData(
 
       if (!contributorStats.has(author)) {
         contributorStats.set(author, {
-          commits: 0,
-          totalChanges: 0,
+          commitCount: 0,
+          totalChangeCount: 0,
           files: new Set(),
-          lastActivity: commitDate,
+          lastActivityDate: commitDate,
         });
       }
 
       const contributorStat = contributorStats.get(author)!;
-      contributorStat.commits += 1;
-      contributorStat.lastActivity =
-        commitDate > contributorStat.lastActivity ? commitDate : contributorStat.lastActivity;
+      contributorStat.commitCount += 1;
+      contributorStat.lastActivityDate =
+        commitDate > contributorStat.lastActivityDate ? commitDate : contributorStat.lastActivityDate;
 
       if (!contributorFileRelations.has(author)) {
         contributorFileRelations.set(author, new Map());
@@ -80,20 +80,20 @@ export function processNetworkGraphData(
       Object.entries(files).forEach(([fileName, stats]) => {
         if (!fileStats.has(fileName)) {
           fileStats.set(fileName, {
-            commits: 0,
-            totalChanges: 0,
+            commitCount: 0,
+            totalChangeCount: 0,
             contributors: new Set(),
-            lastModified: commitDate,
+            lastModifiedDate: commitDate,
           });
         }
 
         const fileStat = fileStats.get(fileName)!;
-        fileStat.commits += 1;
-        fileStat.totalChanges += stats.insertions + stats.deletions;
+        fileStat.commitCount += 1;
+        fileStat.totalChangeCount += stats.insertions + stats.deletions;
         fileStat.contributors.add(author);
-        fileStat.lastModified = commitDate > fileStat.lastModified ? commitDate : fileStat.lastModified;
+        fileStat.lastModifiedDate = commitDate > fileStat.lastModifiedDate ? commitDate : fileStat.lastModifiedDate;
 
-        contributorStat.totalChanges += stats.insertions + stats.deletions;
+        contributorStat.totalChangeCount += stats.insertions + stats.deletions;
         contributorStat.files.add(fileName);
 
         const authorFileMap = contributorFileRelations.get(author)!;
@@ -107,11 +107,11 @@ export function processNetworkGraphData(
 
   if (nodeType === "contributor" || nodeType === "both") {
     const topContributors = Array.from(contributorStats.entries())
-      .sort(([, a], [, b]) => b.commits - a.commits)
+      .sort(([, a], [, b]) => b.commitCount - a.commitCount)
       .slice(0, 20);
 
     topContributors.forEach(([author, stats]) => {
-      const weight = stats.commits / Math.max(...Array.from(contributorStats.values()).map((s) => s.commits));
+      const weight = stats.commitCount / Math.max(...Array.from(contributorStats.values()).map((s) => s.commitCount));
       const radius = Math.max(8, Math.min(25, weight * 20 + 8));
       const connections = stats.files.size;
 
@@ -130,12 +130,12 @@ export function processNetworkGraphData(
 
   if (nodeType === "file" || nodeType === "both") {
     const topFiles = Array.from(fileStats.entries())
-      .sort(([, a], [, b]) => b.commits - a.commits)
+      .sort(([, a], [, b]) => b.commitCount - a.commitCount)
       .slice(0, 30);
 
     topFiles.forEach(([fileName, stats]) => {
       const shortFileName = fileName.split("/").pop() || fileName;
-      const weight = stats.commits / Math.max(...Array.from(fileStats.values()).map((s) => s.commits));
+      const weight = stats.commitCount / Math.max(...Array.from(fileStats.values()).map((s) => s.commitCount));
       const radius = Math.max(6, Math.min(20, weight * 15 + 6));
       const connections = stats.contributors.size;
 
