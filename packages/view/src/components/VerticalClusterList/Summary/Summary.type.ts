@@ -8,7 +8,7 @@ export type Content = {
 export type ContentProps = {
   content: Content;
   clusterId: number;
-  selectedClusterId: number[];
+  selectedClusterIds: number[];
 };
 
 export type Summary = {
