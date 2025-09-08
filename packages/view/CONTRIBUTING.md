@@ -167,12 +167,16 @@ VerticalClusterList
   const Detail = ({data}:DetailProp) => { ... }
   ```
 
-- Util type 이름은 [CamelCase](https://en.wikipedia.org/wiki/Camel_case) 형식을 따릅니다.
+- Util type 이름은 [UpperCamelCase(PascalCase)](https://en.wikipedia.org/wiki/Camel_case) 형식을 따릅니다.
 
   예시:
 
   ```bash
-  function GetData( ... ) { ... }
+  type GitHubUser = {
+    id: string;
+    names: string[];
+    emails: string[];
+  };
   ```
 
 - 선호에 따라 type, interface 자유롭게 사용
