@@ -2,27 +2,7 @@ import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
 
-export interface NetworkNode extends d3.SimulationNodeDatum {
-  id: string;
-  type: "contributor" | "file";
-  radius: number;
-  weight: number;
-  connections: number;
-}
-
-export interface NetworkLink extends d3.SimulationLinkDatum<NetworkNode> {
-  source: NetworkNode;
-  target: NetworkNode;
-  weight: number;
-  sourceType: "contributor" | "file";
-  targetType: "contributor" | "file";
-}
-
-export interface NetworkGraphData {
-  nodes: NetworkNode[];
-  links: NetworkLink[];
-  colorScale: d3.ScaleOrdinal<string, string>;
-}
+import type { NetworkGraphData, NetworkNode, NetworkLink } from "./NetworkGraph.type";
 
 export function processNetworkGraphData(
   data: ClusterNode[],
@@ -113,14 +93,14 @@ export function processNetworkGraphData(
     topContributors.forEach(([author, stats]) => {
       const weight = stats.commitCount / Math.max(...Array.from(contributorStats.values()).map((s) => s.commitCount));
       const radius = Math.max(8, Math.min(25, weight * 20 + 8));
-      const connections = stats.files.size;
+      const connectionCount = stats.files.size;
 
       const node: NetworkNode = {
         id: author,
         type: "contributor",
         radius,
         weight,
-        connections,
+        connectionCount,
       };
 
       nodes.push(node);
@@ -137,14 +117,14 @@ export function processNetworkGraphData(
       const shortFileName = fileName.split("/").pop() || fileName;
       const weight = stats.commitCount / Math.max(...Array.from(fileStats.values()).map((s) => s.commitCount));
       const radius = Math.max(6, Math.min(20, weight * 15 + 6));
-      const connections = stats.contributors.size;
+      const connectionCount = stats.contributors.size;
 
       const node: NetworkNode = {
         id: shortFileName,
         type: "file",
         radius,
         weight,
-        connections,
+        connectionCount,
       };
 
       nodes.push(node);

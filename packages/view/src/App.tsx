@@ -12,6 +12,7 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
+import { NetworkGraph } from "components/NetworkGraph";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -77,6 +78,7 @@ const App = () => {
             <p>Make at least one commit to proceed.</p>
           </div>
         )}
+        <NetworkGraph />
       </div>
     </>
   );
