@@ -28,7 +28,7 @@ const Summary = () => {
   const clusters = getInitData(filteredData);
   const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
-  const selectedClusterId = getClusterIds(selectedData);
+  const selectedClusterIds = getClusterIds(selectedData);
   const listRef = useRef<List>(null);
   const clusterSizes = getClusterSizes(filteredData);
 
@@ -51,12 +51,12 @@ const Summary = () => {
 
   const getRowHeight = ({ index }: { index: number }) => {
     const cluster = clusters[index];
-    return selectedClusterId.includes(cluster.clusterId) ? EXPANDED_ROW_HEIGHT : COLLAPSED_ROW_HEIGHT;
+    return selectedClusterIds.includes(cluster.clusterId) ? EXPANDED_ROW_HEIGHT : COLLAPSED_ROW_HEIGHT;
   };
 
   const rowRenderer = ({ index, key, style }: ListRowProps) => {
     const cluster = clusters[index];
-    const isExpanded = selectedClusterId.includes(cluster.clusterId);
+    const isExpanded = selectedClusterIds.includes(cluster.clusterId);
 
     return (
       <div
@@ -92,7 +92,7 @@ const Summary = () => {
             <Content
               content={cluster.summary.content}
               clusterId={cluster.clusterId}
-              selectedClusterId={selectedClusterId}
+              selectedClusterIds={selectedClusterIds}
             />
           </button>
           {isExpanded && (
