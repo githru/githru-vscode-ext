@@ -1,10 +1,11 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
+import { FolderActivityFlow } from "components/FolderActivityFlow";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -15,6 +16,7 @@ import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
+  const [showExperimentModal, setShowExperimentModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
@@ -60,6 +62,20 @@ const App = () => {
         <ThemeSelector />
         <BranchSelector />
         <RefreshButton />
+        <button
+          onClick={() => setShowExperimentModal(true)}
+          style={{
+            padding: "8px 16px",
+            background: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        >
+          Experiment
+        </button>
       </div>
       <div className="top-container">
         <TemporalFilter />
@@ -78,6 +94,54 @@ const App = () => {
           </div>
         )}
       </div>
+
+      {/* Experiment Modal */}
+      {showExperimentModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowExperimentModal(false)}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+              width: "90%",
+              height: "80%",
+              overflow: "auto",
+              position: "relative",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowExperimentModal(false)}
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                background: "none",
+                border: "none",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+            <FolderActivityFlow />
+          </div>
+        </div>
+      )}
     </>
   );
 };

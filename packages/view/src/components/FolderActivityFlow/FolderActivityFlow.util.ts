@@ -1,0 +1,154 @@
+import * as d3 from "d3";
+import { extractFolderFromPath } from "./FolderActivityFlow.analyzer";
+import type { ContributorActivity, FlowLineData } from "./FolderActivityFlow.type";
+
+// 기여자 활동 데이터 추출
+export function extractContributorActivities(
+  totalData: any[],
+  topFolders: any[],
+  currentPath: string
+): ContributorActivity[] {
+  const contributorActivities: ContributorActivity[] = [];
+
+  totalData.flat().forEach((cluster, clusterIndex) => {
+    const clusterId = `cluster-${clusterIndex}`;
+
+    if (cluster.commitNodeList) {
+      cluster.commitNodeList.forEach((commitNode: any) => {
+        if (commitNode.commit && commitNode.commit.commitDate) {
+          const commit = commitNode.commit;
+          const date = new Date(commit.commitDate);
+
+          if (commit.author?.names?.[0] && commit.author?.emails?.[0] && commit.diffStatistics?.files) {
+            const contributorName = commit.author.names[0].trim();
+            const contributorId = `${contributorName}-${commit.author.emails[0]}`;
+
+            const folderChanges = new Map<string, {insertions: number; deletions: number}>();
+
+            Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
+              let folderPath: string;
+
+              if (currentPath === "") {
+                folderPath = extractFolderFromPath(filePath, 1);
+              } else {
+                if (filePath.startsWith(currentPath + "/")) {
+                  const relativePath = filePath.substring(currentPath.length + 1);
+                  const pathParts = relativePath.split('/');
+                  folderPath = currentPath + "/" + pathParts[0];
+                } else {
+                  return;
+                }
+              }
+
+              if (topFolders.some(f => f.folderPath === folderPath)) {
+                if (!folderChanges.has(folderPath)) {
+                  folderChanges.set(folderPath, { insertions: 0, deletions: 0 });
+                }
+                const folder = folderChanges.get(folderPath)!;
+                folder.insertions += stats.insertions;
+                folder.deletions += stats.deletions;
+              }
+            });
+
+            folderChanges.forEach((stats, folderPath) => {
+              contributorActivities.push({
+                contributorId,
+                contributorName,
+                date,
+                folderPath,
+                changes: stats.insertions + stats.deletions,
+                insertions: stats.insertions,
+                deletions: stats.deletions,
+                clusterId,
+                clusterIndex
+              });
+            });
+          }
+        }
+      });
+    }
+  });
+
+  return contributorActivities.sort((a, b) => a.date.getTime() - b.date.getTime());
+}
+
+// 플로우 라인 데이터 생성
+export function generateFlowLineData(contributorActivities: ContributorActivity[]): FlowLineData[] {
+  const activitiesByContributor = new Map<string, ContributorActivity[]>();
+  contributorActivities.forEach(activity => {
+    if (!activitiesByContributor.has(activity.contributorId)) {
+      activitiesByContributor.set(activity.contributorId, []);
+    }
+    activitiesByContributor.get(activity.contributorId)!.push(activity);
+  });
+
+  const flowLineData: FlowLineData[] = [];
+
+  activitiesByContributor.forEach((contributorActivities) => {
+    contributorActivities.sort((a, b) => a.clusterIndex - b.clusterIndex || a.date.getTime() - b.date.getTime());
+
+    for (let i = 0; i < contributorActivities.length - 1; i++) {
+      const current = contributorActivities[i];
+      const next = contributorActivities[i + 1];
+
+      if (current.clusterIndex !== next.clusterIndex) {
+        flowLineData.push({
+          startClusterIndex: current.clusterIndex,
+          startFolder: current.folderPath,
+          endClusterIndex: next.clusterIndex,
+          endFolder: next.folderPath,
+          contributorName: current.contributorName
+        });
+      }
+    }
+  });
+
+  return flowLineData;
+}
+
+// 클러스터 내 노드 위치 계산
+export function calculateNodePosition(
+  activity: ContributorActivity,
+  xScale: d3.ScaleBand<string>,
+  activitiesByCluster: Map<number, ContributorActivity[]>
+): number {
+  const clusterX = (xScale(String(activity.clusterIndex)) || 0) + xScale.bandwidth() / 2;
+  const clusterActivities = activitiesByCluster.get(activity.clusterIndex) || [];
+  const activityIndex = clusterActivities.findIndex(a =>
+    a.contributorId === activity.contributorId &&
+    a.folderPath === activity.folderPath &&
+    a.date.getTime() === activity.date.getTime()
+  );
+  const offsetRange = xScale.bandwidth() * 0.8;
+  const offset = (activityIndex - (clusterActivities.length - 1) / 2) * (offsetRange / Math.max(clusterActivities.length, 1));
+  return clusterX + offset;
+}
+
+// 첫 번째 기여자 노드 찾기
+export function findFirstContributorNodes(contributorActivities: ContributorActivity[]): Map<string, ContributorActivity> {
+  const firstNodesByContributor = new Map<string, ContributorActivity>();
+  const sortedActivities = [...contributorActivities].sort((a, b) => a.clusterIndex - b.clusterIndex || a.date.getTime() - b.date.getTime());
+
+  sortedActivities.forEach(activity => {
+    const key = activity.contributorId;
+    if (!firstNodesByContributor.has(key)) {
+      firstNodesByContributor.set(key, activity);
+    }
+  });
+
+  return firstNodesByContributor;
+}
+
+// 플로우 라인 경로 생성
+export function generateFlowLinePath(
+  d: FlowLineData,
+  xScale: d3.ScaleBand<string>,
+  yScale: d3.ScaleBand<string>
+): string {
+  const x1 = (xScale(String(d.startClusterIndex)) || 0) + xScale.bandwidth() / 2;
+  const y1 = (yScale(d.startFolder) || 0) + yScale.bandwidth() / 2;
+  const x2 = (xScale(String(d.endClusterIndex)) || 0) + xScale.bandwidth() / 2;
+  const y2 = (yScale(d.endFolder) || 0) + yScale.bandwidth() / 2;
+  const midX = (x1 + x2) / 2;
+  return `M ${x1},${y1} Q ${midX},${y1} ${midX},${(y1 + y2) / 2} Q ${midX},${y2} ${x2},${y2}`;
+}
