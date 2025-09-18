@@ -75,6 +75,7 @@
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
+    "react/prop-types": "off",
     "consistent-return": "off"
   },
   "settings": {
