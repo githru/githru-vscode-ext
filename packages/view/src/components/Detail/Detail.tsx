@@ -11,7 +11,7 @@ import {
 import { Tooltip } from "@mui/material";
 
 import { Author } from "components/@common/Author";
-import { useGithubInfo } from "store";
+import { useGithubInfo, useDataStore } from "store";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -52,7 +52,8 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   );
 };
 
-const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
+const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
+  const selectedData = useDataStore((state) => state.selectedData);
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
@@ -61,7 +62,7 @@ const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
-  if (!selectedData) return null;
+  if (!selectedData || selectedData.length === 0) return null;
 
   return (
     <>

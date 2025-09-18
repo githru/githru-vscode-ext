@@ -101,7 +101,6 @@ const Summary = () => {
               ref={detailRef}
             >
               <Detail
-                selectedData={selectedData}
                 clusterId={cluster.clusterId}
                 authSrcMap={authSrcMap}
               />
