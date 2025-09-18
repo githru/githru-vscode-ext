@@ -16,11 +16,103 @@ import { useGithubInfo, useDataStore } from "store";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
-import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps } from "./Detail.type";
 
 import "./Detail.scss";
 
-const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
+const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
+  const selectedData = useDataStore((state) => state.selectedData);
+
+  const { owner, repo } = useGithubInfo();
+
+  const commitNodeListInCluster =
+    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
+  const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
+
+  const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
+  const handleCommitIdCopy = (id: string) => async () => {
+    navigator.clipboard.writeText(id);
+  };
+
+  if (!selectedData || selectedData.length === 0) return null;
+
+  return (
+    <>
+      <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
+      <ul className="detail__commit-list">
+        {commitNodeList.map(({ commit }) => (
+          <CommitItem
+            key={commit.id}
+            commit={commit}
+            owner={owner}
+            repo={repo}
+            authSrcMap={authSrcMap}
+            handleCommitIdCopy={handleCommitIdCopy}
+          />
+        ))}
+      </ul>
+
+      {isShow && (
+        <button
+          type="button"
+          className="detail__toggle-button"
+          onClick={handleToggle}
+        >
+          {toggle ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+        </button>
+      )}
+    </>
+  );
+};
+
+export default Detail;
+
+function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy }: CommitItemProps) {
+  const { id, message, author, commitDate } = commit;
+
+  return (
+    <li className="detail__commit-item">
+      <div className="commit-item__detail">
+        <div className="commit-item__left">
+          {authSrcMap && (
+            <Author
+              name={author.names.toString()}
+              src={authSrcMap[author.names.toString()]}
+            />
+          )}
+          <div className="commit-item__message-container">
+            <span className="commit-item__message">{message}</span>
+          </div>
+        </div>
+        <div className="commit-item__right">
+          <span className="commit-item__author-date">
+            {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
+          </span>
+          <div className="commit-item__commit-id">
+            <a
+              href={`https://github.com/${owner}/${repo}/commit/${id}`}
+              onClick={handleCommitIdCopy(id)}
+              tabIndex={0}
+              onKeyDown={handleCommitIdCopy(id)}
+              className="commit-id__link"
+            >
+              <Tooltip
+                className="commit-id__tooltip"
+                placement="right"
+                title={id}
+                PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+              >
+                <p>{id.slice(0, 6)}</p>
+              </Tooltip>
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+}
+
+function DetailSummary({ commitNodeListInCluster }: DetailSummaryProps) {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
     commitNodeListInCluster,
   });
@@ -50,83 +142,4 @@ const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
       </div>
     </div>
   );
-};
-
-const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
-  const selectedData = useDataStore((state) => state.selectedData);
-  const commitNodeListInCluster =
-    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
-  const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
-  const { owner, repo } = useGithubInfo();
-  const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
-  const handleCommitIdCopy = (id: string) => async () => {
-    navigator.clipboard.writeText(id);
-  };
-  if (!selectedData || selectedData.length === 0) return null;
-
-  return (
-    <>
-      <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
-      <ul className="detail__commit-list">
-        {commitNodeList.map(({ commit }) => {
-          const { id, message, author, commitDate } = commit;
-          return (
-            <li
-              key={id}
-              className="detail__commit-item"
-            >
-              <div className="commit-item__detail">
-                <div className="commit-item__left">
-                  {authSrcMap && (
-                    <Author
-                      name={author.names.toString()}
-                      src={authSrcMap[author.names.toString()]}
-                    />
-                  )}
-                  <div className="commit-item__message-container">
-                    <span className="commit-item__message">{message}</span>
-                  </div>
-                </div>
-                <div className="commit-item__right">
-                  <span className="commit-item__author-date">
-                    {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
-                  </span>
-                  <div className="commit-item__commit-id">
-                    <a
-                      href={`https://github.com/${owner}/${repo}/commit/${id}`}
-                      onClick={handleCommitIdCopy(id)}
-                      tabIndex={0}
-                      onKeyDown={handleCommitIdCopy(id)}
-                      className="commit-id__link"
-                    >
-                      <Tooltip
-                        className="commit-id__tooltip"
-                        placement="right"
-                        title={id}
-                        PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
-                      >
-                        <p>{id.slice(0, 6)}</p>
-                      </Tooltip>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-
-      {isShow && (
-        <button
-          type="button"
-          className="detail__toggle-button"
-          onClick={handleToggle}
-        >
-          {toggle ? <ExpandLessRounded /> : <ExpandMoreRounded />}
-        </button>
-      )}
-    </>
-  );
-};
-
-export default Detail;
+}

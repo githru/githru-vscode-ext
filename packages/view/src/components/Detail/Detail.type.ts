@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import type { ClusterNode } from "types";
+import type { Commit } from "types/Commit";
 import type { AuthSrcMap } from "components/VerticalClusterList/Summary/Summary.type";
 
 export type DetailProps = {
@@ -15,4 +16,12 @@ export interface DetailSummaryItem {
   name: string;
   count: number;
   icon?: ReactNode;
+}
+
+export interface CommitItemProps {
+  commit: Commit;
+  owner: string;
+  repo: string;
+  authSrcMap: AuthSrcMap | null;
+  handleCommitIdCopy: (id: string) => () => Promise<void>;
 }
