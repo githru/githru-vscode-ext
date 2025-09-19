@@ -11,16 +11,15 @@ export function extractContributorActivities(
 ): ContributorActivity[] {
   const contributorActivities: ContributorActivity[] = [];
 
-  totalData.flat().forEach((cluster, clusterIndex) => {
+  totalData.forEach((cluster, clusterIndex) => {
     const clusterId = `cluster-${clusterIndex}`;
 
-    if (cluster.commitNodeList) {
-      cluster.commitNodeList.forEach((commitNode: any) => {
-        if (commitNode.commit && commitNode.commit.commitDate) {
-          const commit = commitNode.commit;
-          const date = new Date(commit.commitDate);
+    cluster.commitNodeList.forEach(commitNode => {
+      if (commitNode.commit.commitDate) {
+        const commit = commitNode.commit;
+        const date = new Date(commit.commitDate);
 
-          if (commit.author?.names?.[0] && commit.author?.emails?.[0] && commit.diffStatistics?.files) {
+        if (commit.author?.names?.[0] && commit.author?.emails?.[0] && commit.diffStatistics?.files) {
             const contributorName = commit.author.names[0].trim();
             const contributorId = `${contributorName}-${commit.author.emails[0]}`;
 
@@ -64,10 +63,9 @@ export function extractContributorActivities(
                 clusterIndex,
               });
             });
-          }
         }
-      });
-    }
+      }
+    });
   });
 
   return contributorActivities.sort((a, b) => a.date.getTime() - b.date.getTime());
