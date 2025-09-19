@@ -15,7 +15,7 @@ import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
-  const [showExperimentModal, setShowExperimentModal] = useState(false);
+  const [showFolderActivityFlowModal, setShowFolderActivityFlowModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
@@ -62,7 +62,7 @@ const App = () => {
         <BranchSelector />
         <RefreshButton />
         <button
-          onClick={() => setShowExperimentModal(true)}
+          onClick={() => setShowFolderActivityFlowModal(true)}
           style={{
             padding: "8px 16px",
             background: "#007bff",
@@ -73,7 +73,7 @@ const App = () => {
             fontSize: "14px",
           }}
         >
-          Experiment
+          Folder Activity Flow
         </button>
       </div>
       <div className="top-container">
@@ -94,8 +94,8 @@ const App = () => {
         )}
       </div>
 
-      {/* Experiment Modal */}
-      {showExperimentModal && (
+      {/* Folder Activity Flow Modal */}
+      {showFolderActivityFlowModal && (
         <div
           style={{
             position: "fixed",
@@ -109,7 +109,7 @@ const App = () => {
             alignItems: "center",
             zIndex: 1000,
           }}
-          onClick={() => setShowExperimentModal(false)}
+          onClick={() => setShowFolderActivityFlowModal(false)}
         >
           <div
             style={{
@@ -124,7 +124,7 @@ const App = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setShowExperimentModal(false)}
+              onClick={() => setShowFolderActivityFlowModal(false)}
               style={{
                 position: "absolute",
                 top: "10px",
