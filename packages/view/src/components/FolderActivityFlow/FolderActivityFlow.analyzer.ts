@@ -1,3 +1,5 @@
+import type { ClusterNode } from "types";
+
 export interface FolderActivity {
   folderPath: string;
   totalChanges: number;
@@ -13,7 +15,7 @@ export interface CommitData {
   diffStatistics: {
     insertions: number;
     deletions: number;
-    files: Record<string, { insertions: number; deletions: number }>;
+    files: { [filePath: string]: { insertions: number; deletions: number } };
   };
 }
 
@@ -25,25 +27,20 @@ export function extractFolderFromPath(filePath: string, depth: number = 1): stri
   return folderParts.length > 0 ? folderParts.join('/') : '.';
 }
 
-export function analyzeFolderActivity(clusterNodeList: any[], folderDepth: number = 1): FolderActivity[] {
+export function analyzeFolderActivity(clusterNodeList: ClusterNode[], folderDepth: number = 1): FolderActivity[] {
   const folderStats = new Map<string, FolderActivity>();
 
   // 클러스터에서 모든 커밋 추출
   const allCommits: CommitData[] = [];
   clusterNodeList.forEach(cluster => {
-    if (cluster.commitNodeList) {
-      cluster.commitNodeList.forEach((commitNode: any) => {
-        if (commitNode.commit) {
-          allCommits.push(commitNode.commit);
-        }
-      });
-    }
+    cluster.commitNodeList.forEach(commitNode => {
+      allCommits.push(commitNode.commit);
+    });
   });
 
   // 각 커밋의 파일 변경사항 분석
   allCommits.forEach(commit => {
-    if (commit.diffStatistics?.files) {
-      Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]) => {
+    Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]) => {
         const folderPath = extractFolderFromPath(filePath, folderDepth);
 
         if (!folderStats.has(folderPath)) {
@@ -61,24 +58,21 @@ export function analyzeFolderActivity(clusterNodeList: any[], folderDepth: numbe
         folderActivity.deletions += stats.deletions;
         folderActivity.totalChanges += stats.insertions + stats.deletions;
       });
-    }
   });
 
   // 폴더별 고유 커밋 수 계산
   allCommits.forEach(commit => {
-    if (commit.diffStatistics?.files) {
-      const foldersInCommit = new Set<string>();
-      Object.keys(commit.diffStatistics.files).forEach(filePath => {
-        const folderPath = extractFolderFromPath(filePath, folderDepth);
-        foldersInCommit.add(folderPath);
-      });
+    const foldersInCommit = new Set<string>();
+    Object.keys(commit.diffStatistics.files).forEach(filePath => {
+      const folderPath = extractFolderFromPath(filePath, folderDepth);
+      foldersInCommit.add(folderPath);
+    });
 
-      foldersInCommit.forEach(folderPath => {
-        if (folderStats.has(folderPath)) {
-          folderStats.get(folderPath)!.commitCount++;
-        }
-      });
-    }
+    foldersInCommit.forEach(folderPath => {
+      if (folderStats.has(folderPath)) {
+        folderStats.get(folderPath)!.commitCount++;
+      }
+    });
   });
 
   // 배열로 변환하고 총 활동량 기준 정렬
@@ -86,7 +80,7 @@ export function analyzeFolderActivity(clusterNodeList: any[], folderDepth: numbe
     .sort((a, b) => b.totalChanges - a.totalChanges);
 }
 
-export function getTopFolders(clusterNodeList: any[], count: number = 5, folderDepth: number = 1): FolderActivity[] {
+export function getTopFolders(clusterNodeList: ClusterNode[], count: number = 5, folderDepth: number = 1): FolderActivity[] {
   const allActivities = analyzeFolderActivity(clusterNodeList, folderDepth);
   return allActivities.slice(0, count);
 }
