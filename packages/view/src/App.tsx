@@ -62,16 +62,8 @@ const App = () => {
         <BranchSelector />
         <RefreshButton />
         <button
+          className="folder-activity-flow-button"
           onClick={() => setShowFolderActivityFlowModal(true)}
-          style={{
-            padding: "8px 16px",
-            background: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
         >
           Folder Activity Flow
         </button>
@@ -97,43 +89,16 @@ const App = () => {
       {/* Folder Activity Flow Modal */}
       {showFolderActivityFlowModal && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-          }}
+          className="folder-activity-flow-modal"
           onClick={() => setShowFolderActivityFlowModal(false)}
         >
           <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "90%",
-              height: "80%",
-              overflow: "auto",
-              position: "relative",
-            }}
+            className="folder-activity-flow-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
             <button
+              className="folder-activity-flow-modal-close"
               onClick={() => setShowFolderActivityFlowModal(false)}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "none",
-                border: "none",
-                fontSize: "20px",
-                cursor: "pointer",
-              }}
             >
               ×
             </button>
