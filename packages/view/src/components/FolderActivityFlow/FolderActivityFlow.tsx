@@ -43,7 +43,7 @@ const FolderActivityFlow = () => {
   };
 
   // 상위 폴더로 이동
-  const handleGoBack = () => {
+  const handleGoUp = () => {
     if (currentPath === "") return;
 
     const parentPath = currentPath.includes('/')
@@ -320,9 +320,9 @@ const FolderActivityFlow = () => {
         {currentPath !== "" && (
           <button
             className="folder-activity-flow__back-btn"
-            onClick={handleGoBack}
+            onClick={handleGoUp}
           >
-            ← Back
+            ← Up
           </button>
         )}
       </div>
