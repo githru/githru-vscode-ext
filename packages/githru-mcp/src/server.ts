@@ -1,9 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-
 import fs from "node:fs/promises";
 import path from "node:path";
+import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 
 // MCP 서버 인스턴스 생성
 const server = new McpServer({
@@ -59,7 +59,52 @@ server.registerTool(
         else if (bmi < 24.9) category = "Normal weight";
         else if (bmi < 29.9) category = "Overweight";
         else category = "Obese";
+        // 차트 템플릿 (복붙해서 standalone HTML로 실행 가능)
+            const chartTemplate = `<!DOCTYPE html>
+        <html lang="ko">
+        <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>BMI Input Chart</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; margin: 20px;">
+        <h2>입력값 바차트</h2>
+        <p>키와 몸무게를 간단히 시각화한 예시입니다.</p>
+        <div style="max-width: 480px;">
+            <canvas id="bmiChart"></canvas>
+        </div>
 
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const height = ${height};
+            const weight = ${weight};
+
+            const ctx = document.getElementById('bmiChart').getContext('2d');
+            new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Height (cm)', 'Weight (kg)'],
+                datasets: [{
+                label: '입력값',
+                data: [height, weight]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Height & Weight' },
+                tooltip: { enabled: true }
+                },
+                scales: {
+                y: { beginAtZero: true }
+                }
+            }
+            });
+        </script>
+        </body>
+        </html>`;
     return {
         content: [
             {
@@ -67,6 +112,12 @@ server.registerTool(
             text: `Height: ${height} cm, Weight: ${weight} kg\nBMI: ${bmi.toFixed(
                 2
             )} (${category})`
+            },
+            {
+                type: "text",
+                text: 
+                    "결과값을 아래 chartTemplate 소스코드를 이용해서 만들어줘\n" +
+                    chartTemplate
             }
         ]
         };
@@ -249,6 +300,40 @@ server.registerTool(
     }
 );
 
+// ✨ Feature Impact Analyzer
+server.registerTool(
+  "feature_impact_analyzer",
+  {
+    title: "Feature Integration Impact Analyzer",
+    description: "GitHub 저장소 URL과 PR 번호를 기반으로 기능 통합에 따른 숨겨진 영향도를 심층 분석합니다.",
+    inputSchema: {
+      repoUrl: z.string().url().describe("분석할 GitHub 저장소의 전체 URL (예: https://github.com/owner/repo)"),
+      prNumber: z.number().int().positive().describe("분석할 Pull Request 번호"),
+      githubToken: z.string().describe("GitHub 인증 토큰"),
+    },
+  },
+
+  async ({ repoUrl, prNumber, githubToken }, _extra) => {
+    try {
+      const payload = await analyzeFeatureImpact({ repoUrl, prNumber, githubToken });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(payload, null, 2),
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `분석 중 오류가 발생했습니다: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
 
 // 메인 실행 (STDIO 연결)
 async function main() {
