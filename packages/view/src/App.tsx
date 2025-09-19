@@ -24,6 +24,14 @@ const App = () => {
   const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
+  const handleOpenFolderActivityFlowModal = () => {
+    setShowFolderActivityFlowModal(true);
+  };
+
+  const handleCloseFolderActivityFlowModal = () => {
+    setShowFolderActivityFlowModal(false);
+  };
+
   useEffect(() => {
     if (initRef.current === false) {
       const callbacks: IDESentEvents = {
@@ -63,7 +71,7 @@ const App = () => {
         <RefreshButton />
         <button
           className="folder-activity-flow-button"
-          onClick={() => setShowFolderActivityFlowModal(true)}
+          onClick={handleOpenFolderActivityFlowModal}
         >
           Folder Activity Flow
         </button>
@@ -90,7 +98,7 @@ const App = () => {
       {showFolderActivityFlowModal && (
         <div
           className="folder-activity-flow-modal"
-          onClick={() => setShowFolderActivityFlowModal(false)}
+          onClick={handleCloseFolderActivityFlowModal}
         >
           <div
             className="folder-activity-flow-modal-content"
@@ -98,7 +106,7 @@ const App = () => {
           >
             <button
               className="folder-activity-flow-modal-close"
-              onClick={() => setShowFolderActivityFlowModal(false)}
+              onClick={handleCloseFolderActivityFlowModal}
             >
               ×
             </button>
