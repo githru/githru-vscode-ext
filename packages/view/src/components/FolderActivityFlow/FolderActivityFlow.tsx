@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import { useDataStore } from "store";
 import { pxToRem } from "utils/pxToRem";
 import { getTopFolders, type FolderActivity } from "./FolderActivityFlow.analyzer";
+import { getSubFolders } from "./FolderActivityFlow.subfolder";
 
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import {
@@ -28,59 +29,12 @@ const FolderActivityFlow = () => {
   const [currentPath, setCurrentPath] = useState<string>("");
   const [folderDepth, setFolderDepth] = useState<number>(1);
 
-  // 하위 폴더 데이터 추출
-  const getSubFolders = (parentPath: string) => {
-    if (!totalData || totalData.length === 0) return [];
-
-    const subFolderStats = new Map<string, FolderActivity>();
-
-    totalData.flat().forEach(cluster => {
-      if (cluster.commitNodeList) {
-        cluster.commitNodeList.forEach((commitNode: any) => {
-          if (commitNode.commit?.diffStatistics?.files) {
-            const commit = commitNode.commit;
-
-            Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
-              if (parentPath === "" || filePath.startsWith(parentPath + "/")) {
-                const relativePath = parentPath === "" ? filePath : filePath.substring(parentPath.length + 1);
-                const pathParts = relativePath.split('/');
-                const subPath = pathParts[0];
-
-                if (subPath && subPath !== '.' && subPath !== '') {
-                  const fullPath = parentPath === "" ? subPath : `${parentPath}/${subPath}`;
-
-                  if (!subFolderStats.has(fullPath)) {
-                    subFolderStats.set(fullPath, {
-                      folderPath: fullPath,
-                      totalChanges: 0,
-                      insertions: 0,
-                      deletions: 0,
-                      commitCount: 0
-                    });
-                  }
-
-                  const folderActivity = subFolderStats.get(fullPath)!;
-                  folderActivity.insertions += stats.insertions;
-                  folderActivity.deletions += stats.deletions;
-                  folderActivity.totalChanges += stats.insertions + stats.deletions;
-                }
-              }
-            });
-          }
-        });
-      }
-    });
-
-    return Array.from(subFolderStats.values())
-      .sort((a, b) => b.totalChanges - a.totalChanges)
-      .slice(0, 8);
-  };
 
   // 폴더 클릭 처리
   const handleFolderClick = (folderPath: string) => {
     if (folderPath === '.') return;
 
-    const subFolders = getSubFolders(folderPath);
+    const subFolders = getSubFolders(totalData, folderPath);
     if (subFolders.length > 0) {
       setCurrentPath(folderPath);
       setFolderDepth(folderDepth + 1);
@@ -104,7 +58,7 @@ const FolderActivityFlow = () => {
     } else {
       setCurrentPath(parentPath);
       setFolderDepth(Math.max(1, folderDepth - 1));
-      const subFolders = getSubFolders(parentPath);
+      const subFolders = getSubFolders(totalData, parentPath);
       setTopFolders(subFolders);
     }
   };
@@ -354,7 +308,7 @@ const FolderActivityFlow = () => {
                   const targetPath = pathParts.slice(0, index).join("/");
                   setCurrentPath(targetPath);
                   setFolderDepth(index + 1);
-                  const subFolders = getSubFolders(targetPath);
+                  const subFolders = getSubFolders(totalData, targetPath);
                   setTopFolders(subFolders);
                 }
               }}
