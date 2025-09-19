@@ -63,6 +63,22 @@ const FolderActivityFlow = () => {
     }
   };
 
+  const handleBreadcrumbClick = (index: number) => {
+    if (index === 0) {
+      setCurrentPath("");
+      setFolderDepth(1);
+      const folders = getTopFolders(totalData, 8, 1);
+      setTopFolders(folders);
+    } else if (index < getBreadcrumbs().length - 1) {
+      const pathParts = currentPath.split("/");
+      const targetPath = pathParts.slice(0, index).join("/");
+      setCurrentPath(targetPath);
+      setFolderDepth(index + 1);
+      const subFolders = getSubFolders(totalData, targetPath);
+      setTopFolders(subFolders);
+    }
+  };
+
   useEffect(() => {
     if (!totalData || totalData.length === 0) return;
 
@@ -293,25 +309,11 @@ const FolderActivityFlow = () => {
 
       <div className="folder-activity-flow__breadcrumb">
         {getBreadcrumbs().map((crumb, index) => (
-          <span key={index}>
+          <span key={crumb}>
             {index > 0 && <span className="separator"> / </span>}
             <span
               className={index === getBreadcrumbs().length - 1 ? "current" : "clickable"}
-              onClick={() => {
-                if (index === 0) {
-                  setCurrentPath("");
-                  setFolderDepth(1);
-                  const folders = getTopFolders(totalData.flat(), 8, 1);
-                  setTopFolders(folders);
-                } else if (index < getBreadcrumbs().length - 1) {
-                  const pathParts = currentPath.split("/");
-                  const targetPath = pathParts.slice(0, index).join("/");
-                  setCurrentPath(targetPath);
-                  setFolderDepth(index + 1);
-                  const subFolders = getSubFolders(totalData, targetPath);
-                  setTopFolders(subFolders);
-                }
-              }}
+              onClick={() => handleBreadcrumbClick(index)}
             >
               {crumb}
             </span>
