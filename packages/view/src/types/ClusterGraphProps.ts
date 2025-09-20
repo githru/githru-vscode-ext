@@ -1,6 +1,4 @@
-import type { ClusterNode } from "./Nodes";
-
 export interface ClusterGraphProps {
-  data: ClusterNode[];
+  index: number;
   clusterSizes: number[];
 }

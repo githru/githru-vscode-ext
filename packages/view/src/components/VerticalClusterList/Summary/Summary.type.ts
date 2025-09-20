@@ -1,7 +1,7 @@
 import type { ListRowProps } from "react-virtualized";
 import type React from "react";
 
-import type { AuthorInfo, ClusterNode } from "types";
+import type { AuthorInfo } from "types";
 
 export type Content = {
   message: string;
@@ -32,7 +32,6 @@ export type ClusterRowProps = ListRowProps & {
   isExpanded: boolean;
   onClickClusterSummary: (clusterId: number) => () => void;
   authSrcMap: AuthSrcMap | null;
-  filteredData: ClusterNode[];
   clusterSizes: number[];
   detailRef: React.RefObject<HTMLDivElement>;
   selectedClusterIds: number[];

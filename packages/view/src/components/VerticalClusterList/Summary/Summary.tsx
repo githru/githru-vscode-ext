@@ -56,7 +56,6 @@ const Summary = () => {
         isExpanded={isExpanded}
         onClickClusterSummary={onClickClusterSummary}
         authSrcMap={authSrcMap}
-        filteredData={filteredData}
         clusterSizes={clusterSizes}
         detailRef={detailRef}
         selectedClusterIds={selectedClusterIds}
@@ -104,7 +103,6 @@ function ClusterRow({
   isExpanded,
   onClickClusterSummary,
   authSrcMap,
-  filteredData,
   clusterSizes,
   detailRef,
   selectedClusterIds,
@@ -117,7 +115,7 @@ function ClusterRow({
     >
       <div className="cluster-summary__graph">
         <ClusterGraph
-          data={[filteredData[index]]}
+          index={index}
           clusterSizes={[clusterSizes[index]]}
         />
       </div>
