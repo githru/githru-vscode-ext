@@ -10,17 +10,18 @@ import { useHandleClusterGraph } from "./ClusterGraph.hook";
 
 import "./ClusterGraph.scss";
 
-const ClusterGraph: React.FC<ClusterGraphProps> = ({ index, clusterSizes }) => {
+const ClusterGraph: React.FC<ClusterGraphProps> = ({ index }) => {
   const [filteredData, selectedData, setSelectedData] = useDataStore(
     useShallow((state) => [state.filteredData, state.selectedData, state.setSelectedData])
   );
   const data = [filteredData[index]];
   const selectedIndex = getSelectedIndex(data, selectedData);
-  const graphHeight = getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
+  const clusterSize = data[0].commitNodeList.length;
+  const graphHeight = getGraphHeight([clusterSize]) + selectedIndex.length * DETAIL_HEIGHT;
 
   const svgRef = useHandleClusterGraph({
     data,
-    clusterSizes,
+    clusterSize,
     selectedIndex,
     setSelectedData,
   });

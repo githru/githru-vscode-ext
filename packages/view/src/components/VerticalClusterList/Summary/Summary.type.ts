@@ -30,7 +30,6 @@ export type ClusterRowProps = ListRowProps & {
   cluster: Cluster;
   onClickClusterSummary: (clusterId: number) => () => void;
   authSrcMap: AuthSrcMap | null;
-  clusterSizes: number[];
   detailRef: React.RefObject<HTMLDivElement>;
   selectedClusterIds: number[];
 };

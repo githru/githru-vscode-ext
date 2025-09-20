@@ -11,7 +11,6 @@ import "./Summary.scss";
 import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { ClusterGraph } from "../ClusterGraph";
-import { getClusterSizes } from "../ClusterGraph/ClusterGraph.util";
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
 
 import { usePreLoadAuthorImg } from "./Summary.hook";
@@ -31,7 +30,6 @@ const Summary = () => {
   const authSrcMap = usePreLoadAuthorImg();
   const selectedClusterIds = getSelectedClusterIds(selectedData);
   const listRef = useRef<List>(null);
-  const clusterSizes = getClusterSizes(filteredData);
 
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(filteredData, clusterId);
@@ -54,7 +52,6 @@ const Summary = () => {
         cluster={cluster}
         onClickClusterSummary={onClickClusterSummary}
         authSrcMap={authSrcMap}
-        clusterSizes={clusterSizes}
         detailRef={detailRef}
         selectedClusterIds={selectedClusterIds}
       />
@@ -100,7 +97,6 @@ function ClusterRow({
   cluster,
   onClickClusterSummary,
   authSrcMap,
-  clusterSizes,
   detailRef,
   selectedClusterIds,
 }: ClusterRowProps) {
@@ -113,10 +109,7 @@ function ClusterRow({
       className="cluster-summary__item"
     >
       <div className="cluster-summary__graph">
-        <ClusterGraph
-          index={index}
-          clusterSizes={[clusterSizes[index]]}
-        />
+        <ClusterGraph index={index} />
       </div>
       <div className={`cluster-summary__info${isExpanded ? "--expanded" : ""}`}>
         <button
