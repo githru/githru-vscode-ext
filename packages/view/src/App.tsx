@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
+import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -16,6 +16,7 @@ import { NetworkGraph } from "components/NetworkGraph";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
+  const [showFolderActivityFlowModal, setShowFolderActivityFlowModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
@@ -23,6 +24,14 @@ const App = () => {
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+
+  const handleOpenFolderActivityFlowModal = () => {
+    setShowFolderActivityFlowModal(true);
+  };
+
+  const handleCloseFolderActivityFlowModal = () => {
+    setShowFolderActivityFlowModal(false);
+  };
 
   useEffect(() => {
     if (initRef.current === false) {
@@ -61,6 +70,12 @@ const App = () => {
         <ThemeSelector />
         <BranchSelector />
         <RefreshButton />
+        <button
+          className="folder-activity-flow-button"
+          onClick={handleOpenFolderActivityFlowModal}
+        >
+          Folder Activity Flow
+        </button>
       </div>
       <div className="top-container">
         <TemporalFilter />
@@ -80,6 +95,27 @@ const App = () => {
         )}
         <NetworkGraph />
       </div>
+
+      {/* Folder Activity Flow Modal */}
+      {showFolderActivityFlowModal && (
+        <div
+          className="folder-activity-flow-modal"
+          onClick={handleCloseFolderActivityFlowModal}
+        >
+          <div
+            className="folder-activity-flow-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="folder-activity-flow-modal-close"
+              onClick={handleCloseFolderActivityFlowModal}
+            >
+              ×
+            </button>
+            <FolderActivityFlow />
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -1,0 +1,149 @@
+.folder-activity-flow {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  &__subtitle {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  &__breadcrumb {
+    margin: 0 0 1rem 0;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .separator {
+      color: #6c757d;
+    }
+
+    .clickable {
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+      
+      &:hover {
+        color: #0056b3;
+      }
+    }
+
+    .current {
+      color: #212529;
+      font-weight: 600;
+    }
+  }
+
+  &__back-btn {
+    margin-left: auto;
+    padding: 0.25rem 0.5rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  &__chart {
+    display: block;
+    margin: 0 auto;
+    cursor: grab;
+    
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    display: none;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    pointer-events: none;
+    z-index: 1000;
+
+    .contributor-activity-tooltip {
+      p {
+        margin: 0.25rem 0;
+        
+        &:first-child {
+          margin-top: 0;
+          font-weight: 600;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .lane-background {
+    transition: fill 0.2s ease;
+    
+    &:hover {
+      fill: #e9ecef;
+    }
+  }
+
+  .folder-label {
+    font-weight: 500;
+    
+    &.clickable {
+      cursor: pointer;
+      transition: fill 0.2s ease;
+      
+      &:hover {
+        fill: #007bff !important;
+      }
+    }
+  }
+
+  .activity-dot {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      stroke-width: 2;
+      r: 8;
+    }
+  }
+
+  .flow-line {
+    pointer-events: none;
+  }
+
+  .x-axis {
+    .domain,
+    .tick line {
+      stroke: #dee2e6;
+    }
+    
+    .tick text {
+      fill: #6c757d;
+      font-size: 11px;
+    }
+  }
+}
