@@ -12,8 +12,12 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@githru-vscode-ext/analysis-engine": "^0.7.2",
 		"@modelcontextprotocol/sdk": "^1.12.1",
-		"zod": "^3.25.46"
+		"@octokit/rest": "^22.0.0",
+		"cors": "^2.8.5",
+		"express": "^5.1.0",
+		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"@smithery/cli": "^1.2.4",
