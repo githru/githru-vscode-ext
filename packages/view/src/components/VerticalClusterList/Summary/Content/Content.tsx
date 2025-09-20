@@ -5,7 +5,7 @@ import { useGithubInfo } from "store";
 
 import type { ContentProps } from "../Summary.type";
 
-const Content = ({ content, clusterId, selectedClusterIds }: ContentProps) => {
+const Content = ({ content, isExpanded }: ContentProps) => {
   const { owner, repo } = useGithubInfo();
   const [linkedStr, setLinkedStr] = useState<React.ReactNode[]>([]);
 
@@ -45,7 +45,7 @@ const Content = ({ content, clusterId, selectedClusterIds }: ContentProps) => {
         <div className="summary__commit-message">{linkedStr}</div>
         {content.count > 0 && <span className="summary__more-commit">+ {content.count} more</span>}
       </div>
-      <div className={`summary__toggle${selectedClusterIds.includes(clusterId) ? "--visible" : ""}`}>
+      <div className={`summary__toggle${isExpanded ? "--visible" : ""}`}>
         <ArrowDropDownCircleRoundedIcon />
       </div>
     </>

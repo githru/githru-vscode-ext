@@ -140,8 +140,7 @@ function ClusterRow({
           <div>{getCommitLatestTag(cluster.clusterTags)}</div>
           <Content
             content={cluster.summary.content}
-            clusterId={cluster.clusterId}
-            selectedClusterIds={selectedClusterIds}
+            isExpanded={isExpanded}
           />
         </button>
         {isExpanded && (
