@@ -15,7 +15,7 @@ import { getClusterSizes } from "../ClusterGraph/ClusterGraph.util";
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
 
 import { usePreLoadAuthorImg } from "./Summary.hook";
-import { getInitData, getClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
+import { getInitData, getSelectedClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
 import { Content } from "./Content";
 import type { ClusterRowProps } from "./Summary.type";
 
@@ -29,7 +29,7 @@ const Summary = () => {
   const clusters = getInitData(filteredData);
   const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
-  const selectedClusterIds = getClusterIds(selectedData);
+  const selectedClusterIds = getSelectedClusterIds(selectedData);
   const listRef = useRef<List>(null);
   const clusterSizes = getClusterSizes(filteredData);
 

@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { getClusterById, getClusterIds, getInitData, getCommitLatestTag } from "./Summary.util";
+import { getClusterById, getSelectedClusterIds, getInitData, getCommitLatestTag } from "./Summary.util";
 
 const clusterNodeMockData: ClusterNode[] = [
   {
@@ -153,7 +153,7 @@ test("getClusterById test", () => {
 });
 
 test("getClusterIds test", () => {
-  const result = getClusterIds(clusterNodeMockData);
+  const result = getSelectedClusterIds(clusterNodeMockData);
 
   expect(result).not.toBeUndefined();
   expect(result[0]).toBe(0);
