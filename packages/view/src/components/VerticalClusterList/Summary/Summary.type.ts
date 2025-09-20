@@ -28,7 +28,6 @@ export type AuthSrcMap = Record<string, string>;
 
 export type ClusterRowProps = ListRowProps & {
   cluster: Cluster;
-  isExpanded: boolean;
   onClickClusterSummary: (clusterId: number) => () => void;
   authSrcMap: AuthSrcMap | null;
   clusterSizes: number[];

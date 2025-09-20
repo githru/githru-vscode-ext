@@ -47,13 +47,11 @@ const Summary = () => {
 
   const rowRenderer = (props: ListRowProps) => {
     const cluster = clusters[props.index];
-    const isExpanded = selectedClusterIds.includes(cluster.clusterId);
 
     return (
       <ClusterRow
         {...props}
         cluster={cluster}
-        isExpanded={isExpanded}
         onClickClusterSummary={onClickClusterSummary}
         authSrcMap={authSrcMap}
         clusterSizes={clusterSizes}
@@ -100,13 +98,14 @@ function ClusterRow({
   key,
   style,
   cluster,
-  isExpanded,
   onClickClusterSummary,
   authSrcMap,
   clusterSizes,
   detailRef,
   selectedClusterIds,
 }: ClusterRowProps) {
+  const isExpanded = selectedClusterIds.includes(cluster.clusterId);
+
   return (
     <div
       key={key}
