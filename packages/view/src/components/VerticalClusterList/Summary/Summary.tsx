@@ -1,72 +1,76 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import type { ListRowProps } from "react-virtualized";
 import { List, AutoSizer } from "react-virtualized";
 import { useShallow } from "zustand/react/shallow";
 
 import type { ClusterNode } from "types";
 import { Detail } from "components";
-import { useDataStore } from "store";
+import { useDataStore, useSelectedClusterStore } from "store";
 
 import "./Summary.scss";
 import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { ClusterGraph } from "../ClusterGraph";
-import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/ClusterGraph.const";
 
 import { usePreLoadAuthorImg } from "./Summary.hook";
-import { getInitData, getSelectedClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
+import { getInitData, getClusterById, getCommitLatestTag } from "./Summary.util";
 import { Content } from "./Content";
 import type { ClusterRowProps } from "./Summary.type";
 
-const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
-const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
-
 const Summary = () => {
-  const [filteredData, selectedData, setSelectedData] = useDataStore(
-    useShallow((state) => [state.filteredData, state.selectedData, state.setSelectedData])
+  const [filteredData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.filteredData, state.setSelectedData])
   );
   const clusters = getInitData(filteredData);
   const detailRef = useRef<HTMLDivElement>(null);
   const authSrcMap = usePreLoadAuthorImg();
-  const selectedClusterIds = getSelectedClusterIds(selectedData);
   const listRef = useRef<List>(null);
+  const { setDetailRef } = useSelectedClusterStore();
 
-  const onClickClusterSummary = (clusterId: number) => () => {
-    const selected = getClusterById(filteredData, clusterId);
-    setSelectedData((prevState: ClusterNode[]) => {
-      return selectedDataUpdater(selected, clusterId)(prevState);
-    });
-  };
+  const onClickClusterSummary = useCallback(
+    (clusterId: number) => () => {
+      const selected = getClusterById(filteredData, clusterId);
+      setSelectedData((prevState: ClusterNode[]) => {
+        return selectedDataUpdater(selected, clusterId)(prevState);
+      });
+      useSelectedClusterStore.getState().toggleCluster(clusterId);
+    },
+    [filteredData, setSelectedData]
+  );
 
-  const getRowHeight = ({ index }: { index: number }) => {
-    const cluster = clusters[index];
-    return selectedClusterIds.includes(cluster.clusterId) ? EXPANDED_ROW_HEIGHT : COLLAPSED_ROW_HEIGHT;
-  };
+  const getRowHeight = useCallback(
+    ({ index }: { index: number }) => {
+      const cluster = clusters[index];
+      return useSelectedClusterStore.getState().getRowHeight(cluster.clusterId);
+    },
+    [clusters]
+  );
 
-  const rowRenderer = (props: ListRowProps) => {
-    const cluster = clusters[props.index];
+  const rowRenderer = useCallback(
+    (props: ListRowProps) => {
+      const cluster = clusters[props.index];
 
-    return (
-      <ClusterRow
-        {...props}
-        cluster={cluster}
-        onClickClusterSummary={onClickClusterSummary}
-        authSrcMap={authSrcMap}
-        detailRef={detailRef}
-        selectedClusterIds={selectedClusterIds}
-      />
-    );
-  };
+      return (
+        <ClusterRow
+          {...props}
+          cluster={cluster}
+          onClickClusterSummary={onClickClusterSummary}
+          authSrcMap={authSrcMap}
+        />
+      );
+    },
+    [clusters, onClickClusterSummary, authSrcMap]
+  );
 
   useEffect(() => {
-    detailRef.current?.scrollIntoView({
-      block: "center",
-      behavior: "smooth",
-    });
+    setDetailRef(detailRef.current);
+  }, [setDetailRef]);
+
+  useEffect(() => {
     if (listRef.current) {
       listRef.current.recomputeRowHeights();
     }
-  }, [selectedData]);
+  }, [listRef]);
 
   return (
     <div className="vertical-cluster-list__body">
@@ -90,17 +94,9 @@ const Summary = () => {
 
 export default Summary;
 
-function ClusterRow({
-  index,
-  key,
-  style,
-  cluster,
-  onClickClusterSummary,
-  authSrcMap,
-  detailRef,
-  selectedClusterIds,
-}: ClusterRowProps) {
-  const isExpanded = selectedClusterIds.includes(cluster.clusterId);
+function ClusterRow({ index, key, style, cluster, onClickClusterSummary, authSrcMap }: ClusterRowProps) {
+  const isExpanded = useSelectedClusterStore((state) => state.isExpanded(cluster.clusterId));
+  const setDetailRef = useSelectedClusterStore((state) => state.setDetailRef);
 
   return (
     <div
@@ -138,7 +134,11 @@ function ClusterRow({
         {isExpanded && (
           <div
             className="detail"
-            ref={detailRef}
+            ref={(ref) => {
+              if (ref) {
+                setDetailRef(ref);
+              }
+            }}
           >
             <Detail
               clusterId={cluster.clusterId}

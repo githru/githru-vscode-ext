@@ -1,5 +1,4 @@
 import type { ListRowProps } from "react-virtualized";
-import type React from "react";
 
 import type { AuthorInfo } from "types";
 
@@ -30,6 +29,4 @@ export type ClusterRowProps = ListRowProps & {
   cluster: Cluster;
   onClickClusterSummary: (clusterId: number) => () => void;
   authSrcMap: AuthSrcMap | null;
-  detailRef: React.RefObject<HTMLDivElement>;
-  selectedClusterIds: number[];
 };
