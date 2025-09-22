@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -16,12 +17,16 @@ import { useGithubInfo, useDataStore } from "store";
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
-import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps } from "./Detail.type";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps, LinkedMessage } from "./Detail.type";
 
 import "./Detail.scss";
 
 const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const selectedData = useDataStore((state) => state.selectedData);
+  const [linkedMessage, setLinkedMessage] = useState<LinkedMessage>({
+    title: [],
+    body: null,
+  });
 
   const { owner, repo } = useGithubInfo();
 
@@ -30,9 +35,75 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
 
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
+
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
+
+  useEffect(() => {
+    const processMessage = (message: string) => {
+      // GitHub 이슈 번호 패턴: #123 또는 (#123)
+      const regex = /(?:^|\s)(#\d+)(?:\s|$)/g;
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      let match: RegExpExecArray | null;
+
+      while (true) {
+        match = regex.exec(message);
+        if (match === null) break;
+
+        // 이슈 번호 앞의 텍스트 추가
+        if (match.index > lastIndex) {
+          parts.push(message.slice(lastIndex, match.index));
+        }
+
+        // 이슈 번호를 링크로 변환
+        const issueNumber = match[1].substring(1); // # 제거
+        const issueLink = `https://github.com/${owner}/${repo}/issues/${issueNumber}`;
+
+        parts.push(
+          <a
+            key={`issue-${issueNumber}-${match.index}`}
+            href={issueLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="commit-message__issue-link"
+            title={`GitHub Issue #${issueNumber}`}
+          >
+            {match[1]}
+          </a>
+        );
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // 마지막 부분 추가
+      if (lastIndex < message.length) {
+        parts.push(message.slice(lastIndex));
+      }
+
+      return parts.length > 0 ? parts : [message];
+    };
+
+    if (commitNodeListInCluster?.[0]?.commit?.message) {
+      const { message } = commitNodeListInCluster[0].commit;
+      const messageLines = message.split("\n");
+      const title = messageLines[0];
+      const body = messageLines
+        .slice(1)
+        .filter((line: string) => line.trim())
+        .join("\n");
+
+      // 제목과 본문을 각각 처리
+      const processedTitle = processMessage(title);
+      const processedBody = body ? processMessage(body) : null;
+
+      setLinkedMessage({
+        title: processedTitle,
+        body: processedBody,
+      });
+    }
+  }, [commitNodeListInCluster, owner, repo]);
 
   if (!selectedData || selectedData.length === 0) return null;
 
@@ -48,6 +119,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
             repo={repo}
             authSrcMap={authSrcMap}
             handleCommitIdCopy={handleCommitIdCopy}
+            linkedMessage={linkedMessage}
           />
         ))}
       </ul>
@@ -67,44 +139,64 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
 
 export default Detail;
 
-function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy }: CommitItemProps) {
+function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linkedMessage }: CommitItemProps) {
   const { id, message, author, commitDate } = commit;
-
   return (
-    <li className="detail__commit-item">
+    <li
+      key={id}
+      className="detail__commit-item"
+    >
       <div className="commit-item__detail">
-        <div className="commit-item__left">
-          {authSrcMap && (
-            <Author
-              name={author.names.toString()}
-              src={authSrcMap[author.names.toString()]}
-            />
-          )}
-          <div className="commit-item__message-container">
-            <span className="commit-item__message">{message}</span>
-          </div>
-        </div>
-        <div className="commit-item__right">
-          <span className="commit-item__author-date">
-            {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
-          </span>
-          <div className="commit-item__commit-id">
-            <a
-              href={`https://github.com/${owner}/${repo}/commit/${id}`}
-              onClick={handleCommitIdCopy(id)}
-              tabIndex={0}
-              onKeyDown={handleCommitIdCopy(id)}
-              className="commit-id__link"
-            >
-              <Tooltip
-                className="commit-id__tooltip"
-                placement="right"
-                title={id}
-                PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
-              >
-                <p>{id.slice(0, 6)}</p>
-              </Tooltip>
-            </a>
+        <div className="commit-item__message-container">
+          <div className="commit-message">
+            <div className="commit-message__header">
+              {authSrcMap && (
+                <Author
+                  name={author.names.toString()}
+                  src={authSrcMap[author.names.toString()]}
+                />
+              )}
+              <div className="commit-message__title">
+                {(() => {
+                  const messageLines = message.split("\n");
+                  const title = messageLines[0];
+                  return linkedMessage.title.length > 0 ? linkedMessage.title : title;
+                })()}
+              </div>
+              <div className="commit-item__meta">
+                <span className="commit-item__author-name">{author.names[0]}</span>
+                <span className="commit-item__date">{dayjs(commitDate).format("YY. M. DD. a h:mm")}</span>
+                <div className="commit-item__commit-id">
+                  <a
+                    href={`https://github.com/${owner}/${repo}/commit/${id}`}
+                    onClick={handleCommitIdCopy(id)}
+                    tabIndex={0}
+                    onKeyDown={handleCommitIdCopy(id)}
+                    className="commit-id__link"
+                  >
+                    <Tooltip
+                      className="commit-id__tooltip"
+                      placement="right"
+                      title={id}
+                      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+                    >
+                      <p>{id.slice(0, 6)}</p>
+                    </Tooltip>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {(() => {
+              const messageLines = message.split("\n");
+              const body = messageLines
+                .slice(1)
+                .filter((line: string) => line.trim())
+                .join("\n");
+
+              return body ? (
+                <div className="commit-message__body">{linkedMessage.body ? linkedMessage.body : body}</div>
+              ) : null;
+            })()}
           </div>
         </div>
       </div>

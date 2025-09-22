@@ -4,6 +4,11 @@ import type { ClusterNode } from "types";
 import type { Commit } from "types/Commit";
 import type { AuthSrcMap } from "components/VerticalClusterList/Summary/Summary.type";
 
+export type LinkedMessage = {
+  title: ReactNode[];
+  body: ReactNode[] | null;
+};
+
 export type DetailProps = {
   clusterId: number;
   authSrcMap: AuthSrcMap | null;
@@ -24,4 +29,5 @@ export interface CommitItemProps {
   repo: string;
   authSrcMap: AuthSrcMap | null;
   handleCommitIdCopy: (id: string) => () => Promise<void>;
+  linkedMessage: LinkedMessage;
 }

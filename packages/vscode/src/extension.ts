@@ -35,6 +35,9 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
+    if (context.extensionMode === vscode.ExtensionMode.Development) {
+      console.time("Githru-Launch-Time");
+    }
     myStatusBarItem.text = `$(sync~spin) ${projectName}`;
     try {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
@@ -80,7 +83,8 @@ export async function activate(context: vscode.ExtensionContext) {
       const initialBaseBranchName = await fetchCurrentBranch();
 
       const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
-        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
+        const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
+        const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
         const { owner, repo: initialRepo } = getRepo(gitConfig);
         const repo = initialRepo;
         const engine = new AnalysisEngine({
@@ -117,6 +121,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
       subscriptions.push(webLoader);
       myStatusBarItem.text = `$(check) ${projectName}`;
+      if (context.extensionMode === vscode.ExtensionMode.Development) {
+        console.timeEnd("Githru-Launch-Time");
+      }
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {

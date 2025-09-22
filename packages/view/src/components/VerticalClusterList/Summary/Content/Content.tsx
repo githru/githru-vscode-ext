@@ -5,44 +5,83 @@ import { useGithubInfo } from "store";
 
 import type { ContentProps } from "../Summary.type";
 
+type LinkedMessage = {
+  title: React.ReactNode[];
+};
+
 const Content = ({ content, clusterId, selectedClusterIds }: ContentProps) => {
   const { owner, repo } = useGithubInfo();
-  const [linkedStr, setLinkedStr] = useState<React.ReactNode[]>([]);
+  const [linkedMessage, setLinkedMessage] = useState<LinkedMessage>({
+    title: [],
+  });
 
   useEffect(() => {
-    const str: string = content.message;
-    const regex = /^(\(#[0-9]+\)|#[0-9]+)/g;
-    const tobeStr: string[] = str.split(" ");
+    const processMessage = (message: string) => {
+      // GitHub 이슈 번호 패턴: #123 또는 (#123)
+      const regex = /(?:^|\s)(#\d+)(?:\s|$)/g;
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      let match: RegExpExecArray | null;
 
-    const newLinkedStr = tobeStr.reduce((acc: React.ReactNode[], tokenStr: string) => {
-      const matches = tokenStr.match(regex); // #num 으로 결과가 나옴 ()가 결과에 포함되지 않음
-      if (matches) {
-        const matchedStr = matches[0];
-        const matchedStrNum: string = matchedStr.substring(1);
-        const linkIssues = `https://github.com/${owner}/${repo}/issues/${matchedStrNum}`;
-        acc.push(
+      while (true) {
+        match = regex.exec(message);
+        if (match === null) break;
+
+        // 이슈 번호 앞의 텍스트 추가
+        if (match.index > lastIndex) {
+          parts.push(message.slice(lastIndex, match.index));
+        }
+
+        // 이슈 번호를 링크로 변환
+        const issueNumber = match[1].substring(1); // # 제거
+        const issueLink = `https://github.com/${owner}/${repo}/issues/${issueNumber}`;
+
+        parts.push(
           <a
-            href={linkIssues}
-            key={`issues-${matchedStr}`}
-            className="summary__commit-link"
+            key={`issue-${issueNumber}-${match.index}`}
+            href={issueLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="summary__commit-issue-link"
+            title={`GitHub Issue #${issueNumber}`}
           >
-            {matchedStr}
+            {match[1]}
           </a>
         );
-        acc.push(" ");
-      } else {
-        acc.push(tokenStr);
-        acc.push(" ");
+
+        lastIndex = match.index + match[0].length;
       }
-      return acc;
-    }, []);
-    setLinkedStr(newLinkedStr);
-  }, [content]);
+
+      // 마지막 부분 추가
+      if (lastIndex < message.length) {
+        parts.push(message.slice(lastIndex));
+      }
+
+      return parts.length > 0 ? parts : [message];
+    };
+
+    const messageLines = content.message.split("\n");
+    const title = messageLines[0];
+
+    // 제목만 처리
+    const processedTitle = processMessage(title);
+
+    setLinkedMessage({
+      title: processedTitle,
+    });
+  }, [content.message, owner, repo]);
+
+  const messageLines = content.message.split("\n");
+  const title = messageLines[0];
 
   return (
     <>
       <div className="summary__content">
-        <div className="summary__commit-message">{linkedStr}</div>
+        <div className="summary__commit-message">
+          <div className="summary__commit-title">
+            {linkedMessage.title.length > 0 ? linkedMessage.title : title}
+          </div>
+        </div>
         {content.count > 0 && <span className="summary__more-commit">+ {content.count} more</span>}
       </div>
       <div className={`summary__toggle${selectedClusterIds.includes(clusterId) ? "--visible" : ""}`}>

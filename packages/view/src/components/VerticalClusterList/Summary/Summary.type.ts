@@ -5,6 +5,7 @@ import type { AuthorInfo, ClusterNode } from "types";
 
 export type Content = {
   message: string;
+  title: string;
   count: number;
 };
 
