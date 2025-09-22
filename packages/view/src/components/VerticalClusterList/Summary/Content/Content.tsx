@@ -78,9 +78,7 @@ const Content = ({ content, clusterId, selectedClusterIds }: ContentProps) => {
     <>
       <div className="summary__content">
         <div className="summary__commit-message">
-          <div className="summary__commit-title">
-            {linkedMessage.title.length > 0 ? linkedMessage.title : title}
-          </div>
+          <div className="summary__commit-title">{linkedMessage.title.length > 0 ? linkedMessage.title : title}</div>
         </div>
         {content.count > 0 && <span className="summary__more-commit">+ {content.count} more</span>}
       </div>

@@ -28,7 +28,7 @@ export type Cluster = {
 
 export type AuthSrcMap = Record<string, string>;
 
-export type ClusterRowProps = ListRowProps & {
+export type ClusterRowProps = Omit<ListRowProps, "key"> & {
   cluster: Cluster;
   isExpanded: boolean;
   onClickClusterSummary: (clusterId: number) => () => void;
