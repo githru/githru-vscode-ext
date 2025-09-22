@@ -14,12 +14,11 @@ async function getPartialGitLog() {
     "--all",
     "--parents",
     "--numstat",
-    "--date-order",
     `--pretty=format:${GIT_LOG_FORMAT}`,
     "--decorate",
     "-c",
     `--skip=${skipCount}`,
-    `-n ${limitCount}`,
+    `--max-count=${limitCount}`,
   ];
 
   try {
