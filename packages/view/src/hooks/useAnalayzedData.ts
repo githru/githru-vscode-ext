@@ -11,7 +11,7 @@ export const useAnalayzedData = () => {
 
   const handleChangeAnalyzedData = (analyzedData: ClusterNode[]) => {
     setData(analyzedData);
-    setFilteredData([...analyzedData.reverse()]);
+    setFilteredData([...analyzedData]);
     setSelectedData([]);
     setLoading(false);
   };

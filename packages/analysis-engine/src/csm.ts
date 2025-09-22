@@ -101,7 +101,7 @@ export const buildCSMDict = (
   );
 
   const csmDict: CSMDictionary = {};
-  const stemNodes = masterStem.nodes.reverse(); // start on root-node
+  const stemNodes = masterStem.nodes; // start on latest-node
   csmDict[baseBranchName] = stemNodes.map((commitNode) => {
     const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
     const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
