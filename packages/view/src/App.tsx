@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
 import { useEffect, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
@@ -13,6 +12,8 @@ import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 
+import { container } from "./container";
+
 const App = () => {
   const initRef = useRef<boolean>(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
@@ -21,7 +22,7 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
-  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+  const ideAdapter = container.get<IDEPort>("IDEAdapter");
 
   useEffect(() => {
     if (initRef.current === false) {

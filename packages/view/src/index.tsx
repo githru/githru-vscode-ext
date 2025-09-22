@@ -1,12 +1,10 @@
 // THIS index.tsx is only for development (CRA npm start)
-
 import "reflect-metadata";
-import { container } from "tsyringe";
-
+import { container } from "./container";
 import FakeIDEAdapter from "./ide/FakeIDEAdapter";
-import { initRender } from "./index.common";
 import type IDEPort from "./ide/IDEPort";
+import { initRender } from "./index.common";
 
-container.register<IDEPort>("IDEAdapter", { useClass: FakeIDEAdapter });
+container.bind<IDEPort>("IDEAdapter").to(FakeIDEAdapter);
 
 initRender();
