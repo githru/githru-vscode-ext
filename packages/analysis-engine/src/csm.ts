@@ -48,7 +48,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     squashTaskQueue.push(...nestedMergeParentCommits);
   }
 
-  squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
+  squashCommitNodes.sort((a, b) => b.commit.sequence - a.commit.sequence);
 
   return {
     base: baseCommitNode,
