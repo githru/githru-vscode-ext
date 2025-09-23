@@ -1,11 +1,11 @@
 import "reflect-metadata";
 
-import { container } from "tsyringe";
-
 import { buildCommitDict } from "./commit.util";
+import { container } from "./container";
 import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
+import { SERVICE_TOKENS } from "./serviceTokens";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
 
@@ -36,16 +36,12 @@ export class AnalysisEngine {
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
-    container.register("OctokitOptions", {
-      useValue: {
-        owner,
-        repo,
-        options: {
-          auth,
-        },
-      },
+    container.rebindSync(SERVICE_TOKENS.OctokitOptions).toConstantValue({
+      owner,
+      repo,
+      options: { auth },
     });
-    this.octokit = container.resolve(PluginOctokit);
+    this.octokit = container.get(PluginOctokit);
   };
 
   public analyzeGit = async () => {
@@ -53,7 +49,7 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
 
     const commitRaws = getCommitRaws(this.gitLog);
-    if (this.isDebugMode){
+    if (this.isDebugMode) {
       console.log("commitRaws: ", commitRaws);
     }
 
@@ -88,7 +84,6 @@ export class AnalysisEngine {
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {
-    if (container.isRegistered("OctokitOptions")) container.clearInstances();
     this.insertArgs(args);
   };
 }
