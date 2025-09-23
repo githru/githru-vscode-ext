@@ -11,8 +11,8 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
-
-import { container } from "./container";
+import { container } from "container";
+import { SERVICE_TOKENS } from "container/tokens";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -22,7 +22,7 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
-  const ideAdapter = container.get<IDEPort>("IDEAdapter");
+  const ideAdapter = container.get<IDEPort>(SERVICE_TOKENS.IDEAdapter);
 
   useEffect(() => {
     if (initRef.current === false) {
