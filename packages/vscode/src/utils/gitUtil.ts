@@ -166,6 +166,7 @@ export async function getGitLog(gitPath: string, currentWorkspacePath: string): 
     "--all",
     "--parents",
     "--numstat",
+    "--date-order",
     `--pretty=format:${GIT_LOG_FORMAT}`,
     "--decorate",
     "-c",
