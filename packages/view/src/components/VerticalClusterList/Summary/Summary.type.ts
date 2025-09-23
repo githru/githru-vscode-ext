@@ -1,4 +1,7 @@
-import type { AuthorInfo } from "types";
+import type { ListRowProps } from "react-virtualized";
+import type React from "react";
+
+import type { AuthorInfo, ClusterNode } from "types";
 
 export type Content = {
   message: string;
@@ -9,7 +12,7 @@ export type Content = {
 export type ContentProps = {
   content: Content;
   clusterId: number;
-  selectedClusterId: number[];
+  selectedClusterIds: number[];
 };
 
 export type Summary = {
@@ -24,3 +27,14 @@ export type Cluster = {
 };
 
 export type AuthSrcMap = Record<string, string>;
+
+export type ClusterRowProps = Omit<ListRowProps, "key"> & {
+  cluster: Cluster;
+  isExpanded: boolean;
+  onClickClusterSummary: (clusterId: number) => () => void;
+  authSrcMap: AuthSrcMap | null;
+  filteredData: ClusterNode[];
+  clusterSizes: number[];
+  detailRef: React.RefObject<HTMLDivElement>;
+  selectedClusterIds: number[];
+};
