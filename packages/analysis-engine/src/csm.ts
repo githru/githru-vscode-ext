@@ -1,7 +1,13 @@
 import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
-const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
+/**
+ *
+ * @param baseCommitNode merge-commit node
+ * @param commitDict commit-node dictionary
+ * @returns
+ */
+const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict): CSMNode => {
   const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
   if (!mergeParentCommit) {
     return {
@@ -10,45 +16,50 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     };
   }
 
+  // 1. stop point: first-parent of baseCommitNode
+  const baseAncestors = new Set<string>();
+  const baseParentsQueue: CommitNode[] = [];
+  const firstParent = commitDict.get(baseCommitNode.commit.parents[0]);
+  if (firstParent) {
+    baseParentsQueue.push(firstParent);
+  }
+
+  while (baseParentsQueue.length > 0) {
+    const node = baseParentsQueue.shift();
+    if (!node || baseAncestors.has(node.commit.id)) {
+      continue;
+    }
+    baseAncestors.add(node.commit.id);
+    for (const pId of node.commit.parents) {
+      const parentNode = commitDict.get(pId);
+      if (parentNode) {
+        baseParentsQueue.push(parentNode);
+      }
+    }
+  }
+
+  // 2. find squash-commits by DFS
   const squashCommitNodes: CommitNode[] = [];
+  const squashTaskStack: CommitNode[] = [mergeParentCommit];
+  const visited = new Set<string>();
 
-  const squashTaskQueue: CommitNode[] = [mergeParentCommit];
-  while (squashTaskQueue.length > 0) {
-    // get target
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStartNode = squashTaskQueue.shift()!;
+  while (squashTaskStack.length > 0) {
+    const currentNode = squashTaskStack.pop()!; // LIFO
 
-    // get target's stem
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStemId = squashStartNode.stemId!;
-    const squashStem = stemDict.get(squashStemId);
-    if (!squashStem) {
+    if (!currentNode || visited.has(currentNode.commit.id) || baseAncestors.has(currentNode.commit.id)) {
       continue;
     }
 
-    // prepare squash
-    const squashStemLastIndex = squashStem.nodes.length - 1;
-    const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
-    const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
-
-    // squash
-    const spliceCommitNodes = squashStem.nodes.splice(squashStartNodeIndex, spliceCount);
-    squashCommitNodes.push(...spliceCommitNodes);
-
-    // check nested-merge
-    const nestedMergeParentCommitIds = spliceCommitNodes
-      .filter((node) => node.commit.parents.length > 1)
-      .map((node) => node.commit.parents)
-      .reduce((pCommitIds, parents) => [...pCommitIds, ...parents], []);
-    const nestedMergeParentCommits = nestedMergeParentCommitIds
-      .map((commitId) => commitDict.get(commitId))
-      .filter((node): node is CommitNode => node !== undefined)
-      .filter((node) => node.stemId !== baseCommitNode.stemId && node.stemId !== squashStemId);
-
-    squashTaskQueue.push(...nestedMergeParentCommits);
+    visited.add(currentNode.commit.id);
+    squashCommitNodes.push(currentNode);
+    // add parents to stack
+    for (const parentId of currentNode.commit.parents) {
+      const parentNode = commitDict.get(parentId);
+      if (parentNode) {
+        squashTaskStack.push(parentNode);
+      }
+    }
   }
-
-  squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
   return {
     base: baseCommitNode,
@@ -101,9 +112,9 @@ export const buildCSMDict = (
   );
 
   const csmDict: CSMDictionary = {};
-  const stemNodes = masterStem.nodes.reverse(); // start on root-node
+  const stemNodes = masterStem.nodes; // start on latest-node
   csmDict[baseBranchName] = stemNodes.map((commitNode) => {
-    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
+    const csmNode = buildCSMNode(commitNode, commitDict);
     const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
     return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
   });
