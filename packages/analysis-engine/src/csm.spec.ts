@@ -84,7 +84,7 @@ describe("csm", () => {
         expect(nonMergeCSMNodes.length).toBeGreaterThan(0);
 
         // 0,1,4,5 commits have no-squash-commits
-        const expectedNonMergeCommitIds = ["0", "1", "4", "5"];
+        const expectedNonMergeCommitIds = ["5", "4", "1", "0"];
         const nonMergeCommitIds = nonMergeCSMNodes.map((csmNode) => csmNode.base.commit.id);
         nonMergeCommitIds.forEach((commitId) => {
           expect(expectedNonMergeCommitIds.includes(commitId)).toBe(true);
@@ -97,7 +97,7 @@ describe("csm", () => {
         expect(mergeCSMNodes.length).toBeGreaterThan(0);
 
         // 2,3 commits have sqaush-commits
-        const expectedMergeCommitIds = ["2", "3"];
+        const expectedMergeCommitIds = ["3", "2"];
         const mergeCommitIds = mergeCSMNodes.map((csmNode) => csmNode.base.commit.id);
         mergeCommitIds.forEach((commitId) => {
           expect(expectedMergeCommitIds.includes(commitId)).toBe(true);
@@ -132,11 +132,11 @@ describe("csm", () => {
     });
 
     it("has squash-commits", () => {
-      const expectedBaseCommitIds = ["0", "1", "6", "7", "8", "9", "10", "11"];
+      const expectedBaseCommitIds = ["11", "10", "9", "8", "7", "6", "1", "0"];
       expect(csmDict.sub1.map((node) => node.base.commit.id)).toEqual(expectedBaseCommitIds);
 
       const mergeCommitNodes = csmDict.sub1.filter((node) => node.source.length);
-      const expectedMergeCommitIds = ["8", "11"];
+      const expectedMergeCommitIds = ["11", "8"];
       expect(mergeCommitNodes.map((node) => node.base.commit.id)).toEqual(expectedMergeCommitIds);
 
       const expectedSquashCommitIds: Record<string, string[]> = {
