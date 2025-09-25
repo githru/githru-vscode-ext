@@ -4,6 +4,7 @@ import { z } from "zod";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
+import { recommendContributors } from "./tool/contributorRecommender.js";
 
 // MCP 서버 인스턴스 생성
 const server = new McpServer({
@@ -34,7 +35,7 @@ server.registerTool(
         text: z.string().describe("Text to echo back")
         }
     },
-    async ({ text }) => {
+    async ({ text }: { text: string }) => {
         return { content: [{ type: "text", text: `Echo: ${text}` }] };
     }
 );
@@ -51,7 +52,7 @@ server.registerTool(
         }
     },
 
-    async ({ height, weight }) => {
+    async ({ height, weight }: { height: number; weight: number }) => {
         const hMeters = height / 100; // cm → m
         const bmi = weight / (hMeters * hMeters);
         let category = "Unknown";
@@ -137,7 +138,7 @@ server.registerTool(
             height: z.number().int().min(80).max(800).default(180).describe("SVG 세로(px)")
         }
     },
-    async ({ values, width, height }) => {
+    async ({ values, width, height }: { values?: number[]; width?: number; height?: number }) => {
     // 값 준비 (없으면 랜덤 6개)
     const data = values && values.length ? values : Array.from({ length: 6 }, () => Math.floor(Math.random() * 10) + 1);
 
@@ -313,7 +314,7 @@ server.registerTool(
     },
   },
 
-  async ({ repoUrl, prNumber, githubToken }, _extra) => {
+  async ({ repoUrl, prNumber, githubToken }: { repoUrl: string; prNumber: number; githubToken: string }) => {
     try {
       const payload = await analyzeFeatureImpact({ repoUrl, prNumber, githubToken });
 
@@ -329,6 +330,61 @@ server.registerTool(
       return {
         content: [
           { type: "text", text: `분석 중 오류가 발생했습니다: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+// 🏆 Contributor Recommender
+server.registerTool(
+  "contributor_recommender",
+  {
+    title: "Code Contributor Recommender",
+    description: "특정 파일/브랜치/PR 번호를 입력받아, 최근 해당 영역에 가장 많이 기여한 사람들을 집계하여 추천합니다.",
+    inputSchema: {
+      repoPath: z.string().describe("GitHub 저장소 경로 (예: owner/repo 또는 https://github.com/owner/repo)"),
+      pr: z.union([z.string(), z.number()]).optional().describe("특정 PR 기반 추천 (PR 번호)"),
+      paths: z.array(z.string()).optional().describe("파일/디렉터리 경로 배열 (glob 패턴 지원)"),
+      branch: z.string().optional().describe("브랜치 기반 추천 (기본값: main)"),
+      since: z.string().optional().describe("분석 기간 시작점 (기본 90일, 30d/ISO 날짜 등)"),
+      until: z.string().optional().describe("분석 기간 종료점 (미지정 시 현재)"),
+      githubToken: z.string().describe("GitHub 인증 토큰"),
+    },
+  },
+
+  async ({ repoPath, pr, paths, branch, since, until, githubToken }: { 
+    repoPath: string; 
+    pr?: string | number; 
+    paths?: string[]; 
+    branch?: string; 
+    since?: string; 
+    until?: string; 
+    githubToken: string; 
+  }) => {
+    try {
+      const recommendation = await recommendContributors({
+        repoPath,
+        pr,
+        paths,
+        branch,
+        since,
+        until,
+        githubToken,
+      });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(recommendation, null, 2),
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `기여자 추천 중 오류가 발생했습니다: ${err?.message ?? String(err)}` },
         ],
       };
     }
