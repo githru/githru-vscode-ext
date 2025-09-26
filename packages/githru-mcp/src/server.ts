@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 import { recommendContributors } from "./tool/contributorRecommender.js";
+import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
 
 // MCP 서버 인스턴스 생성
 const server = new McpServer({
@@ -314,7 +315,7 @@ server.registerTool(
     },
   },
 
-  async ({ repoUrl, prNumber, githubToken }: { repoUrl: string; prNumber: number; githubToken: string }) => {
+  async ({ repoUrl, prNumber, githubToken }: FeatureImpactAnalyzerInputs) => {
     try {
       const payload = await analyzeFeatureImpact({ repoUrl, prNumber, githubToken });
 
@@ -353,15 +354,7 @@ server.registerTool(
     },
   },
 
-  async ({ repoPath, pr, paths, branch, since, until, githubToken }: { 
-    repoPath: string; 
-    pr?: string | number; 
-    paths?: string[]; 
-    branch?: string; 
-    since?: string; 
-    until?: string; 
-    githubToken: string; 
-  }) => {
+  async ({ repoPath, pr, paths, branch, since, until, githubToken }: ContributorRecommenderInputs) => {
     try {
       const recommendation = await recommendContributors({
         repoPath,

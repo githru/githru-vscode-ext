@@ -1,30 +1,20 @@
 import { Octokit } from "@octokit/rest";
-
-interface AnalyzerInputs {
-  repoUrl: string;
-  prNumber: number;
-  githubToken: string;
-}
+import { GitHubUtils } from "../common/utils.js";
+import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 
 class McpReportGenerator {
   private repoUrl: string;
   private prNumber: number;
-  private githubToken: string;
   private octokit: Octokit;
   private owner: string;
   private repo: string;
 
-  constructor({ repoUrl, prNumber, githubToken }: AnalyzerInputs) {
+  constructor({ repoUrl, prNumber, githubToken }: FeatureImpactAnalyzerInputs) {
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;
-    this.githubToken = githubToken;
-    this.octokit = new Octokit({ auth: this.githubToken });
+    this.octokit = GitHubUtils.createClient(githubToken);
 
-    const cleaned = this.repoUrl
-      .replace(/^https?:\/\/github\.com\//, "")
-      .replace(/\.git$/, "")
-      .replace(/\/+$/, "");
-    const [owner, repo] = cleaned.split("/");
+    const { owner, repo } = GitHubUtils.parseRepoUrl(repoUrl);
     this.owner = owner;
     this.repo = repo;
   }
@@ -134,7 +124,7 @@ class McpReportGenerator {
   }
 }
 
-export async function analyzeFeatureImpact(inputs: AnalyzerInputs) {
+export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) {
   const { repoUrl, prNumber } = inputs;
   const rateScale = (v: number) => (v >= 20 ? "Very Large" : v >= 10 ? "Large" : v >= 5 ? "Medium" : "Small");
   const rateDispersion = (v: number) => (v >= 6 ? "Very High" : v >= 4 ? "High" : v >= 2 ? "Moderate" : "Low");

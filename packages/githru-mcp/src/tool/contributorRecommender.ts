@@ -1,29 +1,10 @@
 import { Octokit } from "@octokit/rest";
-
-export interface ContributorRecommenderInputs {
-  repoPath: string;
-  pr?: string | number;
-  paths?: string[];
-  branch?: string;
-  since?: string;
-  until?: string;
-  githubToken: string;
-}
-
-export interface ContributorCandidate {
-  name: string;
-  score: number;
-  signals: {
-    ownership: number;
-    recentCommits: number;
-    recentReviews: number;
-  };
-}
-
-export interface ContributorRecommendation {
-  candidates: ContributorCandidate[];
-  notes: string[];
-}
+import { GitHubUtils, CommonUtils } from "../common/utils.js";
+import type { 
+  ContributorRecommenderInputs, 
+  ContributorCandidate, 
+  ContributorRecommendation 
+} from "../common/types.js";
 
 /**
  * 특정 파일/브랜치/PR에 대한 최적 기여자를 추천하는 분석기
@@ -39,14 +20,10 @@ class ContributorRecommender {
   private until: string;
 
   constructor(inputs: ContributorRecommenderInputs) {
-    this.octokit = new Octokit({ auth: inputs.githubToken });
+    this.octokit = GitHubUtils.createClient(inputs.githubToken);
     
     // Repository URL 파싱
-    const cleaned = inputs.repoPath
-      .replace(/^https?:\/\/github\.com\//, "")
-      .replace(/\.git$/, "")
-      .replace(/\/+$/, "");
-    const [owner, repo] = cleaned.split("/");
+    const { owner, repo } = GitHubUtils.parseRepoUrl(inputs.repoPath);
     this.owner = owner;
     this.repo = repo;
     
@@ -55,42 +32,11 @@ class ContributorRecommender {
     this.branch = inputs.branch;
     
     // 시간 범위 파싱
-    const timeRange = this.parseTimeRange(inputs.since, inputs.until);
+    const timeRange = GitHubUtils.parseTimeRange(inputs.since, inputs.until);
     this.since = timeRange.since;
     this.until = timeRange.until;
   }
 
-  /**
-   * 날짜 파싱 유틸리티
-   */
-  private parseTimeRange(since?: string, until?: string) {
-    const now = new Date();
-    
-    // since 파싱
-    let sinceDate: Date;
-    if (!since) {
-      // 기본값: 90일 전
-      sinceDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-    } else if (since.endsWith('d')) {
-      // "30d" 형태
-      const days = parseInt(since.replace('d', ''));
-      sinceDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-    } else {
-      // ISO 날짜 형태
-      sinceDate = new Date(since);
-    }
-
-    // until 파싱
-    let untilDate: Date = now;
-    if (until) {
-      untilDate = new Date(until);
-    }
-
-    return {
-      since: sinceDate.toISOString(),
-      until: untilDate.toISOString(),
-    };
-  }
 
   /**
    * PR 기반 기여자 추천
@@ -98,7 +44,7 @@ class ContributorRecommender {
   private async analyzePRContributors(): Promise<ContributorCandidate[]> {
     if (!this.pr) return [];
 
-    const prNumber = typeof this.pr === 'string' ? parseInt(this.pr) : this.pr;
+    const prNumber = CommonUtils.safeParseInt(this.pr!);
     
     try {
       // PR 파일 목록 가져오기
@@ -297,7 +243,7 @@ class ContributorRecommender {
     }
 
     // 기간 정보 추가
-    const sinceDays = Math.ceil((new Date().getTime() - new Date(this.since).getTime()) / (1000 * 60 * 60 * 24));
+    const sinceDays = CommonUtils.getDaysDifference(this.since);
     notes.push(`분석 기간: ${sinceDays}일`);
 
     return {
