@@ -12,20 +12,18 @@ class McpReportGenerator {
   constructor({ repoUrl, prNumber, githubToken }: FeatureImpactAnalyzerInputs) {
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;
-    this.octokit = GitHubUtils.createClient(githubToken);
+    this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);
 
     const { owner, repo } = GitHubUtils.parseRepoUrl(repoUrl);
     this.owner = owner;
     this.repo = repo;
   }
 
-  // 대상 PR의 메터 데이터(제목, 작성자, 생성/머지 시각 등) 가져오기
   private async _fetchPRMetadata(owner: string, repo: string, pull_number: number) {
     const { data } = await this.octokit.pulls.get({ owner, repo, pull_number });
     return data;
   }
 
-  // PR의 모든 커밋과 모든 변경 파일 목록을 페이징 처리로 수집
   private async _getGitDataForPR(owner: string, repo: string, prNumber: number) {
     const commits = await this.octokit.paginate(
       this.octokit.pulls.listCommits,
@@ -39,7 +37,6 @@ class McpReportGenerator {
 
     const prFilesAll = files.map(f => f.filename);
 
-    // 분석에서 커밋별 파일 매칭이 꼭 필요 없다면, PR 전체 파일 세트를 커밋별로 동일 적용
     const commitsSimplified = commits.map(c => ({
       sha: c.sha,
       message: c.commit.message,
@@ -50,41 +47,35 @@ class McpReportGenerator {
     return { commits: commitsSimplified, files: prFilesAll };
   }
 
-  // 커밋 개수로 규모 산출
   private _calculateScale(commits: any[]): number { return commits.length; }
 
-  // 변경이 퍼진 정도를 상위 디렉터리 개수로 측정
   private _calculateDispersion(commits: any[]): number {
     const changedFiles = new Set<string>(commits.flatMap(c => c.changedFiles ?? []));
     const topLevelDirs = new Set(Array.from(changedFiles).map(f => f.split("/")[0]));
     return topLevelDirs.size;
   }
 
-  // prefix가 "fix"로 시작하는 커밋 비율을 카오스(혼란도)로 측정
   private _calculateChaos(commits: any[]): number {
     const isFix = (msg: string) => msg?.trim().toLowerCase().startsWith("fix");
     const fixCount = commits.filter(c => isFix(c.message)).length;
-    return commits.length ? (fixCount / commits.length) * 100 : 0; // %
+    return commits.length ? (fixCount / commits.length) * 100 : 0;
   }
 
-  // 첫 커밋(작성 시각)부터 PR 생성 시각까지의 격리 기간(일수)
   private _calculateIsolation(commits: any[], prMetadata: any): number {
     if (!commits?.length) return 0;
     const firstCommitDate = new Date(commits[commits.length - 1]?.authorDate);
     const prCreationDate = new Date(prMetadata.created_at);
     const ms = prCreationDate.getTime() - firstCommitDate.getTime();
-    return ms > 0 ? ms / (1000 * 60 * 60 * 24) : 0; // days
+    return ms > 0 ? ms / (1000 * 60 * 60 * 24) : 0;
   }
 
-  // PR 생성부터 머지까지 걸린 시간(시간 단위)
   private _calculateLag(prMetadata: any): number {
     if (!prMetadata.merged_at) return 0;
     const createdAt = new Date(prMetadata.created_at).getTime();
     const mergedAt = new Date(prMetadata.merged_at).getTime();
-    return (mergedAt - createdAt) / (1000 * 60 * 60); // hours
+    return (mergedAt - createdAt) / (1000 * 60 * 60);
   }
 
-  // 파일 간 동시 변경 관계의 네트워크 크기를 단순 지표로 산출
   private _calculateCoupling(commits: any[]): number {
     const co = new Map<string, Set<string>>();
     for (const c of commits) {
@@ -138,15 +129,14 @@ export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) 
 
   const scale = Number(metrics.scale ?? 0);
   const dispersion = Number(metrics.dispersion ?? 0);
-  const chaosRatio = Number(((metrics.chaos ?? 0) / 100).toFixed(2));        // % → ratio
-  const isolationDays = Number(Number(metrics.isolation ?? 0).toFixed(1));    // days
-  const reviewLagDays = Number(((Number(metrics.lag ?? 0) / 24)).toFixed(1)); // hours → days
+  const chaosRatio = Number(((metrics.chaos ?? 0) / 100).toFixed(2));
+  const isolationDays = Number(Number(metrics.isolation ?? 0).toFixed(1));
+  const reviewLagDays = Number(((Number(metrics.lag ?? 0) / 24)).toFixed(1));
 
   const changedFiles = Array.from(
     new Set((commits ?? []).flatMap((c: any) => c.changedFiles ?? []))
   );
 
-  // 간단 heatmap: 경로 깊이 가중치 합산 → 상위 12개, 0~100 정규화
   const bucket = new Map<string, number>();
   for (const f of changedFiles) {
     const parts = f.split("/").filter(Boolean);

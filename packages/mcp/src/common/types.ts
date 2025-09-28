@@ -1,7 +1,3 @@
-/**
- * 공통 GitHub 관련 타입 정의
- */
-
 export interface GitHubRepoInfo {
   owner: string;
   repo: string;
@@ -13,18 +9,11 @@ export interface GitHubApiInputs {
   githubToken: string;
 }
 
-/**
- * Feature Impact Analyzer 관련 타입
- */
 export interface FeatureImpactAnalyzerInputs {
   repoUrl: string;
   prNumber: number;
   githubToken: string;
 }
-
-/**
- * Contributor Recommender 관련 타입
- */
 export interface ContributorRecommenderInputs {
   repoPath: string;
   pr?: string | number;
@@ -50,9 +39,6 @@ export interface ContributorRecommendation {
   notes: string[];
 }
 
-/**
- * 공통 GitHub API 응답 타입들
- */
 export interface CommitInfo {
   sha: string;
   message: string;

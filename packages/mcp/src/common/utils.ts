@@ -1,21 +1,16 @@
 import { Octokit } from "@octokit/rest";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import type { GitHubRepoInfo } from "./types.js";
 
-/**
- * GitHub 관련 유틸리티 함수들
- * 모든 함수는 순수 함수로 작성하여 사이드 이펙트를 방지합니다.
- */
+dayjs.extend(relativeTime);
+dayjs.extend(customParseFormat);
+
 export const GitHubUtils = {
-  /**
-   * GitHub API 클라이언트를 생성합니다
-   */
-  createClient(githubToken: string): Octokit {
+  createGitHubAPIClient(githubToken: string): Octokit {
     return new Octokit({ auth: githubToken });
   },
-
-  /**
-   * GitHub 저장소 URL 또는 path를 파싱하여 owner/repo 정보를 추출합니다
-   */
   parseRepoUrl(repoUrlOrPath: string): GitHubRepoInfo {
     const cleaned = repoUrlOrPath
       .replace(/^https?:\/\/github\.com\//, "")
@@ -31,38 +26,26 @@ export const GitHubUtils = {
     return { owner, repo };
   },
 
-  /**
-   * 날짜 범위를 파싱합니다
-   */
   parseTimeRange(since?: string, until?: string): { since: string; until: string } {
-    const now = new Date();
-    
-    // since 파싱
-    let sinceDate: Date;
-    if (!since) {
-      // 기본값: 90일 전
-      sinceDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-    } else if (since.endsWith('d')) {
-      // "30d" 형태
-      const days = parseInt(since.replace('d', ''));
-      if (isNaN(days)) {
-        throw new Error(`Invalid days format: ${since}. Expected format: "30d"`);
-      }
-      sinceDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-    } else {
-      // ISO 날짜 형태
-      sinceDate = new Date(since);
-      if (isNaN(sinceDate.getTime())) {
-        throw new Error(`Invalid date format: ${since}. Expected ISO date or "30d" format`);
+    const now = dayjs();
+
+    let sinceDate = now.subtract(90, 'day');
+    if (since) {
+      const parsedSince = this.parseFlexibleDate(since);
+      if (parsedSince) {
+        sinceDate = parsedSince;
+      } else {
+        throw new Error(`Invalid date format: ${since}. Try formats like "30 days ago", "2024-01-01", "last month", "yesterday", or "30d"`);
       }
     }
 
-    // until 파싱
-    let untilDate: Date = now;
+    let untilDate = now;
     if (until) {
-      untilDate = new Date(until);
-      if (isNaN(untilDate.getTime())) {
-        throw new Error(`Invalid date format: ${until}. Expected ISO date format`);
+      const parsedUntil = this.parseFlexibleDate(until);
+      if (parsedUntil) {
+        untilDate = parsedUntil;
+      } else {
+        throw new Error(`Invalid date format: ${until}. Try formats like "yesterday", "2024-01-01", "last week", or "today"`);
       }
     }
 
@@ -72,9 +55,51 @@ export const GitHubUtils = {
     };
   },
 
-  /**
-   * 에러를 안전하게 처리하는 래퍼 함수
-   */
+  parseFlexibleDate(dateStr: string): dayjs.Dayjs | null {
+    const str = dateStr.trim().toLowerCase();
+    const now = dayjs();
+
+    const patterns = [
+      { regex: /^(\d+)\s*days?\s*ago$/i, unit: 'day' },
+      { regex: /^(\d+)\s*weeks?\s*ago$/i, unit: 'week' },
+      { regex: /^(\d+)\s*months?\s*ago$/i, unit: 'month' },
+      { regex: /^(\d+)\s*years?\s*ago$/i, unit: 'year' },
+      { regex: /^(\d+)d$/i, unit: 'day' },
+      { regex: /^(\d+)w$/i, unit: 'week' },
+      { regex: /^(\d+)m$/i, unit: 'month' },
+      { regex: /^(\d+)y$/i, unit: 'year' },
+    ];
+
+    for (const { regex, unit } of patterns) {
+      const match = str.match(regex);
+      if (match) {
+        const value = parseInt(match[1]);
+        if (!isNaN(value)) {
+          return now.subtract(value, unit as dayjs.ManipulateType);
+        }
+      }
+    }
+
+    const quickFormats = {
+      'yesterday': () => now.subtract(1, 'day'),
+      'today': () => now,
+      'last week': () => now.subtract(1, 'week'),
+      'last month': () => now.subtract(1, 'month'),
+      'last year': () => now.subtract(1, 'year'),
+    };
+
+    if (quickFormats[str as keyof typeof quickFormats]) {
+      return quickFormats[str as keyof typeof quickFormats]();
+    }
+
+    const possibleDate = dayjs(dateStr);
+    if (possibleDate.isValid()) {
+      return possibleDate;
+    }
+
+    return null;
+  },
+
   async safeApiCall<T>(
     apiCall: () => Promise<T>,
     errorMessage: string
@@ -86,11 +111,11 @@ export const GitHubUtils = {
       const message = error?.message || String(error);
       
       if (status === 401) {
-        throw new Error(`GitHub 인증 오류: 토큰을 확인해주세요. ${message}`);
+        throw new Error(`GitHub authentication error: Please check your token. ${message}`);
       } else if (status === 403) {
-        throw new Error(`GitHub API 권한 오류: ${message}`);
+        throw new Error(`GitHub API permission error: ${message}`);
       } else if (status === 404) {
-        throw new Error(`저장소를 찾을 수 없습니다: ${message}`);
+        throw new Error(`Repository not found: ${message}`);
       } else {
         throw new Error(`${errorMessage}: ${message}`);
       }
@@ -98,22 +123,13 @@ export const GitHubUtils = {
   }
 };
 
-/**
- * 일반적인 유틸리티 함수들
- */
 export const CommonUtils = {
-  /**
-   * 계산된 일수를 반환합니다
-   */
   getDaysDifference(startDate: string, endDate?: string): number {
     const start = new Date(startDate).getTime();
     const end = endDate ? new Date(endDate).getTime() : new Date().getTime();
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   },
 
-  /**
-   * 배열을 청크 단위로 나눕니다 (성능 최적화용)
-   */
   chunkArray<T>(array: T[], chunkSize: number): T[][] {
     const chunks: T[][] = [];
     for (let i = 0; i < array.length; i += chunkSize) {
@@ -121,10 +137,6 @@ export const CommonUtils = {
     }
     return chunks;
   },
-
-  /**
-   * 안전하게 숫자로 변환합니다
-   */
   safeParseInt(value: string | number): number {
     if (typeof value === 'number') return value;
     const parsed = parseInt(value);
