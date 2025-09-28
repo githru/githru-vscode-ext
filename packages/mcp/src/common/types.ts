@@ -24,6 +24,7 @@ export interface ContributorRecommenderInputs {
   until?: string;
   githubToken: string;
   locale?: string;
+  chart?: boolean;
 }
 
 export interface ContributorCandidate {

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contributors Chart</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 20px;">
+  <h2>Top Contributors</h2>
+  <div style="margin-bottom: 20px;">
+    {{NOTES}}
+  </div>
+  
+  <div style="max-width: 800px;">
+    <canvas id="contributorsChart"></canvas>
+  </div>
+
+  <div style="margin-top: 30px; max-width: 800px;">
+    <h3>Detailed Metrics</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr style="background-color: #f5f5f5;">
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Contributor</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Score</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Commits</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Ownership</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{TABLE_ROWS}}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const contributors = {{CONTRIBUTORS}};
+    const scores = {{SCORES}};
+    const commits = {{COMMITS}};
+
+    const ctx = document.getElementById('contributorsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: contributors,
+        datasets: [
+          {
+            label: 'Score',
+            data: scores,
+            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Commits',
+            data: commits,
+            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+          title: { display: true, text: 'Contributors Analysis' }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            position: 'left',
+            title: { display: true, text: 'Score' }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            beginAtZero: true,
+            title: { display: true, text: 'Commits' },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
