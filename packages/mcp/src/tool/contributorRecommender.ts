@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/rest";
+import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils, CommonUtils } from "../common/utils.js";
 import type { 
   ContributorRecommenderInputs, 
@@ -6,10 +7,12 @@ import type {
   ContributorRecommendation 
 } from "../common/types.js";
 
-/**
- * 특정 파일/브랜치/PR에 대한 최적 기여자를 추천하는 분석기
- */
+type CommitData = RestEndpointMethodTypes["repos"]["listCommits"]["response"]["data"][0];
+type PullRequestFile = RestEndpointMethodTypes["pulls"]["listFiles"]["response"]["data"][0];
+
 class ContributorRecommender {
+  private static readonly defaultSortFn = (a: ContributorCandidate, b: ContributorCandidate) => b.score - a.score;
+
   private octokit: Octokit;
   private owner: string;
   private repo: string;
@@ -20,9 +23,8 @@ class ContributorRecommender {
   private until: string;
 
   constructor(inputs: ContributorRecommenderInputs) {
-    this.octokit = GitHubUtils.createClient(inputs.githubToken);
+    this.octokit = GitHubUtils.createGitHubAPIClient(inputs.githubToken);
     
-    // Repository URL 파싱
     const { owner, repo } = GitHubUtils.parseRepoUrl(inputs.repoPath);
     this.owner = owner;
     this.repo = repo;
@@ -31,43 +33,34 @@ class ContributorRecommender {
     this.paths = inputs.paths;
     this.branch = inputs.branch;
     
-    // 시간 범위 파싱
     const timeRange = GitHubUtils.parseTimeRange(inputs.since, inputs.until);
     this.since = timeRange.since;
     this.until = timeRange.until;
   }
 
-
-  /**
-   * PR 기반 기여자 추천
-   */
   private async analyzePRContributors(): Promise<ContributorCandidate[]> {
     if (!this.pr) return [];
 
     const prNumber = CommonUtils.safeParseInt(this.pr!);
     
     try {
-      // PR 파일 목록 가져오기
       const prFiles = await this.octokit.paginate(
         this.octokit.pulls.listFiles,
         { owner: this.owner, repo: this.repo, pull_number: prNumber, per_page: 100 }
       );
 
-      const changedFiles = prFiles.map((file: any) => file.filename);
+      const changedFiles = prFiles.map((file: PullRequestFile) => file.filename);
       return this.analyzeFileContributors(changedFiles);
-    } catch (error: any) {
-      console.error('PR 분석 중 오류:', error?.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('PR analysis error:', message);
       return [];
     }
   }
 
-  /**
-   * 파일 경로 기반 기여자 추천
-   */
   private async analyzePathContributors(): Promise<ContributorCandidate[]> {
     if (!this.paths?.length) return [];
     
-    // 각 경로별로 최근 커밋들을 수집
     const allContributors = new Map<string, { commits: number; files: Set<string> }>();
 
     for (const path of this.paths) {
@@ -85,9 +78,9 @@ class ContributorRecommender {
           }
         );
 
-        // 각 커밋의 기여자 정보를 집계
         for (const commit of commits) {
-          const author = (commit as any).author?.login;
+          const commitData = commit as CommitData;
+          const author = commitData.author?.login;
           if (!author) continue;
 
           if (!allContributors.has(author)) {
@@ -98,17 +91,15 @@ class ContributorRecommender {
           contributor.commits++;
           contributor.files.add(path);
         }
-      } catch (error: any) {
-        console.warn(`경로 ${path} 분석 중 오류:`, error?.message);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`Path ${path} analysis error:`, message);
       }
     }
 
     return this.calculateContributorScores(allContributors);
   }
 
-  /**
-   * 브랜치 기반 기여자 추천
-   */
   private async analyzeBranchContributors(): Promise<ContributorCandidate[]> {
     try {
       const commits = await this.octokit.paginate(
@@ -125,11 +116,11 @@ class ContributorRecommender {
 
       const contributors = new Map<string, { commits: number; files: Set<string> }>();
 
-      // 최신 50개 커밋만 분석 (성능을 위해)
       const recentCommits = commits.slice(0, 50);
 
       for (const commit of recentCommits) {
-        const author = (commit as any).author?.login;
+        const commitData = commit as CommitData;
+        const author = commitData.author?.login;
         if (!author) continue;
 
         if (!contributors.has(author)) {
@@ -139,24 +130,20 @@ class ContributorRecommender {
         const contributor = contributors.get(author)!;
         contributor.commits++;
         
-        // 간단한 파일 정보 (실제로는 커밋 상세 정보가 필요하지만 성능상 생략)
         contributor.files.add('*');
       }
 
       return this.calculateContributorScores(contributors);
-    } catch (error: any) {
-      console.error('브랜치 분석 중 오류:', error?.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('Branch analysis error:', message);
       return [];
     }
   }
 
-  /**
-   * 특정 파일들에 대한 기여자 분석
-   */
   private async analyzeFileContributors(files: string[]): Promise<ContributorCandidate[]> {
     const contributors = new Map<string, { commits: number; files: Set<string> }>();
 
-    // 각 파일에 대해 최근 커밋 기록 분석 (최대 10개 파일만)
     for (const file of files.slice(0, 10)) {
       try {
         const commits = await this.octokit.paginate(
@@ -172,7 +159,8 @@ class ContributorRecommender {
         );
 
         for (const commit of commits) {
-          const author = (commit as any).author?.login;
+          const commitData = commit as CommitData;
+          const author = commitData.author?.login;
           if (!author) continue;
 
           if (!contributors.has(author)) {
@@ -183,29 +171,26 @@ class ContributorRecommender {
           contributor.commits++;
           contributor.files.add(file);
         }
-      } catch (error: any) {
-        console.warn(`파일 ${file} 분석 중 오류:`, error?.message);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`File ${file} analysis error:`, message);
       }
     }
 
     return this.calculateContributorScores(contributors);
   }
 
-  /**
-   * 기여자 점수 계산
-   */
   private calculateContributorScores(
-    contributors: Map<string, { commits: number; files: Set<string> }>
+    contributors: Map<string, { commits: number; files: Set<string> }>,
+    sortFn?: (a: ContributorCandidate, b: ContributorCandidate) => number
   ): ContributorCandidate[] {
     const totalCommits = Array.from(contributors.values()).reduce((sum, c) => sum + c.commits, 0);
     const maxFiles = Math.max(...Array.from(contributors.values()).map(c => c.files.size));
 
     return Array.from(contributors.entries())
       .map(([name, data]) => {
-        // ownership: 파일 개수 기반 (정규화)
         const ownership = maxFiles > 0 ? data.files.size / maxFiles : 0;
         
-        // 전체 점수 계산 (가중 평균)
         const commitScore = totalCommits > 0 ? data.commits / totalCommits : 0;
         const score = (commitScore * 0.6) + (ownership * 0.4);
 
@@ -215,36 +200,31 @@ class ContributorRecommender {
           signals: {
             ownership: Number(ownership.toFixed(2)),
             recentCommits: data.commits,
-            recentReviews: 0, // TODO: 리뷰 데이터 연동
+            recentReviews: 0,
           },
         };
       })
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10); // 상위 10명만 반환
+      .sort(sortFn || ContributorRecommender.defaultSortFn)
+      .slice(0, 10);
   }
 
-  /**
-   * 메인 분석 실행
-   */
   async analyze(): Promise<ContributorRecommendation> {
     let candidates: ContributorCandidate[] = [];
     const notes: string[] = [];
 
-    // 분석 조건에 따른 기여자 추천
     if (this.pr) {
       candidates = await this.analyzePRContributors();
-      notes.push(`PR #${this.pr} 기반 추천`);
+      notes.push(`PR #${this.pr} based recommendation`);
     } else if (this.paths?.length) {
       candidates = await this.analyzePathContributors();
-      notes.push(`경로 기반 추천: ${this.paths.join(', ')}`);
+      notes.push(`Path based recommendation: ${this.paths.join(', ')}`);
     } else {
       candidates = await this.analyzeBranchContributors();
-      notes.push(`브랜치 기반 추천: ${this.branch || 'main'}`);
+      notes.push(`Branch based recommendation: ${this.branch || 'main'}`);
     }
 
-    // 기간 정보 추가
     const sinceDays = CommonUtils.getDaysDifference(this.since);
-    notes.push(`분석 기간: ${sinceDays}일`);
+    notes.push(`Analysis period: ${sinceDays} days`);
 
     return {
       candidates,
