@@ -6,6 +6,7 @@ import path from "node:path";
 import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 import { recommendContributors } from "./tool/contributorRecommender.js";
 import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
+import { I18n } from "./common/i18n.js";
 
 const server = new McpServer({
     name: "githru-mcp",
@@ -28,13 +29,16 @@ server.registerTool(
     "echo",
     {
         title: "Echo",
-        description: "Echoes back the input text",
+        description: "Echoes back the input text with multilingual support",
         inputSchema: {
-        text: z.string().describe("Text to echo back")
+        text: z.string().describe("Text to echo back"),
+        locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)")
         }
     },
-    async ({ text }: { text: string }) => {
-        return { content: [{ type: "text", text: `Echo: ${text}` }] };
+    async ({ text, locale }: { text: string; locale?: string }) => {
+        I18n.setLocale(locale || 'en');
+        const response = I18n.t('echo.greeting', { text });
+        return { content: [{ type: "text", text: response }] };
     }
 );
 
@@ -286,11 +290,13 @@ server.registerTool(
       repoUrl: z.string().url().describe("Full URL of GitHub repository to analyze (e.g. https://github.com/owner/repo)"),
       prNumber: z.number().int().positive().describe("Pull Request number to analyze"),
       githubToken: z.string().describe("GitHub authentication token"),
+      locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
     },
   },
 
-  async ({ repoUrl, prNumber, githubToken }: FeatureImpactAnalyzerInputs) => {
+  async ({ repoUrl, prNumber, githubToken, locale }: FeatureImpactAnalyzerInputs & { locale?: string }) => {
     try {
+      I18n.setLocale(locale || 'en');
       const payload = await analyzeFeatureImpact({ repoUrl, prNumber, githubToken });
 
       return {
@@ -325,11 +331,13 @@ server.registerTool(
       since: z.string().optional().describe("Analysis period start (default 90 days, 30d/ISO date etc.)"),
       until: z.string().optional().describe("Analysis period end (current if unspecified)"),
       githubToken: z.string().describe("GitHub authentication token"),
+      locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
     },
   },
 
-  async ({ repoPath, pr, paths, branch, since, until, githubToken }: ContributorRecommenderInputs) => {
+  async ({ repoPath, pr, paths, branch, since, until, githubToken, locale }: ContributorRecommenderInputs & { locale?: string }) => {
     try {
+      I18n.setLocale(locale || 'en');
       const recommendation = await recommendContributors({
         repoPath,
         pr,
@@ -338,6 +346,7 @@ server.registerTool(
         since,
         until,
         githubToken,
+        locale,
       });
 
       return {

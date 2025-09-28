@@ -1,0 +1,31 @@
+{
+  "errors": {
+    "pr_analysis": "PR analysis error:",
+    "path_analysis": "Error analyzing path '{path}':",
+    "branch_analysis": "Branch analysis error:",
+    "file_analysis": "Error analyzing file '{file}':",
+    "feature_impact_analysis": "Feature impact analysis error:",
+    "github_api_error": "GitHub API error:"
+  },
+  "notes": {
+    "pr_recommendation": "PR #{pr} based recommendation",
+    "path_recommendation": "Path based recommendation: {paths}",
+    "branch_recommendation": "Branch '{branch}' based recommendation",
+    "analysis_period": "Analysis period: {days} days",
+    "feature_scale": "Scale: {scale} (commits: {commits}, files: {files})",
+    "feature_dispersion": "Dispersion: {dispersion}",
+    "feature_chaos": "Chaos: {chaos}",
+    "feature_isolation": "Isolation: {isolation}",
+    "feature_coupling": "Coupling: {coupling}"
+  },
+  "messages": {
+    "no_contributors_found": "No contributors found for the specified criteria",
+    "analysis_complete": "Analysis completed successfully",
+    "loading_pr_data": "Loading PR data...",
+    "processing_commits": "Processing commits..."
+  },
+  "echo": {
+    "response": "Echo: {text}",
+    "greeting": "Hello! Your message was: {text}"
+  }
+}

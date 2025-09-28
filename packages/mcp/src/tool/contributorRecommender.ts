@@ -1,6 +1,7 @@
 import { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils, CommonUtils } from "../common/utils.js";
+import { I18n } from "../common/i18n.js";
 import type { 
   ContributorRecommenderInputs, 
   ContributorCandidate, 
@@ -23,6 +24,10 @@ class ContributorRecommender {
   private until: string;
 
   constructor(inputs: ContributorRecommenderInputs) {
+    if (inputs.locale) {
+      I18n.setLocale(inputs.locale);
+    }
+    
     this.octokit = GitHubUtils.createGitHubAPIClient(inputs.githubToken);
     
     const { owner, repo } = GitHubUtils.parseRepoUrl(inputs.repoPath);
@@ -53,7 +58,7 @@ class ContributorRecommender {
       return this.analyzeFileContributors(changedFiles);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error('PR analysis error:', message);
+      console.error(I18n.t('errors.pr_analysis'), message);
       return [];
     }
   }
@@ -93,7 +98,7 @@ class ContributorRecommender {
         }
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        console.warn(`Path ${path} analysis error:`, message);
+        console.warn(I18n.t('errors.path_analysis', { path }), message);
       }
     }
 
@@ -136,7 +141,7 @@ class ContributorRecommender {
       return this.calculateContributorScores(contributors);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error('Branch analysis error:', message);
+      console.error(I18n.t('errors.branch_analysis'), message);
       return [];
     }
   }
@@ -173,7 +178,7 @@ class ContributorRecommender {
         }
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        console.warn(`File ${file} analysis error:`, message);
+        console.warn(I18n.t('errors.file_analysis', { file }), message);
       }
     }
 
@@ -214,17 +219,17 @@ class ContributorRecommender {
 
     if (this.pr) {
       candidates = await this.analyzePRContributors();
-      notes.push(`PR #${this.pr} based recommendation`);
+      notes.push(I18n.t('notes.pr_recommendation', { pr: this.pr }));
     } else if (this.paths?.length) {
       candidates = await this.analyzePathContributors();
-      notes.push(`Path based recommendation: ${this.paths.join(', ')}`);
+      notes.push(I18n.t('notes.path_recommendation', { paths: this.paths.join(', ') }));
     } else {
       candidates = await this.analyzeBranchContributors();
-      notes.push(`Branch based recommendation: ${this.branch || 'main'}`);
+      notes.push(I18n.t('notes.branch_recommendation', { branch: this.branch || 'main' }));
     }
 
     const sinceDays = CommonUtils.getDaysDifference(this.since);
-    notes.push(`Analysis period: ${sinceDays} days`);
+    notes.push(I18n.t('notes.analysis_period', { days: sinceDays }));
 
     return {
       candidates,

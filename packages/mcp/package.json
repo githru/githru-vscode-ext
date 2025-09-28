@@ -6,7 +6,10 @@
 	"module": "./src/index.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "npx @smithery/cli dev"
+		"dev": "npx @smithery/cli dev",
+		"build": "npx tsc && copyfiles -u 1 \"src/locales/**/*\" dist/",
+		"build:clean": "rimraf dist && npm run build",
+		"watch": "npx tsc -w"
 	},
 	"keywords": [],
 	"author": "",
@@ -22,6 +25,8 @@
 	},
 	"devDependencies": {
 		"@smithery/cli": "^1.2.4",
+		"copyfiles": "^2.4.1",
+		"rimraf": "^6.0.1",
 		"tsx": "^4.19.4"
 	}
 }

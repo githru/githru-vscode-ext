@@ -49,7 +49,6 @@ export default function createStatelessServer({
     }
   );
 
-  // ping 툴 등록
   server.registerTool(
       "ping",
       {
@@ -62,7 +61,6 @@ export default function createStatelessServer({
       }
   );
 
-  // echo 툴 등록 (파라미터 받기 예제)
   server.registerTool(
       "echo",
       {
@@ -77,7 +75,6 @@ export default function createStatelessServer({
       }
   );
 
-  // bmi_calculator 툴 등록
   server.registerTool(
       "bmi_calculator",
       {
