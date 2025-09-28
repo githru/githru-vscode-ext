@@ -3,6 +3,8 @@ import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 
+const MAX_HEATMAP_ITEMS = 12;
+
 class McpReportGenerator {
   private repoUrl: string;
   private prNumber: number;
@@ -14,7 +16,6 @@ class McpReportGenerator {
     if (locale) {
       I18n.setLocale(locale);
     }
-    
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;
     this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);
@@ -61,7 +62,7 @@ class McpReportGenerator {
   }
 
   private _calculateChaos(commits: any[]): number {
-    const isFix = (msg: string) => msg?.trim().toLowerCase().startsWith("fix");
+    const isFix = (msg: string) => /\b(fix|hotfix|bugfix)\b/i.test(msg ?? "");
     const fixCount = commits.filter(c => isFix(c.message)).length;
     return commits.length ? (fixCount / commits.length) * 100 : 0;
   }
@@ -115,7 +116,7 @@ class McpReportGenerator {
       prInfo: { repoUrl: this.repoUrl, prNumber: this.prNumber },
       metrics,
       prMetadata,
-      commits,
+      commits,    
     };
   }
 }
@@ -144,14 +145,18 @@ export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) 
 
   const bucket = new Map<string, number>();
   for (const f of changedFiles) {
-    const parts = f.split("/").filter(Boolean);
+    const parts = f.split(/[\\/]/).filter(Boolean);
     for (let i = parts.length; i >= 1; i--) {
       const key = parts.slice(0, i).join("/");
       const w = i;
       bucket.set(key, (bucket.get(key) ?? 0) + w);
     }
   }
-  const top = Array.from(bucket.entries()).sort((a, b) => b[1] - a[1]).slice(0, 12);
+
+  const top = Array.from(bucket.entries())
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, MAX_HEATMAP_ITEMS);
+
   const max = top[0]?.[1] ?? 1;
   const heatmap = top.map(([path, score]) => ({
     path,
@@ -172,6 +177,6 @@ export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) 
       isolation_period_days: { value: isolationDays, rating: rateIsolationDays(isolationDays) },
       review_lag_days: { value: reviewLagDays, rating: rateReviewLagDays(reviewLagDays) },
     },
-    impact_heatmap_data: heatmap,
+    impact_heatmap_data: heatmap
   };
 }
