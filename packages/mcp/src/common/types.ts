@@ -13,6 +13,7 @@ export interface FeatureImpactAnalyzerInputs {
   repoUrl: string;
   prNumber: number;
   githubToken: string;
+  locale?: string;
 }
 export interface ContributorRecommenderInputs {
   repoPath: string;
@@ -22,6 +23,7 @@ export interface ContributorRecommenderInputs {
   since?: string;
   until?: string;
   githubToken: string;
+  locale?: string;
 }
 
 export interface ContributorCandidate {

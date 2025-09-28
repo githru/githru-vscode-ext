@@ -1,5 +1,6 @@
 import { Octokit } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
+import { I18n } from "../common/i18n.js";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 
 class McpReportGenerator {
@@ -9,7 +10,11 @@ class McpReportGenerator {
   private owner: string;
   private repo: string;
 
-  constructor({ repoUrl, prNumber, githubToken }: FeatureImpactAnalyzerInputs) {
+  constructor({ repoUrl, prNumber, githubToken, locale }: FeatureImpactAnalyzerInputs) {
+    if (locale) {
+      I18n.setLocale(locale);
+    }
+    
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;
     this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);

@@ -1,0 +1,31 @@
+{
+  "errors": {
+    "pr_analysis": "PR 분석 중 오류 발생:",
+    "path_analysis": "경로 '{path}' 분석 중 오류:",
+    "branch_analysis": "브랜치 분석 중 오류 발생:",
+    "file_analysis": "파일 '{file}' 분석 중 오류:",
+    "feature_impact_analysis": "기능 영향 분석 중 오류 발생:",
+    "github_api_error": "GitHub API 오류:"
+  },
+  "notes": {
+    "pr_recommendation": "PR #{pr} 기반 기여자 추천",
+    "path_recommendation": "경로 기반 추천: {paths}",
+    "branch_recommendation": "'{branch}' 브랜치 기반 추천",
+    "analysis_period": "분석 기간: 최근 {days}일",
+    "feature_scale": "규모: {scale} (커밋: {commits}개, 파일: {files}개)",
+    "feature_dispersion": "분산도: {dispersion}",
+    "feature_chaos": "혼돈도: {chaos}",
+    "feature_isolation": "격리도: {isolation}",
+    "feature_coupling": "결합도: {coupling}"
+  },
+  "messages": {
+    "no_contributors_found": "지정된 조건에 맞는 기여자를 찾을 수 없습니다",
+    "analysis_complete": "분석이 성공적으로 완료되었습니다",
+    "loading_pr_data": "PR 데이터를 로드하는 중...",
+    "processing_commits": "커밋을 처리하는 중..."
+  },
+  "echo": {
+    "response": "메아리: {text}",
+    "greeting": "(핑테스트) 안녕하세요! 받은 메시지: {text}"
+  }
+}
