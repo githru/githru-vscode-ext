@@ -1,5 +1,8 @@
 import { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { GitHubUtils, CommonUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { 
@@ -8,10 +11,14 @@ import type {
   ContributorRecommendation 
 } from "../common/types.js";
 
+// ES modules에서 __dirname 대체
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 type CommitData = RestEndpointMethodTypes["repos"]["listCommits"]["response"]["data"][0];
 type PullRequestFile = RestEndpointMethodTypes["pulls"]["listFiles"]["response"]["data"][0];
 
-class ContributorRecommender {
+export class ContributorRecommender {
   private static readonly defaultSortFn = (a: ContributorCandidate, b: ContributorCandidate) => b.score - a.score;
 
   private octokit: Octokit;
@@ -236,6 +243,70 @@ class ContributorRecommender {
       notes,
     };
   }
+
+  generateChart(recommendation: ContributorRecommendation): string {
+    const { candidates, notes } = recommendation;
+    
+    try {
+      if (candidates.length === 0) {
+        const templatePath = path.join(__dirname, '../html/no-contributors.html');
+        let template = fs.readFileSync(templatePath, 'utf8');
+        
+        const notesHtml = notes.map(note => `<p style="color: #666; font-size: 14px;">📝 ${note}</p>`).join('');
+        template = template.replace('{{NOTES}}', notesHtml);
+        
+        return template;
+      }
+
+      const templatePath = path.join(__dirname, '../html/contributors-chart.html');
+      let template = fs.readFileSync(templatePath, 'utf8');
+
+      const names = candidates.map(c => c.name);
+      const scores = candidates.map(c => c.score);
+      const commits = candidates.map(c => c.signals.recentCommits);
+      const ownership = candidates.map(c => c.signals.ownership);
+
+      const notesHtml = notes.map(note => `<p style="color: #666; font-size: 14px;">📝 ${note}</p>`).join('');
+      
+      const tableRowsHtml = candidates.map(c => `
+        <tr>
+          <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">${c.name}</td>
+          <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${c.score}</td>
+          <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${c.signals.recentCommits}</td>
+          <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${c.signals.ownership}</td>
+        </tr>
+        `).join('');
+
+      template = template.replace('{{NOTES}}', notesHtml);
+      template = template.replace('{{TABLE_ROWS}}', tableRowsHtml);
+      template = template.replace('{{CONTRIBUTORS}}', JSON.stringify(names));
+      template = template.replace('{{SCORES}}', JSON.stringify(scores));
+      template = template.replace('{{COMMITS}}', JSON.stringify(commits));
+
+      return template;
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Chart generation error:', error);
+      
+      const errorTemplatePath = path.join(__dirname, '../html/error-chart.html');
+      let errorTemplate = fs.readFileSync(errorTemplatePath, 'utf8');
+      
+      const templatePath = path.join(__dirname, '../html/contributors-chart.html');
+      const debugInfo = `Template directory exists: ${fs.existsSync(path.join(__dirname, '../html'))}
+          Contributors template exists: ${fs.existsSync(path.join(__dirname, '../html/contributors-chart.html'))}
+          No-contributors template exists: ${fs.existsSync(path.join(__dirname, '../html/no-contributors.html'))}
+          Error template exists: ${fs.existsSync(errorTemplatePath)}`;
+
+      errorTemplate = errorTemplate.replace('{{ERROR_MESSAGE}}', errorMessage);
+      errorTemplate = errorTemplate.replace('{{TEMPLATE_PATH}}', templatePath);
+      errorTemplate = errorTemplate.replace('{{CURRENT_DIR}}', __dirname);
+      errorTemplate = errorTemplate.replace('{{DEBUG_INFO}}', debugInfo);
+      
+      return errorTemplate;
+    }
+  }
+
 }
 
 export async function recommendContributors(inputs: ContributorRecommenderInputs): Promise<ContributorRecommendation> {

@@ -332,13 +332,16 @@ server.registerTool(
       until: z.string().optional().describe("Analysis period end (current if unspecified)"),
       githubToken: z.string().describe("GitHub authentication token"),
       locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
+      chart: z.boolean().default(false).describe("Generate interactive chart visualization (true: HTML chart display, false: JSON data)"),
     },
   },
 
-  async ({ repoPath, pr, paths, branch, since, until, githubToken, locale }: ContributorRecommenderInputs & { locale?: string }) => {
+  async ({ repoPath, pr, paths, branch, since, until, githubToken, locale, chart }: ContributorRecommenderInputs & { locale?: string; chart?: boolean }) => {
     try {
       I18n.setLocale(locale || 'en');
-      const recommendation = await recommendContributors({
+      
+      const { ContributorRecommender } = await import('./tool/contributorRecommender.js');
+      const recommender = new ContributorRecommender({
         repoPath,
         pr,
         paths,
@@ -348,15 +351,29 @@ server.registerTool(
         githubToken,
         locale,
       });
+      
+      const recommendation = await recommender.analyze();
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(recommendation, null, 2),
-          },
-        ],
-      };
+      if (chart) {
+        const chartHtml = recommender.generateChart(recommendation);
+        return {
+          content: [
+            {
+              type: "text",
+              text: chartHtml,
+            },
+          ],
+        };
+      } else {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(recommendation, null, 2),
+            },
+          ],
+        };
+      }
     } catch (err: any) {
       return {
         content: [
