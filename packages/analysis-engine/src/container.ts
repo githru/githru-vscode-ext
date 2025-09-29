@@ -4,5 +4,5 @@ import { Container } from "inversify";
 
 import PluginOctokit from "./pluginOctokit";
 
-export const container = new Container();
-container.bind(PluginOctokit).toSelf().inSingletonScope();
+export const diContainer = new Container();
+diContainer.bind(PluginOctokit).toSelf().inSingletonScope();
