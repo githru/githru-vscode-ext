@@ -1,4 +1,4 @@
 import "reflect-metadata";
 import { Container } from "inversify";
 
-export const container = new Container();
+export const diContainer = new Container();
