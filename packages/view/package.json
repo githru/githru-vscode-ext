@@ -101,6 +101,7 @@
     "classnames": "^2.3.2",
     "d3": "^7.6.1",
     "dayjs": "^1.11.5",
+    "inversify": "^7.10.0",
     "jest": "^29.6.4",
     "md5": "^2.3.0",
     "nanoid": "^4.0.0",
@@ -108,10 +109,9 @@
     "react-dom": "^18.1.0",
     "react-spinners": "^0.13.8",
     "react-virtualized": "^9.22.5",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.2",
     "svg-parser": "^2.0.4",
     "ts-jest": "^29.1.1",
-    "tsyringe": "^4.7.0",
     "zustand": "^4.5.5"
   }
 }

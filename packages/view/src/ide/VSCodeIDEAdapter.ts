@@ -1,4 +1,4 @@
-﻿import { injectable } from "tsyringe";
+﻿import { injectable } from "inversify";
 
 import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
