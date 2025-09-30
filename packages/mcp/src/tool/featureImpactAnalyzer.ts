@@ -145,7 +145,7 @@ export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) 
 
   const bucket = new Map<string, number>();
   for (const f of changedFiles) {
-    const parts = f.split(/[\\/]/).filter(Boolean);
+    const parts = f.split("/").filter(Boolean);
     for (let i = parts.length; i >= 1; i--) {
       const key = parts.slice(0, i).join("/");
       const w = i;
