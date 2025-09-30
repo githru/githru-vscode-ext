@@ -26,13 +26,32 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
       continue;
     }
 
-    // prepare squash
-    const squashStemLastIndex = squashStem.nodes.length - 1;
+    // find squashStartNode index in stem
     const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
-    const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
+    if (squashStartNodeIndex === -1) {
+      continue;
+    }
 
-    // squash
-    const spliceCommitNodes = squashStem.nodes.splice(squashStartNodeIndex, spliceCount);
+    // collect nodes from squashStartNode to end of stem
+    // (or until the next mergedIntoStem node for future merges)
+    const spliceCommitNodes: CommitNode[] = [];
+
+    // First, find the end index (before next mergedIntoStem or end of stem)
+    let endIndex = squashStem.nodes.length - 1;
+    for (let i = squashStartNodeIndex + 1; i < squashStem.nodes.length; i++) {
+      if (squashStem.nodes[i].mergedIntoStem) {
+        endIndex = i - 1;
+        break;
+      }
+    }
+
+    // Collect nodes from start to end
+    for (let i = squashStartNodeIndex; i <= endIndex; i++) {
+      spliceCommitNodes.push(squashStem.nodes[i]);
+    }
+
+    // remove collected nodes from stem
+    squashStem.nodes.splice(squashStartNodeIndex, spliceCommitNodes.length);
     squashCommitNodes.push(...spliceCommitNodes);
 
     // check nested-merge
@@ -48,7 +67,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     squashTaskQueue.push(...nestedMergeParentCommits);
   }
 
-  squashCommitNodes.sort((a, b) => b.commit.sequence - a.commit.sequence);
+  squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
   return {
     base: baseCommitNode,

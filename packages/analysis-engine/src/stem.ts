@@ -19,6 +19,7 @@ export function getStemNodes(
         if (idx === 0) return;
         const parentNode = commitDict.get(parent);
         if (parentNode) {
+          parentNode.mergedIntoStem = stemId;
           q.push(parentNode);
         }
       }, q);

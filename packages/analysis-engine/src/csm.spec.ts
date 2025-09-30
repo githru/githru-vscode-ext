@@ -60,6 +60,16 @@ describe("csm", () => {
     return dict;
   }, new Map<string, CommitNode>());
 
+  // Set mergedIntoStem flags based on merge structure
+  // Node 8 (parents=[7, 13]) is merged into master at node 2
+  // Node 11 (parents=[10, 16]) is merged into master at node 3
+  fakeCommitNodeDict.get("8")!.mergedIntoStem = "master";
+  fakeCommitNodeDict.get("11")!.mergedIntoStem = "master";
+  // Node 13 is merged into sub1 at node 8
+  fakeCommitNodeDict.get("13")!.mergedIntoStem = "sub1";
+  // Node 16 is merged into sub1 at node 11
+  fakeCommitNodeDict.get("16")!.mergedIntoStem = "sub1";
+
   describe("buildCSM", () => {
     let csmDict: CSMDictionary;
 
@@ -127,8 +137,28 @@ describe("csm", () => {
       makeFakeStemTuple("sub2", [12, 13, 14, 15, 16].reverse().map(String)),
     ]);
 
+    const fakeCommitNodeDictWithSub1: Map<string, CommitNode> = Array.from(fakeStemDictWithSub1.entries()).reduce(
+      (dict, [, stem]) => {
+        stem.nodes.forEach((commitNode) => {
+          dict.set(commitNode.commit.id, commitNode);
+        });
+        return dict;
+      },
+      new Map<string, CommitNode>()
+    );
+
+    // Set mergedIntoStem flags for sub1 as base branch
+    // Node 8 (parents=[7, 13]) is merged into sub1 at itself
+    // Node 11 (parents=[10, 16]) is merged into sub1 at itself
+    fakeCommitNodeDictWithSub1.get("8")!.mergedIntoStem = "sub1";
+    fakeCommitNodeDictWithSub1.get("11")!.mergedIntoStem = "sub1";
+    // Node 13 is merged into sub1 at node 8
+    fakeCommitNodeDictWithSub1.get("13")!.mergedIntoStem = "sub1";
+    // Node 16 is merged into sub1 at node 11
+    fakeCommitNodeDictWithSub1.get("16")!.mergedIntoStem = "sub1";
+
     beforeAll(() => {
-      csmDict = buildCSMDict(fakeCommitNodeDict, fakeStemDictWithSub1, "sub1");
+      csmDict = buildCSMDict(fakeCommitNodeDictWithSub1, fakeStemDictWithSub1, "sub1");
     });
 
     it("has squash-commits", () => {
