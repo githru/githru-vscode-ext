@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { buildCommitDict } from "./commit.util";
-import { container } from "./container";
+import { diContainer } from "./container";
 import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
@@ -36,12 +36,12 @@ export class AnalysisEngine {
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
-    container.rebindSync(SERVICE_TOKENS.OctokitOptions).toConstantValue({
+    diContainer.rebindSync(SERVICE_TOKENS.OctokitOptions).toConstantValue({
       owner,
       repo,
       options: { auth },
     });
-    this.octokit = container.get(PluginOctokit);
+    this.octokit = diContainer.get(PluginOctokit);
   };
 
   public analyzeGit = async () => {
