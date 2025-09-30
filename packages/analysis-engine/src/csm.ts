@@ -1,8 +1,20 @@
+import {
+  collectSquashNodes,
+  extractNestedMergeParents,
+  findSquashEndIndex,
+  findSquashStartNodeIndex,
+  getMergeParentCommit,
+} from "./csm.util";
 import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
+/**
+ * Builds a CSM node.
+ * For merge commits, collects squashed commits using DFS traversal.
+ */
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
-  const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
+  // Return empty source for non-merge commits
+  const mergeParentCommit = getMergeParentCommit(baseCommitNode, commitDict);
   if (!mergeParentCommit) {
     return {
       base: baseCommitNode,
@@ -11,62 +23,45 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
   }
 
   const squashCommitNodes: CommitNode[] = [];
-
   const squashTaskQueue: CommitNode[] = [mergeParentCommit];
-  while (squashTaskQueue.length > 0) {
-    // get target
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStartNode = squashTaskQueue.shift()!;
 
-    // get target's stem
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStemId = squashStartNode.stemId!;
+  // Collect commits to be squashed using DFS
+  while (squashTaskQueue.length > 0) {
+    const squashStartNode = squashTaskQueue.shift();
+    if (!squashStartNode?.stemId) {
+      continue;
+    }
+
+    const squashStemId = squashStartNode.stemId;
     const squashStem = stemDict.get(squashStemId);
     if (!squashStem) {
       continue;
     }
 
-    // find squashStartNode index in stem
-    const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
+    // Find the index of the start node in the stem
+    const squashStartNodeIndex = findSquashStartNodeIndex(squashStem, squashStartNode.commit.id);
     if (squashStartNodeIndex === -1) {
       continue;
     }
 
-    // collect nodes from squashStartNode to end of stem
-    // (or until the next mergedIntoStem node for future merges)
-    const spliceCommitNodes: CommitNode[] = [];
+    // Find the end index for squash collection
+    const endIndex = findSquashEndIndex(squashStem, squashStartNodeIndex);
 
-    // First, find the end index (before next mergedIntoStem or end of stem)
-    let endIndex = squashStem.nodes.length - 1;
-    for (let i = squashStartNodeIndex + 1; i < squashStem.nodes.length; i++) {
-      if (squashStem.nodes[i].mergedIntoStem) {
-        endIndex = i - 1;
-        break;
-      }
-    }
+    // Collect nodes and remove from stem
+    const collectedNodes = collectSquashNodes(squashStem, squashStartNodeIndex, endIndex);
+    squashCommitNodes.push(...collectedNodes);
 
-    // Collect nodes from start to end
-    for (let i = squashStartNodeIndex; i <= endIndex; i++) {
-      spliceCommitNodes.push(squashStem.nodes[i]);
-    }
-
-    // remove collected nodes from stem
-    squashStem.nodes.splice(squashStartNodeIndex, spliceCommitNodes.length);
-    squashCommitNodes.push(...spliceCommitNodes);
-
-    // check nested-merge
-    const nestedMergeParentCommitIds = spliceCommitNodes
-      .filter((node) => node.commit.parents.length > 1)
-      .map((node) => node.commit.parents)
-      .reduce((pCommitIds, parents) => [...pCommitIds, ...parents], []);
-    const nestedMergeParentCommits = nestedMergeParentCommitIds
-      .map((commitId) => commitDict.get(commitId))
-      .filter((node): node is CommitNode => node !== undefined)
-      .filter((node) => node.stemId !== baseCommitNode.stemId && node.stemId !== squashStemId);
-
-    squashTaskQueue.push(...nestedMergeParentCommits);
+    // Handle nested merges: add branches to queue if collected nodes contain merge commits
+    const nestedMergeParents = extractNestedMergeParents(
+      collectedNodes,
+      commitDict,
+      baseCommitNode.stemId ?? "",
+      squashStemId
+    );
+    squashTaskQueue.push(...nestedMergeParents);
   }
 
+  // Sort by sequence order (reverse -> forward)
   squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
   return {
@@ -75,6 +70,14 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
   };
 };
 
+/**
+ * Integrates Pull Request information into a CSM node.
+ * Reflects PR details in commit message and statistics.
+ *
+ * @param csmNode - Existing CSM node
+ * @param pr - Pull Request information
+ * @returns CSM node with integrated PR information
+ */
 const buildCSMNodeWithPullRequest = (csmNode: CSMNode, pr: PullRequest): CSMNode => {
   const convertedCommit = convertPRDetailToCommitRaw(csmNode.base.commit, pr);
 
@@ -88,13 +91,16 @@ const buildCSMNodeWithPullRequest = (csmNode: CSMNode, pr: PullRequest): CSMNode
 };
 
 /**
- * CSM 생성
+ * Builds a CSM (Commit Summary Model) dictionary.
+ * Creates CSM nodes for each commit in the base branch,
+ * and integrates Pull Request information if available.
  *
- * @param {Map<string, CommitNode>} commitDict
- * @param {Map<string, Stem>} stemDict
- * @param {string} baseBranchName
- * @param {Array<PullRequest>} pullRequests
- * @returns {CSMDictionary}
+ * @param commitDict - Commit dictionary
+ * @param stemDict - Stem dictionary
+ * @param baseBranchName - Base branch name (e.g., 'main', 'master')
+ * @param pullRequests - Pull Request array (optional)
+ * @returns CSM dictionary (CSM node array per branch)
+ * @throws {Error} When there are no stems or no base branch stem
  */
 export const buildCSMDict = (
   commitDict: CommitDict,
@@ -107,7 +113,7 @@ export const buildCSMDict = (
     // return {};
   }
 
-  // v0.1 에서는 master STEM 으로만 CSM 생성함
+  // In v0.1, CSM is only created from the master STEM
   const masterStem = stemDict.get(baseBranchName);
   if (!masterStem) {
     throw new Error("no master-stem");
