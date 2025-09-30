@@ -5,6 +5,13 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
   &__title {
     margin: 0 0 0.5rem 0;
     font-size: 1.2rem;
@@ -16,6 +23,19 @@
     margin: 0 0 0.5rem 0;
     font-size: 0.875rem;
     color: #6c757d;
+  }
+
+  &__mode-toggle {
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &__breadcrumb {
