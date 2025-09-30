@@ -55,3 +55,36 @@ export interface FileChangeInfo {
   deletions?: number;
   changes?: number;
 }
+
+export interface CSMDictGeneratorInputs {
+  repo: string;
+  githubToken: string;
+  baseBranchName?: string;
+  locale?: string;
+  debug?: boolean;
+}
+
+export interface AnalysisResult {
+  isPRSuccess: boolean;
+  csmDict: Record<string, unknown[]>;
+}
+
+export interface CSMDictResult {
+  success: boolean;
+  data: {
+    repository: GitHubRepoInfo & { url: string };
+    analysis: {
+      baseBranch: string;
+      isPRDataAvailable: boolean;
+      branches: string[];
+      totalClusters: number;
+      csmDict: Record<string, unknown[]>;
+    };
+  };
+  metadata: {
+    analyzedAt: string;
+    commitsProcessed: number;
+    debugMode: boolean;
+    version?: string;
+  };
+}

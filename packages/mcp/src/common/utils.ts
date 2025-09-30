@@ -100,6 +100,72 @@ export const GitHubUtils = {
     return null;
   },
 
+  async fetchGitLogFromGitHub(githubToken: string, owner: string, repo: string): Promise<string> {
+    const octokit = this.createGitHubAPIClient(githubToken);
+    
+    try {
+      const repoInfo = await octokit.repos.get({ owner, repo });
+      const defaultBranch = repoInfo.data.default_branch;
+
+      const branches = await octokit.repos.listBranches({ owner, repo });
+      
+      let allCommits: any[] = [];
+      
+      for (const branch of branches.data) {
+        try {
+          const commits = await octokit.repos.listCommits({
+            owner,
+            repo,
+            sha: branch.name,
+            per_page: 100
+          });
+          
+          allCommits.push(...commits.data);
+        } catch (error) {
+          console.warn(`Failed to fetch commits for branch ${branch.name}:`, error);
+        }
+      }
+
+      const uniqueCommits = Array.from(
+        new Map(allCommits.map(commit => [commit.sha, commit])).values()
+      );
+
+      uniqueCommits.sort((a, b) =>
+        new Date(b.commit.committer.date).getTime() - new Date(a.commit.committer.date).getTime()
+      );
+
+      const gitLogEntries = uniqueCommits.map(commit => {
+        const hash = commit.sha;
+        const parents = commit.parents.map((p: any) => p.sha).join(' ');
+        const refs = ''; // We don't have refs info from GitHub API easily
+        const authorName = commit.commit.author.name || '';
+        const authorEmail = commit.commit.author.email || '';
+        const authorTimestamp = Math.floor(new Date(commit.commit.author.date).getTime() / 1000);
+        const committerName = commit.commit.committer.name || '';
+        const committerEmail = commit.commit.committer.email || '';
+        const committerTimestamp = Math.floor(new Date(commit.commit.committer.date).getTime() / 1000);
+        const subject = commit.commit.message.split('\n')[0];
+
+        return `${hash}|${parents}|${refs}|${authorName}|${authorEmail}|${authorTimestamp}|${committerName}|${committerEmail}|${committerTimestamp}|${subject}`;
+      });
+
+      return gitLogEntries.join('\n');
+    } catch (error: any) {
+      throw new Error(`Failed to fetch commits from GitHub: ${error.message}`);
+    }
+  },
+
+  async getDefaultBranch(githubToken: string, owner: string, repo: string): Promise<string> {
+    const octokit = this.createGitHubAPIClient(githubToken);
+    
+    try {
+      const repoInfo = await octokit.repos.get({ owner, repo });
+      return repoInfo.data.default_branch;
+    } catch (error: any) {
+      throw new Error(`Failed to get default branch: ${error.message}`);
+    }
+  },
+
   async safeApiCall<T>(
     apiCall: () => Promise<T>,
     errorMessage: string
@@ -143,3 +209,4 @@ export const CommonUtils = {
     return isNaN(parsed) ? 0 : parsed;
   }
 };
+

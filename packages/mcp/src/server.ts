@@ -7,6 +7,7 @@ import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 import { recommendContributors } from "./tool/contributorRecommender.js";
 import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
 import { I18n } from "./common/i18n.js";
+import { generateNewViz } from "./tool/generateNewViz";
 
 const server = new McpServer({
     name: "githru-mcp",
@@ -381,6 +382,46 @@ server.registerTool(
         ],
       };
     }
+  }
+);
+
+server.registerTool(
+  "generate_csm_dict",
+  {
+    title: "Generate CSM Dictionary",
+    description: "Generates CSM (Commit Sequence Map) Dictionary from GitHub repository using AnalysisEngine",
+    inputSchema: {
+      repo: z.string().describe("GitHub repository (format: 'owner/repo' or 'https://github.com/owner/repo')"),
+      githubToken: z.string().describe("GitHub authentication token"),
+      baseBranchName: z.string().optional().describe("Base branch name to analyze (default: repository's default branch)"),
+      locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
+      debug: z.boolean().default(false).describe("Enable debug mode for detailed logging"),
+    },
+  },
+
+  async ({ repo, githubToken, baseBranchName, locale, debug }: {
+    repo: string;
+    githubToken: string;
+    baseBranchName?: string;
+    locale?: string;
+    debug?: boolean;
+  }) => {
+    const result = await generateNewViz({
+      repo,
+      githubToken,
+      baseBranchName,
+      locale,
+      debug
+    });
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
   }
 );
 
