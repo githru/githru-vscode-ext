@@ -98,6 +98,20 @@ const buildPRDict = (pullRequests: Array<PullRequest>): PullRequestDict => {
   );
 };
 
+/** Builds CSM nodes from commit nodes with PR integration. */
+const buildCSMNodesWithPR = (
+  commitNodes: CommitNode[],
+  commitDict: CommitDict,
+  stemDict: StemDict,
+  prDict: PullRequestDict
+): CSMNode[] => {
+  return commitNodes.map((commitNode) => {
+    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
+    const pr = prDict.get(csmNode.base.commit.id);
+    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
+  });
+};
+
 /**
  * Builds a CSM (Commit Summary Model) dictionary.
  * Creates CSM nodes for each commit in the base branch,
@@ -128,22 +142,18 @@ export const buildCSMDict = (
     // return {};
   }
 
-  const prDictByMergedCommitSha = buildPRDict(pullRequests);
+  const prDict = buildPRDict(pullRequests);
+  const csmNodes = buildCSMNodesWithPR(masterStem.nodes, commitDict, stemDict, prDict);
 
-  const csmDict: CSMDictionary = {};
-  const stemNodes = masterStem.nodes; // start on latest-node
-  csmDict[baseBranchName] = stemNodes.map((commitNode) => {
-    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
-    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
-  });
-
-  return csmDict;
+  return {
+    [baseBranchName]: csmNodes,
+  };
 };
 
 /**
  * Builds a paginated CSM dictionary.
- * Creates CSM nodes for a specific range of commits in the base branch.
+ * Creates CSM nodes for a specific range of commits in the base branch,
+ * enabling efficient lazy loading for large repositories.
  */
 export const buildPaginatedCSMDict = (
   commitDict: CommitDict,
@@ -158,38 +168,36 @@ export const buildPaginatedCSMDict = (
     throw new Error("perPage must be greater than 0");
   }
 
-  // Get master stem
-  const masterStem = stemDict.get(baseBranchName);
-  if (!masterStem) {
+  // Validate stemDict
+  if (stemDict.size === 0) {
+    throw new Error("no stem");
+  }
+
+  // Get base branch stem
+  const baseStem = stemDict.get(baseBranchName);
+  if (!baseStem) {
     throw new Error("no master-stem");
   }
 
-  // Determine start index
+  // Determine start index based on cursor
   let startIndex = 0;
   if (lastCommitId) {
-    const lastCommitIndex = masterStem.nodes.findIndex((node) => node.commit.id === lastCommitId);
+    const lastCommitIndex = baseStem.nodes.findIndex((node) => node.commit.id === lastCommitId);
     if (lastCommitIndex === -1) {
       throw new Error("Invalid lastCommitId");
     }
     startIndex = lastCommitIndex + 1;
   }
 
-  // Calculate end index
-  const endIndex = Math.min(startIndex + perPage, masterStem.nodes.length);
+  // Calculate end index and extract page nodes
+  const endIndex = Math.min(startIndex + perPage, baseStem.nodes.length);
+  const pageNodes = baseStem.nodes.slice(startIndex, endIndex);
 
-  // Extract nodes for current page
-  const pageNodes = masterStem.nodes.slice(startIndex, endIndex);
+  // Build CSM nodes with PR integration
+  const prDict = buildPRDict(pullRequests);
+  const csmNodes = buildCSMNodesWithPR(pageNodes, commitDict, stemDict, prDict);
 
-  // Build PR dictionary
-  const prDictByMergedCommitSha = buildPRDict(pullRequests);
-
-  // Build CSM nodes for the page
-  const csmDict: CSMDictionary = {};
-  csmDict[baseBranchName] = pageNodes.map((commitNode) => {
-    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
-    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
-  });
-
-  return csmDict;
+  return {
+    [baseBranchName]: csmNodes,
+  };
 };
