@@ -11,8 +11,9 @@ import {
 } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 
-import { Author } from "components/@common/Author";
 import { useGithubInfo, useDataStore } from "store";
+import { Author } from "components/@common/Author";
+import { GithubIssueLink } from "components/@common/GithubIssueLink";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
@@ -57,21 +58,15 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
           parts.push(message.slice(lastIndex, match.index));
         }
 
-        // 이슈 번호를 링크로 변환
-        const issueNumber = match[1].substring(1); // # 제거
-        const issueLink = `https://github.com/${owner}/${repo}/issues/${issueNumber}`;
+        const issueNumber = match[1].substring(1);
 
         parts.push(
-          <a
+          <GithubIssueLink
             key={`issue-${issueNumber}-${match.index}`}
-            href={issueLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="commit-message__issue-link"
-            title={`GitHub Issue #${issueNumber}`}
-          >
-            {match[1]}
-          </a>
+            owner={owner}
+            repo={repo}
+            issueNumber={issueNumber}
+          />
         );
 
         lastIndex = match.index + match[0].length;

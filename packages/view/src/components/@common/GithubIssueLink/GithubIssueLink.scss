@@ -1,0 +1,21 @@
+@import "styles/app";
+
+.commit-message__issue-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.125rem;
+  background-color: rgba(224, 96, 145, 0.1);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(224, 96, 145, 0.2);
+    text-decoration: underline;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
