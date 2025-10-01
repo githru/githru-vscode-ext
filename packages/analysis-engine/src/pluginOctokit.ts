@@ -4,7 +4,7 @@ import type { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/ty
 import { Octokit, type RestEndpointMethodTypes } from "@octokit/rest";
 import { inject, injectable } from "inversify";
 
-import { SERVICE_TOKENS } from "./serviceTokens";
+import { DI_IDENTIFIERS } from "./diIdentifiers";
 
 type PullsListResponseData = RestEndpointMethodTypes["pulls"]["get"]["response"];
 type PullsListCommitsResponseData = RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
@@ -16,7 +16,7 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
   private repo: string;
 
   constructor(
-    @inject(SERVICE_TOKENS.OctokitOptions)
+    @inject(DI_IDENTIFIERS.OctokitOptions)
     props: {
       owner: string;
       repo: string;
