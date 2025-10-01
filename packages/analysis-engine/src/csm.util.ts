@@ -1,9 +1,9 @@
-import { MERGE_PARENT_INDEX } from "./csm.const";
+import { FIRST_PARENT_INDEX } from "./csm.const";
 import type { CommitDict, CommitNode, Stem } from "./types";
 
 /** Gets the second parent (starting point of merged branch) of a merge commit. */
-export const getMergeParentCommit = (baseCommitNode: CommitNode, commitDict: CommitDict): CommitNode | undefined => {
-  return commitDict.get(baseCommitNode.commit.parents[MERGE_PARENT_INDEX]);
+export const getFirstParentCommit = (baseCommitNode: CommitNode, commitDict: CommitDict): CommitNode | undefined => {
+  return commitDict.get(baseCommitNode.commit.parents[FIRST_PARENT_INDEX]);
 };
 
 /** Finds the index of a specific commit node in a stem. */

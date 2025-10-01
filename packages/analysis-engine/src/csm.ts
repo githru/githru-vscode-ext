@@ -3,7 +3,7 @@ import {
   extractNestedMergeParents,
   findSquashEndIndex,
   findSquashStartNodeIndex,
-  getMergeParentCommit,
+  getFirstParentCommit,
 } from "./csm.util";
 import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
@@ -14,7 +14,7 @@ import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullR
  */
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
   // Return empty source for non-merge commits
-  const mergeParentCommit = getMergeParentCommit(baseCommitNode, commitDict);
+  const mergeParentCommit = getFirstParentCommit(baseCommitNode, commitDict);
   if (!mergeParentCommit) {
     return {
       base: baseCommitNode,
