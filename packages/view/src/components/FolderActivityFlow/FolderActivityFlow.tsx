@@ -4,9 +4,9 @@ import { useShallow } from "zustand/react/shallow";
 
 import { useDataStore } from "store";
 import { pxToRem } from "utils/pxToRem";
+
 import { getTopFolders, type FolderActivity } from "./FolderActivityFlow.analyzer";
 import { getSubFolders } from "./FolderActivityFlow.subfolder";
-
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import "./FolderActivityFlow.scss";
@@ -22,13 +22,11 @@ import {
   generateFlowLineData,
   generateFlowLinePath,
   generateReleaseFlowLineData,
-  generateReleaseFlowLinePath
+  generateReleaseFlowLinePath,
 } from "./FolderActivityFlow.util";
 
 const FolderActivityFlow = () => {
-  const [totalData] = useDataStore(
-    useShallow((state) => [state.data])
-  );
+  const [totalData] = useDataStore(useShallow((state) => [state.data]));
 
   console.log("🚀 [FolderActivityFlow] Rendered with totalData:", totalData);
 
@@ -50,19 +48,18 @@ const FolderActivityFlow = () => {
 
   // 릴리즈 모드 토글 핸들러
   const handleModeToggle = () => {
-    logDataFlow(`🔄 Mode toggle: ${isReleaseMode ? 'cluster' : 'release'} -> ${isReleaseMode ? 'release' : 'cluster'}`);
+    logDataFlow(`🔄 Mode toggle: ${isReleaseMode ? "cluster" : "release"} -> ${isReleaseMode ? "release" : "cluster"}`);
     setIsReleaseMode(!isReleaseMode);
     setCurrentPath("");
     setFolderDepth(1);
   };
 
-
   // 폴더 클릭 처리
   const handleFolderClick = (folderPath: string) => {
     logDataFlow(`📁 Folder clicked: ${folderPath}`);
 
-    if (folderPath === '.') {
-      logDataFlow('❌ Root folder clicked, ignoring');
+    if (folderPath === ".") {
+      logDataFlow("❌ Root folder clicked, ignoring");
       return;
     }
 
@@ -75,7 +72,7 @@ const FolderActivityFlow = () => {
       setFolderDepth(folderDepth + 1);
       setTopFolders(subFolders);
     } else {
-      logDataFlow('⚠️ No subfolders found, staying at current level');
+      logDataFlow("⚠️ No subfolders found, staying at current level");
     }
   };
 
@@ -84,18 +81,16 @@ const FolderActivityFlow = () => {
     logDataFlow(`⬆️ Going up from: ${currentPath}`);
 
     if (currentPath === "") {
-      logDataFlow('❌ Already at root, cannot go up');
+      logDataFlow("❌ Already at root, cannot go up");
       return;
     }
 
-    const parentPath = currentPath.includes('/')
-      ? currentPath.substring(0, currentPath.lastIndexOf('/'))
-      : "";
+    const parentPath = currentPath.includes("/") ? currentPath.substring(0, currentPath.lastIndexOf("/")) : "";
 
     logDataFlow(`📍 Parent path calculated: "${parentPath}"`);
 
     if (parentPath === "") {
-      logDataFlow('🏠 Returning to root level');
+      logDataFlow("🏠 Returning to root level");
       setCurrentPath("");
       setFolderDepth(1);
       const rootFolders = getTopFolders(totalData.flat(), 8, 1);
@@ -115,11 +110,11 @@ const FolderActivityFlow = () => {
     logDataFlow(`🍞 Breadcrumb clicked: index ${index}`);
 
     if (index === 0) {
-      logDataFlow('🏠 Breadcrumb: returning to root');
+      logDataFlow("🏠 Breadcrumb: returning to root");
       setCurrentPath("");
       setFolderDepth(1);
       const folders = getTopFolders(totalData, 8, 1);
-      logDataFlow('📊 Breadcrumb: root folders loaded:', folders);
+      logDataFlow("📊 Breadcrumb: root folders loaded:", folders);
       setTopFolders(folders);
     } else if (index < getBreadcrumbs().length - 1) {
       const pathParts = currentPath.split("/");
@@ -128,10 +123,10 @@ const FolderActivityFlow = () => {
       setCurrentPath(targetPath);
       setFolderDepth(index + 1);
       const subFolders = getSubFolders(totalData, targetPath);
-      logDataFlow('📊 Breadcrumb: subfolders loaded:', subFolders);
+      logDataFlow("📊 Breadcrumb: subfolders loaded:", subFolders);
       setTopFolders(subFolders);
     } else {
-      logDataFlow('❌ Breadcrumb: clicked on current level, ignoring');
+      logDataFlow("❌ Breadcrumb: clicked on current level, ignoring");
     }
   };
 
@@ -142,7 +137,7 @@ const FolderActivityFlow = () => {
     logDataFlow(`📊 TotalData basic info:`, {
       exists: !!totalData,
       length: totalData?.length || 0,
-      type: Array.isArray(totalData) ? 'array' : typeof totalData
+      type: Array.isArray(totalData) ? "array" : typeof totalData,
     });
 
     if (totalData && totalData.length > 0) {
@@ -150,9 +145,9 @@ const FolderActivityFlow = () => {
       const firstItem = totalData[0];
       logDataFlow(`🔍 TotalData structure analysis:`, {
         firstItemType: typeof firstItem,
-        firstItemKeys: firstItem && typeof firstItem === 'object' ? Object.keys(firstItem) : 'N/A',
+        firstItemKeys: firstItem && typeof firstItem === "object" ? Object.keys(firstItem) : "N/A",
         isNestedArray: Array.isArray(firstItem),
-        nestedArrayLength: Array.isArray(firstItem) ? firstItem.length : 'N/A'
+        nestedArrayLength: Array.isArray(firstItem) ? firstItem.length : "N/A",
       });
 
       // 평탄화된 데이터 분석
@@ -160,61 +155,63 @@ const FolderActivityFlow = () => {
       logDataFlow(`📊 Flattened data analysis:`, {
         originalLength: totalData.length,
         flattenedLength: flatData.length,
-        sampleItem: flatData[0] ? {
-          type: typeof flatData[0],
-          keys: flatData[0] && typeof flatData[0] === 'object' ? Object.keys(flatData[0]).slice(0, 10) : 'N/A'
-        } : 'No items'
+        sampleItem: flatData[0]
+          ? {
+              type: typeof flatData[0],
+              keys: flatData[0] && typeof flatData[0] === "object" ? Object.keys(flatData[0]).slice(0, 10) : "N/A",
+            }
+          : "No items",
       });
 
       // 데이터 내용 샘플링
-      if (flatData.length > 0 && flatData[0] && typeof flatData[0] === 'object') {
+      if (flatData.length > 0 && flatData[0] && typeof flatData[0] === "object") {
         const sample = flatData[0];
         logDataFlow(`🎯 Data sample structure:`, {
-          hasAuthor: 'author' in sample || 'contributorName' in sample,
-          hasDate: 'date' in sample || 'commitDate' in sample,
-          hasFiles: 'files' in sample || 'filePaths' in sample,
-          hasCluster: 'cluster' in sample || 'clusterIndex' in sample,
-          allKeys: Object.keys(sample)
+          hasAuthor: "author" in sample || "contributorName" in sample,
+          hasDate: "date" in sample || "commitDate" in sample,
+          hasFiles: "files" in sample || "filePaths" in sample,
+          hasCluster: "cluster" in sample || "clusterIndex" in sample,
+          allKeys: Object.keys(sample),
         });
       }
     }
 
     if (!totalData || totalData.length === 0) {
-      logDataFlow('❌ No totalData available, skipping initialization');
+      logDataFlow("❌ No totalData available, skipping initialization");
       return;
     }
 
     // 루트 폴더로 초기화
     if (currentPath === "") {
-      logDataFlow('🏠 Initializing with root folders');
+      logDataFlow("🏠 Initializing with root folders");
       const flatData = totalData.flat();
       logDataFlow(`📊 Processing ${flatData.length} items for folder analysis`);
 
       // 클러스터 모드 데이터 초기화
       const folders = getTopFolders(flatData, 8, 1);
-      logDataFlow('📁 Initial root folders:', {
+      logDataFlow("📁 Initial root folders:", {
         count: folders.length,
-        folders: folders.map(f => ({
+        folders: folders.map((f) => ({
           path: f.folderPath,
           totalChanges: f.totalChanges,
           commitCount: f.commitCount,
           insertions: f.insertions,
-          deletions: f.deletions
-        }))
+          deletions: f.deletions,
+        })),
       });
       setTopFolders(folders);
 
       // 릴리즈 모드 데이터 초기화
-      logDataFlow('🏷️ Initializing release-based analysis');
+      logDataFlow("🏷️ Initializing release-based analysis");
       const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-      logDataFlow('📊 Release analysis result:', {
+      logDataFlow("📊 Release analysis result:", {
         releaseGroupCount: releaseResult.releaseGroups.length,
         topFolderCount: releaseResult.topFolderPaths.length,
-        releaseGroups: releaseResult.releaseGroups.map(g => ({
+        releaseGroups: releaseResult.releaseGroups.map((g) => ({
           tag: g.releaseTag,
           commitCount: g.commitCount,
-          dateRange: g.dateRange
-        }))
+          dateRange: g.dateRange,
+        })),
       });
       setReleaseGroups(releaseResult.releaseGroups);
       setReleaseTopFolderPaths(releaseResult.topFolderPaths);
@@ -233,48 +230,51 @@ const FolderActivityFlow = () => {
       releaseGroupsLength: releaseGroups.length,
       releaseTopFolderPathsLength: releaseTopFolderPaths.length,
       currentPath,
-      folderDepth
+      folderDepth,
     });
 
     if (!totalData || totalData.length === 0) {
-      logDataFlow('❌ No totalData available, skipping visualization');
+      logDataFlow("❌ No totalData available, skipping visualization");
       return;
     }
 
     // 모드별 데이터 체크
     if (isReleaseMode) {
       if (releaseGroups.length === 0 || releaseTopFolderPaths.length === 0) {
-        logDataFlow('❌ Insufficient release data for rendering, skipping visualization');
+        logDataFlow("❌ Insufficient release data for rendering, skipping visualization");
         return;
       }
-    } else {
-      if (topFolders.length === 0) {
-        logDataFlow('❌ Insufficient cluster data for rendering, skipping visualization');
-        return;
-      }
+    } else if (topFolders.length === 0) {
+      logDataFlow("❌ Insufficient cluster data for rendering, skipping visualization");
+      return;
     }
 
-    const svg = d3.select(svgRef.current)
-      .attr("width", DIMENSIONS.width)
-      .attr("height", DIMENSIONS.height);
+    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", DIMENSIONS.height);
 
     svg.selectAll("*").remove();
 
     // 모드별 기여자 활동 데이터 추출
-    logDataFlow(`🔍 Extracting contributor activities for path: "${currentPath}" in ${isReleaseMode ? 'release' : 'cluster'} mode`);
+    logDataFlow(
+      `🔍 Extracting contributor activities for path: "${currentPath}" in ${isReleaseMode ? "release" : "cluster"} mode`
+    );
 
     if (isReleaseMode) {
       // 릴리즈 모드: releaseTopFolderPaths 기반
-      const releaseContributorActivities = extractReleaseBasedContributorActivities(totalData, releaseTopFolderPaths, folderDepth);
+      const releaseContributorActivities = extractReleaseBasedContributorActivities(
+        totalData,
+        releaseTopFolderPaths,
+        folderDepth
+      );
       logDataFlow(`🏷️ Release contributor activities extracted:`, {
         count: releaseContributorActivities.length,
-        contributors: Array.from(new Set(releaseContributorActivities.map(a => a.contributorName))),
-        releases: Array.from(new Set(releaseContributorActivities.map(a => a.releaseTag))),
-        folders: Array.from(new Set(releaseContributorActivities.map(a => a.folderPath)))
+        contributors: Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName))),
+        releases: Array.from(new Set(releaseContributorActivities.map((a) => a.releaseTag))),
+        folders: Array.from(new Set(releaseContributorActivities.map((a) => a.folderPath))),
       });
 
       if (releaseContributorActivities.length === 0) {
-        svg.append("text")
+        svg
+          .append("text")
           .attr("x", DIMENSIONS.width / 2)
           .attr("y", DIMENSIONS.height / 2)
           .attr("text-anchor", "middle")
@@ -288,16 +288,39 @@ const FolderActivityFlow = () => {
       renderReleaseVisualization(svg, releaseContributorActivities);
     } else {
       // 클러스터 모드: 기존 로직
+      console.log("📊 [Cluster Mode] === Data Analysis Start ===");
+      console.log("📊 [Cluster Mode] totalData:", totalData);
+      console.log("📊 [Cluster Mode] topFolders:", topFolders);
+      console.log("📊 [Cluster Mode] currentPath:", currentPath);
+
       const contributorActivities = extractContributorActivities(totalData, topFolders, currentPath);
+
+      console.log("📊 [Cluster Mode] contributorActivities count:", contributorActivities.length);
+      console.log("📊 [Cluster Mode] contributorActivities sample (first 5):", contributorActivities.slice(0, 5));
+      console.log(
+        "📊 [Cluster Mode] unique contributors:",
+        Array.from(new Set(contributorActivities.map((a) => a.contributorName)))
+      );
+      console.log(
+        "📊 [Cluster Mode] unique clusters:",
+        Array.from(new Set(contributorActivities.map((a) => a.clusterIndex))).sort()
+      );
+      console.log(
+        "📊 [Cluster Mode] unique folders:",
+        Array.from(new Set(contributorActivities.map((a) => a.folderPath)))
+      );
+      console.log("📊 [Cluster Mode] === Data Analysis End ===");
+
       logDataFlow(`👥 Cluster contributor activities extracted:`, {
         count: contributorActivities.length,
-        contributors: Array.from(new Set(contributorActivities.map(a => a.contributorName))),
-        clusters: Array.from(new Set(contributorActivities.map(a => a.clusterIndex))).sort(),
-        folders: Array.from(new Set(contributorActivities.map(a => a.folderPath)))
+        contributors: Array.from(new Set(contributorActivities.map((a) => a.contributorName))),
+        clusters: Array.from(new Set(contributorActivities.map((a) => a.clusterIndex))).sort(),
+        folders: Array.from(new Set(contributorActivities.map((a) => a.folderPath))),
       });
 
       if (contributorActivities.length === 0) {
-        svg.append("text")
+        svg
+          .append("text")
           .attr("x", DIMENSIONS.width / 2)
           .attr("y", DIMENSIONS.height / 2)
           .attr("text-anchor", "middle")
@@ -317,40 +340,42 @@ const FolderActivityFlow = () => {
     const tooltip = d3.select(tooltipRef.current);
 
     // 스케일 설정
-    const uniqueContributors = Array.from(new Set(contributorActivities.map(a => a.contributorName)));
-    const uniqueClusters = Array.from(new Set(contributorActivities.map(a => a.clusterIndex))).sort((a, b) => a - b);
+    const uniqueContributors = Array.from(new Set(contributorActivities.map((a) => a.contributorName)));
+    const uniqueClusters = Array.from(new Set(contributorActivities.map((a) => a.clusterIndex))).sort((a, b) => a - b);
 
-
-    const xScale = d3.scaleBand()
+    const xScale = d3
+      .scaleBand()
       .domain(uniqueClusters.map(String))
       .range([DIMENSIONS.margin.left, DIMENSIONS.width - DIMENSIONS.margin.right])
       .paddingInner(0.1);
 
-    const yScale = d3.scaleBand()
-      .domain(topFolders.map(f => f.folderPath))
+    const yScale = d3
+      .scaleBand()
+      .domain(topFolders.map((f) => f.folderPath))
       .range([DIMENSIONS.margin.top, DIMENSIONS.height - DIMENSIONS.margin.bottom])
       .paddingInner(0.2);
 
-    const sizeScale = d3.scaleSqrt()
-      .domain([0, d3.max(contributorActivities, d => d.changes) || 1])
+    const sizeScale = d3
+      .scaleSqrt()
+      .domain([0, d3.max(contributorActivities, (d) => d.changes) || 1])
       .range([3, 12]);
 
-    const colorScale = d3.scaleOrdinal()
-      .domain(uniqueContributors)
-      .range(d3.schemeCategory10);
+    const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(d3.schemeCategory10);
 
     const mainGroup = svg.append("g");
 
     // 폴더 레인 그리기
-    mainGroup.selectAll(".folder-lane")
+    mainGroup
+      .selectAll(".folder-lane")
       .data(topFolders)
       .enter()
       .append("g")
       .attr("class", "folder-lane")
-      .each(function(this: SVGGElement, d: FolderActivity) {
+      .each(function (this: SVGGElement, d: FolderActivity) {
         const lane = d3.select(this);
 
-        lane.append("rect")
+        lane
+          .append("rect")
           .attr("class", "lane-background")
           .attr("x", DIMENSIONS.margin.left)
           .attr("y", yScale(d.folderPath) || 0)
@@ -360,52 +385,49 @@ const FolderActivityFlow = () => {
           .attr("stroke", "#dee2e6")
           .attr("stroke-width", 1);
 
-        lane.append("text")
+        lane
+          .append("text")
           .attr("class", "folder-label clickable")
           .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
           .attr("y", (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
           .attr("text-anchor", "start")
           .attr("dominant-baseline", "middle")
           .text(() => {
-            if (d.folderPath === '.') return 'root';
+            if (d.folderPath === ".") return "root";
 
-            const fileName = d.folderPath.includes('/')
-              ? d.folderPath.split('/').pop()
-              : d.folderPath;
+            const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
 
-            return fileName && fileName.length > 15
-              ? fileName.substring(0, 12) + "..."
-              : fileName || 'unknown';
+            return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
           })
           .style("font-size", "12px")
           .style("fill", "#495057")
           .style("font-weight", "500")
           .style("cursor", "pointer")
           .on("click", () => {
-            if (d.folderPath !== '.') {
+            if (d.folderPath !== ".") {
               handleFolderClick(d.folderPath);
             }
           })
-          .on("mouseover", function() {
+          .on("mouseover", function () {
             d3.select(this).style("fill", "#007bff");
           })
-          .on("mouseout", function() {
+          .on("mouseout", function () {
             d3.select(this).style("fill", "#495057");
           });
       });
 
     // 클러스터 축
-    const xAxis = d3.axisBottom(xScale)
-      .tickFormat((d: any) => `Cluster ${parseInt(d) + 1}`);
+    const xAxis = d3.axisBottom(xScale).tickFormat((d: any) => `Cluster ${parseInt(d) + 1}`);
 
-    mainGroup.append("g")
+    mainGroup
+      .append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${DIMENSIONS.height - DIMENSIONS.margin.bottom})`)
       .call(xAxis as any);
 
     // 클러스터 내 노드 위치 계산
     const activitiesByCluster = new Map<number, ContributorActivity[]>();
-    contributorActivities.forEach(activity => {
+    contributorActivities.forEach((activity) => {
       if (!activitiesByCluster.has(activity.clusterIndex)) {
         activitiesByCluster.set(activity.clusterIndex, []);
       }
@@ -413,7 +435,8 @@ const FolderActivityFlow = () => {
     });
 
     // 활동 노드 그리기
-    const dots = mainGroup.selectAll(".activity-dot")
+    const dots = mainGroup
+      .selectAll(".activity-dot")
       .data(contributorActivities)
       .enter()
       .append("circle")
@@ -427,16 +450,16 @@ const FolderActivityFlow = () => {
       .attr("stroke-width", 1);
 
     // 툴팁 이벤트
-    dots.on("mouseover", (event: any, d: ContributorActivity) => {
+    dots
+      .on("mouseover", (event: any, d: ContributorActivity) => {
         tooltip
           .style("display", "inline-block")
           .style("left", pxToRem(event.pageX + 10))
-          .style("top", pxToRem(event.pageY - 10))
-          .html(`
+          .style("top", pxToRem(event.pageY - 10)).html(`
             <div class="contributor-activity-tooltip">
               <p><strong>${d.contributorName}</strong></p>
               <p>Cluster: ${d.clusterIndex + 1}</p>
-              <p>Folder: ${d.folderPath === '.' ? 'root' : d.folderPath}</p>
+              <p>Folder: ${d.folderPath === "." ? "root" : d.folderPath}</p>
               <p>Date: ${d.date.toLocaleDateString()}</p>
               <p>Changes: ${d.changes}</p>
               <p style="color: #28a745;">+${d.insertions} insertions</p>
@@ -445,9 +468,7 @@ const FolderActivityFlow = () => {
           `);
       })
       .on("mousemove", (event: any) => {
-        tooltip
-          .style("left", pxToRem(event.pageX + 10))
-          .style("top", pxToRem(event.pageY - 10));
+        tooltip.style("left", pxToRem(event.pageX + 10)).style("top", pxToRem(event.pageY - 10));
       })
       .on("mouseout", () => {
         tooltip.style("display", "none");
@@ -456,13 +477,17 @@ const FolderActivityFlow = () => {
     // 기여자별 첫 노드에 이름 라벨
     const firstNodesByContributor = findFirstContributorNodes(contributorActivities);
 
-    mainGroup.selectAll(".contributor-label")
+    mainGroup
+      .selectAll(".contributor-label")
       .data(Array.from(firstNodesByContributor.values()))
       .enter()
       .append("text")
       .attr("class", "contributor-label")
       .attr("x", (d: ContributorActivity) => calculateNodePosition(d, xScale, activitiesByCluster))
-      .attr("y", (d: ContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5)
+      .attr(
+        "y",
+        (d: ContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5
+      )
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "bottom")
       .text((d: ContributorActivity) => d.contributorName)
@@ -474,7 +499,8 @@ const FolderActivityFlow = () => {
     // 플로우 라인 그리기
     const flowLineData = generateFlowLineData(contributorActivities);
 
-    mainGroup.selectAll(".flow-line")
+    mainGroup
+      .selectAll(".flow-line")
       .data(flowLineData)
       .enter()
       .append("path")
@@ -491,43 +517,48 @@ const FolderActivityFlow = () => {
     const tooltip = d3.select(tooltipRef.current);
 
     // 스케일 설정
-    const uniqueContributors = Array.from(new Set(releaseContributorActivities.map(a => a.contributorName)));
-    const uniqueReleases = Array.from(new Set(releaseContributorActivities.map(a => a.releaseIndex))).sort((a, b) => a - b);
+    const uniqueContributors = Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName)));
+    const uniqueReleases = Array.from(new Set(releaseContributorActivities.map((a) => a.releaseIndex))).sort(
+      (a, b) => a - b
+    );
     const releaseTagsByIndex = new Map<number, string>();
-    releaseContributorActivities.forEach(a => {
+    releaseContributorActivities.forEach((a) => {
       releaseTagsByIndex.set(a.releaseIndex, a.releaseTag);
     });
 
-    const xScale = d3.scaleBand()
+    const xScale = d3
+      .scaleBand()
       .domain(uniqueReleases.map(String))
       .range([DIMENSIONS.margin.left, DIMENSIONS.width - DIMENSIONS.margin.right])
       .paddingInner(0.1);
 
-    const yScale = d3.scaleBand()
+    const yScale = d3
+      .scaleBand()
       .domain(releaseTopFolderPaths)
       .range([DIMENSIONS.margin.top, DIMENSIONS.height - DIMENSIONS.margin.bottom])
       .paddingInner(0.2);
 
-    const sizeScale = d3.scaleSqrt()
-      .domain([0, d3.max(releaseContributorActivities, d => d.changes) || 1])
+    const sizeScale = d3
+      .scaleSqrt()
+      .domain([0, d3.max(releaseContributorActivities, (d) => d.changes) || 1])
       .range([3, 12]);
 
-    const colorScale = d3.scaleOrdinal()
-      .domain(uniqueContributors)
-      .range(d3.schemeCategory10);
+    const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(d3.schemeCategory10);
 
     const mainGroup = svg.append("g");
 
     // 폴더 레인 그리기
-    mainGroup.selectAll(".folder-lane")
+    mainGroup
+      .selectAll(".folder-lane")
       .data(releaseTopFolderPaths)
       .enter()
       .append("g")
       .attr("class", "folder-lane")
-      .each(function(this: SVGGElement, folderPath: string) {
+      .each(function (this: SVGGElement, folderPath: string) {
         const lane = d3.select(this);
 
-        lane.append("rect")
+        lane
+          .append("rect")
           .attr("class", "lane-background")
           .attr("x", DIMENSIONS.margin.left)
           .attr("y", yScale(folderPath) || 0)
@@ -537,16 +568,17 @@ const FolderActivityFlow = () => {
           .attr("stroke", "#dee2e6")
           .attr("stroke-width", 1);
 
-        lane.append("text")
+        lane
+          .append("text")
           .attr("class", "folder-label")
           .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
           .attr("y", (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
           .attr("text-anchor", "start")
           .attr("dominant-baseline", "middle")
           .text(() => {
-            if (folderPath === '.') return 'root';
-            const fileName = folderPath.includes('/') ? folderPath.split('/').pop() : folderPath;
-            return fileName && fileName.length > 15 ? fileName.substring(0, 12) + "..." : fileName || 'unknown';
+            if (folderPath === ".") return "root";
+            const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+            return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
           })
           .style("font-size", "12px")
           .style("fill", "#495057")
@@ -554,17 +586,19 @@ const FolderActivityFlow = () => {
       });
 
     // 릴리즈 축
-    const xAxis = d3.axisBottom(xScale)
+    const xAxis = d3
+      .axisBottom(xScale)
       .tickFormat((d: any) => releaseTagsByIndex.get(parseInt(d)) || `Release ${parseInt(d)}`);
 
-    mainGroup.append("g")
+    mainGroup
+      .append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${DIMENSIONS.height - DIMENSIONS.margin.bottom})`)
       .call(xAxis as any);
 
     // 릴리즈별 노드 위치 계산
     const activitiesByRelease = new Map<number, ReleaseContributorActivity[]>();
-    releaseContributorActivities.forEach(activity => {
+    releaseContributorActivities.forEach((activity) => {
       if (!activitiesByRelease.has(activity.releaseIndex)) {
         activitiesByRelease.set(activity.releaseIndex, []);
       }
@@ -572,7 +606,8 @@ const FolderActivityFlow = () => {
     });
 
     // 활동 노드 그리기
-    const dots = mainGroup.selectAll(".activity-dot")
+    const dots = mainGroup
+      .selectAll(".activity-dot")
       .data(releaseContributorActivities)
       .enter()
       .append("circle")
@@ -586,16 +621,16 @@ const FolderActivityFlow = () => {
       .attr("stroke-width", 1);
 
     // 툴팁 이벤트
-    dots.on("mouseover", (event: any, d: ReleaseContributorActivity) => {
+    dots
+      .on("mouseover", (event: any, d: ReleaseContributorActivity) => {
         tooltip
           .style("display", "inline-block")
           .style("left", pxToRem(event.pageX + 10))
-          .style("top", pxToRem(event.pageY - 10))
-          .html(`
+          .style("top", pxToRem(event.pageY - 10)).html(`
             <div class="contributor-activity-tooltip">
               <p><strong>${d.contributorName}</strong></p>
               <p>Release: ${d.releaseTag}</p>
-              <p>Folder: ${d.folderPath === '.' ? 'root' : d.folderPath}</p>
+              <p>Folder: ${d.folderPath === "." ? "root" : d.folderPath}</p>
               <p>Date: ${d.date.toLocaleDateString()}</p>
               <p>Changes: ${d.changes}</p>
               <p style="color: #28a745;">+${d.insertions} insertions</p>
@@ -604,9 +639,7 @@ const FolderActivityFlow = () => {
           `);
       })
       .on("mousemove", (event: any) => {
-        tooltip
-          .style("left", pxToRem(event.pageX + 10))
-          .style("top", pxToRem(event.pageY - 10));
+        tooltip.style("left", pxToRem(event.pageX + 10)).style("top", pxToRem(event.pageY - 10));
       })
       .on("mouseout", () => {
         tooltip.style("display", "none");
@@ -615,13 +648,18 @@ const FolderActivityFlow = () => {
     // 기여자별 첫 노드에 이름 라벨
     const firstNodesByContributor = findFirstReleaseContributorNodes(releaseContributorActivities);
 
-    mainGroup.selectAll(".contributor-label")
+    mainGroup
+      .selectAll(".contributor-label")
       .data(Array.from(firstNodesByContributor.values()))
       .enter()
       .append("text")
       .attr("class", "contributor-label")
       .attr("x", (d: ReleaseContributorActivity) => calculateReleaseNodePosition(d, xScale, activitiesByRelease))
-      .attr("y", (d: ReleaseContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5)
+      .attr(
+        "y",
+        (d: ReleaseContributorActivity) =>
+          (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5
+      )
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "bottom")
       .text((d: ReleaseContributorActivity) => d.contributorName)
@@ -633,7 +671,8 @@ const FolderActivityFlow = () => {
     // 플로우 라인 그리기
     const flowLineData = generateReleaseFlowLineData(releaseContributorActivities);
 
-    mainGroup.selectAll(".flow-line")
+    mainGroup
+      .selectAll(".flow-line")
       .data(flowLineData)
       .enter()
       .append("path")
@@ -648,7 +687,7 @@ const FolderActivityFlow = () => {
   // 브레드크럼 생성
   const getBreadcrumbs = () => {
     if (currentPath === "") {
-      logDataFlow('🍞 Breadcrumbs: at root level');
+      logDataFlow("🍞 Breadcrumbs: at root level");
       return ["root"];
     }
 
@@ -656,7 +695,7 @@ const FolderActivityFlow = () => {
     const breadcrumbs = ["root"];
     let current = "";
 
-    parts.forEach(part => {
+    parts.forEach((part) => {
       current = current ? `${current}/${part}` : part;
       breadcrumbs.push(part);
     });
@@ -673,8 +712,7 @@ const FolderActivityFlow = () => {
           <div className="folder-activity-flow__subtitle">
             {isReleaseMode
               ? "Contributors moving between folders across releases"
-              : "Contributors moving between top folders over time"
-            }
+              : "Contributors moving between top folders over time"}
           </div>
         </div>
         <button
@@ -688,7 +726,7 @@ const FolderActivityFlow = () => {
             borderRadius: "4px",
             cursor: "pointer",
             fontSize: "14px",
-            fontWeight: "500"
+            fontWeight: "500",
           }}
         >
           {isReleaseMode ? "📋 Release Mode" : "🔗 Cluster Mode"}
