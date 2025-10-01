@@ -1,3 +1,3 @@
-export const SERVICE_TOKENS = {
+export const DI_IDENTIFIERS = {
   IDEAdapter: Symbol.for("IDEAdapter"),
 } as const;
