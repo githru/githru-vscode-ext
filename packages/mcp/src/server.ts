@@ -7,7 +7,7 @@ import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 import { recommendContributors } from "./tool/contributorRecommender.js";
 import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
 import { I18n } from "./common/i18n.js";
-import { generateNewViz } from "./tool/generateNewViz";
+import { generateNewViz } from "./tool/generateNewViz.js";
 
 const server = new McpServer({
     name: "githru-mcp",
@@ -406,22 +406,30 @@ server.registerTool(
     locale?: string;
     debug?: boolean;
   }) => {
-    const result = await generateNewViz({
-      repo,
-      githubToken,
-      baseBranchName,
-      locale,
-      debug
-    });
+    try {
+      const result = await generateNewViz({
+        repo,
+        githubToken,
+        baseBranchName,
+        locale,
+        debug
+      });
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(result, null, 2),
-        },
-      ],
-    };
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `CSM Dictionary generation error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
   }
 );
 

@@ -8,11 +8,16 @@ class EngineGenerator {
   public repoInfo: GitHubRepoInfo | null = null;
   public gitLog: string = '';
   public analysisResult!: AnalysisResult;
+  private initializationPromise: Promise<void>;
   
   constructor(inputs: CSMDictGeneratorInputs) {
     this.inputs = inputs;
     I18n.setLocale(inputs.locale || 'en');
-    void this.initializeAnalysis();
+    this.initializationPromise = this.initializeAnalysis();
+  }
+
+  async waitForInitialization(): Promise<void> {
+    await this.initializationPromise;
   }
 
   private async initializeAnalysis(): Promise<void> {
@@ -33,16 +38,27 @@ class EngineGenerator {
       this.repoInfo.repo
     );
 
-    const analysisEngine = new AnalysisEngine({
-      isDebugMode: this.inputs.debug || false,
-      gitLog: this.gitLog,
-      owner: this.repoInfo.owner,
-      repo: this.repoInfo.repo,
-      auth: this.inputs.githubToken,
-      baseBranchName: targetBranch,
-    });
+    const originalConsoleLog = console.log;
+    const originalConsoleError = console.error;
+    
+    console.log = () => {};
+    console.error = () => {};
+    
+    try {
+      const analysisEngine = new AnalysisEngine({
+        isDebugMode: false,
+        gitLog: this.gitLog,
+        owner: this.repoInfo.owner,
+        repo: this.repoInfo.repo,
+        auth: this.inputs.githubToken,
+        baseBranchName: targetBranch,
+      });
 
-    this.analysisResult = await analysisEngine.analyzeGit();
+      this.analysisResult = await analysisEngine.analyzeGit();
+    } finally {
+      console.log = originalConsoleLog;
+      console.error = originalConsoleError;
+    }
   }
 }
 
@@ -53,7 +69,7 @@ class NewViz {
     this.engine = engine;
   }
   
-  async generate(): Promise<CSMDictResult> {
+  async generate(): Promise<any> {
     const { debug = false } = this.engine.inputs;
     
     if (!this.engine.repoInfo || !this.engine.analysisResult) {
@@ -63,19 +79,20 @@ class NewViz {
     return this.buildResult(debug);
   }
   
-  private buildResult(debug: boolean): CSMDictResult {
+  private buildResult(debug: boolean): any {
     if (!this.engine.repoInfo || !this.engine.analysisResult) {
       throw new Error('Required data not available');
     }
     
     const { isPRSuccess, csmDict } = this.engine.analysisResult;
     
-    return SomethingFunctionAboutNewViz(csmDict);
+    return csmDict;
   }
 }
 
-export async function generateNewViz(inputs: CSMDictGeneratorInputs): Promise<CSMDictResult> {
+export async function generateNewViz(inputs: CSMDictGeneratorInputs): Promise<any> {
   const engine = new EngineGenerator(inputs);
+  await engine.waitForInitialization();
   const viz = new NewViz(engine);
   return await viz.generate();
 }
