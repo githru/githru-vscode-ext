@@ -2,8 +2,6 @@ import type * as d3 from "d3";
 
 import type { ClusterNode } from "types";
 
-import type { FolderActivity } from "./FolderActivityFlow.analyzer";
-import { extractFolderFromPath } from "./FolderActivityFlow.analyzer";
 import {
   getTopFoldersByRelease,
   extractReleaseContributorActivities,
@@ -16,72 +14,6 @@ import type {
   ReleaseContributorActivity,
   ReleaseFlowLineData,
 } from "./FolderActivityFlow.type";
-
-// 기여자 활동 데이터 추출
-export function extractContributorActivities(
-  totalData: ClusterNode[],
-  topFolders: FolderActivity[],
-  currentPath: string
-): ContributorActivity[] {
-  const contributorActivities: ContributorActivity[] = [];
-
-  totalData.forEach((cluster, clusterIndex) => {
-    const clusterId = `cluster-${clusterIndex}`;
-
-    cluster.commitNodeList.forEach((commitNode) => {
-      if (commitNode.commit.commitDate) {
-        const { commit } = commitNode;
-        const date = new Date(commit.commitDate);
-
-        if (commit.author?.names?.[0] && commit.author?.emails?.[0] && commit.diffStatistics?.files) {
-          const contributorName = commit.author.names[0].trim();
-          const contributorId = `${contributorName}-${commit.author.emails[0]}`;
-
-          const folderChanges = new Map<string, { insertions: number; deletions: number }>();
-
-          Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
-            let folderPath: string;
-
-            if (currentPath === "") {
-              folderPath = extractFolderFromPath(filePath, 1);
-            } else if (filePath.startsWith(`${currentPath}/`)) {
-              const relativePath = filePath.substring(currentPath.length + 1);
-              const pathParts = relativePath.split("/");
-              folderPath = `${currentPath}/${pathParts[0]}`;
-            } else {
-              return;
-            }
-
-            if (topFolders.some((f) => f.folderPath === folderPath)) {
-              if (!folderChanges.has(folderPath)) {
-                folderChanges.set(folderPath, { insertions: 0, deletions: 0 });
-              }
-              const folder = folderChanges.get(folderPath) as { insertions: number; deletions: number };
-              folder.insertions += stats.insertions;
-              folder.deletions += stats.deletions;
-            }
-          });
-
-          folderChanges.forEach((stats, folderPath) => {
-            contributorActivities.push({
-              contributorId,
-              contributorName,
-              date,
-              folderPath,
-              changes: stats.insertions + stats.deletions,
-              insertions: stats.insertions,
-              deletions: stats.deletions,
-              clusterId,
-              clusterIndex,
-            });
-          });
-        }
-      }
-    });
-  });
-
-  return contributorActivities.sort((a, b) => a.date.getTime() - b.date.getTime());
-}
 
 // 플로우 라인 데이터 생성
 export function generateFlowLineData(contributorActivities: ContributorActivity[]): FlowLineData[] {

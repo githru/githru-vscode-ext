@@ -1,43 +1,98 @@
 import * as d3 from "d3";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-import { pxToRem } from "utils/pxToRem";
-import type { ClusterNode } from "types";
-
-import { DIMENSIONS } from "./FolderActivityFlow.const";
-import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import "./FolderActivityFlow.scss";
-import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
-import {
-  analyzeReleaseBasedFolders,
-  calculateReleaseNodePosition,
-  extractReleaseBasedContributorActivities,
-  findFirstReleaseContributorNodes,
-  generateReleaseFlowLineData,
-  generateReleaseFlowLinePath,
-} from "./FolderActivityFlow.util";
+import type { ReleaseContributorActivity, ReleaseFlowLineData } from "./FolderActivityFlow.type";
 
-const FolderActivityFlow = ({ totalData }: { totalData: ClusterNode[] }) => {
+const DIMENSIONS = {
+  width: 800,
+  height: 400,
+  margin: { top: 40, right: 120, bottom: 60, left: 20 },
+};
+
+export interface ReleaseGroup {
+  releaseTag: string;
+  commitCount: number;
+  dateRange: {
+    start: Date;
+    end: Date;
+  };
+  commits: CommitData[];
+}
+
+interface CommitData {
+  id: string;
+  authorDate: string;
+  commitDate: string;
+  author: {
+    id: string;
+    names: string[];
+    emails: string[];
+  };
+  diffStatistics: {
+    insertions: number;
+    deletions: number;
+    files: { [filePath: string]: { insertions: number; deletions: number } };
+  };
+  releaseTags: string[];
+}
+
+const FolderActivityFlow = ({
+  releaseGroups,
+  releaseTopFolderPaths,
+  flowLineData,
+  releaseContributorActivities,
+  firstNodesByContributor,
+}: {
+  releaseGroups: ReleaseGroup[];
+  releaseTopFolderPaths: string[];
+  flowLineData: ReleaseFlowLineData[];
+  releaseContributorActivities: ReleaseContributorActivity[];
+  firstNodesByContributor: Map<string, ReleaseContributorActivity>;
+}) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const [releaseGroups, setReleaseGroups] = useState<ReleaseGroup[]>([]);
-  const [releaseTopFolderPaths, setReleaseTopFolderPaths] = useState<string[]>([]);
+  const pxToRem = (px: number) => `${px / 16}rem`;
 
-  useEffect(() => {
-    if (!totalData || totalData.length === 0) {
-      return;
-    }
+  // 릴리즈 기반 노드 위치 계산
+  const calculateReleaseNodePosition = (
+    activity: ReleaseContributorActivity,
+    xScale: d3.ScaleBand<string>,
+    activitiesByRelease: Map<number, ReleaseContributorActivity[]>
+  ): number => {
+    const releaseX = (xScale(String(activity.releaseIndex)) || 0) + xScale.bandwidth() / 2;
+    const releaseActivities = activitiesByRelease.get(activity.releaseIndex) || [];
+    const activityIndex = releaseActivities.findIndex(
+      (a) =>
+        a.contributorName === activity.contributorName &&
+        a.folderPath === activity.folderPath &&
+        a.date.getTime() === activity.date.getTime()
+    );
+    const offsetRange = xScale.bandwidth() * 0.8;
+    const offset =
+      (activityIndex - (releaseActivities.length - 1) / 2) * (offsetRange / Math.max(releaseActivities.length, 1));
+    return releaseX + offset;
+  };
 
-    const flatData = totalData.flat();
-    const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-    setReleaseGroups(releaseResult.releaseGroups);
-    setReleaseTopFolderPaths(releaseResult.topFolderPaths);
-  }, [totalData]);
+  // 릴리즈 기반 플로우 라인 경로 생성
+  const generateReleaseFlowLinePath = (
+    d: ReleaseFlowLineData,
+    xScale: d3.ScaleBand<string>,
+    yScale: d3.ScaleBand<string>
+  ): string => {
+    const x1 = (xScale(String(d.startReleaseIndex)) || 0) + xScale.bandwidth() / 2;
+    const y1 = (yScale(d.startFolder) || 0) + yScale.bandwidth() / 2;
+    const x2 = (xScale(String(d.endReleaseIndex)) || 0) + xScale.bandwidth() / 2;
+    const y2 = (yScale(d.endFolder) || 0) + yScale.bandwidth() / 2;
+    const midX = (x1 + x2) / 2;
+    return `M ${x1},${y1} Q ${midX},${y1} ${midX},${(y1 + y2) / 2} Q ${midX},${y2} ${x2},${y2}`;
+  };
 
   const renderReleaseVisualization = useCallback(
     (
       svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+      // eslint-disable-next-line no-shadow
       releaseContributorActivities: ReleaseContributorActivity[]
     ) => {
       const tooltip = d3.select(tooltipRef.current);
@@ -175,7 +230,7 @@ const FolderActivityFlow = ({ totalData }: { totalData: ClusterNode[] }) => {
         });
 
       // 기여자별 첫 노드에 이름 라벨
-      const firstNodesByContributor = findFirstReleaseContributorNodes(releaseContributorActivities);
+      // const firstNodesByContributor = findFirstReleaseContributorNodes(releaseContributorActivities);
 
       mainGroup
         .selectAll(".contributor-label")
@@ -183,22 +238,18 @@ const FolderActivityFlow = ({ totalData }: { totalData: ClusterNode[] }) => {
         .enter()
         .append("text")
         .attr("class", "contributor-label")
-        .attr("x", (d: ReleaseContributorActivity) => calculateReleaseNodePosition(d, xScale, activitiesByRelease))
-        .attr(
-          "y",
-          (d: ReleaseContributorActivity) =>
-            (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5
-        )
+        .attr("x", (d: any) => calculateReleaseNodePosition(d, xScale, activitiesByRelease))
+        .attr("y", (d: any) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "bottom")
-        .text((d: ReleaseContributorActivity) => d.contributorName)
+        .text((d: any) => d.contributorName)
         .style("font-size", "10px")
         .style("fill", "#495057")
         .style("font-weight", "500")
         .style("pointer-events", "none");
 
       // 플로우 라인 그리기
-      const flowLineData = generateReleaseFlowLineData(releaseContributorActivities);
+      // const flowLineData = generateReleaseFlowLineData(releaseContributorActivities);
 
       mainGroup
         .selectAll(".flow-line")
@@ -227,8 +278,8 @@ const FolderActivityFlow = ({ totalData }: { totalData: ClusterNode[] }) => {
 
     svg.selectAll("*").remove();
 
-    // 릴리즈 모드: releaseTopFolderPaths 기반
-    const releaseContributorActivities = extractReleaseBasedContributorActivities(totalData, releaseTopFolderPaths, 1);
+    // // 릴리즈 모드: releaseTopFolderPaths 기반
+    // const releaseContributorActivities = extractReleaseBasedContributorActivities(totalData, releaseTopFolderPaths, 1);
 
     if (releaseContributorActivities.length === 0) {
       svg
@@ -244,7 +295,7 @@ const FolderActivityFlow = ({ totalData }: { totalData: ClusterNode[] }) => {
     }
 
     renderReleaseVisualization(svg, releaseContributorActivities);
-  }, [totalData, releaseGroups, releaseTopFolderPaths, renderReleaseVisualization]);
+  }, [releaseGroups, releaseTopFolderPaths, renderReleaseVisualization]);
 
   return (
     <div className="folder-activity-flow">
