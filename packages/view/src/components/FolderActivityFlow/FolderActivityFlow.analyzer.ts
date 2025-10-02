@@ -20,11 +20,11 @@ export interface CommitData {
 }
 
 export function extractFolderFromPath(filePath: string, depth: number = 1): string {
-  const parts = filePath.split('/');
-  if (parts.length === 1) return '.'; // 루트 레벨 파일
+  const parts = filePath.split("/");
+  if (parts.length === 1) return "."; // 루트 레벨 파일
 
   const folderParts = parts.slice(0, Math.min(depth, parts.length - 1));
-  return folderParts.length > 0 ? folderParts.join('/') : '.';
+  return folderParts.length > 0 ? folderParts.join("/") : ".";
 }
 
 export function analyzeFolderActivity(clusterNodeList: ClusterNode[], folderDepth: number = 1): FolderActivity[] {

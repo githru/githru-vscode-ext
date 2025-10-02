@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FolderActivityFlow,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -23,6 +30,7 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
+  const totalData = useDataStore((state) => state.data);
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   const handleOpenFolderActivityFlowModal = () => {
@@ -73,6 +81,7 @@ const App = () => {
         <button
           className="folder-activity-flow-button"
           onClick={handleOpenFolderActivityFlowModal}
+          type="button"
         >
           Folder Activity Flow
         </button>
@@ -100,19 +109,26 @@ const App = () => {
       {showFolderActivityFlowModal && (
         <div
           className="folder-activity-flow-modal"
-          onClick={handleCloseFolderActivityFlowModal}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseFolderActivityFlowModal();
+            }
+          }}
+          onKeyDown={(e) => e.key === "Escape" && handleCloseFolderActivityFlowModal()}
+          role="button"
+          tabIndex={0}
+          aria-label="Close modal"
         >
-          <div
-            className="folder-activity-flow-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="folder-activity-flow-modal-content">
             <button
               className="folder-activity-flow-modal-close"
               onClick={handleCloseFolderActivityFlowModal}
+              type="button"
+              aria-label="Close modal"
             >
               ×
             </button>
-            <FolderActivityFlow />
+            <FolderActivityFlow totalData={totalData} />
           </div>
         </div>
       )}

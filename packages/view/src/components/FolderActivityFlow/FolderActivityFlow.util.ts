@@ -1,13 +1,21 @@
-import * as d3 from "d3";
+import type * as d3 from "d3";
+
 import type { ClusterNode } from "types";
-import { extractFolderFromPath, FolderActivity } from "./FolderActivityFlow.analyzer";
+
+import type { FolderActivity } from "./FolderActivityFlow.analyzer";
+import { extractFolderFromPath } from "./FolderActivityFlow.analyzer";
 import {
   getTopFoldersByRelease,
   extractReleaseContributorActivities,
   type ReleaseGroup,
-  type ReleaseFolderActivity
+  type ReleaseFolderActivity,
 } from "./FolderActivityFlow.releaseAnalyzer";
-import type { ContributorActivity, FlowLineData, ReleaseContributorActivity, ReleaseFlowLineData } from "./FolderActivityFlow.type";
+import type {
+  ContributorActivity,
+  FlowLineData,
+  ReleaseContributorActivity,
+  ReleaseFlowLineData,
+} from "./FolderActivityFlow.type";
 
 // 기여자 활동 데이터 추출
 export function extractContributorActivities(
@@ -20,55 +28,53 @@ export function extractContributorActivities(
   totalData.forEach((cluster, clusterIndex) => {
     const clusterId = `cluster-${clusterIndex}`;
 
-    cluster.commitNodeList.forEach(commitNode => {
+    cluster.commitNodeList.forEach((commitNode) => {
       if (commitNode.commit.commitDate) {
-        const commit = commitNode.commit;
+        const { commit } = commitNode;
         const date = new Date(commit.commitDate);
 
         if (commit.author?.names?.[0] && commit.author?.emails?.[0] && commit.diffStatistics?.files) {
-            const contributorName = commit.author.names[0].trim();
-            const contributorId = `${contributorName}-${commit.author.emails[0]}`;
+          const contributorName = commit.author.names[0].trim();
+          const contributorId = `${contributorName}-${commit.author.emails[0]}`;
 
-            const folderChanges = new Map<string, { insertions: number; deletions: number }>();
+          const folderChanges = new Map<string, { insertions: number; deletions: number }>();
 
-            Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
-              let folderPath: string;
+          Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
+            let folderPath: string;
 
-              if (currentPath === "") {
-                folderPath = extractFolderFromPath(filePath, 1);
-              } else {
-                if (filePath.startsWith(currentPath + "/")) {
-                  const relativePath = filePath.substring(currentPath.length + 1);
-                  const pathParts = relativePath.split("/");
-                  folderPath = currentPath + "/" + pathParts[0];
-                } else {
-                  return;
-                }
+            if (currentPath === "") {
+              folderPath = extractFolderFromPath(filePath, 1);
+            } else if (filePath.startsWith(`${currentPath}/`)) {
+              const relativePath = filePath.substring(currentPath.length + 1);
+              const pathParts = relativePath.split("/");
+              folderPath = `${currentPath}/${pathParts[0]}`;
+            } else {
+              return;
+            }
+
+            if (topFolders.some((f) => f.folderPath === folderPath)) {
+              if (!folderChanges.has(folderPath)) {
+                folderChanges.set(folderPath, { insertions: 0, deletions: 0 });
               }
+              const folder = folderChanges.get(folderPath) as { insertions: number; deletions: number };
+              folder.insertions += stats.insertions;
+              folder.deletions += stats.deletions;
+            }
+          });
 
-              if (topFolders.some((f) => f.folderPath === folderPath)) {
-                if (!folderChanges.has(folderPath)) {
-                  folderChanges.set(folderPath, { insertions: 0, deletions: 0 });
-                }
-                const folder = folderChanges.get(folderPath)!;
-                folder.insertions += stats.insertions;
-                folder.deletions += stats.deletions;
-              }
+          folderChanges.forEach((stats, folderPath) => {
+            contributorActivities.push({
+              contributorId,
+              contributorName,
+              date,
+              folderPath,
+              changes: stats.insertions + stats.deletions,
+              insertions: stats.insertions,
+              deletions: stats.deletions,
+              clusterId,
+              clusterIndex,
             });
-
-            folderChanges.forEach((stats, folderPath) => {
-              contributorActivities.push({
-                contributorId,
-                contributorName,
-                date,
-                folderPath,
-                changes: stats.insertions + stats.deletions,
-                insertions: stats.insertions,
-                deletions: stats.deletions,
-                clusterId,
-                clusterIndex,
-              });
-            });
+          });
         }
       }
     });
@@ -84,17 +90,20 @@ export function generateFlowLineData(contributorActivities: ContributorActivity[
     if (!activitiesByContributor.has(activity.contributorId)) {
       activitiesByContributor.set(activity.contributorId, []);
     }
-    activitiesByContributor.get(activity.contributorId)!.push(activity);
+    const contributorActivitiesList = activitiesByContributor.get(activity.contributorId);
+    if (contributorActivitiesList) {
+      contributorActivitiesList.push(activity);
+    }
   });
 
   const flowLineData: FlowLineData[] = [];
 
-  activitiesByContributor.forEach((contributorActivities) => {
-    contributorActivities.sort((a, b) => a.clusterIndex - b.clusterIndex || a.date.getTime() - b.date.getTime());
+  activitiesByContributor.forEach((contributorActivitiesList) => {
+    contributorActivitiesList.sort((a, b) => a.clusterIndex - b.clusterIndex || a.date.getTime() - b.date.getTime());
 
-    for (let i = 0; i < contributorActivities.length - 1; i++) {
-      const current = contributorActivities[i];
-      const next = contributorActivities[i + 1];
+    for (let i = 0; i < contributorActivitiesList.length - 1; i += 1) {
+      const current = contributorActivitiesList[i];
+      const next = contributorActivitiesList[i + 1];
 
       if (current.clusterIndex !== next.clusterIndex) {
         flowLineData.push({
@@ -169,8 +178,8 @@ export function generateFlowLinePath(
 // 릴리즈 기반 상위 폴더 분석
 export function analyzeReleaseBasedFolders(
   totalData: ClusterNode[],
-  count: number = 8,
-  folderDepth: number = 1
+  count = 8,
+  folderDepth = 1
 ): {
   releaseGroups: ReleaseGroup[];
   topFolders: ReleaseFolderActivity[];
@@ -181,7 +190,7 @@ export function analyzeReleaseBasedFolders(
   return {
     releaseGroups: result.releaseGroups,
     topFolders: result.folderActivities,
-    topFolderPaths: result.topFolders
+    topFolderPaths: result.topFolders,
   };
 }
 
@@ -189,7 +198,7 @@ export function analyzeReleaseBasedFolders(
 export function extractReleaseBasedContributorActivities(
   totalData: ClusterNode[],
   topFolderPaths: string[],
-  folderDepth: number = 1
+  folderDepth = 1
 ): ReleaseContributorActivity[] {
   const result = getTopFoldersByRelease(totalData, topFolderPaths.length, folderDepth);
   return extractReleaseContributorActivities(result.releaseGroups, topFolderPaths, folderDepth);
@@ -204,17 +213,17 @@ export function generateReleaseFlowLineData(
     if (!activitiesByContributor.has(activity.contributorName)) {
       activitiesByContributor.set(activity.contributorName, []);
     }
-    activitiesByContributor.get(activity.contributorName)!.push(activity);
+    activitiesByContributor.get(activity.contributorName)?.push(activity);
   });
 
   const flowLineData: ReleaseFlowLineData[] = [];
 
-  activitiesByContributor.forEach((contributorActivities) => {
-    contributorActivities.sort((a, b) => a.releaseIndex - b.releaseIndex || a.date.getTime() - b.date.getTime());
+  activitiesByContributor.forEach((contributorActivitiesList) => {
+    contributorActivitiesList.sort((a, b) => a.releaseIndex - b.releaseIndex || a.date.getTime() - b.date.getTime());
 
-    for (let i = 0; i < contributorActivities.length - 1; i++) {
-      const current = contributorActivities[i];
-      const next = contributorActivities[i + 1];
+    for (let i = 0; i < contributorActivitiesList.length - 1; i += 1) {
+      const current = contributorActivitiesList[i];
+      const next = contributorActivitiesList[i + 1];
 
       if (current.releaseIndex !== next.releaseIndex) {
         flowLineData.push({
