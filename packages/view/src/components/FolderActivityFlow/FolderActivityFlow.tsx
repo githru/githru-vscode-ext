@@ -6,7 +6,7 @@ import { useDataStore } from "store";
 import { pxToRem } from "utils/pxToRem";
 
 import { getTopFolders, type FolderActivity } from "./FolderActivityFlow.analyzer";
-import { getSubFolders } from "./FolderActivityFlow.subfolder";
+import { getSubFolders, getReleaseSubFolders } from "./FolderActivityFlow.subfolder";
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import "./FolderActivityFlow.scss";
@@ -56,29 +56,45 @@ const FolderActivityFlow = () => {
 
   // 폴더 클릭 처리
   const handleFolderClick = (folderPath: string) => {
-    logDataFlow(`📁 Folder clicked: ${folderPath}`);
+    logDataFlow(`📁 Folder clicked: ${folderPath} in ${isReleaseMode ? "release" : "cluster"} mode`);
 
     if (folderPath === ".") {
       logDataFlow("❌ Root folder clicked, ignoring");
       return;
     }
 
-    const subFolders = getSubFolders(totalData, folderPath);
-    logDataFlow(`🔍 Found ${subFolders.length} subfolders for path: ${folderPath}`, subFolders);
+    if (isReleaseMode) {
+      // Release mode: getReleaseSubFolders 사용
+      const subFolderPaths = getReleaseSubFolders(totalData, folderPath);
+      logDataFlow(`🔍 Found ${subFolderPaths.length} release subfolders for path: ${folderPath}`, subFolderPaths);
 
-    if (subFolders.length > 0) {
-      logDataFlow(`📂 Navigating to folder: ${folderPath}, depth: ${folderDepth} -> ${folderDepth + 1}`);
-      setCurrentPath(folderPath);
-      setFolderDepth(folderDepth + 1);
-      setTopFolders(subFolders);
+      if (subFolderPaths.length > 0) {
+        logDataFlow(`📂 Navigating to folder: ${folderPath}, depth: ${folderDepth} -> ${folderDepth + 1}`);
+        setCurrentPath(folderPath);
+        setFolderDepth(folderDepth + 1);
+        setReleaseTopFolderPaths(subFolderPaths);
+      } else {
+        logDataFlow("⚠️ No release subfolders found, staying at current level");
+      }
     } else {
-      logDataFlow("⚠️ No subfolders found, staying at current level");
+      // Cluster mode: getSubFolders 사용
+      const subFolders = getSubFolders(totalData, folderPath);
+      logDataFlow(`🔍 Found ${subFolders.length} cluster subfolders for path: ${folderPath}`, subFolders);
+
+      if (subFolders.length > 0) {
+        logDataFlow(`📂 Navigating to folder: ${folderPath}, depth: ${folderDepth} -> ${folderDepth + 1}`);
+        setCurrentPath(folderPath);
+        setFolderDepth(folderDepth + 1);
+        setTopFolders(subFolders);
+      } else {
+        logDataFlow("⚠️ No cluster subfolders found, staying at current level");
+      }
     }
   };
 
   // 상위 폴더로 이동
   const handleGoUp = () => {
-    logDataFlow(`⬆️ Going up from: ${currentPath}`);
+    logDataFlow(`⬆️ Going up from: ${currentPath} in ${isReleaseMode ? "release" : "cluster"} mode`);
 
     if (currentPath === "") {
       logDataFlow("❌ Already at root, cannot go up");
@@ -93,38 +109,68 @@ const FolderActivityFlow = () => {
       logDataFlow("🏠 Returning to root level");
       setCurrentPath("");
       setFolderDepth(1);
-      const rootFolders = getTopFolders(totalData.flat(), 8, 1);
-      logDataFlow(`📊 Root folders loaded:`, rootFolders);
-      setTopFolders(rootFolders);
+
+      if (isReleaseMode) {
+        const flatData = totalData.flat();
+        const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
+        logDataFlow(`📊 Root release folders loaded:`, releaseResult.topFolderPaths);
+        setReleaseTopFolderPaths(releaseResult.topFolderPaths);
+      } else {
+        const rootFolders = getTopFolders(totalData.flat(), 8, 1);
+        logDataFlow(`📊 Root cluster folders loaded:`, rootFolders);
+        setTopFolders(rootFolders);
+      }
     } else {
       logDataFlow(`📂 Moving to parent: ${parentPath}, depth: ${folderDepth} -> ${Math.max(1, folderDepth - 1)}`);
       setCurrentPath(parentPath);
       setFolderDepth(Math.max(1, folderDepth - 1));
-      const subFolders = getSubFolders(totalData, parentPath);
-      logDataFlow(`📊 Parent subfolders loaded:`, subFolders);
-      setTopFolders(subFolders);
+
+      if (isReleaseMode) {
+        const subFolderPaths = getReleaseSubFolders(totalData, parentPath);
+        logDataFlow(`📊 Parent release subfolders loaded:`, subFolderPaths);
+        setReleaseTopFolderPaths(subFolderPaths);
+      } else {
+        const subFolders = getSubFolders(totalData, parentPath);
+        logDataFlow(`📊 Parent cluster subfolders loaded:`, subFolders);
+        setTopFolders(subFolders);
+      }
     }
   };
 
   const handleBreadcrumbClick = (index: number) => {
-    logDataFlow(`🍞 Breadcrumb clicked: index ${index}`);
+    logDataFlow(`🍞 Breadcrumb clicked: index ${index} in ${isReleaseMode ? "release" : "cluster"} mode`);
 
     if (index === 0) {
       logDataFlow("🏠 Breadcrumb: returning to root");
       setCurrentPath("");
       setFolderDepth(1);
-      const folders = getTopFolders(totalData, 8, 1);
-      logDataFlow("📊 Breadcrumb: root folders loaded:", folders);
-      setTopFolders(folders);
+
+      if (isReleaseMode) {
+        const flatData = totalData.flat();
+        const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
+        logDataFlow("📊 Breadcrumb: root release folders loaded:", releaseResult.topFolderPaths);
+        setReleaseTopFolderPaths(releaseResult.topFolderPaths);
+      } else {
+        const folders = getTopFolders(totalData, 8, 1);
+        logDataFlow("📊 Breadcrumb: root cluster folders loaded:", folders);
+        setTopFolders(folders);
+      }
     } else if (index < getBreadcrumbs().length - 1) {
       const pathParts = currentPath.split("/");
       const targetPath = pathParts.slice(0, index).join("/");
       logDataFlow(`📂 Breadcrumb: navigating to ${targetPath}, depth: ${folderDepth} -> ${index + 1}`);
       setCurrentPath(targetPath);
       setFolderDepth(index + 1);
-      const subFolders = getSubFolders(totalData, targetPath);
-      logDataFlow("📊 Breadcrumb: subfolders loaded:", subFolders);
-      setTopFolders(subFolders);
+
+      if (isReleaseMode) {
+        const subFolderPaths = getReleaseSubFolders(totalData, targetPath);
+        logDataFlow("📊 Breadcrumb: release subfolders loaded:", subFolderPaths);
+        setReleaseTopFolderPaths(subFolderPaths);
+      } else {
+        const subFolders = getSubFolders(totalData, targetPath);
+        logDataFlow("📊 Breadcrumb: cluster subfolders loaded:", subFolders);
+        setTopFolders(subFolders);
+      }
     } else {
       logDataFlow("❌ Breadcrumb: clicked on current level, ignoring");
     }
@@ -260,10 +306,12 @@ const FolderActivityFlow = () => {
 
     if (isReleaseMode) {
       // 릴리즈 모드: releaseTopFolderPaths 기반
+      // currentPath가 비어있으면 1, 아니면 현재 depth를 사용
+      const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
       const releaseContributorActivities = extractReleaseBasedContributorActivities(
         totalData,
         releaseTopFolderPaths,
-        folderDepth
+        currentDepth
       );
       logDataFlow(`🏷️ Release contributor activities extracted:`, {
         count: releaseContributorActivities.length,
@@ -570,7 +618,7 @@ const FolderActivityFlow = () => {
 
         lane
           .append("text")
-          .attr("class", "folder-label")
+          .attr("class", "folder-label clickable")
           .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
           .attr("y", (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
           .attr("text-anchor", "start")
@@ -582,7 +630,19 @@ const FolderActivityFlow = () => {
           })
           .style("font-size", "12px")
           .style("fill", "#495057")
-          .style("font-weight", "500");
+          .style("font-weight", "500")
+          .style("cursor", "pointer")
+          .on("click", () => {
+            if (folderPath !== ".") {
+              handleFolderClick(folderPath);
+            }
+          })
+          .on("mouseover", function () {
+            d3.select(this).style("fill", "#007bff");
+          })
+          .on("mouseout", function () {
+            d3.select(this).style("fill", "#495057");
+          });
       });
 
     // 릴리즈 축
