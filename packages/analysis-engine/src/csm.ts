@@ -2,8 +2,19 @@ import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pul
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
-  const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
-  if (!mergeParentCommit) {
+  if (baseCommitNode.commit.parents.length <= 1) {
+    return {
+      base: baseCommitNode,
+      source: [],
+    };
+  }
+
+  const mergeParentCommits = baseCommitNode.commit.parents
+    .slice(1)
+    .map((parentId) => commitDict.get(parentId))
+    .filter((commit): commit is CommitNode => !!commit);
+
+  if (mergeParentCommits.length === 0) {
     return {
       base: baseCommitNode,
       source: [],
@@ -12,7 +23,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
 
   const squashCommitNodes: CommitNode[] = [];
 
-  const squashTaskQueue: CommitNode[] = [mergeParentCommit];
+  const squashTaskQueue: CommitNode[] = [...mergeParentCommits];
   while (squashTaskQueue.length > 0) {
     // get target
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

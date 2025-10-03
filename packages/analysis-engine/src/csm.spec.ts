@@ -179,4 +179,260 @@ describe("csm", () => {
       });
     });
   });
+
+  describe("octopus merge (multiple parents)", () => {
+    // Test scenario: 3-way merge (octopus merge)
+    // master = [0, 1, 100]
+    // branch1 = [2, 3]
+    // branch2 = [4, 5]
+    // branch3 = [6, 7]
+    // 100 = merge(1, 3, 5, 7) - 4 parents octopus merge
+
+    const octopusCommitDict: Map<string, CommitRaw> = new Map<
+      string,
+      Pick<CommitRaw, "id" | "parents" | "branches" | "sequence">
+    >([
+      ["0", { id: "0", parents: [], branches: [], sequence: 9 }],
+      ["1", { id: "1", parents: ["0"], branches: [], sequence: 8 }],
+      ["2", { id: "2", parents: ["1"], branches: [], sequence: 7 }],
+      ["3", { id: "3", parents: ["2"], branches: ["branch1"], sequence: 6 }],
+      ["4", { id: "4", parents: ["1"], branches: [], sequence: 5 }],
+      ["5", { id: "5", parents: ["4"], branches: ["branch2"], sequence: 4 }],
+      ["6", { id: "6", parents: ["1"], branches: [], sequence: 3 }],
+      ["7", { id: "7", parents: ["6"], branches: ["branch3"], sequence: 2 }],
+      ["100", { id: "100", parents: ["1", "3", "5", "7"], branches: ["master"], sequence: 0 }],
+    ]) as Map<string, CommitRaw>;
+
+    const octopusStemDict: Map<string, Stem> = new Map([
+      [
+        "master",
+        {
+          nodes: ["100", "1", "0"]
+            .map((id) => octopusCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "master", commit })),
+        },
+      ],
+      [
+        "branch1",
+        {
+          nodes: ["3", "2"]
+            .map((id) => octopusCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "branch1", commit })),
+        },
+      ],
+      [
+        "branch2",
+        {
+          nodes: ["5", "4"]
+            .map((id) => octopusCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "branch2", commit })),
+        },
+      ],
+      [
+        "branch3",
+        {
+          nodes: ["7", "6"]
+            .map((id) => octopusCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "branch3", commit })),
+        },
+      ],
+    ]);
+
+    const octopusCommitNodeDict: Map<string, CommitNode> = Array.from(octopusStemDict.entries()).reduce(
+      (dict, [, stem]) => {
+        stem.nodes.forEach((commitNode) => {
+          dict.set(commitNode.commit.id, commitNode);
+        });
+        return dict;
+      },
+      new Map<string, CommitNode>()
+    );
+
+    // Set mergedIntoStem flags
+    octopusCommitNodeDict.get("3")!.mergedIntoStem = "master";
+    octopusCommitNodeDict.get("5")!.mergedIntoStem = "master";
+    octopusCommitNodeDict.get("7")!.mergedIntoStem = "master";
+
+    it("should handle octopus merge with 4 parents", () => {
+      const csmDict = buildCSMDict(octopusCommitNodeDict, octopusStemDict, "master");
+
+      expect(csmDict.master).toBeDefined();
+      expect(csmDict.master.length).toBe(3); // 100, 1, 0
+
+      const octopusMergeNode = csmDict.master.find((node) => node.base.commit.id === "100");
+      expect(octopusMergeNode).toBeDefined();
+      expect(octopusMergeNode!.source.length).toBeGreaterThan(0);
+
+      // Should include all commits from all 3 branches: 3,2 + 5,4 + 7,6
+      const sourceIds = octopusMergeNode!.source.map((node) => node.commit.id);
+      expect(sourceIds).toContain("3");
+      expect(sourceIds).toContain("2");
+      expect(sourceIds).toContain("5");
+      expect(sourceIds).toContain("4");
+      expect(sourceIds).toContain("7");
+      expect(sourceIds).toContain("6");
+
+      // Should be sorted by sequence
+      const sequences = octopusMergeNode!.source.map((node) => node.commit.sequence);
+      const sortedSequences = [...sequences].sort((a, b) => a - b);
+      expect(sequences).toEqual(sortedSequences);
+    });
+  });
+
+  describe("single parent commits (early return)", () => {
+    const singleParentCommitDict: Map<string, CommitRaw> = new Map<
+      string,
+      Pick<CommitRaw, "id" | "parents" | "branches" | "sequence">
+    >([
+      ["initial", { id: "initial", parents: [], branches: [], sequence: 2 }],
+      ["normal", { id: "normal", parents: ["initial"], branches: [], sequence: 1 }],
+      ["latest", { id: "latest", parents: ["normal"], branches: ["master"], sequence: 0 }],
+    ]) as Map<string, CommitRaw>;
+
+    const singleParentStemDict: Map<string, Stem> = new Map([
+      [
+        "master",
+        {
+          nodes: ["latest", "normal", "initial"]
+            .map((id) => singleParentCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "master", commit })),
+        },
+      ],
+    ]);
+
+    const singleParentCommitNodeDict: Map<string, CommitNode> = Array.from(singleParentStemDict.entries()).reduce(
+      (dict, [, stem]) => {
+        stem.nodes.forEach((commitNode) => {
+          dict.set(commitNode.commit.id, commitNode);
+        });
+        return dict;
+      },
+      new Map<string, CommitNode>()
+    );
+
+    it("should return empty source for initial commit (0 parents)", () => {
+      const csmDict = buildCSMDict(singleParentCommitNodeDict, singleParentStemDict, "master");
+
+      const initialNode = csmDict.master.find((node) => node.base.commit.id === "initial");
+      expect(initialNode).toBeDefined();
+      expect(initialNode!.source).toEqual([]);
+    });
+
+    it("should return empty source for normal commit (1 parent)", () => {
+      const csmDict = buildCSMDict(singleParentCommitNodeDict, singleParentStemDict, "master");
+
+      const normalNode = csmDict.master.find((node) => node.base.commit.id === "normal");
+      expect(normalNode).toBeDefined();
+      expect(normalNode!.source).toEqual([]);
+
+      const latestNode = csmDict.master.find((node) => node.base.commit.id === "latest");
+      expect(latestNode).toBeDefined();
+      expect(latestNode!.source).toEqual([]);
+    });
+  });
+
+  describe("edge case: non-existent parent commits", () => {
+    const edgeCaseCommitDict: Map<string, CommitRaw> = new Map<
+      string,
+      Pick<CommitRaw, "id" | "parents" | "branches" | "sequence">
+    >([
+      ["0", { id: "0", parents: [], branches: [], sequence: 4 }],
+      ["1", { id: "1", parents: ["0"], branches: [], sequence: 3 }],
+      ["2", { id: "2", parents: ["1"], branches: ["branch1"], sequence: 2 }],
+      // "phantom" is not in commitDict
+      ["merge", { id: "merge", parents: ["1", "2", "phantom"], branches: ["master"], sequence: 0 }],
+    ]) as Map<string, CommitRaw>;
+
+    const edgeCaseStemDict: Map<string, Stem> = new Map([
+      [
+        "master",
+        {
+          nodes: ["merge", "1", "0"]
+            .map((id) => edgeCaseCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "master", commit })),
+        },
+      ],
+      [
+        "branch1",
+        {
+          nodes: ["2"]
+            .map((id) => edgeCaseCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "branch1", commit })),
+        },
+      ],
+    ]);
+
+    const edgeCaseCommitNodeDict: Map<string, CommitNode> = Array.from(edgeCaseStemDict.entries()).reduce(
+      (dict, [, stem]) => {
+        stem.nodes.forEach((commitNode) => {
+          dict.set(commitNode.commit.id, commitNode);
+        });
+        return dict;
+      },
+      new Map<string, CommitNode>()
+    );
+
+    edgeCaseCommitNodeDict.get("2")!.mergedIntoStem = "master";
+
+    it("should filter out non-existent parent commits", () => {
+      const csmDict = buildCSMDict(edgeCaseCommitNodeDict, edgeCaseStemDict, "master");
+
+      const mergeNode = csmDict.master.find((node) => node.base.commit.id === "merge");
+      expect(mergeNode).toBeDefined();
+
+      // Should only include commit "2", not "phantom"
+      const sourceIds = mergeNode!.source.map((node) => node.commit.id);
+      expect(sourceIds).toContain("2");
+      expect(sourceIds).not.toContain("phantom");
+    });
+  });
+
+  describe("edge case: all parents are invalid", () => {
+    const allInvalidCommitDict: Map<string, CommitRaw> = new Map<
+      string,
+      Pick<CommitRaw, "id" | "parents" | "branches" | "sequence">
+    >([
+      ["0", { id: "0", parents: [], branches: [], sequence: 2 }],
+      ["1", { id: "1", parents: ["0"], branches: [], sequence: 1 }],
+      // All merge parents are phantoms
+      ["merge", { id: "merge", parents: ["1", "phantom1", "phantom2"], branches: ["master"], sequence: 0 }],
+    ]) as Map<string, CommitRaw>;
+
+    const allInvalidStemDict: Map<string, Stem> = new Map([
+      [
+        "master",
+        {
+          nodes: ["merge", "1", "0"]
+            .map((id) => allInvalidCommitDict.get(id))
+            .filter((commit): commit is CommitRaw => Boolean(commit))
+            .map((commit) => ({ stemId: "master", commit })),
+        },
+      ],
+    ]);
+
+    const allInvalidCommitNodeDict: Map<string, CommitNode> = Array.from(allInvalidStemDict.entries()).reduce(
+      (dict, [, stem]) => {
+        stem.nodes.forEach((commitNode) => {
+          dict.set(commitNode.commit.id, commitNode);
+        });
+        return dict;
+      },
+      new Map<string, CommitNode>()
+    );
+
+    it("should return empty source when all merge parents are invalid", () => {
+      const csmDict = buildCSMDict(allInvalidCommitNodeDict, allInvalidStemDict, "master");
+
+      const mergeNode = csmDict.master.find((node) => node.base.commit.id === "merge");
+      expect(mergeNode).toBeDefined();
+      expect(mergeNode!.source).toEqual([]);
+    });
+  });
 });
