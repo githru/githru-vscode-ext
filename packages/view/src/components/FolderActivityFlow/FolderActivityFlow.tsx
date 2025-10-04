@@ -1,146 +1,39 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { useDataStore } from "store";
 
-import type { FolderActivity } from "./FolderActivityFlow.analyzer";
 import { DIMENSIONS } from "./FolderActivityFlow.const";
-import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import "./FolderActivityFlow.scss";
 import { extractContributorActivities, extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
 import { renderClusterVisualization } from "./ClusterVisualization";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
-import { ClusterModeStrategy, ReleaseModeStrategy, type NavigationStrategy } from "./NavigationStrategy";
+import { useFolderNavigation } from "./useFolderNavigation";
 
 const FolderActivityFlow = () => {
   const [totalData] = useDataStore(useShallow((state) => [state.data]));
 
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [topFolders, setTopFolders] = useState<FolderActivity[]>([]);
-  const [currentPath, setCurrentPath] = useState<string>("");
-  const [folderDepth, setFolderDepth] = useState<number>(1);
 
-  // 릴리즈 모드 관련 state
-  const [isReleaseMode, setIsReleaseMode] = useState<boolean>(false);
-  const [releaseGroups, setReleaseGroups] = useState<ReleaseGroup[]>([]);
-  const [releaseTopFolderPaths, setReleaseTopFolderPaths] = useState<string[]>([]);
-
-  // Navigation Strategy
-  const navigationStrategy: NavigationStrategy = isReleaseMode
-    ? new ReleaseModeStrategy()
-    : new ClusterModeStrategy();
-
-  // 릴리즈 모드 토글 핸들러
-  const handleModeToggle = () => {
-    setIsReleaseMode(!isReleaseMode);
-    setCurrentPath("");
-    setFolderDepth(1);
-  };
-
-  // 폴더 클릭 처리
-  const handleFolderClick = (folderPath: string) => {
-    if (folderPath === ".") {
-      return;
-    }
-
-    const subFolders = navigationStrategy.getSubFolders(totalData, folderPath);
-
-    if (subFolders.length > 0) {
-      setCurrentPath(folderPath);
-      setFolderDepth(folderDepth + 1);
-
-      if (isReleaseMode) {
-        setReleaseTopFolderPaths(subFolders as string[]);
-      } else {
-        setTopFolders(subFolders as FolderActivity[]);
-      }
-    }
-  };
-
-  // 상위 폴더로 이동
-  const handleGoUp = () => {
-    if (currentPath === "") {
-      return;
-    }
-
-    const parentPath = currentPath.includes("/") ? currentPath.substring(0, currentPath.lastIndexOf("/")) : "";
-
-    if (parentPath === "") {
-      setCurrentPath("");
-      setFolderDepth(1);
-
-      const rootResult = navigationStrategy.getRootFolders(totalData);
-      if (isReleaseMode) {
-        setReleaseTopFolderPaths(rootResult.folders as string[]);
-        if (rootResult.releaseGroups) {
-          setReleaseGroups(rootResult.releaseGroups);
-        }
-      } else {
-        setTopFolders(rootResult.folders as FolderActivity[]);
-      }
-    } else {
-      setCurrentPath(parentPath);
-      setFolderDepth(Math.max(1, folderDepth - 1));
-
-      const subFolders = navigationStrategy.getSubFolders(totalData, parentPath);
-      if (isReleaseMode) {
-        setReleaseTopFolderPaths(subFolders as string[]);
-      } else {
-        setTopFolders(subFolders as FolderActivity[]);
-      }
-    }
-  };
-
-  const handleBreadcrumbClick = (index: number) => {
-    if (index === 0) {
-      setCurrentPath("");
-      setFolderDepth(1);
-
-      const rootResult = navigationStrategy.getRootFolders(totalData);
-      if (isReleaseMode) {
-        setReleaseTopFolderPaths(rootResult.folders as string[]);
-        if (rootResult.releaseGroups) {
-          setReleaseGroups(rootResult.releaseGroups);
-        }
-      } else {
-        setTopFolders(rootResult.folders as FolderActivity[]);
-      }
-    } else if (index < getBreadcrumbs().length - 1) {
-      const pathParts = currentPath.split("/");
-      const targetPath = pathParts.slice(0, index).join("/");
-      setCurrentPath(targetPath);
-      setFolderDepth(index + 1);
-
-      const subFolders = navigationStrategy.getSubFolders(totalData, targetPath);
-      if (isReleaseMode) {
-        setReleaseTopFolderPaths(subFolders as string[]);
-      } else {
-        setTopFolders(subFolders as FolderActivity[]);
-      }
-    }
-  };
+  const {
+    topFolders,
+    currentPath,
+    isReleaseMode,
+    releaseGroups,
+    releaseTopFolderPaths,
+    toggleMode,
+    navigateToFolder,
+    navigateUp,
+    navigateToBreadcrumb,
+    initializeRootFolders,
+    getBreadcrumbs,
+  } = useFolderNavigation(totalData);
 
   useEffect(() => {
-    if (!totalData || totalData.length === 0) {
-      return;
-    }
-
-    if (currentPath === "") {
-      const clusterStrategy = new ClusterModeStrategy();
-      const releaseStrategy = new ReleaseModeStrategy();
-
-      const clusterResult = clusterStrategy.getRootFolders(totalData);
-      setTopFolders(clusterResult.folders as FolderActivity[]);
-
-      const releaseResult = releaseStrategy.getRootFolders(totalData);
-      setReleaseTopFolderPaths(releaseResult.folders as string[]);
-      if (releaseResult.releaseGroups) {
-        setReleaseGroups(releaseResult.releaseGroups);
-      }
-    }
-  }, [totalData]);
+    initializeRootFolders();
+  }, [initializeRootFolders]);
 
   useEffect(() => {
     if (!totalData || totalData.length === 0) {
@@ -185,7 +78,7 @@ const FolderActivityFlow = () => {
         releaseContributorActivities,
         releaseTopFolderPaths,
         tooltipRef,
-        onFolderClick: handleFolderClick,
+        onFolderClick: navigateToFolder,
       });
     } else {
       const contributorActivities = extractContributorActivities(totalData, topFolders, currentPath);
@@ -208,28 +101,10 @@ const FolderActivityFlow = () => {
         contributorActivities,
         topFolders,
         tooltipRef,
-        onFolderClick: handleFolderClick,
+        onFolderClick: navigateToFolder,
       });
     }
-  }, [totalData, topFolders, isReleaseMode, releaseGroups, releaseTopFolderPaths]);
-
-  // 브레드크럼 생성
-  const getBreadcrumbs = () => {
-    if (currentPath === "") {
-      return ["root"];
-    }
-
-    const parts = currentPath.split("/");
-    const breadcrumbs = ["root"];
-    let current = "";
-
-    parts.forEach((part) => {
-      current = current ? `${current}/${part}` : part;
-      breadcrumbs.push(part);
-    });
-
-    return breadcrumbs;
-  };
+  }, [totalData, topFolders, isReleaseMode, releaseGroups, releaseTopFolderPaths, navigateToFolder]);
 
   return (
     <div className="folder-activity-flow">
@@ -244,7 +119,7 @@ const FolderActivityFlow = () => {
         </div>
         <button
           className="folder-activity-flow__mode-toggle"
-          onClick={handleModeToggle}
+          onClick={toggleMode}
           style={{
             padding: "8px 16px",
             backgroundColor: isReleaseMode ? "#28a745" : "#007bff",
@@ -266,7 +141,7 @@ const FolderActivityFlow = () => {
             {index > 0 && <span className="separator"> / </span>}
             <span
               className={index === getBreadcrumbs().length - 1 ? "current" : "clickable"}
-              onClick={() => handleBreadcrumbClick(index)}
+              onClick={() => navigateToBreadcrumb(index, getBreadcrumbs().length)}
             >
               {crumb}
             </span>
@@ -275,7 +150,7 @@ const FolderActivityFlow = () => {
         {currentPath !== "" && (
           <button
             className="folder-activity-flow__back-btn"
-            onClick={handleGoUp}
+            onClick={navigateUp}
           >
             ← Up
           </button>
