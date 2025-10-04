@@ -28,8 +28,6 @@ import {
 const FolderActivityFlow = () => {
   const [totalData] = useDataStore(useShallow((state) => [state.data]));
 
-  console.log("🚀 [FolderActivityFlow] Rendered with totalData:", totalData);
-
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [topFolders, setTopFolders] = useState<FolderActivity[]>([]);
@@ -41,14 +39,8 @@ const FolderActivityFlow = () => {
   const [releaseGroups, setReleaseGroups] = useState<ReleaseGroup[]>([]);
   const [releaseTopFolderPaths, setReleaseTopFolderPaths] = useState<string[]>([]);
 
-  // 로그 헬퍼 함수
-  const logDataFlow = (message: string, data?: any) => {
-    console.log(`[FolderActivityFlow] ${message}`, data);
-  };
-
   // 릴리즈 모드 토글 핸들러
   const handleModeToggle = () => {
-    logDataFlow(`🔄 Mode toggle: ${isReleaseMode ? "cluster" : "release"} -> ${isReleaseMode ? "release" : "cluster"}`);
     setIsReleaseMode(!isReleaseMode);
     setCurrentPath("");
     setFolderDepth(1);
@@ -56,242 +48,119 @@ const FolderActivityFlow = () => {
 
   // 폴더 클릭 처리
   const handleFolderClick = (folderPath: string) => {
-    logDataFlow(`📁 Folder clicked: ${folderPath} in ${isReleaseMode ? "release" : "cluster"} mode`);
-
     if (folderPath === ".") {
-      logDataFlow("❌ Root folder clicked, ignoring");
       return;
     }
 
     if (isReleaseMode) {
-      // Release mode: getReleaseSubFolders 사용
       const subFolderPaths = getReleaseSubFolders(totalData, folderPath);
-      logDataFlow(`🔍 Found ${subFolderPaths.length} release subfolders for path: ${folderPath}`, subFolderPaths);
 
       if (subFolderPaths.length > 0) {
-        logDataFlow(`📂 Navigating to folder: ${folderPath}, depth: ${folderDepth} -> ${folderDepth + 1}`);
         setCurrentPath(folderPath);
         setFolderDepth(folderDepth + 1);
         setReleaseTopFolderPaths(subFolderPaths);
-      } else {
-        logDataFlow("⚠️ No release subfolders found, staying at current level");
       }
     } else {
-      // Cluster mode: getSubFolders 사용
       const subFolders = getSubFolders(totalData, folderPath);
-      logDataFlow(`🔍 Found ${subFolders.length} cluster subfolders for path: ${folderPath}`, subFolders);
 
       if (subFolders.length > 0) {
-        logDataFlow(`📂 Navigating to folder: ${folderPath}, depth: ${folderDepth} -> ${folderDepth + 1}`);
         setCurrentPath(folderPath);
         setFolderDepth(folderDepth + 1);
         setTopFolders(subFolders);
-      } else {
-        logDataFlow("⚠️ No cluster subfolders found, staying at current level");
       }
     }
   };
 
   // 상위 폴더로 이동
   const handleGoUp = () => {
-    logDataFlow(`⬆️ Going up from: ${currentPath} in ${isReleaseMode ? "release" : "cluster"} mode`);
-
     if (currentPath === "") {
-      logDataFlow("❌ Already at root, cannot go up");
       return;
     }
 
     const parentPath = currentPath.includes("/") ? currentPath.substring(0, currentPath.lastIndexOf("/")) : "";
 
-    logDataFlow(`📍 Parent path calculated: "${parentPath}"`);
-
     if (parentPath === "") {
-      logDataFlow("🏠 Returning to root level");
       setCurrentPath("");
       setFolderDepth(1);
 
       if (isReleaseMode) {
         const flatData = totalData.flat();
         const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-        logDataFlow(`📊 Root release folders loaded:`, releaseResult.topFolderPaths);
         setReleaseTopFolderPaths(releaseResult.topFolderPaths);
       } else {
         const rootFolders = getTopFolders(totalData.flat(), 8, 1);
-        logDataFlow(`📊 Root cluster folders loaded:`, rootFolders);
         setTopFolders(rootFolders);
       }
     } else {
-      logDataFlow(`📂 Moving to parent: ${parentPath}, depth: ${folderDepth} -> ${Math.max(1, folderDepth - 1)}`);
       setCurrentPath(parentPath);
       setFolderDepth(Math.max(1, folderDepth - 1));
 
       if (isReleaseMode) {
         const subFolderPaths = getReleaseSubFolders(totalData, parentPath);
-        logDataFlow(`📊 Parent release subfolders loaded:`, subFolderPaths);
         setReleaseTopFolderPaths(subFolderPaths);
       } else {
         const subFolders = getSubFolders(totalData, parentPath);
-        logDataFlow(`📊 Parent cluster subfolders loaded:`, subFolders);
         setTopFolders(subFolders);
       }
     }
   };
 
   const handleBreadcrumbClick = (index: number) => {
-    logDataFlow(`🍞 Breadcrumb clicked: index ${index} in ${isReleaseMode ? "release" : "cluster"} mode`);
-
     if (index === 0) {
-      logDataFlow("🏠 Breadcrumb: returning to root");
       setCurrentPath("");
       setFolderDepth(1);
 
       if (isReleaseMode) {
         const flatData = totalData.flat();
         const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-        logDataFlow("📊 Breadcrumb: root release folders loaded:", releaseResult.topFolderPaths);
         setReleaseTopFolderPaths(releaseResult.topFolderPaths);
       } else {
         const folders = getTopFolders(totalData, 8, 1);
-        logDataFlow("📊 Breadcrumb: root cluster folders loaded:", folders);
         setTopFolders(folders);
       }
     } else if (index < getBreadcrumbs().length - 1) {
       const pathParts = currentPath.split("/");
       const targetPath = pathParts.slice(0, index).join("/");
-      logDataFlow(`📂 Breadcrumb: navigating to ${targetPath}, depth: ${folderDepth} -> ${index + 1}`);
       setCurrentPath(targetPath);
       setFolderDepth(index + 1);
 
       if (isReleaseMode) {
         const subFolderPaths = getReleaseSubFolders(totalData, targetPath);
-        logDataFlow("📊 Breadcrumb: release subfolders loaded:", subFolderPaths);
         setReleaseTopFolderPaths(subFolderPaths);
       } else {
         const subFolders = getSubFolders(totalData, targetPath);
-        logDataFlow("📊 Breadcrumb: cluster subfolders loaded:", subFolders);
         setTopFolders(subFolders);
       }
-    } else {
-      logDataFlow("❌ Breadcrumb: clicked on current level, ignoring");
     }
   };
 
   useEffect(() => {
-    logDataFlow(`🔄 First useEffect triggered - totalData changed`);
-
-    // totalData 기본 정보 로그
-    logDataFlow(`📊 TotalData basic info:`, {
-      exists: !!totalData,
-      length: totalData?.length || 0,
-      type: Array.isArray(totalData) ? "array" : typeof totalData,
-    });
-
-    if (totalData && totalData.length > 0) {
-      // totalData 구조 상세 분석
-      const firstItem = totalData[0];
-      logDataFlow(`🔍 TotalData structure analysis:`, {
-        firstItemType: typeof firstItem,
-        firstItemKeys: firstItem && typeof firstItem === "object" ? Object.keys(firstItem) : "N/A",
-        isNestedArray: Array.isArray(firstItem),
-        nestedArrayLength: Array.isArray(firstItem) ? firstItem.length : "N/A",
-      });
-
-      // 평탄화된 데이터 분석
-      const flatData = totalData.flat();
-      logDataFlow(`📊 Flattened data analysis:`, {
-        originalLength: totalData.length,
-        flattenedLength: flatData.length,
-        sampleItem: flatData[0]
-          ? {
-              type: typeof flatData[0],
-              keys: flatData[0] && typeof flatData[0] === "object" ? Object.keys(flatData[0]).slice(0, 10) : "N/A",
-            }
-          : "No items",
-      });
-
-      // 데이터 내용 샘플링
-      if (flatData.length > 0 && flatData[0] && typeof flatData[0] === "object") {
-        const sample = flatData[0];
-        logDataFlow(`🎯 Data sample structure:`, {
-          hasAuthor: "author" in sample || "contributorName" in sample,
-          hasDate: "date" in sample || "commitDate" in sample,
-          hasFiles: "files" in sample || "filePaths" in sample,
-          hasCluster: "cluster" in sample || "clusterIndex" in sample,
-          allKeys: Object.keys(sample),
-        });
-      }
-    }
-
     if (!totalData || totalData.length === 0) {
-      logDataFlow("❌ No totalData available, skipping initialization");
       return;
     }
 
-    // 루트 폴더로 초기화
     if (currentPath === "") {
-      logDataFlow("🏠 Initializing with root folders");
       const flatData = totalData.flat();
-      logDataFlow(`📊 Processing ${flatData.length} items for folder analysis`);
 
-      // 클러스터 모드 데이터 초기화
       const folders = getTopFolders(flatData, 8, 1);
-      logDataFlow("📁 Initial root folders:", {
-        count: folders.length,
-        folders: folders.map((f) => ({
-          path: f.folderPath,
-          totalChanges: f.totalChanges,
-          commitCount: f.commitCount,
-          insertions: f.insertions,
-          deletions: f.deletions,
-        })),
-      });
       setTopFolders(folders);
 
-      // 릴리즈 모드 데이터 초기화
-      logDataFlow("🏷️ Initializing release-based analysis");
       const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-      logDataFlow("📊 Release analysis result:", {
-        releaseGroupCount: releaseResult.releaseGroups.length,
-        topFolderCount: releaseResult.topFolderPaths.length,
-        releaseGroups: releaseResult.releaseGroups.map((g) => ({
-          tag: g.releaseTag,
-          commitCount: g.commitCount,
-          dateRange: g.dateRange,
-        })),
-      });
       setReleaseGroups(releaseResult.releaseGroups);
       setReleaseTopFolderPaths(releaseResult.topFolderPaths);
-    } else {
-      logDataFlow(`📂 Not at root (currentPath: ${currentPath}), skipping initialization`);
     }
   }, [totalData]);
 
   useEffect(() => {
-    logDataFlow(`🎨 Second useEffect triggered - rendering visualization`);
-    logDataFlow(`📊 Render conditions:`, {
-      totalDataExists: !!totalData,
-      totalDataLength: totalData?.length || 0,
-      isReleaseMode,
-      topFoldersLength: topFolders.length,
-      releaseGroupsLength: releaseGroups.length,
-      releaseTopFolderPathsLength: releaseTopFolderPaths.length,
-      currentPath,
-      folderDepth,
-    });
-
     if (!totalData || totalData.length === 0) {
-      logDataFlow("❌ No totalData available, skipping visualization");
       return;
     }
 
-    // 모드별 데이터 체크
     if (isReleaseMode) {
       if (releaseGroups.length === 0 || releaseTopFolderPaths.length === 0) {
-        logDataFlow("❌ Insufficient release data for rendering, skipping visualization");
         return;
       }
     } else if (topFolders.length === 0) {
-      logDataFlow("❌ Insufficient cluster data for rendering, skipping visualization");
       return;
     }
 
@@ -299,26 +168,13 @@ const FolderActivityFlow = () => {
 
     svg.selectAll("*").remove();
 
-    // 모드별 기여자 활동 데이터 추출
-    logDataFlow(
-      `🔍 Extracting contributor activities for path: "${currentPath}" in ${isReleaseMode ? "release" : "cluster"} mode`
-    );
-
     if (isReleaseMode) {
-      // 릴리즈 모드: releaseTopFolderPaths 기반
-      // currentPath가 비어있으면 1, 아니면 현재 depth를 사용
       const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
       const releaseContributorActivities = extractReleaseBasedContributorActivities(
         totalData,
         releaseTopFolderPaths,
         currentDepth
       );
-      logDataFlow(`🏷️ Release contributor activities extracted:`, {
-        count: releaseContributorActivities.length,
-        contributors: Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName))),
-        releases: Array.from(new Set(releaseContributorActivities.map((a) => a.releaseTag))),
-        folders: Array.from(new Set(releaseContributorActivities.map((a) => a.folderPath))),
-      });
 
       if (releaseContributorActivities.length === 0) {
         svg
@@ -335,36 +191,7 @@ const FolderActivityFlow = () => {
 
       renderReleaseVisualization(svg, releaseContributorActivities);
     } else {
-      // 클러스터 모드: 기존 로직
-      console.log("📊 [Cluster Mode] === Data Analysis Start ===");
-      console.log("📊 [Cluster Mode] totalData:", totalData);
-      console.log("📊 [Cluster Mode] topFolders:", topFolders);
-      console.log("📊 [Cluster Mode] currentPath:", currentPath);
-
       const contributorActivities = extractContributorActivities(totalData, topFolders, currentPath);
-
-      console.log("📊 [Cluster Mode] contributorActivities count:", contributorActivities.length);
-      console.log("📊 [Cluster Mode] contributorActivities sample (first 5):", contributorActivities.slice(0, 5));
-      console.log(
-        "📊 [Cluster Mode] unique contributors:",
-        Array.from(new Set(contributorActivities.map((a) => a.contributorName)))
-      );
-      console.log(
-        "📊 [Cluster Mode] unique clusters:",
-        Array.from(new Set(contributorActivities.map((a) => a.clusterIndex))).sort()
-      );
-      console.log(
-        "📊 [Cluster Mode] unique folders:",
-        Array.from(new Set(contributorActivities.map((a) => a.folderPath)))
-      );
-      console.log("📊 [Cluster Mode] === Data Analysis End ===");
-
-      logDataFlow(`👥 Cluster contributor activities extracted:`, {
-        count: contributorActivities.length,
-        contributors: Array.from(new Set(contributorActivities.map((a) => a.contributorName))),
-        clusters: Array.from(new Set(contributorActivities.map((a) => a.clusterIndex))).sort(),
-        folders: Array.from(new Set(contributorActivities.map((a) => a.folderPath))),
-      });
 
       if (contributorActivities.length === 0) {
         svg
@@ -747,7 +574,6 @@ const FolderActivityFlow = () => {
   // 브레드크럼 생성
   const getBreadcrumbs = () => {
     if (currentPath === "") {
-      logDataFlow("🍞 Breadcrumbs: at root level");
       return ["root"];
     }
 
@@ -760,7 +586,6 @@ const FolderActivityFlow = () => {
       breadcrumbs.push(part);
     });
 
-    logDataFlow(`🍞 Breadcrumbs generated:`, { currentPath, breadcrumbs });
     return breadcrumbs;
   };
 
