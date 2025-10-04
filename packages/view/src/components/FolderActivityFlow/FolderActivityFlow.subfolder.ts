@@ -1,6 +1,19 @@
 import type { ClusterNode } from "types";
 import type { FolderActivity } from "./FolderActivityFlow.analyzer";
 
+/**
+ * Extract subfolders for cluster mode navigation
+ *
+ * @param totalData - Array of cluster nodes containing commit data
+ * @param parentPath - Parent folder path to extract subfolders from (empty string for root)
+ * @returns Array of folder activities sorted by total changes (max 8 items)
+ *
+ * @example
+ * ```ts
+ * const subFolders = getSubFolders(clusterData, "src/components");
+ * // Returns: [{ folderPath: "src/components/FolderActivityFlow", totalChanges: 150, ... }, ...]
+ * ```
+ */
 export function getSubFolders(totalData: ClusterNode[], parentPath: string): FolderActivity[] {
   if (totalData.length === 0) return [];
 
@@ -45,8 +58,17 @@ export function getSubFolders(totalData: ClusterNode[], parentPath: string): Fol
 }
 
 /**
- * Release mode용 서브폴더 추출 함수
- * parentPath 기준으로 하위 폴더들을 추출하고 변경사항 기준으로 정렬
+ * Extract subfolders for release mode navigation
+ *
+ * @param totalData - Array of cluster nodes containing commit data
+ * @param parentPath - Parent folder path to extract subfolders from (empty string for root)
+ * @returns Array of folder paths sorted by total changes (max 8 items)
+ *
+ * @example
+ * ```ts
+ * const releaseFolders = getReleaseSubFolders(clusterData, "src");
+ * // Returns: ["src/components", "src/utils", "src/store", ...]
+ * ```
  */
 export function getReleaseSubFolders(totalData: ClusterNode[], parentPath: string): string[] {
   if (totalData.length === 0) return [];

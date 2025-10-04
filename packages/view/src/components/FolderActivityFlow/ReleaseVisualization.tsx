@@ -10,14 +10,31 @@ import {
   generateReleaseFlowLinePath,
 } from "./FolderActivityFlow.util";
 
+/**
+ * Props for release visualization component
+ */
 interface ReleaseVisualizationProps {
+  /** D3 SVG selection to render into */
   svg: d3.Selection<SVGSVGElement | null, unknown, null, undefined>;
+  /** Contributor activities grouped by release */
   releaseContributorActivities: ReleaseContributorActivity[];
+  /** Top folder paths to display as lanes */
   releaseTopFolderPaths: string[];
+  /** Tooltip element reference */
   tooltipRef: React.RefObject<HTMLDivElement>;
+  /** Callback when folder is clicked */
   onFolderClick: (folderPath: string) => void;
 }
 
+/**
+ * Render release-based visualization of contributor activities across folders
+ *
+ * Displays contributors moving between folders across different releases.
+ * Each folder is shown as a horizontal lane, with contributor nodes plotted
+ * within release columns. Flow lines connect activities of the same contributor.
+ *
+ * @param props - Visualization configuration
+ */
 export const renderReleaseVisualization = ({
   svg,
   releaseContributorActivities,
