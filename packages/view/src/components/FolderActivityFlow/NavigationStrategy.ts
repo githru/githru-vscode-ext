@@ -1,5 +1,6 @@
 import type { ClusterNode } from "types";
 import type { FolderActivity } from "./FolderActivityFlow.analyzer";
+import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import { getTopFolders } from "./FolderActivityFlow.analyzer";
 import { analyzeReleaseBasedFolders } from "./FolderActivityFlow.util";
 import { getSubFolders, getReleaseSubFolders } from "./FolderActivityFlow.subfolder";
@@ -18,7 +19,7 @@ export interface NavigationStrategy {
    */
   getRootFolders(totalData: ClusterNode[]): {
     folders: FolderActivity[] | string[];
-    releaseGroups?: any[];
+    releaseGroups?: ReleaseGroup[];
   };
 }
 
@@ -49,7 +50,7 @@ export class ReleaseModeStrategy implements NavigationStrategy {
 
   getRootFolders(totalData: ClusterNode[]): {
     folders: string[];
-    releaseGroups: any[];
+    releaseGroups: ReleaseGroup[];
   } {
     const flatData = totalData.flat();
     const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);

@@ -31,7 +31,8 @@ export function extractContributorActivities(
 
             const folderChanges = new Map<string, { insertions: number; deletions: number }>();
 
-            Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]: [string, any]) => {
+            Object.entries(commit.diffStatistics.files).forEach(
+              ([filePath, stats]: [string, { insertions: number; deletions: number }]) => {
               let folderPath: string;
 
               if (currentPath === "") {
