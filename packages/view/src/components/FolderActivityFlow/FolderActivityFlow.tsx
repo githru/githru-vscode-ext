@@ -4,18 +4,14 @@ import { useShallow } from "zustand/react/shallow";
 
 import { useDataStore } from "store";
 
-import { getTopFolders, type FolderActivity } from "./FolderActivityFlow.analyzer";
-import { getSubFolders, getReleaseSubFolders } from "./FolderActivityFlow.subfolder";
+import type { FolderActivity } from "./FolderActivityFlow.analyzer";
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
 import "./FolderActivityFlow.scss";
-import {
-  analyzeReleaseBasedFolders,
-  extractContributorActivities,
-  extractReleaseBasedContributorActivities,
-} from "./FolderActivityFlow.util";
+import { extractContributorActivities, extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
 import { renderClusterVisualization } from "./ClusterVisualization";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
+import { ClusterModeStrategy, ReleaseModeStrategy, type NavigationStrategy } from "./NavigationStrategy";
 
 const FolderActivityFlow = () => {
   const [totalData] = useDataStore(useShallow((state) => [state.data]));
@@ -31,6 +27,11 @@ const FolderActivityFlow = () => {
   const [releaseGroups, setReleaseGroups] = useState<ReleaseGroup[]>([]);
   const [releaseTopFolderPaths, setReleaseTopFolderPaths] = useState<string[]>([]);
 
+  // Navigation Strategy
+  const navigationStrategy: NavigationStrategy = isReleaseMode
+    ? new ReleaseModeStrategy()
+    : new ClusterModeStrategy();
+
   // 릴리즈 모드 토글 핸들러
   const handleModeToggle = () => {
     setIsReleaseMode(!isReleaseMode);
@@ -44,21 +45,16 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    if (isReleaseMode) {
-      const subFolderPaths = getReleaseSubFolders(totalData, folderPath);
+    const subFolders = navigationStrategy.getSubFolders(totalData, folderPath);
 
-      if (subFolderPaths.length > 0) {
-        setCurrentPath(folderPath);
-        setFolderDepth(folderDepth + 1);
-        setReleaseTopFolderPaths(subFolderPaths);
-      }
-    } else {
-      const subFolders = getSubFolders(totalData, folderPath);
+    if (subFolders.length > 0) {
+      setCurrentPath(folderPath);
+      setFolderDepth(folderDepth + 1);
 
-      if (subFolders.length > 0) {
-        setCurrentPath(folderPath);
-        setFolderDepth(folderDepth + 1);
-        setTopFolders(subFolders);
+      if (isReleaseMode) {
+        setReleaseTopFolderPaths(subFolders as string[]);
+      } else {
+        setTopFolders(subFolders as FolderActivity[]);
       }
     }
   };
@@ -75,24 +71,24 @@ const FolderActivityFlow = () => {
       setCurrentPath("");
       setFolderDepth(1);
 
+      const rootResult = navigationStrategy.getRootFolders(totalData);
       if (isReleaseMode) {
-        const flatData = totalData.flat();
-        const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-        setReleaseTopFolderPaths(releaseResult.topFolderPaths);
+        setReleaseTopFolderPaths(rootResult.folders as string[]);
+        if (rootResult.releaseGroups) {
+          setReleaseGroups(rootResult.releaseGroups);
+        }
       } else {
-        const rootFolders = getTopFolders(totalData.flat(), 8, 1);
-        setTopFolders(rootFolders);
+        setTopFolders(rootResult.folders as FolderActivity[]);
       }
     } else {
       setCurrentPath(parentPath);
       setFolderDepth(Math.max(1, folderDepth - 1));
 
+      const subFolders = navigationStrategy.getSubFolders(totalData, parentPath);
       if (isReleaseMode) {
-        const subFolderPaths = getReleaseSubFolders(totalData, parentPath);
-        setReleaseTopFolderPaths(subFolderPaths);
+        setReleaseTopFolderPaths(subFolders as string[]);
       } else {
-        const subFolders = getSubFolders(totalData, parentPath);
-        setTopFolders(subFolders);
+        setTopFolders(subFolders as FolderActivity[]);
       }
     }
   };
@@ -102,13 +98,14 @@ const FolderActivityFlow = () => {
       setCurrentPath("");
       setFolderDepth(1);
 
+      const rootResult = navigationStrategy.getRootFolders(totalData);
       if (isReleaseMode) {
-        const flatData = totalData.flat();
-        const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-        setReleaseTopFolderPaths(releaseResult.topFolderPaths);
+        setReleaseTopFolderPaths(rootResult.folders as string[]);
+        if (rootResult.releaseGroups) {
+          setReleaseGroups(rootResult.releaseGroups);
+        }
       } else {
-        const folders = getTopFolders(totalData, 8, 1);
-        setTopFolders(folders);
+        setTopFolders(rootResult.folders as FolderActivity[]);
       }
     } else if (index < getBreadcrumbs().length - 1) {
       const pathParts = currentPath.split("/");
@@ -116,12 +113,11 @@ const FolderActivityFlow = () => {
       setCurrentPath(targetPath);
       setFolderDepth(index + 1);
 
+      const subFolders = navigationStrategy.getSubFolders(totalData, targetPath);
       if (isReleaseMode) {
-        const subFolderPaths = getReleaseSubFolders(totalData, targetPath);
-        setReleaseTopFolderPaths(subFolderPaths);
+        setReleaseTopFolderPaths(subFolders as string[]);
       } else {
-        const subFolders = getSubFolders(totalData, targetPath);
-        setTopFolders(subFolders);
+        setTopFolders(subFolders as FolderActivity[]);
       }
     }
   };
@@ -132,14 +128,17 @@ const FolderActivityFlow = () => {
     }
 
     if (currentPath === "") {
-      const flatData = totalData.flat();
+      const clusterStrategy = new ClusterModeStrategy();
+      const releaseStrategy = new ReleaseModeStrategy();
 
-      const folders = getTopFolders(flatData, 8, 1);
-      setTopFolders(folders);
+      const clusterResult = clusterStrategy.getRootFolders(totalData);
+      setTopFolders(clusterResult.folders as FolderActivity[]);
 
-      const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
-      setReleaseGroups(releaseResult.releaseGroups);
-      setReleaseTopFolderPaths(releaseResult.topFolderPaths);
+      const releaseResult = releaseStrategy.getRootFolders(totalData);
+      setReleaseTopFolderPaths(releaseResult.folders as string[]);
+      if (releaseResult.releaseGroups) {
+        setReleaseGroups(releaseResult.releaseGroups);
+      }
     }
   }, [totalData]);
 
