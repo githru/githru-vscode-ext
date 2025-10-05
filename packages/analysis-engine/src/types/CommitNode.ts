@@ -4,7 +4,7 @@ export interface CommitNode {
   // stemId does not exist before traversal.
   stemId?: string;
   // ID of the stem this node was merged into (for merge parents)
-  mergedIntoStem?: string;
+  mergedIntoBaseStem?: string;
   commit: CommitRaw;
 }
 

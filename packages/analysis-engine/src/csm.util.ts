@@ -1,9 +1,11 @@
-import { MERGE_PARENT_INDEX } from "./csm.const";
 import type { CommitDict, CommitNode, Stem } from "./types";
 
 /** Gets the second parent (starting point of merged branch) of a merge commit. */
-export const getMergeParentCommit = (baseCommitNode: CommitNode, commitDict: CommitDict): CommitNode | undefined => {
-  return commitDict.get(baseCommitNode.commit.parents[MERGE_PARENT_INDEX]);
+export const getParentCommits = (baseCommitNode: CommitNode, commitDict: CommitDict): CommitNode[] => {
+  return baseCommitNode.commit.parents
+    .slice(1)
+    .map((parentId) => commitDict.get(parentId))
+    .filter((commit): commit is CommitNode => !!commit);
 };
 
 /** Finds the index of a specific commit node in a stem. */
@@ -19,7 +21,7 @@ export const findSquashEndIndex = (stem: Stem, startIndex: number): number => {
   let endIndex = stem.nodes.length - 1;
 
   for (let i = startIndex + 1; i < stem.nodes.length; i++) {
-    if (stem.nodes[i].mergedIntoStem) {
+    if (stem.nodes[i].mergedIntoBaseStem) {
       endIndex = i - 1;
       break;
     }
