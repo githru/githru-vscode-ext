@@ -11,6 +11,7 @@ import {
 import { Tooltip } from "@mui/material";
 import type { ListRowProps } from "react-virtualized";
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
+import type { RenderedRows } from "react-virtualized/dist/es/List";
 
 import { Author } from "components/@common/Author";
 import { useGithubInfo, useDataStore } from "store";
@@ -71,16 +72,6 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
     return items;
   }, [commitNodeListInCluster]);
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(
-    ({ scrollTop, scrollHeight, clientHeight }: { scrollTop: number; scrollHeight: number; clientHeight: number }) => {
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5; // 5px 여유
-      const hasMoreContent = scrollHeight > clientHeight;
-      setShowScrollIndicator(!isAtBottom && hasMoreContent && virtualizedItems.length > 1);
-    },
-    [virtualizedItems.length]
-  );
-
   const renderCommitItem = useCallback(
     (props: { index: number; key: string }) => {
       const { index, key } = props;
@@ -102,6 +93,14 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
       );
     },
     [virtualizedItems]
+  );
+
+  const handleRowsRendered = useCallback(
+    ({ stopIndex }: RenderedRows) => {
+      const lastIndex = virtualizedItems.length - 1;
+      setShowScrollIndicator(stopIndex < lastIndex);
+    },
+    [virtualizedItems.length]
   );
 
   const rowRenderer = useCallback(
@@ -197,7 +196,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
               rowCount={virtualizedItems.length}
               rowHeight={cache.rowHeight}
               rowRenderer={rowRenderer}
-              onScroll={handleScroll}
+              onRowsRendered={handleRowsRendered}
               className="detail__virtualized-list"
               estimatedRowSize={120}
             />
