@@ -50,7 +50,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     // First, find the end index (before next mergedIntoStem or end of stem)
     let endIndex = squashStem.nodes.length - 1;
     for (let i = squashStartNodeIndex + 1; i < squashStem.nodes.length; i++) {
-      if (squashStem.nodes[i].mergedIntoStem) {
+      if (squashStem.nodes[i].mergedIntoBaseStem) {
         endIndex = i - 1;
         break;
       }
