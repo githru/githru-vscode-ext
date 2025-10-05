@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -7,17 +7,23 @@ import {
   CommitRounded,
   RestorePageRounded,
   ExpandMoreRounded,
-  ExpandLessRounded,
 } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
+import type { ListRowProps } from "react-virtualized";
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
 
 import { Author } from "components/@common/Author";
 import { useGithubInfo, useDataStore } from "store";
 
-import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
-import { FIRST_SHOW_NUM } from "./Detail.const";
-import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps, LinkedMessage } from "./Detail.type";
+import type {
+  DetailProps,
+  DetailSummaryProps,
+  DetailSummaryItem,
+  CommitItemProps,
+  LinkedMessage,
+  VirtualizedItem,
+} from "./Detail.type";
 
 import "./Detail.scss";
 
@@ -27,18 +33,91 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
     title: [],
     body: null,
   });
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
   const { owner, repo } = useGithubInfo();
 
+  const cache = useMemo(
+    () =>
+      new CellMeasurerCache({
+        fixedWidth: true,
+        defaultHeight: 120,
+      }),
+    []
+  );
+
   const commitNodeListInCluster =
     selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
-  const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
-
-  const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
 
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
+
+  const virtualizedItems = useMemo((): VirtualizedItem[] => {
+    const items: VirtualizedItem[] = [];
+
+    items.push({
+      type: "summary",
+      data: commitNodeListInCluster,
+    });
+
+    commitNodeListInCluster.forEach(({ commit }) => {
+      items.push({
+        type: "commit",
+        data: commit,
+      });
+    });
+
+    return items;
+  }, [commitNodeListInCluster]);
+
+  // 스크롤 이벤트 핸들러
+  const handleScroll = useCallback(
+    ({ scrollTop, scrollHeight, clientHeight }: { scrollTop: number; scrollHeight: number; clientHeight: number }) => {
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5; // 5px 여유
+      const hasMoreContent = scrollHeight > clientHeight;
+      setShowScrollIndicator(!isAtBottom && hasMoreContent && virtualizedItems.length > 1);
+    },
+    [virtualizedItems.length]
+  );
+
+  const renderCommitItem = useCallback(
+    (props: { index: number; key: string }) => {
+      const { index, key } = props;
+      const item = virtualizedItems[index];
+
+      if (item.type === "summary") {
+        return <DetailSummary commitNodeListInCluster={item.data} />;
+      }
+      return (
+        <MemoizedCommitItem
+          key={key}
+          commit={item.data}
+          owner={owner}
+          repo={repo}
+          authSrcMap={authSrcMap}
+          handleCommitIdCopy={handleCommitIdCopy}
+          linkedMessage={linkedMessage}
+        />
+      );
+    },
+    [virtualizedItems]
+  );
+
+  const rowRenderer = useCallback(
+    ({ index, key, parent, style }: ListRowProps) => (
+      <CellMeasurer
+        key={key}
+        cache={cache}
+        parent={parent}
+        columnIndex={0}
+        rowIndex={index}
+      >
+        <div style={style}>{renderCommitItem({ index, key })}</div>
+      </CellMeasurer>
+    ),
+    [cache, renderCommitItem]
+  );
 
   useEffect(() => {
     const processMessage = (message: string) => {
@@ -108,32 +187,30 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   if (!selectedData || selectedData.length === 0) return null;
 
   return (
-    <>
-      <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
-      <ul className="detail__commit-list">
-        {commitNodeList.map(({ commit }) => (
-          <CommitItem
-            key={commit.id}
-            commit={commit}
-            owner={owner}
-            repo={repo}
-            authSrcMap={authSrcMap}
-            handleCommitIdCopy={handleCommitIdCopy}
-            linkedMessage={linkedMessage}
-          />
-        ))}
-      </ul>
+    <div className="detail__container">
+      <AutoSizer>
+        {({ height, width }) => {
+          return (
+            <List
+              height={height}
+              width={width}
+              rowCount={virtualizedItems.length}
+              rowHeight={cache.rowHeight}
+              rowRenderer={rowRenderer}
+              onScroll={handleScroll}
+              className="detail__virtualized-list"
+              estimatedRowSize={120}
+            />
+          );
+        }}
+      </AutoSizer>
 
-      {isShow && (
-        <button
-          type="button"
-          className="detail__toggle-button"
-          onClick={handleToggle}
-        >
-          {toggle ? <ExpandLessRounded /> : <ExpandMoreRounded />}
-        </button>
+      {showScrollIndicator && (
+        <div className="detail__scroll-indicator">
+          <ExpandMoreRounded />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -142,10 +219,7 @@ export default Detail;
 function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linkedMessage }: CommitItemProps) {
   const { id, message, author, commitDate } = commit;
   return (
-    <li
-      key={id}
-      className="detail__commit-item"
-    >
+    <div className="detail__commit-item">
       <div className="commit-item__detail">
         <div className="commit-item__message-container">
           <div className="commit-message">
@@ -200,9 +274,11 @@ function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linke
           </div>
         </div>
       </div>
-    </li>
+    </div>
   );
 }
+
+const MemoizedCommitItem = React.memo(CommitItem);
 
 function DetailSummary({ commitNodeListInCluster }: DetailSummaryProps) {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({

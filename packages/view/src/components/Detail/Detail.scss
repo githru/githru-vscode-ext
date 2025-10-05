@@ -5,6 +5,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: $font-size-caption;
+  padding-bottom: 1rem;
 
   .detail__summary-divider {
     margin-right: 1rem;
@@ -45,13 +46,14 @@
   }
 }
 
-.detail__commit-list {
+.detail__container {
+  position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 1.25rem;
-  font-size: $font-size-body;
+  height: 100%;
+  min-height: 200px;
+}
 
+.detail__container {
   .detail__commit-item {
     width: 100%;
     display: flex;
@@ -182,16 +184,46 @@
   }
 }
 
-.detail__toggle-button {
+.detail__scroll-indicator {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   display: flex;
-  margin: 0 auto;
-  border: none;
-  background: none;
-  color: var(--color-tertiary);
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  color: var(--color-text-tertiary);
   cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   &:hover {
-    color: $color-light-gray;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--color-text-secondary);
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  svg {
+    font-size: 1rem;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-3px);
+    }
+    60% {
+      transform: translateY(-2px);
+    }
   }
 }
 
