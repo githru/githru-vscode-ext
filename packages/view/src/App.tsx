@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FolderActivityFlow,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -13,6 +20,12 @@ import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { NetworkGraph } from "components/NetworkGraph";
+import {
+  analyzeReleaseBasedFolders,
+  extractReleaseBasedContributorActivities,
+  findFirstReleaseContributorNodes,
+  generateReleaseFlowLineData,
+} from "components/FolderActivityFlow/FolderActivityFlow.util";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -23,6 +36,7 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
+  const totalData = useDataStore((state) => state.data);
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   const handleOpenFolderActivityFlowModal = () => {
@@ -32,6 +46,14 @@ const App = () => {
   const handleCloseFolderActivityFlowModal = () => {
     setShowFolderActivityFlowModal(false);
   };
+
+  // storyline chart
+  const flatData = totalData.flat();
+  const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
+  const { releaseGroups, topFolderPaths: releaseTopFolderPaths } = releaseResult;
+  const releaseContributorActivities = extractReleaseBasedContributorActivities(flatData, releaseTopFolderPaths, 1);
+  const flowLineData = generateReleaseFlowLineData(releaseContributorActivities);
+  const firstNodesByContributor = findFirstReleaseContributorNodes(releaseContributorActivities);
 
   useEffect(() => {
     if (initRef.current === false) {
@@ -73,6 +95,7 @@ const App = () => {
         <button
           className="folder-activity-flow-button"
           onClick={handleOpenFolderActivityFlowModal}
+          type="button"
         >
           Folder Activity Flow
         </button>
@@ -100,19 +123,32 @@ const App = () => {
       {showFolderActivityFlowModal && (
         <div
           className="folder-activity-flow-modal"
-          onClick={handleCloseFolderActivityFlowModal}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseFolderActivityFlowModal();
+            }
+          }}
+          onKeyDown={(e) => e.key === "Escape" && handleCloseFolderActivityFlowModal()}
+          role="button"
+          tabIndex={0}
+          aria-label="Close modal"
         >
-          <div
-            className="folder-activity-flow-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="folder-activity-flow-modal-content">
             <button
               className="folder-activity-flow-modal-close"
               onClick={handleCloseFolderActivityFlowModal}
+              type="button"
+              aria-label="Close modal"
             >
               ×
             </button>
-            <FolderActivityFlow />
+            <FolderActivityFlow
+              releaseGroups={releaseGroups}
+              releaseTopFolderPaths={releaseTopFolderPaths}
+              flowLineData={flowLineData}
+              releaseContributorActivities={releaseContributorActivities}
+              firstNodesByContributor={firstNodesByContributor}
+            />
           </div>
         </div>
       )}
