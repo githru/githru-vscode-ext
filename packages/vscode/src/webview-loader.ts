@@ -37,22 +37,30 @@ export default class WebviewLoader implements vscode.Disposable {
 
         if (command === "fetchAnalyzedData" || command === "refresh") {
           try {
-            const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
-            const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(
-              `${ANALYZE_DATA_KEY}_${baseBranchName}`
-            );
-            analyzedData = storedAnalyzedData;
-            if (!storedAnalyzedData) {
-              console.log("No cache Data");
-              console.log("baseBranchName : ", baseBranchName);
-              analyzedData = await fetchClusterNodes(baseBranchName);
-              context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
-            } else console.log("Cache data exists");
+            const requestPayload = payload ? JSON.parse(payload) : {};
+            const { baseBranchName, perPage, lastCommitId } = requestPayload;
+            const currentBranch = baseBranchName ?? (await fetchCurrentBranch());
 
-            console.log("Current Stored data");
-            context.workspaceState.keys().forEach((key) => {
-              console.log(key);
-            });
+            if (perPage) {
+              console.log(`Paging request: perPage=${perPage}, lastCommitId=${lastCommitId}`);
+              analyzedData = await fetchClusterNodes(currentBranch, perPage, lastCommitId);
+            } else {
+              const cacheKey = `${ANALYZE_DATA_KEY}_${currentBranch}`;
+              const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(cacheKey);
+
+              if (storedAnalyzedData) {
+                console.log("Cache data exists");
+                analyzedData = storedAnalyzedData;
+              } else {
+                console.log("No cache Data");
+                analyzedData = await fetchClusterNodes(currentBranch);
+                context.workspaceState.update(cacheKey, analyzedData);
+              }
+              console.log("Current Stored data");
+              context.workspaceState.keys().forEach((key) => {
+                console.log(key);
+              });
+            }
 
             const resMessage = {
               command,
@@ -158,7 +166,15 @@ export default class WebviewLoader implements vscode.Disposable {
 
 type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
 type GithruFetcherMap = {
-  fetchClusterNodes: GithruFetcher<ClusterNode[], [string]>;
+  fetchClusterNodes: GithruFetcher<
+    {
+      clusterNodes: ClusterNode[];
+      isLastPage: boolean | undefined;
+      nextCommitId: string | null | undefined;
+      isPRSuccess: boolean;
+    },
+    [string?, number?, string?]
+  >;
   fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
   fetchCurrentBranch: GithruFetcher<string>;
   fetchGithubInfo: GithruFetcher<{ owner: string; repo: string }>;
