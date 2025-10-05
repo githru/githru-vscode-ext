@@ -9,6 +9,8 @@ import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
 
+export { buildPaginatedCSMDict } from "./csm";
+
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
   gitLog: string;

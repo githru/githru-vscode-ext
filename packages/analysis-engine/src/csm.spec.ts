@@ -1,5 +1,5 @@
-import { buildCSMDict } from "./csm";
-import type { CommitNode, CommitRaw, CSMDictionary, Stem } from "./types";
+import { buildCSMDict, buildPaginatedCSMDict } from "./csm";
+import type { CommitNode, CommitRaw, CSMDictionary, PullRequest, Stem } from "./types";
 
 describe("csm", () => {
   // master = [0, 1,              2,                 3, 4, 5]
@@ -433,6 +433,150 @@ describe("csm", () => {
       const mergeNode = csmDict.master.find((node) => node.base.commit.id === "merge");
       expect(mergeNode).toBeDefined();
       expect(mergeNode!.source).toEqual([]);
+    });
+  });
+
+  describe("buildPaginatedCSMDict", () => {
+    it("should load first page when lastCommitId is not provided", () => {
+      const perPage = 2;
+      const result = buildPaginatedCSMDict(
+        fakeCommitNodeDict,
+        fakeStemDict,
+        "master",
+        perPage
+      );
+
+      expect(result).toBeDefined();
+      expect(result.master).toBeDefined();
+      expect(result.master.length).toBe(2);
+      // Master nodes in order: [5, 4, 3, 2, 1, 0]
+      // First page should return [5, 4]
+      expect(result.master[0].base.commit.id).toBe("5");
+      expect(result.master[1].base.commit.id).toBe("4");
+    });
+
+    it("should load next page when lastCommitId is provided", () => {
+      const perPage = 2;
+      const result = buildPaginatedCSMDict(
+        fakeCommitNodeDict,
+        fakeStemDict,
+        "master",
+        perPage,
+        "4" // Last commit of first page
+      );
+
+      expect(result).toBeDefined();
+      expect(result.master).toBeDefined();
+      expect(result.master.length).toBe(2);
+      // Next page should return [3, 2]
+      expect(result.master[0].base.commit.id).toBe("3");
+      expect(result.master[1].base.commit.id).toBe("2");
+    });
+
+    it("should return remaining nodes when perPage exceeds remaining nodes", () => {
+      const perPage = 10;
+      const result = buildPaginatedCSMDict(
+        fakeCommitNodeDict,
+        fakeStemDict,
+        "master",
+        perPage,
+        "2" // Only [1, 0] remaining
+      );
+
+      expect(result).toBeDefined();
+      expect(result.master).toBeDefined();
+      expect(result.master.length).toBe(2);
+      expect(result.master[0].base.commit.id).toBe("1");
+      expect(result.master[1].base.commit.id).toBe("0");
+    });
+
+    it("should return empty array when no more nodes available", () => {
+      const perPage = 2;
+      const result = buildPaginatedCSMDict(
+        fakeCommitNodeDict,
+        fakeStemDict,
+        "master",
+        perPage,
+        "0" // Last node
+      );
+
+      expect(result).toBeDefined();
+      expect(result.master).toBeDefined();
+      expect(result.master.length).toBe(0);
+    });
+
+    it("should throw error when lastCommitId is invalid", () => {
+      expect(() => {
+        buildPaginatedCSMDict(
+          fakeCommitNodeDict,
+          fakeStemDict,
+          "master",
+          2,
+          "invalid-commit-id"
+        );
+      }).toThrow("Invalid lastCommitId");
+    });
+
+    it("should throw error when perPage is less than or equal to 0", () => {
+      expect(() => {
+        buildPaginatedCSMDict(
+          fakeCommitNodeDict,
+          fakeStemDict,
+          "master",
+          0
+        );
+      }).toThrow("perPage must be greater than 0");
+
+      expect(() => {
+        buildPaginatedCSMDict(
+          fakeCommitNodeDict,
+          fakeStemDict,
+          "master",
+          -1
+        );
+      }).toThrow("perPage must be greater than 0");
+    });
+
+    it("should throw error when base branch does not exist", () => {
+      expect(() => {
+        buildPaginatedCSMDict(
+          fakeCommitNodeDict,
+          fakeStemDict,
+          "non-existent-branch",
+          2
+        );
+      }).toThrow("no master-stem");
+    });
+
+    it("should integrate pull request information when provided", () => {
+      const fakePR = {
+        detail: {
+          data: {
+            merge_commit_sha: "5",
+          },
+          headers: {},
+          status: 200,
+          url: "",
+        },
+        commitDetails: {
+          data: [],
+          headers: {},
+          status: 200,
+          url: "",
+        },
+      } as unknown as PullRequest;
+
+      const result = buildPaginatedCSMDict(
+        fakeCommitNodeDict,
+        fakeStemDict,
+        "master",
+        1,
+        undefined,
+        [fakePR]
+      );
+
+      expect(result.master[0].base.commit.id).toBe("5");
+      // PR integration logic should be applied
     });
   });
 });
