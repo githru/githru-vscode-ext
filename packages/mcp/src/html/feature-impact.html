@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{{TITLE}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      h1 { margin-bottom: 5px; }
+      .card {
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 10px 16px;
+        margin: 6px;
+        background: #fafafa;
+      }
+      .card h3 { margin: 0 0 4px 0; font-size: 14px; color: #444; }
+      .card .val { font-size: 18px; font-weight: bold; }
+      table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+      th, td { border: 1px solid #ddd; padding: 6px 8px; }
+      th { background: #f5f5f5; }
+      td.val-right { text-align: right; }
+      td.val-center { text-align: center; }
+    </style>
+  </head>
+  <body>
+    <h1>{{TITLE}}</h1>
+    <div style="color:#666; font-size:14px;">{{NOTES}}</div>
+
+    <div class="card"><h3>Isolation (days)</h3><div class="val">{{METRICS_ISOLATION}}</div></div>
+    <div class="card"><h3>Lag (days)</h3><div class="val">{{METRICS_LAG}}</div></div>
+    <div class="card"><h3>Coupling (pairs)</h3><div class="val">{{METRICS_COUPLING}}</div></div>
+    <div class="card"><h3>Scale (commits)</h3><div class="val">{{METRICS_SCALE}}</div></div>
+    <div class="card"><h3>Dispersion (top-level dirs)</h3><div class="val">{{METRICS_DISPERSION}}</div></div>
+    <div class="card"><h3>Chaos (%)</h3><div class="val">{{METRICS_CHAOS}}</div></div>
+
+    <h2 style="margin-top:18px;">Long Tail (Outliers)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Path</th>
+          <th style="text-align:right;">Score</th>
+          <th style="text-align:center;">Rule</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{LONG_TAIL_TABLE_ROWS}}
+      </tbody>
+    </table>
+
+    <div style="margin-top:24px;">
+      <canvas id="ltChart" height="120"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const LT_LABELS = {{LONG_TAIL_LABELS_JSON}};
+      const LT_SCORES = {{LONG_TAIL_SCORES_JSON}};
+
+      const ctx = document.getElementById('ltChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: LT_LABELS,
+          datasets: [{
+            label: 'Outlier Score',
+            data: LT_SCORES,
+            borderWidth: 1,
+            backgroundColor: '#4e79a7'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            title: { display: true, text: 'Long Tail Outliers' }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

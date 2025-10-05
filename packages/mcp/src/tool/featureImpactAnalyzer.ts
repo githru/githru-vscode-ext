@@ -1,25 +1,13 @@
 import { Octokit } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 
-async function mapWithConcurrency<T, R>(
-  items: T[],
-  concurrency: number,
-  worker: (item: T, index: number) => Promise<R>
-): Promise<R[]> {
-  const ret: R[] = new Array(items.length);
-  let i = 0;
-  const runners = new Array(Math.min(concurrency, items.length)).fill(0).map(async () => {
-    while (true) {
-      const idx = i++;
-      if (idx >= items.length) break;
-      ret[idx] = await worker(items[idx], idx);
-    }
-  });
-  await Promise.all(runners);
-  return ret;
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function retry<T>(fn: () => Promise<T>, tries = 3, baseMs = 500): Promise<T> {
   let lastErr: any;
@@ -32,36 +20,6 @@ async function retry<T>(fn: () => Promise<T>, tries = 3, baseMs = 500): Promise<
     }
   }
   throw lastErr;
-}
-
-function percentiles(sorted: number[], ps = [0.05,0.25,0.5,0.75,0.95]) {
-  const out: Record<string, number> = {};
-  for (const p of ps) out[`p${Math.round(p*100)}`] = quantile(sorted, p);
-  out.min = sorted[0] ?? NaN;
-  out.max = sorted[sorted.length - 1] ?? NaN;
-  out.mean = sorted.length ? sorted.reduce((a, b) => a + b, 0) / sorted.length : NaN;
-  return out;
-}
-
-function histogram(sorted: number[]) {
-  if (sorted.length < 2) return { bins: [] as number[], counts: [] as number[] };
-  const q25 = quantile(sorted, 0.25);
-  const q75 = quantile(sorted, 0.75);
-  const iqr = q75 - q25 || 1e-9;
-  const binWidth = (2 * iqr) / Math.cbrt(sorted.length);
-  const min = sorted[0], max = sorted[sorted.length - 1];
-  const rawBins = Math.max(1, Math.ceil((max - min) / binWidth));
-  const binCount = Math.max(10, Math.min(rawBins, 80));
-  const bw = (max - min) / binCount || 1;
-  const bins = Array.from({ length: binCount }, (_, i) => min + i * bw);
-  const counts = new Array(binCount).fill(0);
-  for (const v of sorted) {
-    let idx = Math.floor((v - min) / bw);
-    if (idx >= binCount) idx = binCount - 1;
-    if (idx < 0) idx = 0;
-    counts[idx]++;
-  }
-  return { bins, counts };
 }
 
 function robustZScores(values: number[]) {
@@ -97,7 +55,7 @@ function rateByP05P95(v: number, p05: number, p95: number) {
   return "Normal" as const;
 }
 
-class McpReportGenerator {
+export class McpReportGenerator {
   private repoUrl: string;
   private prNumber: number;
   private octokit: Octokit;
@@ -195,7 +153,7 @@ class McpReportGenerator {
     return (n * (n - 1)) / 2;
   }
 
-  private _buildPathDistributionAndLongTail(files: string[], topN = 12) {
+  private _buildPathLongTail(files: string[]) {
     const bucket = new Map<string, number>();
     for (const f of files) {
       if (!f) continue;
@@ -211,20 +169,7 @@ class McpReportGenerator {
     const all = Array.from(bucket.entries());
     const scores = all.map(([, s]) => s);
 
-    const top = all.slice().sort((a, b) => b[1] - a[1]).slice(0, topN);
-    const max = top[0]?.[1] ?? 1;
-    const pathHeatmapTop = top.map(([path, score]) => ({
-      path,
-      impact_score: Math.round((score / max) * 100),
-      raw_score: score,
-    }));
-
     const sortedScores = scores.slice().sort((a,b)=>a-b);
-    const pathDistribution = {
-      summary: percentiles(sortedScores),
-      histogram: histogram(sortedScores),
-    };
-
     const { p95 } = thresholdsP05P95(sortedScores, true);
     const zs = robustZScores(scores);
 
@@ -242,64 +187,11 @@ class McpReportGenerator {
       .filter(x => (seen.has(x.path) ? false : (seen.add(x.path), true)))
       .sort((a, b) => b.score - a.score);
 
-    return { pathHeatmapTop, pathDistribution, pathLongTail };
-  }
-
-  private async _collectHistoryMetrics(months = 6, limit = 200, concurrency = 8) {
-    const since = new Date();
-    since.setMonth(since.getMonth() - months);
-
-    const picks: any[] = [];
-    for await (const page of this.octokit.paginate.iterator(this.octokit.pulls.list, {
-      owner: this.owner,
-      repo: this.repo,
-      state: "closed",
-      sort: "updated",
-      direction: "desc",
-      per_page: 100,
-    })) {
-      for (const p of page.data) {
-        if (p.merged_at && new Date(p.created_at) >= since) {
-          picks.push(p);
-          if (picks.length >= limit) break;
-        }
-      }
-      if (picks.length >= limit) break;
-    }
-
-    const hist = await mapWithConcurrency(picks, concurrency, async (pr: any) => {
-      const { commits } = await retry(
-        () => this._getGitDataForPR(this.owner, this.repo, pr.number)
-      );
-      return {
-        scale: this._calculateScale(commits),
-        dispersion: this._calculateDispersion(commits),
-        chaos: this._calculateChaos(commits),
-        isolation: this._calculateIsolation(commits, { created_at: pr.created_at }),
-        lag: this._calculateLag({ created_at: pr.created_at, merged_at: pr.merged_at }),
-        coupling: this._calculateCoupling(commits),
-      };
-    });
-
-    return hist;
-  }
-
-  private _rateWithP05P95(current: number, samples: number[]) {
-    const { p05, p95, n } = thresholdsP05P95(samples);
-    if (!Number.isFinite(p05) || !Number.isFinite(p95) || n < 20) {
-      const sorted = samples.slice().sort((a, b) => a - b);
-      const min = sorted[0], max = sorted[sorted.length - 1];
-      if (!Number.isFinite(min) || !Number.isFinite(max)) return "Unknown" as const;
-      if (current <= min) return "Low" as const;
-      if (current >= max) return "High" as const;
-      return "Normal" as const;
-    }
-    return rateByP05P95(current, p05, p95);
+    return { pathLongTail };
   }
 
   async generateWithOutlierRatings() {
     const prMetadata = await this._fetchPRMetadata(this.owner, this.repo, this.prNumber);
-
     const { commits, files } = await retry(
       () => this._getGitDataForPR(this.owner, this.repo, this.prNumber)
     );
@@ -313,33 +205,111 @@ class McpReportGenerator {
       coupling: this._calculateCoupling(commits),
     };
 
-    const hist = await this._collectHistoryMetrics(6, 200, 8);
-
-    const rating = {
-      scale: this._rateWithP05P95(metrics.scale, hist.map(h => h.scale)),
-      dispersion: this._rateWithP05P95(metrics.dispersion, hist.map(h => h.dispersion)),
-      chaos: this._rateWithP05P95(metrics.chaos, hist.map(h => h.chaos)),
-      isolation: this._rateWithP05P95(metrics.isolation, hist.map(h => h.isolation)),
-      lag: this._rateWithP05P95(metrics.lag, hist.map(h => h.lag)),
-      coupling: this._rateWithP05P95(metrics.coupling, hist.map(h => h.coupling)),
-    };
-
-    const { pathHeatmapTop, pathDistribution, pathLongTail } =
-      this._buildPathDistributionAndLongTail(files, 12);
+    const { pathLongTail } = this._buildPathLongTail(files);
 
     return {
       prInfo: { repoUrl: this.repoUrl, prNumber: this.prNumber },
       metrics,
-      rating,
-      prMetadata,
-      pathHeatmapTop,
-      pathDistribution,
       pathLongTail,
     };
   }
+
+  generateReport(payload: {
+    prInfo: { repoUrl: string; prNumber: number };
+    metrics: {
+      scale: number; dispersion: number; chaos: number;
+      isolation: number; lag: number; coupling: number
+    };
+    pathLongTail: Array<{ path: string; score: number; rule: string }>;
+    }): string {
+
+      const { prInfo, metrics, pathLongTail } = payload;
+
+      const htmlEscape = (s: string) =>
+        String(s ?? "").replace(/[&<>"']/g, (ch) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch] as string)
+        );
+
+      try {
+        const baseDir = path.join(__dirname, "../html");
+        const mainTplPath = path.join(baseDir, "feature-impact.html");
+
+        const title = `Feature Impact · ${prInfo.repoUrl} · PR #${prInfo.prNumber}`;
+
+        if (!fs.existsSync(mainTplPath)) {
+          throw new Error(`Missing template: ${mainTplPath}`);
+        }
+
+        const rows = (pathLongTail.length
+          ? pathLongTail
+              .map((x) => {
+                const p = htmlEscape(x.path ?? "");
+                const s = Number(x.score ?? 0);
+                const r = htmlEscape(String(x.rule ?? ""));
+                return `<tr>
+                          <td>${p}</td>
+                          <td class="val-right">${s}</td>
+                          <td class="val-center">${r}</td>
+                        </tr>`;
+              })
+              .join("")
+          : `<tr><td colspan="3" class="val-center" style="color:#777;">No long-tail items</td></tr>`);
+
+        const labelsJson = JSON.stringify(pathLongTail.map((x) => x.path ?? ""));
+        const scoresJson = JSON.stringify(pathLongTail.map((x) => Number(x.score ?? 0)));
+
+        let template = fs.readFileSync(mainTplPath, "utf8");
+        const notesHtml = "";
+        
+        const html = replaceMapSafe(template, {
+          TITLE: htmlEscape(title),
+          METRICS_SCALE: String(metrics.scale ?? "-"),
+          METRICS_DISPERSION: String(metrics.dispersion ?? "-"),
+          METRICS_CHAOS: (Number.isFinite(metrics.chaos) ? (Number(metrics.chaos).toFixed(2)) : "-"),
+          METRICS_ISOLATION: String(metrics.isolation ?? "-"),
+          METRICS_LAG: String(metrics.lag ?? "-"),
+          METRICS_COUPLING: String(metrics.coupling ?? "-"),
+          LONG_TAIL_TABLE_ROWS: rows,
+          LONG_TAIL_LABELS_JSON: labelsJson,
+          LONG_TAIL_SCORES_JSON: scoresJson,
+          NOTES: notesHtml,
+        });
+
+        return html;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Chart generation error:", error);
+
+        const errorTemplatePath = path.join(__dirname, "../html/error-chart.html");
+
+        let errorTemplate = fs.existsSync(errorTemplatePath)
+          ? fs.readFileSync(errorTemplatePath, "utf8")
+          : `<!doctype html><meta charset="utf-8"><pre>{{ERROR_MESSAGE}}</pre>`;
+
+        const templatePath = path.join(__dirname, "../html/feature-impact.html");
+
+        const debugInfo = [
+          `Template directory exists: ${fs.existsSync(path.join(__dirname, "../html"))}`,
+          `Chart template exists: ${fs.existsSync(templatePath)}`,
+          `Error template exists: ${fs.existsSync(errorTemplatePath)}`
+        ].join("\n");
+
+        errorTemplate = replaceMapSafe(errorTemplate, {
+          ERROR_MESSAGE: errorMessage,
+          TEMPLATE_PATH: templatePath,
+          CURRENT_DIR: __dirname,
+          DEBUG_INFO: debugInfo,
+        });
+
+        return errorTemplate;
+      }
+  }
 }
 
-export async function analyzeFeatureImpact(inputs: FeatureImpactAnalyzerInputs) {
-  const gen = new McpReportGenerator(inputs);
-  return await gen.generateWithOutlierRatings();
+function replaceMapSafe(tpl: string, map: Record<string, string>) {
+  let out = tpl;
+  for (const [k, v] of Object.entries(map)) {
+    out = out.split(`{{${k}}}`).join(v);
+  }
+  return out;
 }
