@@ -3,7 +3,7 @@ import {
   extractNestedMergeParents,
   findSquashEndIndex,
   findSquashStartNodeIndex,
-  getFirstParentCommit,
+  getParentCommits,
 } from "./csm.util";
 import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
@@ -13,9 +13,16 @@ import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullR
  * For merge commits, collects squashed commits using DFS traversal.
  */
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
+  if (baseCommitNode.commit.parents.length <= 1) {
+    return {
+      base: baseCommitNode,
+      source: [],
+    };
+  }
+
   // Return empty source for non-merge commits
-  const mergeParentCommit = getFirstParentCommit(baseCommitNode, commitDict);
-  if (!mergeParentCommit) {
+  const mergeParentCommits = getParentCommits(baseCommitNode, commitDict);
+  if (mergeParentCommits.length === 0) {
     return {
       base: baseCommitNode,
       source: [],
@@ -23,9 +30,8 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
   }
 
   const squashCommitNodes: CommitNode[] = [];
-  const squashTaskQueue: CommitNode[] = [mergeParentCommit];
 
-  // Collect commits to be squashed using DFS
+  const squashTaskQueue: CommitNode[] = [...mergeParentCommits];
   while (squashTaskQueue.length > 0) {
     const squashStartNode = squashTaskQueue.shift();
     if (!squashStartNode?.stemId) {
