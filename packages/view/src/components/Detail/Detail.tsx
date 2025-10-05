@@ -10,21 +10,14 @@ import {
 } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 import type { ListRowProps } from "react-virtualized";
-import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
-import type { RenderedRows } from "react-virtualized/dist/es/List";
+import { List, AutoSizer, CellMeasurer } from "react-virtualized";
 
 import { Author } from "components/@common/Author";
 import { useGithubInfo, useDataStore } from "store";
 
 import { getCommitListDetail } from "./Detail.util";
-import type {
-  DetailProps,
-  DetailSummaryProps,
-  DetailSummaryItem,
-  CommitItemProps,
-  LinkedMessage,
-  VirtualizedItem,
-} from "./Detail.type";
+import { useVirtualizedList } from "./Detail.hook";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps, LinkedMessage } from "./Detail.type";
 
 import "./Detail.scss";
 
@@ -34,43 +27,21 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
     title: [],
     body: null,
   });
-  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
   const { owner, repo } = useGithubInfo();
 
-  const cache = useMemo(
+  const commitNodeListInCluster = useMemo(
     () =>
-      new CellMeasurerCache({
-        fixedWidth: true,
-        defaultHeight: 120,
-      }),
-    []
+      selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [],
+    [selectedData, clusterId]
   );
-
-  const commitNodeListInCluster =
-    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
 
   const handleCommitIdCopy = (id: string) => async () => {
     navigator.clipboard.writeText(id);
   };
 
-  const virtualizedItems = useMemo((): VirtualizedItem[] => {
-    const items: VirtualizedItem[] = [];
-
-    items.push({
-      type: "summary",
-      data: commitNodeListInCluster,
-    });
-
-    commitNodeListInCluster.forEach(({ commit }) => {
-      items.push({
-        type: "commit",
-        data: commit,
-      });
-    });
-
-    return items;
-  }, [commitNodeListInCluster]);
+  const { cache, virtualizedItems, showScrollIndicator, handleRowsRendered } =
+    useVirtualizedList(commitNodeListInCluster);
 
   const renderCommitItem = useCallback(
     (props: { index: number; key: string }) => {
@@ -93,14 +64,6 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
       );
     },
     [virtualizedItems]
-  );
-
-  const handleRowsRendered = useCallback(
-    ({ stopIndex }: RenderedRows) => {
-      const lastIndex = virtualizedItems.length - 1;
-      setShowScrollIndicator(stopIndex < lastIndex);
-    },
-    [virtualizedItems.length]
   );
 
   const rowRenderer = useCallback(
