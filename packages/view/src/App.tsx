@@ -71,6 +71,7 @@ const App = () => {
         <BranchSelector />
         <RefreshButton />
         <button
+          type="button"
           className="folder-activity-flow-button"
           onClick={handleOpenFolderActivityFlowModal}
         >
@@ -101,12 +102,23 @@ const App = () => {
         <div
           className="folder-activity-flow-modal"
           onClick={handleCloseFolderActivityFlowModal}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              handleCloseFolderActivityFlowModal();
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           <div
             className="folder-activity-flow-modal-content"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+            role="dialog"
+            tabIndex={-1}
           >
             <button
+              type="button"
               className="folder-activity-flow-modal-close"
               onClick={handleCloseFolderActivityFlowModal}
             >

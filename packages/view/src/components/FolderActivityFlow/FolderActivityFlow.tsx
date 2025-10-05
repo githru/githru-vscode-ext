@@ -118,6 +118,7 @@ const FolderActivityFlow = () => {
           </div>
         </div>
         <button
+          type="button"
           className="folder-activity-flow__mode-toggle"
           onClick={toggleMode}
           style={{
@@ -142,6 +143,14 @@ const FolderActivityFlow = () => {
             <span
               className={index === getBreadcrumbs().length - 1 ? "current" : "clickable"}
               onClick={() => navigateToBreadcrumb(index, getBreadcrumbs().length)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  navigateToBreadcrumb(index, getBreadcrumbs().length);
+                }
+              }}
+              role="button"
+              tabIndex={index === getBreadcrumbs().length - 1 ? -1 : 0}
             >
               {crumb}
             </span>
@@ -149,6 +158,7 @@ const FolderActivityFlow = () => {
         ))}
         {currentPath !== "" && (
           <button
+            type="button"
             className="folder-activity-flow__back-btn"
             onClick={navigateUp}
           >
