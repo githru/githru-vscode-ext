@@ -2,8 +2,19 @@ import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pul
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
-  const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
-  if (!mergeParentCommit) {
+  if (baseCommitNode.commit.parents.length <= 1) {
+    return {
+      base: baseCommitNode,
+      source: [],
+    };
+  }
+
+  const mergeParentCommits = baseCommitNode.commit.parents
+    .slice(1)
+    .map((parentId) => commitDict.get(parentId))
+    .filter((commit): commit is CommitNode => !!commit);
+
+  if (mergeParentCommits.length === 0) {
     return {
       base: baseCommitNode,
       source: [],
@@ -12,7 +23,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
 
   const squashCommitNodes: CommitNode[] = [];
 
-  const squashTaskQueue: CommitNode[] = [mergeParentCommit];
+  const squashTaskQueue: CommitNode[] = [...mergeParentCommits];
   while (squashTaskQueue.length > 0) {
     // get target
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -26,13 +37,32 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
       continue;
     }
 
-    // prepare squash
-    const squashStemLastIndex = squashStem.nodes.length - 1;
+    // find squashStartNode index in stem
     const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
-    const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
+    if (squashStartNodeIndex === -1) {
+      continue;
+    }
 
-    // squash
-    const spliceCommitNodes = squashStem.nodes.splice(squashStartNodeIndex, spliceCount);
+    // collect nodes from squashStartNode to end of stem
+    // (or until the next mergedIntoStem node for future merges)
+    const spliceCommitNodes: CommitNode[] = [];
+
+    // First, find the end index (before next mergedIntoStem or end of stem)
+    let endIndex = squashStem.nodes.length - 1;
+    for (let i = squashStartNodeIndex + 1; i < squashStem.nodes.length; i++) {
+      if (squashStem.nodes[i].mergedIntoBaseStem) {
+        endIndex = i - 1;
+        break;
+      }
+    }
+
+    // Collect nodes from start to end
+    for (let i = squashStartNodeIndex; i <= endIndex; i++) {
+      spliceCommitNodes.push(squashStem.nodes[i]);
+    }
+
+    // remove collected nodes from stem
+    squashStem.nodes.splice(squashStartNodeIndex, spliceCommitNodes.length);
     squashCommitNodes.push(...spliceCommitNodes);
 
     // check nested-merge
@@ -48,7 +78,7 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
     squashTaskQueue.push(...nestedMergeParentCommits);
   }
 
-  squashCommitNodes.sort((a, b) => b.commit.sequence - a.commit.sequence);
+  squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
   return {
     base: baseCommitNode,
