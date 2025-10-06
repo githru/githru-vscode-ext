@@ -93,7 +93,7 @@ export class AnalysisEngine {
       const lastNode: CSMNode | undefined = list.length > 0 ? list[list.length - 1] : undefined;
 
       const isLastPage = list.length < perPage;
-      const nextCommitId = !isLastPage && lastNode ? lastNode.base.commit.id : null;
+      const nextCommitId = !isLastPage && lastNode ? lastNode.base.commit.id : undefined;
 
       return {
         isPRSuccess,
@@ -112,7 +112,7 @@ export class AnalysisEngine {
       return {
         isPRSuccess,
         csmDict,
-        nextCommitId: null,
+        nextCommitId: undefined,
         isLastPage: true,
       };
     }
