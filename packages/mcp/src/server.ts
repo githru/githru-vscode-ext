@@ -5,7 +5,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
 import { recommendContributors } from "./tool/contributorRecommender.js";
-import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
+import { testReactComponents } from "./tool/reactComponentTester.js";
+import { testDataDrivenComponents } from "./tool/dataDrivenComponentTester.js";
+import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs, ReactComponentTestInputs, DataDrivenComponentInputs } from "./common/types.js";
 import { I18n } from "./common/i18n.js";
 import { generateNewViz } from "./tool/generateNewViz.js";
 
@@ -427,6 +429,74 @@ server.registerTool(
       return {
         content: [
           { type: "text", text: `CSM Dictionary generation error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+// 🧪 React Component Test Tool
+server.registerTool(
+  "react_component_test",
+  {
+    title: "React Component Test",
+    description: "Provides React components of varying complexity to test Claude's understanding capabilities",
+    inputSchema: {
+      complexity: z.enum(["simple", "medium", "complex", "all"]).default("simple").describe("Complexity level of React components to test"),
+      componentType: z.enum(["basic", "chart", "form", "data-display", "interactive"]).optional().describe("Type of component to generate"),
+    },
+  },
+
+  async ({ complexity, componentType }: ReactComponentTestInputs) => {
+    try {
+      const result = await testReactComponents({ complexity, componentType });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `React component test error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+// 📊 Data-Driven React Component Test Tool
+server.registerTool(
+  "data_driven_component_test",
+  {
+    title: "Data-Driven React Component Test",
+    description: "Provides React components that work with data props to test Claude's understanding of data-driven patterns",
+    inputSchema: {
+      dataType: z.enum(["chart", "table", "list", "card", "all"]).default("all").describe("Type of data-driven component to test"),
+      sampleData: z.boolean().default(true).describe("Include sample data with components"),
+    },
+  },
+
+  async ({ dataType, sampleData }: DataDrivenComponentInputs) => {
+    try {
+      const result = await testDataDrivenComponents({ dataType, sampleData });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `Data-driven component test error: ${err?.message ?? String(err)}` },
         ],
       };
     }

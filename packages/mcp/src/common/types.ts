@@ -88,3 +88,41 @@ export interface CSMDictResult {
     version?: string;
   };
 }
+
+// React Component Test Types
+export interface ReactComponentTestInputs {
+  complexity?: "simple" | "medium" | "complex" | "all";
+  componentType?: "basic" | "chart" | "form" | "data-display" | "interactive";
+}
+
+export interface ReactComponentDefinition {
+  title: string;
+  description: string;
+  component: string;
+  usage: string;
+}
+
+export interface ReactComponentTestResult {
+  components: ReactComponentDefinition[];
+  testQuestions: string[];
+}
+
+// Data-driven React Component Types
+export interface DataDrivenComponentInputs {
+  dataType?: "chart" | "table" | "list" | "card" | "all";
+  sampleData?: boolean;
+}
+
+export interface DataDrivenComponentDefinition {
+  title: string;
+  description: string;
+  component: string;
+  usage: string;
+  sampleData: any;
+  dataStructure: string;
+}
+
+export interface DataDrivenComponentResult {
+  components: DataDrivenComponentDefinition[];
+  testQuestions: string[];
+}
