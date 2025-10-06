@@ -294,11 +294,11 @@ server.registerTool(
       prNumber: z.number().int().positive().describe("Pull Request number to analyze"),
       githubToken: z.string().describe("GitHub authentication token"),
       locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
-      chart: z.boolean().default(false).describe("Return HTML chart (true) or JSON (false, default)"),
+      isChart: z.boolean().default(false).describe("Return HTML chart (true) or JSON (false, default)"),
     },
   },
 
-  async ({ repoUrl, prNumber, githubToken, locale, chart }: FeatureImpactAnalyzerInputs & { locale?: string; chart?: boolean }) => {
+  async ({ repoUrl, prNumber, githubToken, locale, isChart }: FeatureImpactAnalyzerInputs & { locale?: string; isChart?: boolean }) => {
     try {
       I18n.setLocale(locale || 'en');
       
@@ -307,7 +307,7 @@ server.registerTool(
 
       const payload = await analyzeFeatureImpact.generateWithOutlierRatings();
       
-      if (chart) {
+      if (isChart) {
         const chartHtml = analyzeFeatureImpact.generateReport(payload);
         return {
           content: [
