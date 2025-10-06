@@ -100,6 +100,142 @@ export const GitHubUtils = {
     return null;
   },
 
+  async fetchGitLogFromGitHub(githubToken: string, owner: string, repo: string): Promise<string> {
+    const octokit = this.createGitHubAPIClient(githubToken);
+    
+    try {
+      const repoInfo = await octokit.repos.get({ owner, repo });
+      const defaultBranch = repoInfo.data.default_branch;
+      const branches = await octokit.repos.listBranches({ owner, repo });
+      
+      let allCommits: any[] = [];
+      const branchCommitMap = new Map<string, string[]>();
+      
+      for (const branch of branches.data) {
+        try {
+          let page = 1;
+          let hasMoreCommits = true;
+          const branchCommits: string[] = [];
+          
+          while (hasMoreCommits && page <= 5) {
+            const commits = await octokit.repos.listCommits({
+              owner,
+              repo,
+              sha: branch.name,
+              per_page: 100,
+              page
+            });
+            
+            allCommits.push(...commits.data.map(commit => ({ ...commit, branchName: branch.name })));
+            branchCommits.push(...commits.data.map(commit => commit.sha));
+            hasMoreCommits = commits.data.length === 100;
+            page++;
+          }
+          
+          branchCommitMap.set(branch.name, branchCommits);
+        } catch (error) {
+          console.debug(`Failed to fetch commits for branch ${branch.name}:`, error);
+        }
+      }
+
+      const uniqueCommits = Array.from(
+        new Map(allCommits.map(commit => [commit.sha, commit])).values()
+      );
+
+      uniqueCommits.sort((a, b) =>
+        new Date(a.commit.committer.date).getTime() - new Date(b.commit.committer.date).getTime()
+      );
+
+      const gitLogEntries = await Promise.all(
+        uniqueCommits.slice(0, 1000).map(async (commit) => {
+          const hash = commit.sha;
+          const parents = commit.parents.map((p: any) => p.sha).join(' ');
+          
+          const refs = [];
+          for (const [branchName, commits] of branchCommitMap.entries()) {
+            if (commits.includes(hash)) {
+              if (branchName === defaultBranch) {
+                refs.push(`origin/${branchName}`, branchName);
+              } else {
+                refs.push(`origin/${branchName}`);
+              }
+            }
+          }
+          
+          if (refs.length === 0 && commit.branchName) {
+            refs.push(`origin/${commit.branchName}`);
+          }
+          
+          const refString = refs.join(', ');
+          const authorName = commit.commit.author?.name || '';
+          const authorEmail = commit.commit.author?.email || '';
+          const authorDate = commit.commit.author?.date || '';
+          const committerName = commit.commit.committer?.name || '';
+          const committerEmail = commit.commit.committer?.email || '';
+          const committerDate = commit.commit.committer?.date || '';
+          const message = commit.commit.message || '';
+          const messageLines = message.split('\n');
+          const subject = messageLines[0] || '';
+          const body = messageLines.slice(1).join('\n').trim();
+          
+          let fileStats = '';
+          try {
+            const commitDetail = await octokit.repos.getCommit({
+              owner,
+              repo,
+              ref: hash
+            });
+            
+            if (commitDetail.data.files && commitDetail.data.files.length > 0) {
+              fileStats = '\n' + commitDetail.data.files.map((file: any) => {
+                const additions = file.additions || 0;
+                const deletions = file.deletions || 0;
+                const filename = file.filename || '';
+                return `${additions}\t${deletions}\t${filename}`;
+              }).join('\n');
+            }
+          } catch (error) {
+            console.debug(`Failed to fetch file stats for commit ${hash}`);
+          }
+
+          const commitParts = [
+            hash,
+            parents,
+            refString,
+            authorName,
+            authorEmail,
+            authorDate,
+            committerName,
+            committerEmail,
+            committerDate,
+            `    ${subject}`,
+          ];
+          
+          if (body) {
+            commitParts.push(body);
+          }
+
+          return commitParts.join('\n') + fileStats;
+        })
+      );
+
+      return '\n\n' + gitLogEntries.join('\n\n\n\n');
+    } catch (error: any) {
+      throw new Error(`Failed to fetch commits from GitHub: ${error.message}`);
+    }
+  },
+
+  async getDefaultBranch(githubToken: string, owner: string, repo: string): Promise<string> {
+    const octokit = this.createGitHubAPIClient(githubToken);
+    
+    try {
+      const repoInfo = await octokit.repos.get({ owner, repo });
+      return repoInfo.data.default_branch;
+    } catch (error: any) {
+      throw new Error(`Failed to get default branch: ${error.message}`);
+    }
+  },
+
   async safeApiCall<T>(
     apiCall: () => Promise<T>,
     errorMessage: string
@@ -143,3 +279,4 @@ export const CommonUtils = {
     return isNaN(parsed) ? 0 : parsed;
   }
 };
+
