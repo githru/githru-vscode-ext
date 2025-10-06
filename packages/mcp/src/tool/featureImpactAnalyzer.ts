@@ -48,13 +48,6 @@ function thresholdsP05P95(valuesOrSorted: number[], alreadySorted=false) {
   return { p05: quantile(arr, 0.05), p95: quantile(arr, 0.95), n: arr.length };
 }
 
-function rateByP05P95(v: number, p05: number, p95: number) {
-  if (!Number.isFinite(v) || !Number.isFinite(p05) || !Number.isFinite(p95)) return "Unknown" as const;
-  if (v >= p95) return "High" as const;
-  if (v <= p05) return "Low" as const;
-  return "Normal" as const;
-}
-
 export class McpReportGenerator {
   private repoUrl: string;
   private prNumber: number;
