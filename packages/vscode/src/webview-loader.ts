@@ -43,7 +43,11 @@ export default class WebviewLoader implements vscode.Disposable {
 
             if (perPage) {
               console.log(`Paging request: perPage=${perPage}, lastCommitId=${lastCommitId}`);
-              analyzedData = await fetchClusterNodes(currentBranch, perPage, lastCommitId);
+              const clusterData = await fetchClusterNodes(currentBranch, perPage, lastCommitId);
+              analyzedData = {
+                ...clusterData,
+                isLoadMore: !!lastCommitId,
+              };
             } else {
               const cacheKey = `${ANALYZE_DATA_KEY}_${currentBranch}`;
               const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(cacheKey);
@@ -169,8 +173,8 @@ type GithruFetcherMap = {
   fetchClusterNodes: GithruFetcher<
     {
       clusterNodes: ClusterNode[];
-      isLastPage: boolean | undefined;
-      nextCommitId: string | null | undefined;
+      isLastPage: boolean;
+      nextCommitId?: string;
       isPRSuccess: boolean;
     },
     [string?, number?, string?]
