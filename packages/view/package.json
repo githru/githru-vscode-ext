@@ -1,7 +1,14 @@
 {
-  "name": "@githru-vscode-ext/view",
+  "name": "githru-view-components",
   "version": "0.8.0",
   "description": "view module for githru",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": "./dist/index.js",
+    "./components": "./dist/components/index.js"
+  },
   "engines": {
     "node": ">=16",
     "npm": ">=8"
@@ -10,6 +17,8 @@
     "start": "webpack serve --config webpack.dev.config.js",
     "build": "webpack --config webpack.prod.config.js",
     "build:dev": "webpack --config webpack.dev.config.js",
+    "build:lib": "tsc --build",
+    "prepublishOnly": "npm run build:lib",
     "test": "jest",
     "test:e2e": "playwright test"
   },
