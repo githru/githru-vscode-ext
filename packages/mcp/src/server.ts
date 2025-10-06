@@ -3,8 +3,13 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs } from "./common/types.js";
+import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
+import { recommendContributors } from "./tool/contributorRecommender.js";
+import { testReactComponents } from "./tool/reactComponentTester.js";
+import { testDataDrivenComponents } from "./tool/dataDrivenComponentTester.js";
+import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs, ReactComponentTestInputs, DataDrivenComponentInputs } from "./common/types.js";
 import { I18n } from "./common/i18n.js";
+import { generateNewViz } from "./tool/generateNewViz.js";
 
 const server = new McpServer({
     name: "githru-mcp",
@@ -398,6 +403,120 @@ server.registerTool(
       return {
         content: [
           { type: "text", text: `Contributor recommendation error occurred: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+server.registerTool(
+  "generate_csm_dict",
+  {
+    title: "Generate CSM Dictionary",
+    description: "Generates CSM (Commit Sequence Map) Dictionary from GitHub repository using AnalysisEngine",
+    inputSchema: {
+      repo: z.string().describe("GitHub repository (format: 'owner/repo' or 'https://github.com/owner/repo')"),
+      githubToken: z.string().describe("GitHub authentication token"),
+      baseBranchName: z.string().optional().describe("Base branch name to analyze (default: repository's default branch)"),
+      locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
+      debug: z.boolean().default(false).describe("Enable debug mode for detailed logging"),
+    },
+  },
+
+  async ({ repo, githubToken, baseBranchName, locale, debug }: {
+    repo: string;
+    githubToken: string;
+    baseBranchName?: string;
+    locale?: string;
+    debug?: boolean;
+  }) => {
+    try {
+      const result = await generateNewViz({
+        repo,
+        githubToken,
+        baseBranchName,
+        locale,
+        debug
+      });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `CSM Dictionary generation error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+server.registerTool(
+  "react_component_test",
+  {
+    title: "React Component Test",
+    description: "Provides React components of varying complexity to test Claude's understanding capabilities",
+    inputSchema: {
+      complexity: z.enum(["simple", "medium", "complex", "all"]).default("simple").describe("Complexity level of React components to test"),
+      componentType: z.enum(["basic", "chart", "form", "data-display", "interactive"]).optional().describe("Type of component to generate"),
+    },
+  },
+
+  async ({ complexity, componentType }: ReactComponentTestInputs) => {
+    try {
+      const result = await testReactComponents({ complexity, componentType });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `React component test error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+server.registerTool(
+  "data_driven_component_test",
+  {
+    title: "Data-Driven React Component Test",
+    description: "Provides React components that work with data props to test Claude's understanding of data-driven patterns",
+    inputSchema: {
+      dataType: z.enum(["chart", "table", "list", "card", "all"]).default("all").describe("Type of data-driven component to test"),
+      sampleData: z.boolean().default(true).describe("Include sample data with components"),
+    },
+  },
+
+  async ({ dataType, sampleData }: DataDrivenComponentInputs) => {
+    try {
+      const result = await testDataDrivenComponents({ dataType, sampleData });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: result,
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `Data-driven component test error: ${err?.message ?? String(err)}` },
         ],
       };
     }

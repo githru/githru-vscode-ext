@@ -55,3 +55,74 @@ export interface FileChangeInfo {
   deletions?: number;
   changes?: number;
 }
+
+export interface CSMDictGeneratorInputs {
+  repo: string;
+  githubToken: string;
+  baseBranchName?: string;
+  locale?: string;
+  debug?: boolean;
+}
+
+export interface AnalysisResult {
+  isPRSuccess: boolean;
+  csmDict: Record<string, unknown[]>;
+}
+
+export interface CSMDictResult {
+  success: boolean;
+  data: {
+    repository: GitHubRepoInfo & { url: string };
+    analysis: {
+      baseBranch: string;
+      isPRDataAvailable: boolean;
+      branches: string[];
+      totalClusters: number;
+      csmDict: Record<string, unknown[]>;
+    };
+  };
+  metadata: {
+    analyzedAt: string;
+    commitsProcessed: number;
+    debugMode: boolean;
+    version?: string;
+  };
+}
+
+// React Component Test Types
+export interface ReactComponentTestInputs {
+  complexity?: "simple" | "medium" | "complex" | "all";
+  componentType?: "basic" | "chart" | "form" | "data-display" | "interactive";
+}
+
+export interface ReactComponentDefinition {
+  title: string;
+  description: string;
+  component: string;
+  usage: string;
+}
+
+export interface ReactComponentTestResult {
+  components: ReactComponentDefinition[];
+  testQuestions: string[];
+}
+
+// Data-driven React Component Types
+export interface DataDrivenComponentInputs {
+  dataType?: "chart" | "table" | "list" | "card" | "all";
+  sampleData?: boolean;
+}
+
+export interface DataDrivenComponentDefinition {
+  title: string;
+  description: string;
+  component: string;
+  usage: string;
+  sampleData: any;
+  dataStructure: string;
+}
+
+export interface DataDrivenComponentResult {
+  components: DataDrivenComponentDefinition[];
+  testQuestions: string[];
+}
