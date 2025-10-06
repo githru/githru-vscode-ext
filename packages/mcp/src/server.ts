@@ -435,7 +435,6 @@ server.registerTool(
   }
 );
 
-// 🧪 React Component Test Tool
 server.registerTool(
   "react_component_test",
   {
@@ -469,7 +468,6 @@ server.registerTool(
   }
 );
 
-// 📊 Data-Driven React Component Test Tool
 server.registerTool(
   "data_driven_component_test",
   {
