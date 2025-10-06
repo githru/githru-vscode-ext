@@ -9,7 +9,7 @@ export const sendUpdateThemeCommand = (theme: string) => {
 
 export const sendFetchAnalyzedDataCommand = (selectedBranch?: string) => {
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
-  ideAdapter.sendFetchAnalyzedDataMessage(selectedBranch);
+  ideAdapter.sendFetchAnalyzedDataMessage({ baseBranch: selectedBranch });
 };
 
 export const sendRefreshDataCommand = (selectedBranch?: string) => {

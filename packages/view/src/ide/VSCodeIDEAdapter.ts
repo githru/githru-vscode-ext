@@ -37,10 +37,14 @@ export default class VSCodeIDEAdapter implements IDEPort {
     this.sendMessageToIDE(message);
   }
 
-  public sendFetchAnalyzedDataMessage(baseBranch?: string) {
+  public sendFetchAnalyzedDataMessage(requestParams?: {
+    baseBranch?: string;
+    perPage?: number;
+    lastCommitId?: string;
+  }) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
-      payload: JSON.stringify(baseBranch),
+      payload: JSON.stringify(requestParams),
     };
     this.sendMessageToIDE(message);
   }

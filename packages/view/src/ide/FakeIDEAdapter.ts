@@ -39,7 +39,12 @@ export default class FakeIDEAdapter implements IDEPort {
     this.sendMessageToMe(message);
   }
 
-  public sendFetchAnalyzedDataMessage(payload?: string) {
+  public sendFetchAnalyzedDataMessage(requestParams?: {
+    baseBranch?: string;
+    perPage?: number;
+    lastCommitId?: string;
+  }) {
+    const payload = requestParams ? JSON.stringify(requestParams) : undefined;
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
       payload,
