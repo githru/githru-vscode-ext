@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ArrowDropDownCircleRoundedIcon from "@mui/icons-material/ArrowDropDownCircleRounded";
 
 import { useGithubInfo } from "store";
+import { GithubIssueLink } from "components/@common/GithubIssueLink";
 
 import type { ContentProps } from "../Summary.type";
 
@@ -32,21 +33,15 @@ const Content = ({ content, clusterId, selectedClusterIds }: ContentProps) => {
           parts.push(message.slice(lastIndex, match.index));
         }
 
-        // 이슈 번호를 링크로 변환
-        const issueNumber = match[1].substring(1); // # 제거
-        const issueLink = `https://github.com/${owner}/${repo}/issues/${issueNumber}`;
+        const issueNumber = match[1].substring(1);
 
         parts.push(
-          <a
+          <GithubIssueLink
             key={`issue-${issueNumber}-${match.index}`}
-            href={issueLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="summary__commit-issue-link"
-            title={`GitHub Issue #${issueNumber}`}
-          >
-            {match[1]}
-          </a>
+            owner={owner}
+            repo={repo}
+            issueNumber={issueNumber}
+          />
         );
 
         lastIndex = match.index + match[0].length;

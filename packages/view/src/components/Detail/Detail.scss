@@ -76,7 +76,7 @@
         gap: 0.625rem;
         width: 100%;
         flex: 1;
-        margin-left: 0.125rem; // 아주 미세한 여백
+        margin-left: 0.125rem;
         min-width: 0;
         padding-top: 0.3rem;
         padding-right: 3.125rem;
@@ -90,7 +90,6 @@
             gap: 0.75rem;
             margin-bottom: 0.5rem;
 
-            // 아바타를 맨 앞에 배치
             .author {
               width: 1.5rem;
               height: 1.5rem;
@@ -176,7 +175,7 @@
       }
 
       .commit-item__right {
-        display: none; // 오른쪽 레이아웃 숨김
+        display: none;
       }
     }
   }
@@ -194,23 +193,3 @@
     color: $color-light-gray;
   }
 }
-
-        .commit-message__issue-link {
-          color: var(--color-primary);
-          text-decoration: none;
-          font-weight: 500;
-          padding: 0.125rem 0.25rem;
-          border-radius: 0.125rem;
-          background-color: rgba(224, 96, 145, 0.1);
-          transition: all 0.2s ease-in-out;
-
-          &:hover {
-            background-color: rgba(224, 96, 145, 0.2);
-            text-decoration: underline;
-            transform: translateY(-1px);
-          }
-
-          &:active {
-            transform: translateY(0);
-          }
-        }
