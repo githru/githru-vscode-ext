@@ -3,8 +3,6 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { analyzeFeatureImpact } from "./tool/featureImpactAnalyzer.js";
-import { recommendContributors } from "./tool/contributorRecommender.js";
 import { testReactComponents } from "./tool/reactComponentTester.js";
 import { testDataDrivenComponents } from "./tool/dataDrivenComponentTester.js";
 import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs, ReactComponentTestInputs, DataDrivenComponentInputs } from "./common/types.js";
