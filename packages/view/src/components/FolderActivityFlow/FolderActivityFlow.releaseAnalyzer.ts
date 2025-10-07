@@ -173,11 +173,13 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
           });
         }
 
-        const folderActivity = folderStats.get(folderPath)!;
-        folderActivity.insertions += stats.insertions;
-        folderActivity.deletions += stats.deletions;
-        folderActivity.totalChanges += stats.insertions + stats.deletions;
-        folderActivity.contributors.add(authorName);
+        const folderActivity = folderStats.get(folderPath);
+        if (folderActivity) {
+          folderActivity.insertions += stats.insertions;
+          folderActivity.deletions += stats.deletions;
+          folderActivity.totalChanges += stats.insertions + stats.deletions;
+          folderActivity.contributors.add(authorName);
+        }
       });
     });
 
@@ -290,7 +292,8 @@ export function extractReleaseContributorActivities(
         contributorFolderStats.set(authorName, new Map());
       }
 
-      const contributorStats = contributorFolderStats.get(authorName)!;
+      const contributorStats = contributorFolderStats.get(authorName);
+      if (!contributorStats) return;
 
       Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]) => {
         const folderPath = extractFolderFromPath(filePath, folderDepth);
@@ -306,11 +309,13 @@ export function extractReleaseContributorActivities(
           });
         }
 
-        const folderStats = contributorStats.get(folderPath)!;
-        folderStats.changes += stats.insertions + stats.deletions;
-        folderStats.insertions += stats.insertions;
-        folderStats.deletions += stats.deletions;
-        folderStats.lastDate = commitDate;
+        const folderStats = contributorStats.get(folderPath);
+        if (folderStats) {
+          folderStats.changes += stats.insertions + stats.deletions;
+          folderStats.insertions += stats.insertions;
+          folderStats.deletions += stats.deletions;
+          folderStats.lastDate = commitDate;
+        }
       });
     });
 
