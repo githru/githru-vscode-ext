@@ -80,10 +80,11 @@ export async function activate(context: vscode.ExtensionContext) {
       const fetchClusterNodes = async (
         baseBranchName = initialBaseBranchName,
         perPage?: number,
-        lastCommitId?: string
+        lastCommitId?: string,
+        command?: string
       ): Promise<ClusterNodesResult> => {
-        // Cache engine
-        if (!engine || engine.getBaseBranchName() !== baseBranchName) {
+        // Initialize engine if it doesn't exist or if the branch has changed
+        if (command === "refresh" || !engine || engine.getBaseBranchName() !== baseBranchName) {
           const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
           const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
           const { owner, repo } = getRepo(gitConfig);
