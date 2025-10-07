@@ -12,8 +12,7 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
-
-const PER_PAGE = 10;
+import { PER_PAGE } from "constants/constants";
 
 const App = () => {
   const initRef = useRef<boolean>(false);

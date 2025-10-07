@@ -8,6 +8,7 @@ import "./BranchSelector.scss";
 import { useBranchStore, useLoadingStore } from "store";
 
 import { SLICE_LENGTH } from "./BranchSelector.const";
+import { PER_PAGE } from "constants/constants";
 
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch } = useBranchStore();
@@ -16,7 +17,7 @@ const BranchSelector = () => {
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setSelectedBranch(event.target.value);
     setLoading(true);
-    sendFetchAnalyzedDataCommand(event.target.value);
+    sendFetchAnalyzedDataCommand({ baseBranch: event.target.value, perPage: PER_PAGE });
   };
 
   return (

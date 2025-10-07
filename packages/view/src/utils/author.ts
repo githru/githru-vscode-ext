@@ -2,7 +2,7 @@ import md5 from "md5";
 
 import type { AuthorInfo } from "types";
 
-import { GITHUB_URL, GRAVATA_URL } from "../constants/constants";
+import { GITHUB_URL, GRAVATA_URL } from "constants/constants";
 
 export function getAuthorProfileImgSrc(authorName: string): Promise<AuthorInfo> {
   return new Promise((resolve) => {
