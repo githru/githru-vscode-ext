@@ -1,5 +1,7 @@
 import type { ClusterNode } from "types";
 
+import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
+
 export interface ReleaseGroup {
   releaseTag: string;
   commitCount: number;
@@ -38,34 +40,43 @@ export interface CommitData {
 }
 
 /**
- * 폴더 경로에서 지정된 깊이의 폴더를 추출
+ * Extracts folder path at specified depth from file path.
+ *
+ * @param filePath - Full file path to extract from
+ * @param depth - Folder depth level to extract (default: 1)
+ * @returns Extracted folder path or "." for root level
  */
 export function extractFolderFromPath(filePath: string, depth = 1): string {
   const parts = filePath.split("/");
-  if (parts.length === 1) return "."; // 루트 레벨 파일
+  if (parts.length === 1) return "."; // Root level file
 
   const folderParts = parts.slice(0, Math.min(depth, parts.length - 1));
   return folderParts.length > 0 ? folderParts.join("/") : ".";
 }
 
 /**
- * 커밋들을 releaseTags 기준으로 그룹화
- * releaseTags가 없는 커밋은 이전 releaseTags와 합침
+ * Groups commits by release tags.
+ * Commits without release tags are merged into the previous release group.
+ *
+ * @param clusterNodeList - List of cluster nodes containing commits
+ * @returns Array of release groups sorted chronologically
  */
 export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): ReleaseGroup[] {
-  // 모든 커밋을 평탄화하고 시간순 정렬
+  // Flatten all commits and sort chronologically
   const allCommits = clusterNodeList
     .flatMap((cluster) => cluster.commitNodeList.map((node) => node.commit))
     .sort((a, b) => new Date(a.commitDate).getTime() - new Date(b.commitDate).getTime());
 
-  // reduce를 사용한 함수형 접근
-  const { groups, lastGroup } = allCommits.reduce<{
+  // Functional approach using reduce
+  interface ReduceAccumulator {
     groups: ReleaseGroup[];
     lastGroup: ReleaseGroup | null;
-  }>(
+  }
+
+  const { groups } = allCommits.reduce<ReduceAccumulator>(
     (acc, commit) => {
       if (commit.releaseTags && commit.releaseTags.length > 0) {
-        // 릴리즈 태그가 있는 경우 새 그룹들 생성
+        // Create new groups for commits with release tags
         const newGroups = commit.releaseTags.map((releaseTag) => ({
           releaseTag,
           commitCount: 1,
@@ -82,16 +93,26 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
         };
       }
 
-      // 릴리즈 태그가 없는 경우
+      // For commits without release tags
       if (acc.lastGroup) {
-        // 기존 그룹에 추가
-        acc.lastGroup.commits.push(commit);
-        acc.lastGroup.commitCount += 1;
-        acc.lastGroup.dateRange.end = new Date(commit.commitDate);
-        return acc;
+        // Add to existing group (maintaining immutability)
+        const updatedLastGroup: ReleaseGroup = {
+          ...acc.lastGroup,
+          commits: [...acc.lastGroup.commits, commit],
+          commitCount: acc.lastGroup.commitCount + 1,
+          dateRange: {
+            ...acc.lastGroup.dateRange,
+            end: new Date(commit.commitDate),
+          },
+        };
+
+        return {
+          groups: [...acc.groups.slice(0, -1), updatedLastGroup],
+          lastGroup: updatedLastGroup,
+        };
       }
 
-      // Pre-release 그룹 생성
+      // Create Pre-release group for commits before the first release
       const preReleaseGroup = {
         releaseTag: "Pre-release",
         commitCount: 1,
@@ -114,7 +135,11 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
 }
 
 /**
- * 릴리즈 그룹별 폴더 활동 분석
+ * Analyzes folder activity per release group.
+ *
+ * @param releaseGroups - Release groups to analyze
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Array of folder activities per release
  */
 export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], folderDepth = 1): ReleaseFolderActivity[] {
   const activities: ReleaseFolderActivity[] = [];
@@ -131,7 +156,7 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
       }
     >();
 
-    // 각 커밋의 파일 변경사항 분석
+    // Analyze file changes for each commit
     group.commits.forEach((commit) => {
       const authorName = commit.author.names[0] || "Unknown";
 
@@ -156,7 +181,7 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
       });
     });
 
-    // 폴더별 고유 커밋 수 계산
+    // Calculate unique commit count per folder
     group.commits.forEach((commit) => {
       const foldersInCommit = new Set<string>();
       Object.keys(commit.diffStatistics.files).forEach((filePath) => {
@@ -172,7 +197,7 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
       });
     });
 
-    // ReleaseFolderActivity 객체로 변환
+    // Convert to ReleaseFolderActivity objects
     folderStats.forEach((stats, folderPath) => {
       activities.push({
         folderPath,
@@ -190,7 +215,12 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
 }
 
 /**
- * 릴리즈별 상위 폴더 추출
+ * Extracts top folders by activity across releases.
+ *
+ * @param clusterNodeList - List of cluster nodes containing commits
+ * @param count - Number of top folders to return (default: 8)
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Object containing release groups, filtered activities, and top folders
  */
 export function getTopFoldersByRelease(
   clusterNodeList: ClusterNode[],
@@ -204,7 +234,7 @@ export function getTopFoldersByRelease(
   const releaseGroups = groupCommitsByReleaseTags(clusterNodeList);
   const folderActivities = analyzeReleaseFolderActivity(releaseGroups, folderDepth);
 
-  // 전체 기간 동안 가장 활발한 폴더들 추출
+  // Extract most active folders across all releases
   const globalFolderStats = new Map<string, number>();
   folderActivities.forEach((activity) => {
     const current = globalFolderStats.get(activity.folderPath) || 0;
@@ -224,23 +254,19 @@ export function getTopFoldersByRelease(
 }
 
 /**
- * 특정 릴리즈 그룹의 기여자 활동 추출
+ * Extracts contributor activities for specific release groups.
+ *
+ * @param releaseGroups - Release groups to analyze
+ * @param topFolders - List of folder paths to include
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Array of contributor activities per folder and release
  */
 export function extractReleaseContributorActivities(
   releaseGroups: ReleaseGroup[],
   topFolders: string[],
   folderDepth = 1
-) {
-  const activities: Array<{
-    contributorName: string;
-    folderPath: string;
-    releaseTag: string;
-    releaseIndex: number;
-    changes: number;
-    insertions: number;
-    deletions: number;
-    date: Date;
-  }> = [];
+): ReleaseContributorActivity[] {
+  const activities: ReleaseContributorActivity[] = [];
 
   releaseGroups.forEach((group, releaseIndex) => {
     const contributorFolderStats = new Map<
@@ -288,7 +314,7 @@ export function extractReleaseContributorActivities(
       });
     });
 
-    // 활동 데이터로 변환
+    // Convert to activity data
     contributorFolderStats.forEach((folderStatsMap, contributorName) => {
       folderStatsMap.forEach((stats, folderPath) => {
         activities.push({
