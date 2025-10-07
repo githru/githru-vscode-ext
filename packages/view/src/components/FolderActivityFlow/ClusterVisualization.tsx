@@ -66,60 +66,49 @@ export const renderClusterVisualization = ({
     .domain([0, d3.max(contributorActivities, (d) => d.changes) || 1])
     .range([3, 12]);
 
-  const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(d3.schemeCategory10);
+  const svgElement = svg.node();
+  const parentElement = svgElement?.parentElement;
+  const chartColors = Array.from({ length: 10 }, (_, i) =>
+    getComputedStyle(parentElement || document.documentElement)
+      .getPropertyValue(`--chart-color-${i + 1}`)
+      .trim()
+  );
+
+  const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(chartColors);
 
   const mainGroup = svg.append("g");
 
-  // 폴더 레인 그리기
   mainGroup
-    .selectAll(".folder-lane")
+    .selectAll(".folder-label")
     .data(topFolders)
     .enter()
-    .append("g")
-    .attr("class", "folder-lane")
-    .each(function (this: SVGGElement, d: FolderActivity) {
-      const lane = d3.select(this);
+    .append("text")
+    .attr("class", "folder-label clickable")
+    .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
+    .attr("y", (d: FolderActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
+    .attr("text-anchor", "start")
+    .attr("dominant-baseline", "middle")
+    .text((d: FolderActivity) => {
+      if (d.folderPath === ".") return "root";
 
-      lane
-        .append("rect")
-        .attr("class", "lane-background")
-        .attr("x", DIMENSIONS.margin.left)
-        .attr("y", yScale(d.folderPath) || 0)
-        .attr("width", DIMENSIONS.width - DIMENSIONS.margin.left - DIMENSIONS.margin.right)
-        .attr("height", yScale.bandwidth())
-        .attr("fill", "#f8f9fa")
-        .attr("stroke", "#dee2e6")
-        .attr("stroke-width", 1);
+      const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
 
-      lane
-        .append("text")
-        .attr("class", "folder-label clickable")
-        .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
-        .attr("y", (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
-        .attr("text-anchor", "start")
-        .attr("dominant-baseline", "middle")
-        .text(() => {
-          if (d.folderPath === ".") return "root";
-
-          const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
-
-          return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
-        })
-        .style("font-size", "12px")
-        .style("fill", "#495057")
-        .style("font-weight", "500")
-        .style("cursor", "pointer")
-        .on("click", () => {
-          if (d.folderPath !== ".") {
-            onFolderClick(d.folderPath);
-          }
-        })
-        .on("mouseover", function () {
-          d3.select(this).style("fill", "#007bff");
-        })
-        .on("mouseout", function () {
-          d3.select(this).style("fill", "#495057");
-        });
+      return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
+    })
+    .style("font-size", "12px")
+    .style("fill", "#b4bac6")
+    .style("font-weight", "500")
+    .style("cursor", "pointer")
+    .on("click", (_event: MouseEvent, d: FolderActivity) => {
+      if (d.folderPath !== ".") {
+        onFolderClick(d.folderPath);
+      }
+    })
+    .on("mouseover", function () {
+      d3.select(this).style("fill", "#e06091");
+    })
+    .on("mouseout", function () {
+      d3.select(this).style("fill", "#b4bac6");
     });
 
   // 클러스터 축
@@ -151,9 +140,7 @@ export const renderClusterVisualization = ({
     .attr("cy", (d: ContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("r", (d: ContributorActivity) => sizeScale(d.changes))
     .attr("fill", (d: ContributorActivity) => colorScale(d.contributorName) as string)
-    .attr("fill-opacity", 0.8)
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1);
+    .attr("fill-opacity", 0.8);
 
   // 툴팁 이벤트
   dots
@@ -198,7 +185,7 @@ export const renderClusterVisualization = ({
     .attr("dominant-baseline", "bottom")
     .text((d: ContributorActivity) => d.contributorName)
     .style("font-size", "10px")
-    .style("fill", "#495057")
+    .style("fill", "#f7f7f7")
     .style("font-weight", "500")
     .style("pointer-events", "none");
 
@@ -215,5 +202,5 @@ export const renderClusterVisualization = ({
     .attr("fill", "none")
     .attr("stroke", (d) => colorScale(d.contributorName) as string)
     .attr("stroke-width", 2)
-    .attr("stroke-opacity", 0.4);
+    .attr("stroke-opacity", 1);
 };
