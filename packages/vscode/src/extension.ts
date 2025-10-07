@@ -82,7 +82,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const initialBaseBranchName = await fetchCurrentBranch();
 
-      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
+      const fetchClusterNodes = async (
+        baseBranchName = initialBaseBranchName,
+        perPage?: number,
+        lastCommitId?: string
+      ) => {
         const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
         const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
         const { owner, repo: initialRepo } = getRepo(gitConfig);
@@ -96,9 +100,18 @@ export async function activate(context: vscode.ExtensionContext) {
           baseBranchName,
         });
 
-        const { isPRSuccess, csmDict } = await engine.analyzeGit();
-        if (isPRSuccess) console.log("crawling PR Success");
-        return mapClusterNodesFrom(csmDict);
+        const analysisResult = await engine.analyzeGit(perPage, lastCommitId);
+
+        if (analysisResult.isPRSuccess) console.log("crawling PR Success");
+
+        const clusterNodes = mapClusterNodesFrom(analysisResult.csmDict);
+
+        return {
+          clusterNodes: clusterNodes,
+          isLastPage: analysisResult.isLastPage,
+          nextCommitId: analysisResult.nextCommitId,
+          isPRSuccess: analysisResult.isPRSuccess,
+        };
       };
 
       const webLoader = new WebviewLoader(extensionPath, context, {

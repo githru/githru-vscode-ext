@@ -3,11 +3,12 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 
 import { buildCommitDict } from "./commit.util";
-import { buildCSMDict } from "./csm";
+import { buildCSMDict, buildPaginatedCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
+import type { CSMNode } from "./types";
 
 export { buildPaginatedCSMDict } from "./csm";
 
@@ -50,12 +51,12 @@ export class AnalysisEngine {
     this.octokit = container.resolve(PluginOctokit);
   };
 
-  public analyzeGit = async () => {
+  public analyzeGit = async (perPage?: number, lastCommitId?: string) => {
     let isPRSuccess = true;
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
 
     const commitRaws = getCommitRaws(this.gitLog);
-    if (this.isDebugMode){
+    if (this.isDebugMode) {
       console.log("commitRaws: ", commitRaws);
     }
 
@@ -77,16 +78,44 @@ export class AnalysisEngine {
 
     const stemDict = buildStemDict(commitDict, this.baseBranchName);
     if (this.isDebugMode) console.log("stemDict: ", stemDict);
-    const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
-    if (this.isDebugMode) console.log("csmDict: ", csmDict);
-    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({ commit }) => commit);
-    const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
-    if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
 
-    return {
-      isPRSuccess,
-      csmDict,
-    };
+    // Paginated CSM
+    if (perPage) {
+      const csmDict = buildPaginatedCSMDict(
+        commitDict,
+        stemDict,
+        this.baseBranchName,
+        perPage,
+        lastCommitId,
+        pullRequests
+      );
+      const list = csmDict[this.baseBranchName] ?? [];
+      const lastNode: CSMNode | undefined = list.length > 0 ? list[list.length - 1] : undefined;
+
+      const isLastPage = list.length < perPage;
+      const nextCommitId = !isLastPage && lastNode ? lastNode.base.commit.id : null;
+
+      return {
+        isPRSuccess,
+        csmDict,
+        nextCommitId,
+        isLastPage,
+      };
+    } else {
+      // Non-paginated CSM
+      const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
+      if (this.isDebugMode) console.log("csmDict: ", csmDict);
+      const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({ commit }) => commit);
+      const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
+      if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
+
+      return {
+        isPRSuccess,
+        csmDict,
+        nextCommitId: null,
+        isLastPage: true,
+      };
+    }
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {
