@@ -1,6 +1,19 @@
 @import "../../styles/colors";
 
 .folder-activity-flow {
+  // Chart color palette for contributors
+  --chart-color-1: #e06091;  // githru-pri
+  --chart-color-2: #8840bb;  // githru-sec
+  --chart-color-3: #ffd08a;  // githru-ter
+  --chart-color-4: #07bebe;  // githru-suc
+  --chart-color-5: #456cf7;  // hacker-pri
+  --chart-color-6: #0687a3;  // aqua-sec
+  --chart-color-7: #ffcccb;  // cotton-pri
+  --chart-color-8: #feffd1;  // cotton-sec
+  --chart-color-9: #3a4776;  // mono-sec
+  --chart-color-10: #aa4b72; // mono-fai
+
+
   padding: 1rem;
   margin-bottom: 2rem;
   background: $color-background;
@@ -89,7 +102,8 @@
     display: block;
     margin: 0 auto;
     cursor: grab;
-    
+    background: $color-background;
+
     &:active {
       cursor: grabbing;
     }
