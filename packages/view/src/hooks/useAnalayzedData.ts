@@ -8,6 +8,7 @@ type AnalyzedDataPayload = {
   nextCommitId?: string;
   isLastPage: boolean;
   isLoadMore: boolean;
+  isPRSuccess: boolean;
 };
 
 export const useAnalayzedData = () => {

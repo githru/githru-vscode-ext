@@ -18,3 +18,10 @@ export type CommitNode = NodeBase & {
 export type ClusterNode = NodeBase & {
   commitNodeList: CommitNode[];
 };
+
+export type ClusterNodesResult = {
+  clusterNodes: ClusterNode[];
+  isLastPage: boolean;
+  nextCommitId: string | undefined;
+  isPRSuccess: boolean;
+};

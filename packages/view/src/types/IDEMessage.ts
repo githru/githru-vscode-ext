@@ -14,3 +14,15 @@ export type IDEMessageCommandNames =
   | "fetchCurrentBranch"
   | "fetchGithubInfo"
   | "updateTheme";
+
+export type RefreshDataRequestPayload = {
+  selectedBranch?: string;
+  perPage?: number;
+  lastCommitId?: string;
+};
+
+export type FetchDataRequestPayload = {
+  baseBranch?: string;
+  perPage?: number;
+  lastCommitId?: string;
+};
