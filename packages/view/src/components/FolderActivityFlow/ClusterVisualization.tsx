@@ -83,7 +83,10 @@ export const renderClusterVisualization = ({
     .data(topFolders)
     .enter()
     .append("text")
-    .attr("class", "folder-label clickable")
+    .attr("class", (d: FolderActivity) => {
+      const isFile = d.folderPath.includes(".");
+      return isFile ? "folder-label" : "folder-label clickable";
+    })
     .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
     .attr("y", (d: FolderActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("text-anchor", "start")
@@ -93,22 +96,45 @@ export const renderClusterVisualization = ({
 
       const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
 
-      return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
+      return fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
     })
     .style("font-size", "12px")
     .style("fill", "#b4bac6")
     .style("font-weight", "500")
-    .style("cursor", "pointer")
+    .style("cursor", (d: FolderActivity) => {
+      const isFile = d.folderPath.includes(".");
+      return isFile ? "default" : "pointer";
+    })
     .on("click", (_event: MouseEvent, d: FolderActivity) => {
-      if (d.folderPath !== ".") {
+      const isFile = d.folderPath.includes(".");
+      if (!isFile && d.folderPath !== ".") {
         onFolderClick(d.folderPath);
       }
     })
-    .on("mouseover", function () {
-      d3.select(this).style("fill", "#e06091");
+    .on("mouseover", function (_event: MouseEvent, d: FolderActivity) {
+      const isFile = d.folderPath.includes(".");
+      if (!isFile) {
+        d3.select(this).style("fill", "#e06091");
+      }
     })
-    .on("mouseout", function () {
-      d3.select(this).style("fill", "#b4bac6");
+    .on("mouseout", function (_event: MouseEvent, d: FolderActivity) {
+      const isFile = d.folderPath.includes(".");
+      const element = d3.select(this);
+      if (!isFile) {
+        element.style("fill", "#b4bac6");
+      }
+      // 호버 끝나면 축약된 텍스트로 복원
+      const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
+      const displayName = fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
+      element.text(d.folderPath === "." ? "root" : displayName);
+    });
+
+  // 호버 시 전체 이름 표시를 위한 추가 이벤트
+  mainGroup
+    .selectAll<SVGTextElement, FolderActivity>(".folder-label")
+    .on("mouseover.showfull", function (_event, d) {
+      const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
+      d3.select(this).text(d.folderPath === "." ? "root" : fileName || "unknown");
     });
 
   // 클러스터 축

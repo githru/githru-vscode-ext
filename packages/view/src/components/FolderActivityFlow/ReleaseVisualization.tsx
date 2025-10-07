@@ -88,7 +88,10 @@ export const renderReleaseVisualization = ({
     .data(releaseTopFolderPaths)
     .enter()
     .append("text")
-    .attr("class", "folder-label clickable")
+    .attr("class", (folderPath: string) => {
+      const isFile = folderPath.includes(".");
+      return isFile ? "folder-label" : "folder-label clickable";
+    })
     .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
     .attr("y", (folderPath: string) => (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("text-anchor", "start")
@@ -96,22 +99,45 @@ export const renderReleaseVisualization = ({
     .text((folderPath: string) => {
       if (folderPath === ".") return "root";
       const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
-      return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
+      return fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
     })
     .style("font-size", "12px")
     .style("fill", "#b4bac6")
     .style("font-weight", "500")
-    .style("cursor", "pointer")
+    .style("cursor", (folderPath: string) => {
+      const isFile = folderPath.includes(".");
+      return isFile ? "default" : "pointer";
+    })
     .on("click", (_event: MouseEvent, folderPath: string) => {
-      if (folderPath !== ".") {
+      const isFile = folderPath.includes(".");
+      if (!isFile && folderPath !== ".") {
         onFolderClick(folderPath);
       }
     })
-    .on("mouseover", function () {
-      d3.select(this).style("fill", "#e06091");
+    .on("mouseover", function (_event: MouseEvent, folderPath: string) {
+      const isFile = folderPath.includes(".");
+      if (!isFile) {
+        d3.select(this).style("fill", "#e06091");
+      }
     })
-    .on("mouseout", function () {
-      d3.select(this).style("fill", "#b4bac6");
+    .on("mouseout", function (_event: MouseEvent, folderPath: string) {
+      const isFile = folderPath.includes(".");
+      const element = d3.select(this);
+      if (!isFile) {
+        element.style("fill", "#b4bac6");
+      }
+      // 호버 끝나면 축약된 텍스트로 복원
+      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+      const displayName = fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
+      element.text(folderPath === "." ? "root" : displayName);
+    });
+
+  // 호버 시 전체 이름 표시를 위한 추가 이벤트
+  mainGroup
+    .selectAll<SVGTextElement, string>(".folder-label")
+    .on("mouseover.showfull", function (_event, folderPath) {
+      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+      d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
     });
 
   // 릴리즈 축
