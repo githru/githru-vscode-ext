@@ -2,7 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getTheme, setTheme } from "./setting-repository";
-import type { ClusterNode } from "./types/Node";
+import type { ClusterNode, ClusterNodesResult } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
@@ -50,13 +50,16 @@ export default class WebviewLoader implements vscode.Disposable {
               };
             } else {
               const cacheKey = `${ANALYZE_DATA_KEY}_${currentBranch}`;
-              const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(cacheKey);
+              // "refresh": ignore the cache
+              // "fetchAnalyzedData": use the cache if exists
+              const storedAnalyzedData =
+                command === "fetchAnalyzedData" ? context.workspaceState.get<ClusterNode[]>(cacheKey) : undefined;
 
               if (storedAnalyzedData) {
                 console.log("Cache data exists");
                 analyzedData = storedAnalyzedData;
               } else {
-                console.log("No cache Data");
+                console.log(command === "refresh" ? "Forced refresh: fetching new data" : "No cache Data");
                 analyzedData = await fetchClusterNodes(currentBranch);
                 context.workspaceState.update(cacheKey, analyzedData);
               }
@@ -170,15 +173,7 @@ export default class WebviewLoader implements vscode.Disposable {
 
 type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
 type GithruFetcherMap = {
-  fetchClusterNodes: GithruFetcher<
-    {
-      clusterNodes: ClusterNode[];
-      isLastPage: boolean;
-      nextCommitId?: string;
-      isPRSuccess: boolean;
-    },
-    [string?, number?, string?]
-  >;
+  fetchClusterNodes: GithruFetcher<ClusterNodesResult, [string?, number?, string?]>;
   fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
   fetchCurrentBranch: GithruFetcher<string>;
   fetchGithubInfo: GithruFetcher<{ owner: string; repo: string }>;
