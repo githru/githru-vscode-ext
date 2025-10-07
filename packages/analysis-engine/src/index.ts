@@ -83,28 +83,25 @@ export class AnalysisEngine {
     if (this.isDebugMode) console.log("stemDict: ", this.stemDict);
   };
 
-  public analyzeGit = async (
-    perPage?: number,
-    lastCommitId?: string
-  ): Promise<AnalyzeGitResult> => {
+  public analyzeGit = async (commitCountPerPage?: number, lastCommitId?: string): Promise<AnalyzeGitResult> => {
     if (!this.commitDict || !this.stemDict || !this.pullRequests) {
       throw new Error("AnalysisEngine not initialized. Call init() first.");
     }
 
     // Paginated CSM
-    if (perPage) {
+    if (commitCountPerPage) {
       const csmDict = buildPaginatedCSMDict(
         this.commitDict,
         this.stemDict,
         this.baseBranchName,
-        perPage,
+        commitCountPerPage,
         lastCommitId,
         this.pullRequests
       );
       const list = csmDict[this.baseBranchName] ?? [];
       const lastNode = list.length > 0 ? list[list.length - 1] : undefined;
 
-      const isLastPage = list.length < perPage;
+      const isLastPage = list.length < commitCountPerPage;
       const nextCommitId = !isLastPage && lastNode ? lastNode.base.commit.id : undefined;
 
       return {

@@ -79,7 +79,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchClusterNodes = async (
         baseBranchName = initialBaseBranchName,
-        perPage?: number,
+        commitCountPerPage?: number,
         lastCommitId?: string,
         command?: string
       ): Promise<ClusterNodesResult> => {
@@ -103,7 +103,7 @@ export async function activate(context: vscode.ExtensionContext) {
           throw new Error("Analysis engine is not initialized.");
         }
 
-        const analysisResult = await engine.analyzeGit(perPage, lastCommitId);
+        const analysisResult = await engine.analyzeGit(commitCountPerPage, lastCommitId);
 
         if (analysisResult.isPRSuccess) console.log("crawling PR Success");
 

@@ -165,13 +165,13 @@ export const buildPaginatedCSMDict = (
   commitDict: CommitDict,
   stemDict: StemDict,
   baseBranchName: string,
-  perPage: number,
+  commitCountPerPage: number,
   lastCommitId?: string,
   pullRequests: Array<PullRequest> = []
 ): CSMDictionary => {
-  // Validate perPage
-  if (perPage <= 0) {
-    throw new Error("perPage must be greater than 0");
+  // Validate commitCountPerPage
+  if (commitCountPerPage <= 0) {
+    throw new Error("commitCountPerPage must be greater than 0");
   }
 
   // Validate stemDict
@@ -196,7 +196,7 @@ export const buildPaginatedCSMDict = (
   }
 
   // Calculate end index and extract page nodes
-  const endIndex = Math.min(startIndex + perPage, baseStem.nodes.length);
+  const endIndex = Math.min(startIndex + commitCountPerPage, baseStem.nodes.length);
   const pageNodes = baseStem.nodes.slice(startIndex, endIndex);
 
   // Build CSM nodes with PR integration

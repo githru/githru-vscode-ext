@@ -2,7 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getTheme, setTheme } from "./setting-repository";
-import type { ClusterNode, ClusterNodesResult } from "./types/Node";
+import type { ClusterNodesResult } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
@@ -36,10 +36,10 @@ export default class WebviewLoader implements vscode.Disposable {
 
         if (command === "refresh") {
           const requestPayload = payload ? JSON.parse(payload) : {};
-          const { selectedBranch, perPage, lastCommitId } = requestPayload;
+          const { selectedBranch, commitCountPerPage, lastCommitId } = requestPayload;
           const currentBranch = selectedBranch ?? (await fetchCurrentBranch());
 
-          const clusterData = await fetchClusterNodes(currentBranch, perPage, lastCommitId, "refresh");
+          const clusterData = await fetchClusterNodes(currentBranch, commitCountPerPage, lastCommitId, "refresh");
           analyzedData = {
             ...clusterData,
             isLoadMore: !!lastCommitId,
@@ -53,7 +53,7 @@ export default class WebviewLoader implements vscode.Disposable {
 
         if (command === "fetchAnalyzedData") {
           const requestPayload = payload ? JSON.parse(payload) : {};
-          const { baseBranch, perPage, lastCommitId } = requestPayload;
+          const { baseBranch, commitCountPerPage, lastCommitId } = requestPayload;
           const currentBranch = baseBranch ?? (await fetchCurrentBranch());
 
           const cacheKey = `${ANALYZE_DATA_KEY}_${currentBranch}_${lastCommitId || "firstPage"}`;
@@ -63,7 +63,7 @@ export default class WebviewLoader implements vscode.Disposable {
           if (storedAnalyzedData) {
             analyzedData = storedAnalyzedData;
           } else {
-            const clusterData = await fetchClusterNodes(currentBranch, perPage, lastCommitId);
+            const clusterData = await fetchClusterNodes(currentBranch, commitCountPerPage, lastCommitId);
             analyzedData = {
               ...clusterData,
               isLoadMore: !!lastCommitId,

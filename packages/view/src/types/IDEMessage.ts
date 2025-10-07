@@ -17,12 +17,12 @@ export type IDEMessageCommandNames =
 
 export type RefreshDataRequestPayload = {
   selectedBranch?: string;
-  perPage?: number;
+  commitCountPerPage?: number;
   lastCommitId?: string;
 };
 
 export type FetchDataRequestPayload = {
   baseBranch?: string;
-  perPage?: number;
+  commitCountPerPage?: number;
   lastCommitId?: string;
 };

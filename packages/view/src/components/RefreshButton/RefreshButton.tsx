@@ -7,7 +7,7 @@ import { throttle } from "utils";
 import "./RefreshButton.scss";
 import { sendRefreshDataCommand } from "services";
 import { useBranchStore, useLoadingStore } from "store";
-import { PER_PAGE } from "constants/constants";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const RefreshButton = () => {
   const { selectedBranch } = useBranchStore();
@@ -15,7 +15,7 @@ const RefreshButton = () => {
 
   const refreshHandler = throttle(() => {
     setLoading(true);
-    sendRefreshDataCommand({ selectedBranch, perPage: PER_PAGE });
+    sendRefreshDataCommand({ selectedBranch, commitCountPerPage: COMMIT_COUNT_PER_PAGE });
   }, 3000);
 
   return (
