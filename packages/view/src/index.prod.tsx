@@ -3,10 +3,10 @@ import "reflect-metadata";
 import { diContainer } from "container";
 import VSCodeIDEAdapter from "ide/VSCodeIDEAdapter";
 import type IDEPort from "ide/IDEPort";
-import { SERVICE_TOKENS } from "container/tokens";
+import { DI_IDENTIFIERS } from "container/identifiers";
 
 import { initRender } from "./index.common";
 
-diContainer.bind<IDEPort>(SERVICE_TOKENS.IDEAdapter).to(VSCodeIDEAdapter);
+diContainer.bind<IDEPort>(DI_IDENTIFIERS.IDEAdapter).to(VSCodeIDEAdapter);
 
 initRender();

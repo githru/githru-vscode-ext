@@ -3,9 +3,9 @@ import "reflect-metadata";
 import { buildCommitDict } from "./commit.util";
 import { diContainer } from "./container";
 import { buildCSMDict } from "./csm";
+import { DI_IDENTIFIERS } from "./diIdentifiers";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
-import { SERVICE_TOKENS } from "./serviceTokens";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
 
@@ -36,7 +36,7 @@ export class AnalysisEngine {
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
-    diContainer.rebindSync(SERVICE_TOKENS.OctokitOptions).toConstantValue({
+    diContainer.rebindSync(DI_IDENTIFIERS.OctokitOptions).toConstantValue({
       owner,
       repo,
       options: { auth },
