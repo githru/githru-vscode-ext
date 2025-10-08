@@ -12,9 +12,9 @@ import {
 import { Tooltip } from "@mui/material";
 
 import { useGithubInfo, useDataStore } from "store";
-import { Author } from "components/@common/Author";
-import type { IssueLinkedMessage } from "components/@common/GithubIssueLink";
-import { renderIssueLinkedNodes } from "components/@common/GithubIssueLink";
+import { Author } from "components/Common/Author";
+import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
+import { renderIssueLinkedNodes } from "components/Common/GithubIssueLink";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
