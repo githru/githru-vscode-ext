@@ -197,6 +197,18 @@ export function analyzeReleaseBasedFolders(
   };
 }
 
+export function getRootFolders(totalData: ClusterNode[]): {
+  folders: string[];
+  releaseGroups: ReleaseGroup[];
+} {
+  const flatData = totalData.flat();
+  const releaseResult = analyzeReleaseBasedFolders(flatData, 8, 1);
+  return {
+    folders: releaseResult.topFolderPaths,
+    releaseGroups: releaseResult.releaseGroups,
+  };
+}
+
 // 릴리즈 기반 기여자 활동 추출
 export function extractReleaseBasedContributorActivities(
   totalData: ClusterNode[],

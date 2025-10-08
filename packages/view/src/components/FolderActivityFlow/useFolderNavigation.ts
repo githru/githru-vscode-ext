@@ -3,7 +3,8 @@ import { useState, useCallback } from "react";
 import type { ClusterNode } from "types";
 
 import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
-import { ReleaseModeStrategy, type NavigationStrategy } from "./NavigationStrategy";
+import { getReleaseSubFolders } from "./FolderActivityFlow.subfolder";
+import { getRootFolders } from "./FolderActivityFlow.util";
 
 /**
  * Custom hook for managing folder navigation state and operations
@@ -14,8 +15,6 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
   const [releaseGroups, setReleaseGroups] = useState<ReleaseGroup[]>([]);
   const [releaseTopFolderPaths, setReleaseTopFolderPaths] = useState<string[]>([]);
 
-  const navigationStrategy: NavigationStrategy = new ReleaseModeStrategy();
-
   /**
    * Navigate to a specific folder
    */
@@ -25,7 +24,7 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
         return;
       }
 
-      const subFolders = navigationStrategy.getSubFolders(totalData, folderPath);
+      const subFolders = getReleaseSubFolders(totalData, folderPath);
 
       if (subFolders.length > 0) {
         setCurrentPath(folderPath);
@@ -34,7 +33,7 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
         setReleaseTopFolderPaths(subFolders as string[]);
       }
     },
-    [navigationStrategy, totalData]
+    [totalData]
   );
 
   /**
@@ -51,7 +50,7 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
       setCurrentPath("");
       setFolderDepth(1);
 
-      const rootResult = navigationStrategy.getRootFolders(totalData);
+      const rootResult = getRootFolders(totalData);
 
       setReleaseTopFolderPaths(rootResult.folders as string[]);
       if (rootResult.releaseGroups) {
@@ -61,11 +60,11 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
       setCurrentPath(parentPath);
       setFolderDepth((prev) => Math.max(1, prev - 1));
 
-      const subFolders = navigationStrategy.getSubFolders(totalData, parentPath);
+      const subFolders = getReleaseSubFolders(totalData, parentPath);
 
       setReleaseTopFolderPaths(subFolders as string[]);
     }
-  }, [currentPath, navigationStrategy, totalData]);
+  }, [currentPath, totalData]);
 
   /**
    * Navigate to breadcrumb by index
@@ -76,7 +75,7 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
         setCurrentPath("");
         setFolderDepth(1);
 
-        const rootResult = navigationStrategy.getRootFolders(totalData);
+        const rootResult = getRootFolders(totalData);
 
         setReleaseTopFolderPaths(rootResult.folders as string[]);
         if (rootResult.releaseGroups) {
@@ -88,12 +87,12 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
         setCurrentPath(targetPath);
         setFolderDepth(index + 1);
 
-        const subFolders = navigationStrategy.getSubFolders(totalData, targetPath);
+        const subFolders = getReleaseSubFolders(totalData, targetPath);
 
         setReleaseTopFolderPaths(subFolders as string[]);
       }
     },
-    [currentPath, navigationStrategy, totalData]
+    [currentPath, totalData]
   );
 
   /**
@@ -104,12 +103,9 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
       return;
     }
 
-    const releaseStrategy = new ReleaseModeStrategy();
-    const releaseResult = releaseStrategy.getRootFolders(totalData);
-    setReleaseTopFolderPaths(releaseResult.folders as string[]);
-    if (releaseResult.releaseGroups) {
-      setReleaseGroups(releaseResult.releaseGroups);
-    }
+    const releaseResult = getRootFolders(totalData);
+    setReleaseTopFolderPaths(releaseResult.folders);
+    setReleaseGroups(releaseResult.releaseGroups);
   }, [totalData, currentPath]);
 
   /**
