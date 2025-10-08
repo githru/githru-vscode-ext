@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { ClusterNode } from "types";
 import type { Commit } from "types/Commit";
 import type { AuthSrcMap } from "components/VerticalClusterList/Summary/Summary.type";
-import type { IssueLinkedMessage } from "components/@common/GithubIssueLink";
+import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
 
 export type DetailProps = {
   clusterId: number;

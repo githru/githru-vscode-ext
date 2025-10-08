@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import ArrowDropDownCircleRoundedIcon from "@mui/icons-material/ArrowDropDownCircleRounded";
 
 import { useGithubInfo } from "store";
-import type { IssueLinkedMessage } from "components/@common/GithubIssueLink";
-import { renderIssueLinkedNodes } from "components/@common/GithubIssueLink";
+import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
+import { renderIssueLinkedNodes } from "components/Common/GithubIssueLink";
 
 import type { ContentProps } from "../Summary.type";
 
