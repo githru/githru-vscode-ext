@@ -17,3 +17,22 @@ export interface FlowLineData {
   endFolder: string;
   contributorName: string;
 }
+
+export interface ReleaseContributorActivity {
+  contributorName: string;
+  folderPath: string;
+  releaseTag: string;
+  releaseIndex: number;
+  changes: number;
+  insertions: number;
+  deletions: number;
+  date: Date;
+}
+
+export interface ReleaseFlowLineData {
+  startReleaseIndex: number;
+  startFolder: string;
+  endReleaseIndex: number;
+  endFolder: string;
+  contributorName: string;
+}

@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FolderActivityFlow,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -72,6 +79,7 @@ const App = () => {
         <div>
           <RefreshButton />
           <button
+            type="button"
             className="folder-activity-flow-button"
             onClick={handleOpenFolderActivityFlowModal}
           >
@@ -103,12 +111,23 @@ const App = () => {
         <div
           className="folder-activity-flow-modal"
           onClick={handleCloseFolderActivityFlowModal}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              handleCloseFolderActivityFlowModal();
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           <div
             className="folder-activity-flow-modal-content"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+            role="dialog"
+            tabIndex={-1}
           >
             <button
+              type="button"
               className="folder-activity-flow-modal-close"
               onClick={handleCloseFolderActivityFlowModal}
             >
