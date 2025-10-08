@@ -438,13 +438,8 @@ describe("csm", () => {
 
   describe("buildPaginatedCSMDict", () => {
     it("should load first page when lastCommitId is not provided", () => {
-      const perPage = 2;
-      const result = buildPaginatedCSMDict(
-        fakeCommitNodeDict,
-        fakeStemDict,
-        "master",
-        perPage
-      );
+      const commitCountPerPage = 2;
+      const result = buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", commitCountPerPage);
 
       expect(result).toBeDefined();
       expect(result.master).toBeDefined();
@@ -456,12 +451,12 @@ describe("csm", () => {
     });
 
     it("should load next page when lastCommitId is provided", () => {
-      const perPage = 2;
+      const commitCountPerPage = 2;
       const result = buildPaginatedCSMDict(
         fakeCommitNodeDict,
         fakeStemDict,
         "master",
-        perPage,
+        commitCountPerPage,
         "4" // Last commit of first page
       );
 
@@ -474,12 +469,12 @@ describe("csm", () => {
     });
 
     it("should return remaining nodes when perPage exceeds remaining nodes", () => {
-      const perPage = 10;
+      const commitCountPerPage = 10;
       const result = buildPaginatedCSMDict(
         fakeCommitNodeDict,
         fakeStemDict,
         "master",
-        perPage,
+        commitCountPerPage,
         "2" // Only [1, 0] remaining
       );
 
@@ -491,12 +486,12 @@ describe("csm", () => {
     });
 
     it("should return empty array when no more nodes available", () => {
-      const perPage = 2;
+      const commitCountPerPage = 2;
       const result = buildPaginatedCSMDict(
         fakeCommitNodeDict,
         fakeStemDict,
         "master",
-        perPage,
+        commitCountPerPage,
         "0" // Last node
       );
 
@@ -507,44 +502,23 @@ describe("csm", () => {
 
     it("should throw error when lastCommitId is invalid", () => {
       expect(() => {
-        buildPaginatedCSMDict(
-          fakeCommitNodeDict,
-          fakeStemDict,
-          "master",
-          2,
-          "invalid-commit-id"
-        );
+        buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", 2, "invalid-commit-id");
       }).toThrow("Invalid lastCommitId");
     });
 
     it("should throw error when perPage is less than or equal to 0", () => {
       expect(() => {
-        buildPaginatedCSMDict(
-          fakeCommitNodeDict,
-          fakeStemDict,
-          "master",
-          0
-        );
+        buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", 0);
       }).toThrow("perPage must be greater than 0");
 
       expect(() => {
-        buildPaginatedCSMDict(
-          fakeCommitNodeDict,
-          fakeStemDict,
-          "master",
-          -1
-        );
+        buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", -1);
       }).toThrow("perPage must be greater than 0");
     });
 
     it("should throw error when base branch does not exist", () => {
       expect(() => {
-        buildPaginatedCSMDict(
-          fakeCommitNodeDict,
-          fakeStemDict,
-          "non-existent-branch",
-          2
-        );
+        buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "non-existent-branch", 2);
       }).toThrow("no master-stem");
     });
 
@@ -566,14 +540,7 @@ describe("csm", () => {
         },
       } as unknown as PullRequest;
 
-      const result = buildPaginatedCSMDict(
-        fakeCommitNodeDict,
-        fakeStemDict,
-        "master",
-        1,
-        undefined,
-        [fakePR]
-      );
+      const result = buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", 1, undefined, [fakePR]);
 
       expect(result.master[0].base.commit.id).toBe("5");
       // PR integration logic should be applied

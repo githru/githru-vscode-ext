@@ -5,6 +5,7 @@ import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } 
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
+import { ClusterNodesResult } from "./types/Node";
 import { mapClusterNodesFrom } from "./utils/csmMapper";
 import {
   fetchGitLogInParallel,
@@ -29,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
-
+  let engine: AnalysisEngine | undefined;
   await credentials.initialize(context);
 
   console.log('Congratulations, your extension "githru" is now active!');
@@ -66,13 +67,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const fetchGithubInfo = async () => getRepo(gitConfig);
 
       const fetchCurrentBranch = async () => {
-        let branchName;
-        try {
-          branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
-        } catch (error) {
-          console.error(error);
-        }
-
+        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath).catch(() => null);
         if (!branchName) {
           const branchList = (await fetchBranches()).branchList;
           branchName = getDefaultBranchName(branchList);
@@ -84,23 +79,31 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const fetchClusterNodes = async (
         baseBranchName = initialBaseBranchName,
-        perPage?: number,
-        lastCommitId?: string
-      ) => {
-        const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
-        const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
-        const { owner, repo: initialRepo } = getRepo(gitConfig);
-        const repo = initialRepo;
-        const engine = new AnalysisEngine({
-          isDebugMode: true,
-          gitLog,
-          owner,
-          repo,
-          auth: githubToken,
-          baseBranchName,
-        });
+        commitCountPerPage?: number,
+        lastCommitId?: string,
+        command?: string
+      ): Promise<ClusterNodesResult> => {
+        // Initialize engine if it doesn't exist or if the branch has changed
+        if (command === "refresh" || !engine || engine.getBaseBranchName() !== baseBranchName) {
+          const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
+          const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
+          const { owner, repo } = getRepo(gitConfig);
+          engine = new AnalysisEngine({
+            isDebugMode: true,
+            gitLog,
+            owner,
+            repo,
+            auth: githubToken,
+            baseBranchName,
+          });
+          await engine.init();
+        }
 
-        const analysisResult = await engine.analyzeGit(perPage, lastCommitId);
+        if (!engine) {
+          throw new Error("Analysis engine is not initialized.");
+        }
+
+        const analysisResult = await engine.analyzeGit(commitCountPerPage, lastCommitId);
 
         if (analysisResult.isPRSuccess) console.log("crawling PR Success");
 
