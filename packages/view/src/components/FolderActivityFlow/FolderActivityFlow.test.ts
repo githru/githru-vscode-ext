@@ -1,8 +1,9 @@
 import type { ClusterNode } from "types";
+
 import {
   groupCommitsByReleaseTags,
   analyzeReleaseFolderActivity,
-  getTopFoldersByRelease
+  getTopFoldersByRelease,
 } from "./FolderActivityFlow.releaseAnalyzer";
 
 // 테스트 데이터 생성
@@ -19,12 +20,12 @@ export function createTestData(): ClusterNode[] {
             author: {
               id: "user1",
               names: ["이규환"],
-              emails: ["user1@example.com"]
+              emails: ["user1@example.com"],
             },
             committer: {
               id: "user1",
               names: ["이규환"],
-              emails: ["user1@example.com"]
+              emails: ["user1@example.com"],
             },
             authorDate: "Mon Sep 29 2025 18:35:18 GMT+0900",
             commitDate: "Mon Sep 29 2025 18:35:18 GMT+0900",
@@ -34,15 +35,15 @@ export function createTestData(): ClusterNode[] {
               deletions: 20,
               files: {
                 "src/components/Button.tsx": { insertions: 50, deletions: 10 },
-                "src/utils/helper.ts": { insertions: 50, deletions: 10 }
-              }
+                "src/utils/helper.ts": { insertions: 50, deletions: 10 },
+              },
             },
             message: "feat: add button component",
             tags: [],
-            releaseTags: ["v1.0.0"]
+            releaseTags: ["v1.0.0"],
           },
           seq: 1,
-          clusterId: 1
+          clusterId: 1,
         },
         {
           nodeTypeName: "COMMIT",
@@ -52,12 +53,12 @@ export function createTestData(): ClusterNode[] {
             author: {
               id: "user2",
               names: ["김개발"],
-              emails: ["user2@example.com"]
+              emails: ["user2@example.com"],
             },
             committer: {
               id: "user2",
               names: ["김개발"],
-              emails: ["user2@example.com"]
+              emails: ["user2@example.com"],
             },
             authorDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
             commitDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
@@ -66,15 +67,15 @@ export function createTestData(): ClusterNode[] {
               insertions: 30,
               deletions: 5,
               files: {
-                "src/components/Input.tsx": { insertions: 30, deletions: 5 }
-              }
+                "src/components/Input.tsx": { insertions: 30, deletions: 5 },
+              },
             },
             message: "feat: add input component",
             tags: [],
-            releaseTags: [] // releaseTags 없음 -> 이전 v1.0.0과 합쳐짐
+            releaseTags: [], // releaseTags 없음 -> 이전 v1.0.0과 합쳐짐
           },
           seq: 2,
-          clusterId: 1
+          clusterId: 1,
         },
         {
           nodeTypeName: "COMMIT",
@@ -84,12 +85,12 @@ export function createTestData(): ClusterNode[] {
             author: {
               id: "user1",
               names: ["이규환"],
-              emails: ["user1@example.com"]
+              emails: ["user1@example.com"],
             },
             committer: {
               id: "user1",
               names: ["이규환"],
-              emails: ["user1@example.com"]
+              emails: ["user1@example.com"],
             },
             authorDate: "Wed Oct 01 2025 14:30:00 GMT+0900",
             commitDate: "Wed Oct 01 2025 14:30:00 GMT+0900",
@@ -99,18 +100,18 @@ export function createTestData(): ClusterNode[] {
               deletions: 15,
               files: {
                 "src/pages/Home.tsx": { insertions: 60, deletions: 10 },
-                "src/styles/main.css": { insertions: 20, deletions: 5 }
-              }
+                "src/styles/main.css": { insertions: 20, deletions: 5 },
+              },
             },
             message: "feat: add home page",
             tags: [],
-            releaseTags: ["v1.1.0"]
+            releaseTags: ["v1.1.0"],
           },
           seq: 3,
-          clusterId: 2
-        }
-      ]
-    }
+          clusterId: 2,
+        },
+      ],
+    },
   ] as ClusterNode[];
 }
 
@@ -138,6 +139,6 @@ export function testReleaseAnalyzer() {
   return {
     releaseGroups,
     folderActivities,
-    topFoldersResult
+    topFoldersResult,
   };
 }
