@@ -11,7 +11,7 @@ const GithubIssueLink = ({ owner, repo, issueNumber, className, ...rest }: Githu
       href={issueLink}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn("commit-message__issue-link", className)}
+      className={cn("github-issue-link", className)}
       title={`GitHub Issue #${issueNumber}`}
       {...rest}
     >

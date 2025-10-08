@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useMemo } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -13,26 +13,25 @@ import { Tooltip } from "@mui/material";
 
 import { useGithubInfo, useDataStore } from "store";
 import { Author } from "components/@common/Author";
-import { GithubIssueLink } from "components/@common/GithubIssueLink";
+import type { IssueLinkedMessage } from "components/@common/GithubIssueLink";
+import { renderIssueLinkedNodes } from "components/@common/GithubIssueLink";
 
 import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
 import { FIRST_SHOW_NUM } from "./Detail.const";
-import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps, LinkedMessage } from "./Detail.type";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps } from "./Detail.type";
 
 import "./Detail.scss";
 
 const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const selectedData = useDataStore((state) => state.selectedData);
-  const [linkedMessage, setLinkedMessage] = useState<LinkedMessage>({
-    title: [],
-    body: null,
-  });
-
   const { owner, repo } = useGithubInfo();
 
-  const commitNodeListInCluster =
-    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
+  const commitNodeListInCluster = useMemo(
+    () =>
+      selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [],
+    [selectedData, clusterId]
+  );
   const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
 
   const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
@@ -41,63 +40,17 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
     navigator.clipboard.writeText(id);
   };
 
-  useEffect(() => {
-    const processMessage = (message: string) => {
-      // GitHub 이슈 번호 패턴: #123 또는 (#123)
-      const regex = /(?:^|\s)(#\d+)(?:\s|$)/g;
-      const parts: React.ReactNode[] = [];
-      let lastIndex = 0;
-      let match: RegExpExecArray | null;
+  const issueLinkedMessage: IssueLinkedMessage = useMemo(() => {
+    const message = commitNodeListInCluster?.[0]?.commit?.message;
+    if (!message) return { title: [], body: null };
 
-      while (true) {
-        match = regex.exec(message);
-        if (match === null) break;
+    const [title, ...rest] = message.split("\n");
+    const body = rest.filter((line) => line.trim()).join("\n");
 
-        // 이슈 번호 앞의 텍스트 추가
-        if (match.index > lastIndex) {
-          parts.push(message.slice(lastIndex, match.index));
-        }
-
-        const issueNumber = match[1].substring(1);
-
-        parts.push(
-          <GithubIssueLink
-            key={`issue-${issueNumber}-${match.index}`}
-            owner={owner}
-            repo={repo}
-            issueNumber={issueNumber}
-          />
-        );
-
-        lastIndex = match.index + match[0].length;
-      }
-
-      // 마지막 부분 추가
-      if (lastIndex < message.length) {
-        parts.push(message.slice(lastIndex));
-      }
-
-      return parts.length > 0 ? parts : [message];
+    return {
+      title: renderIssueLinkedNodes(title, owner, repo),
+      body: body ? renderIssueLinkedNodes(body, owner, repo) : null,
     };
-
-    if (commitNodeListInCluster?.[0]?.commit?.message) {
-      const { message } = commitNodeListInCluster[0].commit;
-      const messageLines = message.split("\n");
-      const title = messageLines[0];
-      const body = messageLines
-        .slice(1)
-        .filter((line: string) => line.trim())
-        .join("\n");
-
-      // 제목과 본문을 각각 처리
-      const processedTitle = processMessage(title);
-      const processedBody = body ? processMessage(body) : null;
-
-      setLinkedMessage({
-        title: processedTitle,
-        body: processedBody,
-      });
-    }
   }, [commitNodeListInCluster, owner, repo]);
 
   if (!selectedData || selectedData.length === 0) return null;
@@ -114,7 +67,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
             repo={repo}
             authSrcMap={authSrcMap}
             handleCommitIdCopy={handleCommitIdCopy}
-            linkedMessage={linkedMessage}
+            linkedMessage={issueLinkedMessage}
           />
         ))}
       </ul>
