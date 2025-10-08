@@ -71,58 +71,73 @@ export const renderReleaseVisualization = ({
     .domain([0, d3.max(releaseContributorActivities, (d) => d.changes) || 1])
     .range([3, 12]);
 
-  const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(d3.schemeCategory10);
+  const svgElement = svg.node();
+  const parentElement = svgElement?.parentElement;
+  const chartColors = Array.from({ length: 10 }, (_, i) =>
+    getComputedStyle(parentElement || document.documentElement)
+      .getPropertyValue(`--chart-color-${i + 1}`)
+      .trim()
+  );
+
+  const colorScale = d3.scaleOrdinal().domain(uniqueContributors).range(chartColors);
 
   const mainGroup = svg.append("g");
 
-  // 폴더 레인 그리기
   mainGroup
-    .selectAll(".folder-lane")
+    .selectAll(".folder-label")
     .data(releaseTopFolderPaths)
     .enter()
-    .append("g")
-    .attr("class", "folder-lane")
-    .each(function (this: SVGGElement, folderPath: string) {
-      const lane = d3.select(this);
+    .append("text")
+    .attr("class", (folderPath: string) => {
+      const isFile = folderPath.includes(".");
+      return isFile ? "folder-label" : "folder-label clickable";
+    })
+    .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
+    .attr("y", (folderPath: string) => (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
+    .attr("text-anchor", "start")
+    .attr("dominant-baseline", "middle")
+    .text((folderPath: string) => {
+      if (folderPath === ".") return "root";
+      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+      return fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
+    })
+    .style("font-size", "12px")
+    .style("fill", "#b4bac6")
+    .style("font-weight", "500")
+    .style("cursor", (folderPath: string) => {
+      const isFile = folderPath.includes(".");
+      return isFile ? "default" : "pointer";
+    })
+    .on("click", (_event: MouseEvent, folderPath: string) => {
+      const isFile = folderPath.includes(".");
+      if (!isFile && folderPath !== ".") {
+        onFolderClick(folderPath);
+      }
+    })
+    .on("mouseover", function (_event: MouseEvent, folderPath: string) {
+      const isFile = folderPath.includes(".");
+      if (!isFile) {
+        d3.select(this).style("fill", "#e06091");
+      }
+    })
+    .on("mouseout", function (_event: MouseEvent, folderPath: string) {
+      const isFile = folderPath.includes(".");
+      const element = d3.select(this);
+      if (!isFile) {
+        element.style("fill", "#b4bac6");
+      }
+      // 호버 끝나면 축약된 텍스트로 복원
+      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+      const displayName = fileName && fileName.length > 15 ? `${fileName.substring(0, 15)}...` : fileName || "unknown";
+      element.text(folderPath === "." ? "root" : displayName);
+    });
 
-      lane
-        .append("rect")
-        .attr("class", "lane-background")
-        .attr("x", DIMENSIONS.margin.left)
-        .attr("y", yScale(folderPath) || 0)
-        .attr("width", DIMENSIONS.width - DIMENSIONS.margin.left - DIMENSIONS.margin.right)
-        .attr("height", yScale.bandwidth())
-        .attr("fill", "#f8f9fa")
-        .attr("stroke", "#dee2e6")
-        .attr("stroke-width", 1);
-
-      lane
-        .append("text")
-        .attr("class", "folder-label clickable")
-        .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
-        .attr("y", (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
-        .attr("text-anchor", "start")
-        .attr("dominant-baseline", "middle")
-        .text(() => {
-          if (folderPath === ".") return "root";
-          const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
-          return fileName && fileName.length > 15 ? `${fileName.substring(0, 12)}...` : fileName || "unknown";
-        })
-        .style("font-size", "12px")
-        .style("fill", "#495057")
-        .style("font-weight", "500")
-        .style("cursor", "pointer")
-        .on("click", () => {
-          if (folderPath !== ".") {
-            onFolderClick(folderPath);
-          }
-        })
-        .on("mouseover", function () {
-          d3.select(this).style("fill", "#007bff");
-        })
-        .on("mouseout", function () {
-          d3.select(this).style("fill", "#495057");
-        });
+  // 호버 시 전체 이름 표시를 위한 추가 이벤트
+  mainGroup
+    .selectAll<SVGTextElement, string>(".folder-label")
+    .on("mouseover.showfull", function (_event, folderPath) {
+      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+      d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
     });
 
   // 릴리즈 축
@@ -156,9 +171,7 @@ export const renderReleaseVisualization = ({
     .attr("cy", (d: ReleaseContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("r", (d: ReleaseContributorActivity) => sizeScale(d.changes))
     .attr("fill", (d: ReleaseContributorActivity) => colorScale(d.contributorName) as string)
-    .attr("fill-opacity", 0.8)
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1);
+    .attr("fill-opacity", 0.8);
 
   // 툴팁 이벤트
   dots
@@ -197,14 +210,13 @@ export const renderReleaseVisualization = ({
     .attr("x", (d: ReleaseContributorActivity) => calculateReleaseNodePosition(d, xScale, activitiesByRelease))
     .attr(
       "y",
-      (d: ReleaseContributorActivity) =>
-        (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5
+      (d: ReleaseContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2 - sizeScale(d.changes) - 5
     )
     .attr("text-anchor", "middle")
     .attr("dominant-baseline", "bottom")
     .text((d: ReleaseContributorActivity) => d.contributorName)
     .style("font-size", "10px")
-    .style("fill", "#495057")
+    .style("fill", "#f7f7f7")
     .style("font-weight", "500")
     .style("pointer-events", "none");
 
@@ -221,5 +233,5 @@ export const renderReleaseVisualization = ({
     .attr("fill", "none")
     .attr("stroke", (d) => colorScale(d.contributorName) as string)
     .attr("stroke-width", 2)
-    .attr("stroke-opacity", 0.4);
+    .attr("stroke-opacity", 1);
 };

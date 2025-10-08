@@ -144,7 +144,7 @@ const FolderActivityFlow = () => {
               className={index === getBreadcrumbs().length - 1 ? "current" : "clickable"}
               onClick={() => navigateToBreadcrumb(index, getBreadcrumbs().length)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   navigateToBreadcrumb(index, getBreadcrumbs().length);
                 }
