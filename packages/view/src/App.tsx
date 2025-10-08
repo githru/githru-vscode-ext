@@ -69,13 +69,15 @@ const App = () => {
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
-        <RefreshButton />
-        <button
-          className="folder-activity-flow-button"
-          onClick={handleOpenFolderActivityFlowModal}
-        >
-          Folder Activity Flow
-        </button>
+        <div>
+          <RefreshButton />
+          <button
+            className="folder-activity-flow-button"
+            onClick={handleOpenFolderActivityFlowModal}
+          >
+            Folder Activity Flow
+          </button>
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />
