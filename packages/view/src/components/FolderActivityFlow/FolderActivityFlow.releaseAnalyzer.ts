@@ -95,7 +95,7 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
 
       // For commits without release tags
       if (acc.lastGroup) {
-        // Add to existing group (maintaining immutability)
+        // Add to existing group (maintaining immutability with optimized array copy)
         const updatedLastGroup: ReleaseGroup = {
           ...acc.lastGroup,
           commits: [...acc.lastGroup.commits, commit],
@@ -106,8 +106,12 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
           },
         };
 
+        // Optimized: shallow copy array and replace last element
+        const updatedGroups = acc.groups.slice();
+        updatedGroups[updatedGroups.length - 1] = updatedLastGroup;
+
         return {
-          groups: [...acc.groups.slice(0, -1), updatedLastGroup],
+          groups: updatedGroups,
           lastGroup: updatedLastGroup,
         };
       }
