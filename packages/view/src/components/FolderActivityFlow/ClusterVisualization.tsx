@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { pxToRem } from "utils/pxToRem";
 
 import type { FolderActivity } from "./FolderActivityFlow.analyzer";
 import { DIMENSIONS } from "./FolderActivityFlow.const";
@@ -44,6 +43,9 @@ export const renderClusterVisualization = ({
   onFolderClick,
 }: ClusterVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
+
+  // 툴팁 초기 상태 설정
+  tooltip.style("display", "none");
 
   // 스케일 설정
   const uniqueContributors = Array.from(new Set(contributorActivities.map((a) => a.contributorName)));
@@ -130,12 +132,10 @@ export const renderClusterVisualization = ({
     });
 
   // 호버 시 전체 이름 표시를 위한 추가 이벤트
-  mainGroup
-    .selectAll<SVGTextElement, FolderActivity>(".folder-label")
-    .on("mouseover.showfull", function (_event, d) {
-      const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
-      d3.select(this).text(d.folderPath === "." ? "root" : fileName || "unknown");
-    });
+  mainGroup.selectAll<SVGTextElement, FolderActivity>(".folder-label").on("mouseover.showfull", function (_event, d) {
+    const fileName = d.folderPath.includes("/") ? d.folderPath.split("/").pop() : d.folderPath;
+    d3.select(this).text(d.folderPath === "." ? "root" : fileName || "unknown");
+  });
 
   // 클러스터 축
   const xAxis = d3.axisBottom(xScale).tickFormat((d) => `Cluster ${parseInt(String(d)) + 1}`);
@@ -170,27 +170,60 @@ export const renderClusterVisualization = ({
 
   // 툴팁 이벤트
   dots
-    .on("mouseover", (event: MouseEvent, d: ContributorActivity) => {
+    .on("mouseover", function (event: MouseEvent, d: ContributorActivity) {
+      const currentRadius = sizeScale(d.changes);
+      const hoveredRadius = currentRadius * 1.2;
+
+      // 노드 크기 확대
+      d3.select(this)
+        .attr("r", hoveredRadius)
+        .attr("stroke-width", 2)
+        .attr("stroke", "rgba(255, 255, 255, 0.5)");
+
+      // 노드 위치 계산
+      const nodeElement = event.target as SVGCircleElement;
+      const nodeRect = nodeElement.getBoundingClientRect();
+      const tooltipLeft = nodeRect.left + nodeRect.width / 2;
+      const tooltipTop = nodeRect.bottom + 8;
+
+      // 툴팁 표시
       tooltip
         .style("display", "inline-block")
-        .style("left", pxToRem(event.pageX + 10))
-        .style("top", pxToRem(event.pageY - 10)).html(`
-          <div class="contributor-activity-tooltip">
-            <p><strong>${d.contributorName}</strong></p>
-            <p>Cluster: ${d.clusterIndex + 1}</p>
-            <p>Folder: ${d.folderPath === "." ? "root" : d.folderPath}</p>
-            <p>Date: ${d.date.toLocaleDateString()}</p>
-            <p>Changes: ${d.changes}</p>
-            <p style="color: #28a745;">+${d.insertions} insertions</p>
-            <p style="color: #dc3545;">-${d.deletions} deletions</p>
+        .style("left", `${tooltipLeft}px`)
+        .style("top", `${tooltipTop}px`)
+        .style("transform", "translateX(-50%)")
+        .style("opacity", "0")
+        .style("transition", "opacity 0.2s ease-in-out")
+        .html(`
+          <div class="contributor-activity-tooltip" style="background:rgba(60, 64, 72, 0.9);padding:10px 14px;border-radius:8px;border:none;outline:none;box-shadow:0 3px 6px rgba(0,0,0,0.16);color:#fff;font-size:13px;line-height:1.6;position:relative;">
+            <div class="tooltip-arrow" style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid rgba(60, 64, 72, 0.9);"></div>
+            <p><strong>${d.contributorName}'s contribute</strong></p>
+            <p style="color:#1fc3b5;display:inline;">+${d.insertions}</p> / <p style="color:#e84b6b;display:inline;">-${d.deletions}</p>
+            <p>CLOC # → ${d.changes}</p>
+            <p><span style="display:inline-flex;align-items:center;gap:4px;"><svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>${d.folderPath === "." ? "root" : d.folderPath.split("/").pop() || d.folderPath}</span></p>
+            <p><span style="display:inline-flex;align-items:center;gap:4px;"><svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M7 11h2v2H7v-2zm14-5v14c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2l.01-14c0-1.1.88-2 1.99-2h1V2h2v2h8V2h2v2h1c1.1 0 2 .9 2 2zM5 8h14V6H5v2zm14 12V10H5v10h14zm-4-7h2v-2h-2v2zm-4 0h2v-2h-2v2z"/></svg>${d.date.toLocaleDateString()}</span></p>
           </div>
         `);
+
+      // 페이드 인 애니메이션
+      setTimeout(() => {
+        tooltip.style("opacity", "1");
+      }, 10);
     })
-    .on("mousemove", (event: MouseEvent) => {
-      tooltip.style("left", pxToRem(event.pageX + 10)).style("top", pxToRem(event.pageY - 10));
+    .on("mousemove", () => {
+      // 툴팁이 노드 기준으로 고정되므로 mousemove에서는 위치 업데이트 불필요
     })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
+    .on("mouseout", function (_event: MouseEvent, d: ContributorActivity) {
+      const currentRadius = sizeScale(d.changes);
+
+      // 노드 크기 원래대로
+      d3.select(this).attr("r", currentRadius).attr("stroke-width", 0);
+
+      // 페이드 아웃 애니메이션
+      tooltip.style("opacity", "0");
+      setTimeout(() => {
+        tooltip.style("display", "none");
+      }, 200);
     });
 
   // 기여자별 첫 노드에 이름 라벨
