@@ -20,6 +20,7 @@ import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { NetworkGraph } from "components/NetworkGraph";
+import { InsightsButton } from "components/InsightsButton";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -78,13 +79,15 @@ const App = () => {
         <BranchSelector />
         <div>
           <RefreshButton />
-          <button
-            type="button"
-            className="folder-activity-flow-button"
+          <InsightsButton
+            isNew
+            sx={{
+              width: "1.875rem",
+              height: "1.875rem",
+              color: "white",
+            }}
             onClick={handleOpenFolderActivityFlowModal}
-          >
-            Folder Activity Flow
-          </button>
+          />
         </div>
       </div>
       <div className="top-container">
