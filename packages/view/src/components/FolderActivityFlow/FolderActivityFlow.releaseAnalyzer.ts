@@ -1,5 +1,7 @@
 import type { ClusterNode } from "types";
 
+import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
+
 export interface ReleaseGroup {
   releaseTag: string;
   commitCount: number;
@@ -38,97 +40,120 @@ export interface CommitData {
 }
 
 /**
- * 폴더 경로에서 지정된 깊이의 폴더를 추출
+ * Extracts folder path at specified depth from file path.
+ *
+ * @param filePath - Full file path to extract from
+ * @param depth - Folder depth level to extract (default: 1)
+ * @returns Extracted folder path or "." for root level
  */
-export function extractFolderFromPath(filePath: string, depth: number = 1): string {
-  const parts = filePath.split('/');
-  if (parts.length === 1) return '.'; // 루트 레벨 파일
+export function extractFolderFromPath(filePath: string, depth = 1): string {
+  const parts = filePath.split("/");
+  if (parts.length === 1) return ".";
 
   const folderParts = parts.slice(0, Math.min(depth, parts.length - 1));
-  return folderParts.length > 0 ? folderParts.join('/') : '.';
+  return folderParts.length > 0 ? folderParts.join("/") : ".";
 }
 
 /**
- * 커밋들을 releaseTags 기준으로 그룹화
- * releaseTags가 없는 커밋은 이전 releaseTags와 합침
+ * Groups commits by release tags.
+ * Commits without release tags are merged into the previous release group.
+ *
+ * @param clusterNodeList - List of cluster nodes containing commits
+ * @returns Array of release groups sorted chronologically
  */
 export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): ReleaseGroup[] {
-  // 모든 커밋을 시간순으로 정렬
-  const allCommits: CommitData[] = [];
-  clusterNodeList.forEach(cluster => {
-    cluster.commitNodeList.forEach(commitNode => {
-      allCommits.push(commitNode.commit);
-    });
-  });
+  const allCommits = clusterNodeList
+    .flatMap((cluster) => cluster.commitNodeList.map((node) => node.commit))
+    .sort((a, b) => new Date(a.commitDate).getTime() - new Date(b.commitDate).getTime());
 
-  // 커밋 날짜 기준으로 정렬
-  allCommits.sort((a, b) => new Date(a.commitDate).getTime() - new Date(b.commitDate).getTime());
+  interface ReduceAccumulator {
+    groups: ReleaseGroup[];
+    lastGroup: ReleaseGroup | null;
+  }
 
-  const releaseGroups: ReleaseGroup[] = [];
-  let currentGroup: ReleaseGroup | null = null;
-
-  for (const commit of allCommits) {
-    if (commit.releaseTags && commit.releaseTags.length > 0) {
-      // 새로운 릴리즈 태그가 있는 경우, 새 그룹 시작
-      for (const releaseTag of commit.releaseTags) {
-        currentGroup = {
+  const { groups } = allCommits.reduce<ReduceAccumulator>(
+    (acc, commit) => {
+      if (commit.releaseTags && commit.releaseTags.length > 0) {
+        const newGroups = commit.releaseTags.map((releaseTag) => ({
           releaseTag,
           commitCount: 1,
           dateRange: {
             start: new Date(commit.commitDate),
-            end: new Date(commit.commitDate)
+            end: new Date(commit.commitDate),
           },
-          commits: [commit]
-        };
-        releaseGroups.push(currentGroup);
-      }
-    } else {
-      // releaseTags가 없는 경우
-      if (currentGroup) {
-        // 기존 그룹에 추가
-        currentGroup.commits.push(commit);
-        currentGroup.commitCount++;
-        currentGroup.dateRange.end = new Date(commit.commitDate);
-      } else {
-        // 첫 번째 릴리즈 태그 이전의 커밋들을 위한 그룹 생성
-        currentGroup = {
-          releaseTag: "Pre-release",
-          commitCount: 1,
-          dateRange: {
-            start: new Date(commit.commitDate),
-            end: new Date(commit.commitDate)
-          },
-          commits: [commit]
-        };
-        releaseGroups.unshift(currentGroup); // 맨 앞에 추가
-      }
-    }
-  }
+          commits: [commit],
+        }));
 
-  return releaseGroups;
+        return {
+          groups: [...acc.groups, ...newGroups],
+          lastGroup: newGroups[newGroups.length - 1],
+        };
+      }
+
+      if (acc.lastGroup) {
+        const updatedLastGroup: ReleaseGroup = {
+          ...acc.lastGroup,
+          commits: [...acc.lastGroup.commits, commit],
+          commitCount: acc.lastGroup.commitCount + 1,
+          dateRange: {
+            ...acc.lastGroup.dateRange,
+            end: new Date(commit.commitDate),
+          },
+        };
+
+        const updatedGroups = acc.groups.slice();
+        updatedGroups[updatedGroups.length - 1] = updatedLastGroup;
+
+        return {
+          groups: updatedGroups,
+          lastGroup: updatedLastGroup,
+        };
+      }
+
+      const preReleaseGroup = {
+        releaseTag: "Pre-release",
+        commitCount: 1,
+        dateRange: {
+          start: new Date(commit.commitDate),
+          end: new Date(commit.commitDate),
+        },
+        commits: [commit],
+      };
+
+      return {
+        groups: [preReleaseGroup, ...acc.groups],
+        lastGroup: preReleaseGroup,
+      };
+    },
+    { groups: [], lastGroup: null }
+  );
+
+  return groups;
+}
+
+interface FolderStats {
+  totalChanges: number;
+  insertions: number;
+  deletions: number;
+  commitCount: number;
+  contributors: Set<string>;
 }
 
 /**
- * 릴리즈 그룹별 폴더 활동 분석
+ * Analyzes folder activity per release group.
+ *
+ * @param releaseGroups - Release groups to analyze
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Array of folder activities per release
  */
-export function analyzeReleaseFolderActivity(
-  releaseGroups: ReleaseGroup[],
-  folderDepth: number = 1
-): ReleaseFolderActivity[] {
+export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], folderDepth = 1): ReleaseFolderActivity[] {
   const activities: ReleaseFolderActivity[] = [];
 
-  releaseGroups.forEach(group => {
-    const folderStats = new Map<string, {
-      totalChanges: number;
-      insertions: number;
-      deletions: number;
-      commitCount: number;
-      contributors: Set<string>;
-    }>();
+  releaseGroups.forEach((group) => {
+    const folderStats = new Map<string, FolderStats>();
 
-    // 각 커밋의 파일 변경사항 분석
-    group.commits.forEach(commit => {
-      const authorName = commit.author.names[0] || 'Unknown';
+    group.commits.forEach((commit) => {
+      const authorName = commit.author.names[0] || "Unknown";
 
       Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]) => {
         const folderPath = extractFolderFromPath(filePath, folderDepth);
@@ -139,34 +164,35 @@ export function analyzeReleaseFolderActivity(
             insertions: 0,
             deletions: 0,
             commitCount: 0,
-            contributors: new Set()
+            contributors: new Set(),
           });
         }
 
-        const folderActivity = folderStats.get(folderPath)!;
-        folderActivity.insertions += stats.insertions;
-        folderActivity.deletions += stats.deletions;
-        folderActivity.totalChanges += stats.insertions + stats.deletions;
-        folderActivity.contributors.add(authorName);
+        const folderActivity = folderStats.get(folderPath);
+        if (folderActivity) {
+          folderActivity.insertions += stats.insertions;
+          folderActivity.deletions += stats.deletions;
+          folderActivity.totalChanges += stats.insertions + stats.deletions;
+          folderActivity.contributors.add(authorName);
+        }
       });
     });
 
-    // 폴더별 고유 커밋 수 계산
-    group.commits.forEach(commit => {
+    group.commits.forEach((commit) => {
       const foldersInCommit = new Set<string>();
-      Object.keys(commit.diffStatistics.files).forEach(filePath => {
+      Object.keys(commit.diffStatistics.files).forEach((filePath) => {
         const folderPath = extractFolderFromPath(filePath, folderDepth);
         foldersInCommit.add(folderPath);
       });
 
-      foldersInCommit.forEach(folderPath => {
-        if (folderStats.has(folderPath)) {
-          folderStats.get(folderPath)!.commitCount++;
+      foldersInCommit.forEach((folderPath) => {
+        const folder = folderStats.get(folderPath);
+        if (folder) {
+          folder.commitCount += 1;
         }
       });
     });
 
-    // ReleaseFolderActivity 객체로 변환
     folderStats.forEach((stats, folderPath) => {
       activities.push({
         folderPath,
@@ -175,7 +201,7 @@ export function analyzeReleaseFolderActivity(
         insertions: stats.insertions,
         deletions: stats.deletions,
         commitCount: stats.commitCount,
-        contributors: Array.from(stats.contributors)
+        contributors: Array.from(stats.contributors),
       });
     });
   });
@@ -184,12 +210,17 @@ export function analyzeReleaseFolderActivity(
 }
 
 /**
- * 릴리즈별 상위 폴더 추출
+ * Extracts top folders by activity across releases.
+ *
+ * @param clusterNodeList - List of cluster nodes containing commits
+ * @param count - Number of top folders to return (default: 8)
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Object containing release groups, filtered activities, and top folders
  */
 export function getTopFoldersByRelease(
   clusterNodeList: ClusterNode[],
-  count: number = 8,
-  folderDepth: number = 1
+  count = 8,
+  folderDepth = 1
 ): {
   releaseGroups: ReleaseGroup[];
   folderActivities: ReleaseFolderActivity[];
@@ -198,9 +229,8 @@ export function getTopFoldersByRelease(
   const releaseGroups = groupCommitsByReleaseTags(clusterNodeList);
   const folderActivities = analyzeReleaseFolderActivity(releaseGroups, folderDepth);
 
-  // 전체 기간 동안 가장 활발한 폴더들 추출
   const globalFolderStats = new Map<string, number>();
-  folderActivities.forEach(activity => {
+  folderActivities.forEach((activity) => {
     const current = globalFolderStats.get(activity.folderPath) || 0;
     globalFolderStats.set(activity.folderPath, current + activity.totalChanges);
   });
@@ -212,49 +242,46 @@ export function getTopFoldersByRelease(
 
   return {
     releaseGroups,
-    folderActivities: folderActivities.filter(activity =>
-      topFolders.includes(activity.folderPath)
-    ),
-    topFolders
+    folderActivities: folderActivities.filter((activity) => topFolders.includes(activity.folderPath)),
+    topFolders,
   };
 }
 
+interface ContributorFolderStats {
+  changes: number;
+  insertions: number;
+  deletions: number;
+  lastDate: Date;
+}
+
 /**
- * 특정 릴리즈 그룹의 기여자 활동 추출
+ * Extracts contributor activities for specific release groups.
+ *
+ * @param releaseGroups - Release groups to analyze
+ * @param topFolders - List of folder paths to include
+ * @param folderDepth - Folder depth level for grouping (default: 1)
+ * @returns Array of contributor activities per folder and release
  */
 export function extractReleaseContributorActivities(
   releaseGroups: ReleaseGroup[],
   topFolders: string[],
-  folderDepth: number = 1
-) {
-  const activities: Array<{
-    contributorName: string;
-    folderPath: string;
-    releaseTag: string;
-    releaseIndex: number;
-    changes: number;
-    insertions: number;
-    deletions: number;
-    date: Date;
-  }> = [];
+  folderDepth = 1
+): ReleaseContributorActivity[] {
+  const activities: ReleaseContributorActivity[] = [];
 
   releaseGroups.forEach((group, releaseIndex) => {
-    const contributorFolderStats = new Map<string, Map<string, {
-      changes: number;
-      insertions: number;
-      deletions: number;
-      lastDate: Date;
-    }>>();
+    const contributorFolderStats = new Map<string, Map<string, ContributorFolderStats>>();
 
-    group.commits.forEach(commit => {
-      const authorName = commit.author.names[0] || 'Unknown';
+    group.commits.forEach((commit) => {
+      const authorName = commit.author.names[0] || "Unknown";
       const commitDate = new Date(commit.commitDate);
 
       if (!contributorFolderStats.has(authorName)) {
         contributorFolderStats.set(authorName, new Map());
       }
 
-      const contributorStats = contributorFolderStats.get(authorName)!;
+      const contributorStats = contributorFolderStats.get(authorName);
+      if (!contributorStats) return;
 
       Object.entries(commit.diffStatistics.files).forEach(([filePath, stats]) => {
         const folderPath = extractFolderFromPath(filePath, folderDepth);
@@ -266,19 +293,20 @@ export function extractReleaseContributorActivities(
             changes: 0,
             insertions: 0,
             deletions: 0,
-            lastDate: commitDate
+            lastDate: commitDate,
           });
         }
 
-        const folderStats = contributorStats.get(folderPath)!;
-        folderStats.changes += stats.insertions + stats.deletions;
-        folderStats.insertions += stats.insertions;
-        folderStats.deletions += stats.deletions;
-        folderStats.lastDate = commitDate;
+        const folderStats = contributorStats.get(folderPath);
+        if (folderStats) {
+          folderStats.changes += stats.insertions + stats.deletions;
+          folderStats.insertions += stats.insertions;
+          folderStats.deletions += stats.deletions;
+          folderStats.lastDate = commitDate;
+        }
       });
     });
 
-    // 활동 데이터로 변환
     contributorFolderStats.forEach((folderStatsMap, contributorName) => {
       folderStatsMap.forEach((stats, folderPath) => {
         activities.push({
@@ -289,7 +317,7 @@ export function extractReleaseContributorActivities(
           changes: stats.changes,
           insertions: stats.insertions,
           deletions: stats.deletions,
-          date: stats.lastDate
+          date: stats.lastDate,
         });
       });
     });
