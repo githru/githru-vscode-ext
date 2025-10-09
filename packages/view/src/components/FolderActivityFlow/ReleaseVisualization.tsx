@@ -172,8 +172,7 @@ export const renderReleaseVisualization = ({
     .attr("cy", (d: ReleaseContributorActivity) => (yScale(d.folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("r", (d: ReleaseContributorActivity) => sizeScale(d.changes))
     .attr("fill", (d: ReleaseContributorActivity) => colorScale(d.contributorName) as string)
-    .attr("fill-opacity", 0.8)
-    .raise(); // 노드를 최상위로
+    .attr("fill-opacity", 0.8);
 
   // 툴팁 이벤트
   dots
@@ -208,12 +207,12 @@ export const renderReleaseVisualization = ({
         .style("transform", "translateX(-50%)")
         .style("opacity", "0")
         .style("transition", "opacity 0.2s ease-in-out").html(`
-          <div class="contributor-activity-tooltip" style="background:rgba(60, 64, 72, 0.9);padding:10px 14px;border-radius:8px;border:none;outline:none;box-shadow:0 3px 6px rgba(0,0,0,0.16);color:#fff;font-size:13px;line-height:1.6;position:relative;">
+          <div class="contributor-activity-tooltip">
             <p><strong>${d.contributorName}'s contribute</strong></p>
-            <p style="color:#1fc3b5;display:inline;">+${d.insertions}</p> / <p style="color:#e84b6b;display:inline;">-${d.deletions}</p>
+            <p class="insertions">+${d.insertions}</p> / <p class="deletions">-${d.deletions}</p>
             <p>CLOC # → ${d.changes}</p>
-            <p><span style="display:inline-flex;align-items:center;gap:4px;"><svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>${d.folderPath === "." ? "root" : d.folderPath.split("/").pop() || d.folderPath}</span></p>
-            <p><span style="display:inline-flex;align-items:center;gap:4px;"><svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M7 11h2v2H7v-2zm14-5v14c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2l.01-14c0-1.1.88-2 1.99-2h1V2h2v2h8V2h2v2h1c1.1 0 2 .9 2 2zM5 8h14V6H5v2zm14 12V10H5v10h14zm-4-7h2v-2h-2v2zm-4 0h2v-2h-2v2z"/></svg>${d.date.toLocaleDateString()}</span></p>
+            <p><span class="icon-wrapper"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>${d.folderPath === "." ? "root" : d.folderPath.split("/").pop() || d.folderPath}</span></p>
+            <p><span class="icon-wrapper"><svg viewBox="0 0 24 24"><path d="M7 11h2v2H7v-2zm14-5v14c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2l.01-14c0-1.1.88-2 1.99-2h1V2h2v2h8V2h2v2h1c1.1 0 2 .9 2 2zM5 8h14V6H5v2zm14 12V10H5v10h14zm-4-7h2v-2h-2v2zm-4 0h2v-2h-2v2z"/></svg>${d.date.toLocaleDateString()}</span></p>
           </div>
         `);
 
@@ -221,9 +220,6 @@ export const renderReleaseVisualization = ({
       setTimeout(() => {
         tooltip.style("opacity", "1");
       }, 10);
-    })
-    .on("mousemove", () => {
-      // 툴팁이 노드 기준으로 고정되므로 mousemove에서는 위치 업데이트 불필요
     })
     .on("mouseout", function (_event: MouseEvent, d: ReleaseContributorActivity) {
       const currentRadius = sizeScale(d.changes);
