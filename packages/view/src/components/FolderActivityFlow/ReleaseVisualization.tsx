@@ -44,9 +44,6 @@ export const renderReleaseVisualization = ({
 }: ReleaseVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
 
-  // 툴팁 초기 상태 설정
-  tooltip.style("display", "none");
-
   // 스케일 설정
   const uniqueContributors = Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName)));
   const uniqueReleases = Array.from(new Set(releaseContributorActivities.map((a) => a.releaseIndex))).sort(
