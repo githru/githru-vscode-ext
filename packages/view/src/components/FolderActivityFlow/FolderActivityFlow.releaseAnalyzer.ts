@@ -138,6 +138,14 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
   return groups;
 }
 
+interface FolderStats {
+  totalChanges: number;
+  insertions: number;
+  deletions: number;
+  commitCount: number;
+  contributors: Set<string>;
+}
+
 /**
  * Analyzes folder activity per release group.
  *
@@ -149,16 +157,7 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
   const activities: ReleaseFolderActivity[] = [];
 
   releaseGroups.forEach((group) => {
-    const folderStats = new Map<
-      string,
-      {
-        totalChanges: number;
-        insertions: number;
-        deletions: number;
-        commitCount: number;
-        contributors: Set<string>;
-      }
-    >();
+    const folderStats = new Map<string, FolderStats>();
 
     // Analyze file changes for each commit
     group.commits.forEach((commit) => {
@@ -259,6 +258,13 @@ export function getTopFoldersByRelease(
   };
 }
 
+interface ContributorFolderStats {
+  changes: number;
+  insertions: number;
+  deletions: number;
+  lastDate: Date;
+}
+
 /**
  * Extracts contributor activities for specific release groups.
  *
@@ -275,18 +281,7 @@ export function extractReleaseContributorActivities(
   const activities: ReleaseContributorActivity[] = [];
 
   releaseGroups.forEach((group, releaseIndex) => {
-    const contributorFolderStats = new Map<
-      string,
-      Map<
-        string,
-        {
-          changes: number;
-          insertions: number;
-          deletions: number;
-          lastDate: Date;
-        }
-      >
-    >();
+    const contributorFolderStats = new Map<string, Map<string, ContributorFolderStats>>();
 
     group.commits.forEach((commit) => {
       const authorName = commit.author.names[0] || "Unknown";
