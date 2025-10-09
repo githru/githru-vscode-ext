@@ -119,6 +119,16 @@
     z-index: 1000;
 
     .contributor-activity-tooltip {
+      background: rgba(60, 64, 72, 0.9);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.6;
+      position: relative;
 
       p {
         margin: 0.25rem 0;
@@ -130,6 +140,28 @@
 
         &:last-child {
           margin-bottom: 0;
+        }
+      }
+
+      .insertions {
+        color: #1fc3b5;
+        display: inline;
+      }
+
+      .deletions {
+        color: #e84b6b;
+        display: inline;
+      }
+
+      .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
         }
       }
     }
