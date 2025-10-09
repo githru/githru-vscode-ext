@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FolderActivityFlow,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -13,6 +20,7 @@ import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { NetworkGraph } from "components/NetworkGraph";
+import { InsightsButton } from "components/InsightsButton";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -69,14 +77,18 @@ const App = () => {
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
-        <RefreshButton />
-        <button
-          type="button"
-          className="folder-activity-flow-button"
-          onClick={handleOpenFolderActivityFlowModal}
-        >
-          Folder Activity Flow
-        </button>
+        <div>
+          <RefreshButton />
+          <InsightsButton
+            isNew
+            sx={{
+              width: "1.875rem",
+              height: "1.875rem",
+              color: "white",
+            }}
+            onClick={handleOpenFolderActivityFlowModal}
+          />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />
@@ -103,7 +115,7 @@ const App = () => {
           className="folder-activity-flow-modal"
           onClick={handleCloseFolderActivityFlowModal}
           onKeyDown={(e) => {
-            if (e.key === 'Escape') {
+            if (e.key === "Escape") {
               handleCloseFolderActivityFlowModal();
             }
           }}

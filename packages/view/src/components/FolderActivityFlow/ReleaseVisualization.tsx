@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import type React from "react";
 
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
@@ -135,17 +136,15 @@ export const renderReleaseVisualization = ({
     });
 
   // 호버 시 전체 이름 표시를 위한 추가 이벤트
-  mainGroup
-    .selectAll<SVGTextElement, string>(".folder-label")
-    .on("mouseover.showfull", function (_event, folderPath) {
-      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
-      d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
-    });
+  mainGroup.selectAll<SVGTextElement, string>(".folder-label").on("mouseover.showfull", function (_event, folderPath) {
+    const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+    d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
+  });
 
   // 릴리즈 축
   const xAxis = d3
     .axisBottom(xScale)
-    .tickFormat((d) => releaseTagsByIndex.get(parseInt(String(d))) || `Release ${parseInt(String(d))}`);
+    .tickFormat((d) => releaseTagsByIndex.get(parseInt(String(d), 10)) || `Release ${parseInt(String(d), 10)}`);
 
   mainGroup
     .append("g")
@@ -159,7 +158,10 @@ export const renderReleaseVisualization = ({
     if (!activitiesByRelease.has(activity.releaseIndex)) {
       activitiesByRelease.set(activity.releaseIndex, []);
     }
-    activitiesByRelease.get(activity.releaseIndex)!.push(activity);
+    const activities = activitiesByRelease.get(activity.releaseIndex);
+    if (activities) {
+      activities.push(activity);
+    }
   });
 
   // 활동 노드 그리기
@@ -183,10 +185,7 @@ export const renderReleaseVisualization = ({
       const hoveredRadius = currentRadius * 1.2;
 
       // 노드 크기 확대
-      d3.select(this)
-        .attr("r", hoveredRadius)
-        .attr("stroke-width", 2)
-        .attr("stroke", "rgba(255, 255, 255, 0.5)");
+      d3.select(this).attr("r", hoveredRadius).attr("stroke-width", 2).attr("stroke", "rgba(255, 255, 255, 0.5)");
 
       // 노드 위치 계산
       const nodeElement = event.target as SVGCircleElement;
@@ -211,8 +210,7 @@ export const renderReleaseVisualization = ({
         .style("top", `${tooltipTop}px`)
         .style("transform", "translateX(-50%)")
         .style("opacity", "0")
-        .style("transition", "opacity 0.2s ease-in-out")
-        .html(`
+        .style("transition", "opacity 0.2s ease-in-out").html(`
           <div class="contributor-activity-tooltip" style="background:rgba(60, 64, 72, 0.9);padding:10px 14px;border-radius:8px;border:none;outline:none;box-shadow:0 3px 6px rgba(0,0,0,0.16);color:#fff;font-size:13px;line-height:1.6;position:relative;">
             <p><strong>${d.contributorName}'s contribute</strong></p>
             <p style="color:#1fc3b5;display:inline;">+${d.insertions}</p> / <p style="color:#e84b6b;display:inline;">-${d.deletions}</p>
@@ -234,9 +232,7 @@ export const renderReleaseVisualization = ({
       const currentRadius = sizeScale(d.changes);
 
       // 노드 크기 원래대로
-      d3.select(this)
-        .attr("r", currentRadius)
-        .attr("stroke-width", 0);
+      d3.select(this).attr("r", currentRadius).attr("stroke-width", 0);
 
       // 페이드 아웃 애니메이션
       tooltip.style("opacity", "0");

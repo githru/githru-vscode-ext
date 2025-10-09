@@ -1,4 +1,5 @@
 import type { ClusterNode } from "types";
+
 import type { FolderActivity } from "./FolderActivityFlow.analyzer";
 
 /**
@@ -19,18 +20,18 @@ export function getSubFolders(totalData: ClusterNode[], parentPath: string): Fol
 
   const subFolderStats = new Map<string, FolderActivity>();
 
-  totalData.forEach(cluster => {
-    cluster.commitNodeList.forEach(commitNode => {
-      const commit = commitNode.commit;
+  totalData.forEach((cluster) => {
+    cluster.commitNodeList.forEach((commitNode) => {
+      const { commit } = commitNode;
 
       Object.entries(commit.diffStatistics.files)
-        .filter(([filePath]) => parentPath === "" || filePath.startsWith(parentPath + "/"))
+        .filter(([filePath]) => parentPath === "" || filePath.startsWith(`${parentPath}/`))
         .forEach(([filePath, stats]) => {
           const relativePath = parentPath === "" ? filePath : filePath.substring(parentPath.length + 1);
-          const pathParts = relativePath.split('/');
+          const pathParts = relativePath.split("/");
           const subPath = pathParts[0];
 
-          if (subPath && subPath !== '.' && subPath !== '') {
+          if (subPath && subPath !== "." && subPath !== "") {
             const fullPath = parentPath === "" ? subPath : `${parentPath}/${subPath}`;
 
             if (!subFolderStats.has(fullPath)) {
@@ -39,7 +40,7 @@ export function getSubFolders(totalData: ClusterNode[], parentPath: string): Fol
                 totalChanges: 0,
                 insertions: 0,
                 deletions: 0,
-                commitCount: 0
+                commitCount: 0,
               });
             }
 
@@ -75,18 +76,18 @@ export function getReleaseSubFolders(totalData: ClusterNode[], parentPath: strin
 
   const subFolderStats = new Map<string, number>();
 
-  totalData.forEach(cluster => {
-    cluster.commitNodeList.forEach(commitNode => {
-      const commit = commitNode.commit;
+  totalData.forEach((cluster) => {
+    cluster.commitNodeList.forEach((commitNode) => {
+      const { commit } = commitNode;
 
       Object.entries(commit.diffStatistics.files)
-        .filter(([filePath]) => parentPath === "" || filePath.startsWith(parentPath + "/"))
+        .filter(([filePath]) => parentPath === "" || filePath.startsWith(`${parentPath}/`))
         .forEach(([filePath, stats]) => {
           const relativePath = parentPath === "" ? filePath : filePath.substring(parentPath.length + 1);
-          const pathParts = relativePath.split('/');
+          const pathParts = relativePath.split("/");
           const subPath = pathParts[0];
 
-          if (subPath && subPath !== '.' && subPath !== '') {
+          if (subPath && subPath !== "." && subPath !== "") {
             const fullPath = parentPath === "" ? subPath : `${parentPath}/${subPath}`;
 
             const currentChanges = subFolderStats.get(fullPath) || 0;
