@@ -48,7 +48,7 @@ export interface CommitData {
  */
 export function extractFolderFromPath(filePath: string, depth = 1): string {
   const parts = filePath.split("/");
-  if (parts.length === 1) return "."; // Root level file
+  if (parts.length === 1) return ".";
 
   const folderParts = parts.slice(0, Math.min(depth, parts.length - 1));
   return folderParts.length > 0 ? folderParts.join("/") : ".";
@@ -62,12 +62,10 @@ export function extractFolderFromPath(filePath: string, depth = 1): string {
  * @returns Array of release groups sorted chronologically
  */
 export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): ReleaseGroup[] {
-  // Flatten all commits and sort chronologically
   const allCommits = clusterNodeList
     .flatMap((cluster) => cluster.commitNodeList.map((node) => node.commit))
     .sort((a, b) => new Date(a.commitDate).getTime() - new Date(b.commitDate).getTime());
 
-  // Functional approach using reduce
   interface ReduceAccumulator {
     groups: ReleaseGroup[];
     lastGroup: ReleaseGroup | null;
@@ -76,7 +74,6 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
   const { groups } = allCommits.reduce<ReduceAccumulator>(
     (acc, commit) => {
       if (commit.releaseTags && commit.releaseTags.length > 0) {
-        // Create new groups for commits with release tags
         const newGroups = commit.releaseTags.map((releaseTag) => ({
           releaseTag,
           commitCount: 1,
@@ -93,9 +90,7 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
         };
       }
 
-      // For commits without release tags
       if (acc.lastGroup) {
-        // Add to existing group (maintaining immutability with optimized array copy)
         const updatedLastGroup: ReleaseGroup = {
           ...acc.lastGroup,
           commits: [...acc.lastGroup.commits, commit],
@@ -106,7 +101,6 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
           },
         };
 
-        // Optimized: shallow copy array and replace last element
         const updatedGroups = acc.groups.slice();
         updatedGroups[updatedGroups.length - 1] = updatedLastGroup;
 
@@ -116,7 +110,6 @@ export function groupCommitsByReleaseTags(clusterNodeList: ClusterNode[]): Relea
         };
       }
 
-      // Create Pre-release group for commits before the first release
       const preReleaseGroup = {
         releaseTag: "Pre-release",
         commitCount: 1,
@@ -159,7 +152,6 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
   releaseGroups.forEach((group) => {
     const folderStats = new Map<string, FolderStats>();
 
-    // Analyze file changes for each commit
     group.commits.forEach((commit) => {
       const authorName = commit.author.names[0] || "Unknown";
 
@@ -186,7 +178,6 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
       });
     });
 
-    // Calculate unique commit count per folder
     group.commits.forEach((commit) => {
       const foldersInCommit = new Set<string>();
       Object.keys(commit.diffStatistics.files).forEach((filePath) => {
@@ -202,7 +193,6 @@ export function analyzeReleaseFolderActivity(releaseGroups: ReleaseGroup[], fold
       });
     });
 
-    // Convert to ReleaseFolderActivity objects
     folderStats.forEach((stats, folderPath) => {
       activities.push({
         folderPath,
@@ -239,7 +229,6 @@ export function getTopFoldersByRelease(
   const releaseGroups = groupCommitsByReleaseTags(clusterNodeList);
   const folderActivities = analyzeReleaseFolderActivity(releaseGroups, folderDepth);
 
-  // Extract most active folders across all releases
   const globalFolderStats = new Map<string, number>();
   folderActivities.forEach((activity) => {
     const current = globalFolderStats.get(activity.folderPath) || 0;
@@ -318,7 +307,6 @@ export function extractReleaseContributorActivities(
       });
     });
 
-    // Convert to activity data
     contributorFolderStats.forEach((folderStatsMap, contributorName) => {
       folderStatsMap.forEach((stats, folderPath) => {
         activities.push({
