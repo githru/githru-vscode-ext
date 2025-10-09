@@ -6,8 +6,7 @@ import { useDataStore } from "store";
 
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import "./FolderActivityFlow.scss";
-import { extractContributorActivities, extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
-import { renderClusterVisualization } from "./ClusterVisualization";
+import { extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
 import { useFolderNavigation } from "./useFolderNavigation";
 
@@ -18,12 +17,9 @@ const FolderActivityFlow = () => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const {
-    topFolders,
     currentPath,
-    isReleaseMode,
     releaseGroups,
     releaseTopFolderPaths,
-    toggleMode,
     navigateToFolder,
     navigateUp,
     navigateToBreadcrumb,
@@ -40,11 +36,7 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    if (isReleaseMode) {
-      if (releaseGroups.length === 0 || releaseTopFolderPaths.length === 0) {
-        return;
-      }
-    } else if (topFolders.length === 0) {
+    if (releaseGroups.length === 0 || releaseTopFolderPaths.length === 0) {
       return;
     }
 
@@ -52,88 +44,42 @@ const FolderActivityFlow = () => {
 
     svg.selectAll("*").remove();
 
-    if (isReleaseMode) {
-      const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
-      const releaseContributorActivities = extractReleaseBasedContributorActivities(
-        totalData,
-        releaseTopFolderPaths,
-        currentDepth
-      );
+    const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
+    const releaseContributorActivities = extractReleaseBasedContributorActivities(
+      totalData,
+      releaseTopFolderPaths,
+      currentDepth
+    );
 
-      if (releaseContributorActivities.length === 0) {
-        svg
-          .append("text")
-          .attr("x", DIMENSIONS.width / 2)
-          .attr("y", DIMENSIONS.height / 2)
-          .attr("text-anchor", "middle")
-          .attr("dominant-baseline", "middle")
-          .text("No release activity data available")
-          .style("font-size", "14px")
-          .style("fill", "#6c757d");
-        return;
-      }
-
-      renderReleaseVisualization({
-        svg,
-        releaseContributorActivities,
-        releaseTopFolderPaths,
-        tooltipRef,
-        onFolderClick: navigateToFolder,
-      });
-    } else {
-      const contributorActivities = extractContributorActivities(totalData, topFolders, currentPath);
-
-      if (contributorActivities.length === 0) {
-        svg
-          .append("text")
-          .attr("x", DIMENSIONS.width / 2)
-          .attr("y", DIMENSIONS.height / 2)
-          .attr("text-anchor", "middle")
-          .attr("dominant-baseline", "middle")
-          .text("No activity data available for this folder")
-          .style("font-size", "14px")
-          .style("fill", "#6c757d");
-        return;
-      }
-
-      renderClusterVisualization({
-        svg,
-        contributorActivities,
-        topFolders,
-        tooltipRef,
-        onFolderClick: navigateToFolder,
-      });
+    if (releaseContributorActivities.length === 0) {
+      svg
+        .append("text")
+        .attr("x", DIMENSIONS.width / 2)
+        .attr("y", DIMENSIONS.height / 2)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .text("No release activity data available")
+        .style("font-size", "14px")
+        .style("fill", "#6c757d");
+      return;
     }
-  }, [totalData, topFolders, isReleaseMode, releaseGroups, releaseTopFolderPaths, navigateToFolder]);
+
+    renderReleaseVisualization({
+      svg,
+      releaseContributorActivities,
+      releaseTopFolderPaths,
+      tooltipRef,
+      onFolderClick: navigateToFolder,
+    });
+  }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
 
   return (
     <div className="folder-activity-flow">
       <div className="folder-activity-flow__header">
         <div>
           <p className="folder-activity-flow__title">Contributors Folder Activity Flow</p>
-          <div className="folder-activity-flow__subtitle">
-            {isReleaseMode
-              ? "Contributors moving between folders across releases"
-              : "Contributors moving between top folders over time"}
-          </div>
+          <div className="folder-activity-flow__subtitle">Contributors moving between folders across releases</div>
         </div>
-        <button
-          type="button"
-          className="folder-activity-flow__mode-toggle"
-          onClick={toggleMode}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: isReleaseMode ? "#28a745" : "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: "500",
-          }}
-        >
-          {isReleaseMode ? "📋 Release Mode" : "🔗 Cluster Mode"}
-        </button>
       </div>
 
       <div className="folder-activity-flow__breadcrumb">

@@ -1,4 +1,6 @@
 import * as d3 from "d3";
+import type React from "react";
+
 import { pxToRem } from "utils/pxToRem";
 
 import { DIMENSIONS } from "./FolderActivityFlow.const";
@@ -133,17 +135,15 @@ export const renderReleaseVisualization = ({
     });
 
   // 호버 시 전체 이름 표시를 위한 추가 이벤트
-  mainGroup
-    .selectAll<SVGTextElement, string>(".folder-label")
-    .on("mouseover.showfull", function (_event, folderPath) {
-      const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
-      d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
-    });
+  mainGroup.selectAll<SVGTextElement, string>(".folder-label").on("mouseover.showfull", function (_event, folderPath) {
+    const fileName = folderPath.includes("/") ? folderPath.split("/").pop() : folderPath;
+    d3.select(this).text(folderPath === "." ? "root" : fileName || "unknown");
+  });
 
   // 릴리즈 축
   const xAxis = d3
     .axisBottom(xScale)
-    .tickFormat((d) => releaseTagsByIndex.get(parseInt(String(d))) || `Release ${parseInt(String(d))}`);
+    .tickFormat((d) => releaseTagsByIndex.get(parseInt(String(d), 10)) || `Release ${parseInt(String(d), 10)}`);
 
   mainGroup
     .append("g")
@@ -157,7 +157,10 @@ export const renderReleaseVisualization = ({
     if (!activitiesByRelease.has(activity.releaseIndex)) {
       activitiesByRelease.set(activity.releaseIndex, []);
     }
-    activitiesByRelease.get(activity.releaseIndex)!.push(activity);
+    const activities = activitiesByRelease.get(activity.releaseIndex);
+    if (activities) {
+      activities.push(activity);
+    }
   });
 
   // 활동 노드 그리기

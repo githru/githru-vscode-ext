@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList, FolderActivityFlow } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  FolderActivityFlow,
+} from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
@@ -70,16 +77,18 @@ const App = () => {
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
-        <RefreshButton />
-        <InsightsButton
-          isNew
-          sx={{
-            width: "1.875rem",
-            height: "1.875rem",
-            color: "white",
-          }}
-          onClick={handleOpenFolderActivityFlowModal}
-        />
+        <div>
+          <RefreshButton />
+          <InsightsButton
+            isNew
+            sx={{
+              width: "1.875rem",
+              height: "1.875rem",
+              color: "white",
+            }}
+            onClick={handleOpenFolderActivityFlowModal}
+          />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />
@@ -106,7 +115,7 @@ const App = () => {
           className="folder-activity-flow-modal"
           onClick={handleCloseFolderActivityFlowModal}
           onKeyDown={(e) => {
-            if (e.key === 'Escape') {
+            if (e.key === "Escape") {
               handleCloseFolderActivityFlowModal();
             }
           }}
