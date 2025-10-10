@@ -53,7 +53,7 @@ export class ContributorRecommender {
   private async analyzePRContributors(): Promise<ContributorCandidate[]> {
     if (!this.pr) return [];
 
-    const prNumber = CommonUtils.safeParseInt(this.pr!);
+    const prNumber = parseInt(String(this.pr!));
     
     try {
       const prFiles = await this.octokit.paginate(

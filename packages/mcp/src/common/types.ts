@@ -42,20 +42,6 @@ export interface ContributorRecommendation {
   notes: string[];
 }
 
-export interface CommitInfo {
-  sha: string;
-  message: string;
-  authorDate: string;
-  changedFiles: string[];
-}
-
-export interface FileChangeInfo {
-  filename: string;
-  additions?: number;
-  deletions?: number;
-  changes?: number;
-}
-
 export interface CSMDictGeneratorInputs {
   repo: string;
   githubToken: string;
@@ -64,9 +50,49 @@ export interface CSMDictGeneratorInputs {
   debug?: boolean;
 }
 
+export interface GitUser {
+  name: string;
+  email: string;
+}
+
+export interface DifferenceStatistic {
+  totalInsertionCount: number;
+  totalDeletionCount: number;
+  fileDictionary: { [filePath: string]: { insertionCount: number; deletionCount: number } };
+}
+
+export interface CommitRaw {
+  sequence: number;
+  id: string;
+  parents: string[];
+  branches: string[];
+  tags: string[];
+  author: GitUser;
+  authorDate: Date;
+  committer: GitUser;
+  committerDate: Date;
+  message: string;
+  differenceStatistic: DifferenceStatistic;
+  commitMessageType: string;
+}
+
+export interface CommitNode {
+  stemId?: string;
+  commit: CommitRaw;
+}
+
+export interface CSMNode {
+  base: CommitNode;
+  source: CommitNode[];
+}
+
+export interface CSMDictionary {
+  [branch: string]: CSMNode[];
+}
+
 export interface AnalysisResult {
   isPRSuccess: boolean;
-  csmDict: Record<string, unknown[]>;
+  csmDict: CSMDictionary;
 }
 
 export interface CSMDictResult {
@@ -78,7 +104,7 @@ export interface CSMDictResult {
       isPRDataAvailable: boolean;
       branches: string[];
       totalClusters: number;
-      csmDict: Record<string, unknown[]>;
+      csmDict: CSMDictionary;
     };
   };
   metadata: {
@@ -89,7 +115,6 @@ export interface CSMDictResult {
   };
 }
 
-// React Component Test Types
 export interface ReactComponentTestInputs {
   complexity?: "simple" | "medium" | "complex" | "all";
   componentType?: "basic" | "chart" | "form" | "data-display" | "interactive";
@@ -107,7 +132,6 @@ export interface ReactComponentTestResult {
   testQuestions: string[];
 }
 
-// Data-driven React Component Types
 export interface DataDrivenComponentInputs {
   dataType?: "chart" | "table" | "list" | "card" | "all";
   sampleData?: boolean;
