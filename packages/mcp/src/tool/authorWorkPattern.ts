@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
+import { Config } from "../common/config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +18,6 @@ export interface AuthorWorkPatternArgs {
   branch?: string;
   since?: string;
   until?: string;
-  githubToken: string;
   locale?: "en" | "ko";
   chart?: boolean;
 }
@@ -59,9 +59,12 @@ export class AuthorWorkPatternAnalyzer {
 
   constructor(private args: AuthorWorkPatternArgs) {
     const { owner, repo } = GitHubUtils.parseRepoUrl(args.repoPath);
+    const config = Config.getInstance();
+    const githubToken = config.getGithubToken();
+
     this.owner = owner;
     this.repo = repo;
-    this.token = args.githubToken;
+    this.token = githubToken;
     this.authorQuery = args.author;
     this.baseBranch = args.branch;
     this.since = args.since;
