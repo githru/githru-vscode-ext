@@ -5,7 +5,10 @@
     "branch_analysis": "브랜치 분석 중 오류 발생:",
     "file_analysis": "파일 '{file}' 분석 중 오류:",
     "feature_impact_analysis": "기능 영향 분석 중 오류 발생:",
-    "github_api_error": "GitHub API 오류:"
+    "github_api_error": "GitHub API 오류:",
+    "author_work_analysis": "사용자 작업 분석 중 오류 발생:",
+    "commit_detail_fetch": "커밋 상세 정보를 가져오는 중 오류 발생:",
+    "commit_filter": "커밋 필터링 중 오류 발생:"
   },
   "notes": {
     "pr_recommendation": "PR #{pr} 기반 기여자 추천",
@@ -16,13 +19,17 @@
     "feature_dispersion": "분산도: {dispersion}",
     "feature_chaos": "혼돈도: {chaos}",
     "feature_isolation": "격리도: {isolation}",
-    "feature_coupling": "결합도: {coupling}"
+    "feature_coupling": "결합도: {coupling}",
+    "author": "저자: {author}",
+    "repo": "레포: {repo}",
+    "period": "기간: {from} ~ {to}"
   },
   "messages": {
     "no_contributors_found": "지정된 조건에 맞는 기여자를 찾을 수 없습니다",
     "analysis_complete": "분석이 성공적으로 완료되었습니다",
     "loading_pr_data": "PR 데이터를 로드하는 중...",
-    "processing_commits": "커밋을 처리하는 중..."
+    "processing_commits": "커밋을 처리하는 중...",
+    "no_data": "데이터가 없습니다"
   },
   "echo": {
     "response": "메아리: {text}",

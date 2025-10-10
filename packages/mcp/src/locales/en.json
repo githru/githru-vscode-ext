@@ -5,7 +5,10 @@
     "branch_analysis": "Branch analysis error:",
     "file_analysis": "Error analyzing file '{file}':",
     "feature_impact_analysis": "Feature impact analysis error:",
-    "github_api_error": "GitHub API error:"
+    "github_api_error": "GitHub API error:",
+    "author_work_analysis": "Error occurred during Author Work Pattern analysis:",
+    "commit_detail_fetch": "Error fetching commit details:",
+    "commit_filter": "Error filtering commits:"
   },
   "notes": {
     "pr_recommendation": "PR #{pr} based recommendation",
@@ -16,13 +19,17 @@
     "feature_dispersion": "Dispersion: {dispersion}",
     "feature_chaos": "Chaos: {chaos}",
     "feature_isolation": "Isolation: {isolation}",
-    "feature_coupling": "Coupling: {coupling}"
+    "feature_coupling": "Coupling: {coupling}",
+    "author": "Author: {author}",
+    "repo": "Repo: {repo}",
+    "period": "Period: {from} ~ {to}"
   },
   "messages": {
     "no_contributors_found": "No contributors found for the specified criteria",
     "analysis_complete": "Analysis completed successfully",
     "loading_pr_data": "Loading PR data...",
-    "processing_commits": "Processing commits..."
+    "processing_commits": "Processing commits...",
+    "no_data": "No data"
   },
   "echo": {
     "response": "Echo: {text}",
