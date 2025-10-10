@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
+import { Config } from "../common/config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,10 +56,13 @@ export class McpReportGenerator {
   private owner: string;
   private repo: string;
 
-  constructor({ repoUrl, prNumber, githubToken, locale }: FeatureImpactAnalyzerInputs) {
+  constructor({ repoUrl, prNumber, locale }: FeatureImpactAnalyzerInputs) {
     if (locale) {
       I18n.setLocale(locale);
     }
+    const config = Config.getInstance();
+    const githubToken = config.getGithubToken();
+
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;
     this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);
