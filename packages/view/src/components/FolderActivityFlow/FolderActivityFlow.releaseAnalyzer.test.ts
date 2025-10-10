@@ -1,144 +1,331 @@
-import type { ClusterNode } from "types";
+import type { ClusterNode, CommitNode } from "types";
 
 import {
   groupCommitsByReleaseTags,
   analyzeReleaseFolderActivity,
   getTopFoldersByRelease,
+  extractFolderFromPath,
+  extractReleaseContributorActivities,
+  type ReleaseGroup,
 } from "./FolderActivityFlow.releaseAnalyzer";
 
-// 테스트 데이터 생성
-export function createTestData(): ClusterNode[] {
-  return [
+// Mock data for testing
+const fakeReleaseCommitNode1: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
     {
-      nodeTypeName: "CLUSTER",
-      commitNodeList: [
-        {
-          nodeTypeName: "COMMIT",
-          commit: {
-            id: "commit1",
-            parentIds: [],
-            author: {
-              id: "user1",
-              names: ["이규환"],
-              emails: ["user1@example.com"],
-            },
-            committer: {
-              id: "user1",
-              names: ["이규환"],
-              emails: ["user1@example.com"],
-            },
-            authorDate: "Mon Sep 29 2025 18:35:18 GMT+0900",
-            commitDate: "Mon Sep 29 2025 18:35:18 GMT+0900",
-            diffStatistics: {
-              changedFileCount: 2,
-              insertions: 100,
-              deletions: 20,
-              files: {
-                "src/components/Button.tsx": { insertions: 50, deletions: 10 },
-                "src/utils/helper.ts": { insertions: 50, deletions: 10 },
-              },
-            },
-            message: "feat: add button component",
-            tags: [],
-            releaseTags: ["v1.0.0"],
-          },
-          seq: 1,
-          clusterId: 1,
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-1",
+        parentIds: [],
+        author: {
+          id: "author-1",
+          names: ["Alice"],
+          emails: ["alice@example.com"],
         },
-        {
-          nodeTypeName: "COMMIT",
-          commit: {
-            id: "commit2",
-            parentIds: ["commit1"],
-            author: {
-              id: "user2",
-              names: ["김개발"],
-              emails: ["user2@example.com"],
-            },
-            committer: {
-              id: "user2",
-              names: ["김개발"],
-              emails: ["user2@example.com"],
-            },
-            authorDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
-            commitDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
-            diffStatistics: {
-              changedFileCount: 1,
-              insertions: 30,
-              deletions: 5,
-              files: {
-                "src/components/Input.tsx": { insertions: 30, deletions: 5 },
-              },
-            },
-            message: "feat: add input component",
-            tags: [],
-            releaseTags: [], // releaseTags 없음 -> 이전 v1.0.0과 합쳐짐
-          },
-          seq: 2,
-          clusterId: 1,
+        committer: {
+          id: "author-1",
+          names: ["Alice"],
+          emails: ["alice@example.com"],
         },
-        {
-          nodeTypeName: "COMMIT",
-          commit: {
-            id: "commit3",
-            parentIds: ["commit2"],
-            author: {
-              id: "user1",
-              names: ["이규환"],
-              emails: ["user1@example.com"],
-            },
-            committer: {
-              id: "user1",
-              names: ["이규환"],
-              emails: ["user1@example.com"],
-            },
-            authorDate: "Wed Oct 01 2025 14:30:00 GMT+0900",
-            commitDate: "Wed Oct 01 2025 14:30:00 GMT+0900",
-            diffStatistics: {
-              changedFileCount: 2,
-              insertions: 80,
-              deletions: 15,
-              files: {
-                "src/pages/Home.tsx": { insertions: 60, deletions: 10 },
-                "src/styles/main.css": { insertions: 20, deletions: 5 },
-              },
-            },
-            message: "feat: add home page",
-            tags: [],
-            releaseTags: ["v1.1.0"],
+        authorDate: "Mon Sep 29 2025 09:00:00 GMT+0900",
+        commitDate: "Mon Sep 29 2025 09:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 1,
+          insertions: 50,
+          deletions: 10,
+          files: {
+            "src/components/Button.tsx": { insertions: 50, deletions: 10 },
           },
-          seq: 3,
-          clusterId: 2,
         },
-      ],
+        message: "feat: add button component",
+        tags: ["v1.0.0"],
+        releaseTags: ["v1.0.0"],
+      },
+      seq: 0,
+      clusterId: 0,
     },
-  ] as ClusterNode[];
-}
+  ],
+};
 
-// 테스트 실행 함수
-export function testReleaseAnalyzer() {
-  console.log("🧪 Testing Release Analyzer...");
+const fakeReleaseCommitNode2: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-2",
+        parentIds: ["release-commit-1"],
+        author: {
+          id: "author-2",
+          names: ["Bob"],
+          emails: ["bob@example.com"],
+        },
+        committer: {
+          id: "author-2",
+          names: ["Bob"],
+          emails: ["bob@example.com"],
+        },
+        authorDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
+        commitDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 1,
+          insertions: 30,
+          deletions: 5,
+          files: {
+            "src/components/Input.tsx": { insertions: 30, deletions: 5 },
+          },
+        },
+        message: "feat: add input component",
+        tags: ["v1.1.0"],
+        releaseTags: ["v1.1.0"],
+      },
+      seq: 1,
+      clusterId: 1,
+    },
+  ],
+};
 
-  const testData = createTestData();
-  console.log("📊 Test data created:", testData);
+const fakeReleaseCommitNode3: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-3",
+        parentIds: ["release-commit-2"],
+        author: {
+          id: "author-3",
+          names: ["Charlie"],
+          emails: ["charlie@example.com"],
+        },
+        committer: {
+          id: "author-3",
+          names: ["Charlie"],
+          emails: ["charlie@example.com"],
+        },
+        authorDate: "Wed Oct 01 2025 11:00:00 GMT+0900",
+        commitDate: "Wed Oct 01 2025 11:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 2,
+          insertions: 100,
+          deletions: 25,
+          files: {
+            "src/pages/Home.tsx": { insertions: 60, deletions: 10 },
+            "src/utils/helper.ts": { insertions: 40, deletions: 15 },
+          },
+        },
+        message: "feat: add home page and helpers",
+        tags: ["v2.0.0"],
+        releaseTags: ["v2.0.0"],
+      },
+      seq: 2,
+      clusterId: 2,
+    },
+  ],
+};
 
-  // 1. 릴리즈 그룹 테스트
-  const releaseGroups = groupCommitsByReleaseTags(testData);
-  console.log("🏷️ Release groups:", releaseGroups);
+describe("FolderActivityFlow.releaseAnalyzer", () => {
+  describe("extractFolderFromPath", () => {
+    it("should extract folder from file path", () => {
+      expect(extractFolderFromPath("src/components/Button.tsx", 1)).toBe("src");
+      expect(extractFolderFromPath("src/components/Button.tsx", 2)).toBe("src/components");
+      expect(extractFolderFromPath("README.md", 1)).toBe(".");
+      expect(extractFolderFromPath("src/test.ts", 10)).toBe("src");
+    });
+  });
 
-  // 2. 릴리즈별 폴더 활동 분석 테스트
-  const folderActivities = analyzeReleaseFolderActivity(releaseGroups);
-  console.log("📁 Folder activities by release:", folderActivities);
+  describe("groupCommitsByReleaseTags", () => {
+    it("should group commits by release tags", () => {
+      const clusterNodes = [fakeReleaseCommitNode1, fakeReleaseCommitNode2];
+      const result = groupCommitsByReleaseTags(clusterNodes);
 
-  // 3. 상위 폴더 추출 테스트
-  const topFoldersResult = getTopFoldersByRelease(testData, 5, 1);
-  console.log("🔝 Top folders result:", topFoldersResult);
+      expect(result).toHaveLength(2);
+      expect(result[0].releaseTag).toBe("v1.0.0");
+      expect(result[0].commits[0].id).toBe("release-commit-1");
+      expect(result[1].releaseTag).toBe("v1.1.0");
+    });
 
-  console.log("✅ Release analyzer test completed!");
+    it("should include commits without releaseTags into previous release", () => {
+      const commitWithTag = fakeReleaseCommitNode1.commitNodeList[0].commit;
+      const commitWithoutTag = {
+        ...commitWithTag,
+        id: "no-tag-commit",
+        releaseTags: [],
+      };
 
-  return {
-    releaseGroups,
-    folderActivities,
-    topFoldersResult,
-  };
-}
+      const clusterWithMixedCommits = {
+        nodeTypeName: "CLUSTER" as const,
+        commitNodeList: [
+          fakeReleaseCommitNode1.commitNodeList[0],
+          {
+            ...fakeReleaseCommitNode1.commitNodeList[0],
+            commit: commitWithoutTag,
+          } as CommitNode,
+        ],
+      };
+
+      const result = groupCommitsByReleaseTags([clusterWithMixedCommits]);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].releaseTag).toBe("v1.0.0");
+      expect(result[0].commits).toHaveLength(2);
+    });
+
+    it("should create Pre-release group when no releaseTags exist", () => {
+      const commitNoTag = {
+        ...fakeReleaseCommitNode1.commitNodeList[0].commit,
+        releaseTags: [],
+      };
+
+      const clusterNoTag = {
+        nodeTypeName: "CLUSTER" as const,
+        commitNodeList: [
+          {
+            ...fakeReleaseCommitNode1.commitNodeList[0],
+            commit: commitNoTag,
+          } as CommitNode,
+        ],
+      };
+
+      const result = groupCommitsByReleaseTags([clusterNoTag]);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].releaseTag).toBe("Pre-release");
+    });
+  });
+
+  describe("analyzeReleaseFolderActivity", () => {
+    it("should analyze folder activity and track contributors", () => {
+      const clusterNodes = [fakeReleaseCommitNode1, fakeReleaseCommitNode2];
+      const releaseGroups = groupCommitsByReleaseTags(clusterNodes);
+      const result = analyzeReleaseFolderActivity(releaseGroups, 2);
+
+      expect(result).toHaveLength(2);
+
+      const v1Activity = result.find((r) => r.releaseTag === "v1.0.0");
+      expect(v1Activity?.folderPath).toBe("src/components");
+      expect(v1Activity?.totalChanges).toBe(60);
+      expect(v1Activity?.insertions).toBe(50);
+      expect(v1Activity?.deletions).toBe(10);
+      expect(v1Activity?.commitCount).toBe(1);
+      expect(v1Activity?.contributors).toContain("Alice");
+
+      const v11Activity = result.find((r) => r.releaseTag === "v1.1.0");
+      expect(v11Activity?.folderPath).toBe("src/components");
+      expect(v11Activity?.contributors).toContain("Bob");
+    });
+  });
+
+  describe("getTopFoldersByRelease", () => {
+    it("should extract and sort top folders by total changes", () => {
+      const multiFileCommit = {
+        ...fakeReleaseCommitNode3.commitNodeList[0].commit,
+        diffStatistics: {
+          changedFileCount: 3,
+          insertions: 180,
+          deletions: 30,
+          files: {
+            "src/components/Button.tsx": { insertions: 100, deletions: 20 },
+            "src/utils/helper.ts": { insertions: 30, deletions: 5 },
+            "src/pages/Home.tsx": { insertions: 50, deletions: 5 },
+          },
+        },
+      };
+
+      const clusterWithMultipleFiles = {
+        nodeTypeName: "CLUSTER" as const,
+        commitNodeList: [
+          {
+            ...fakeReleaseCommitNode3.commitNodeList[0],
+            commit: multiFileCommit,
+          } as CommitNode,
+        ],
+      };
+
+      const result = getTopFoldersByRelease([clusterWithMultipleFiles], 5, 2);
+
+      expect(result.releaseGroups).toHaveLength(1);
+      expect(result.topFolders).toHaveLength(3);
+      expect(result.topFolders[0]).toBe("src/components");
+      expect(result.topFolders[1]).toBe("src/pages");
+      expect(result.topFolders[2]).toBe("src/utils");
+    });
+  });
+
+  describe("extractReleaseContributorActivities", () => {
+    it("should extract contributor activities per release", () => {
+      const clusterNodes = [fakeReleaseCommitNode1, fakeReleaseCommitNode2];
+      const releaseGroups = groupCommitsByReleaseTags(clusterNodes);
+
+      const topFolders = ["src/components"];
+      const result = extractReleaseContributorActivities(releaseGroups, topFolders, 2);
+
+      expect(result).toHaveLength(2);
+
+      const aliceActivity = result.find((a) => a.contributorName === "Alice");
+      expect(aliceActivity?.folderPath).toBe("src/components");
+      expect(aliceActivity?.changes).toBe(60);
+
+      const bobActivity = result.find((a) => a.contributorName === "Bob");
+      expect(bobActivity?.changes).toBe(35);
+    });
+
+    it("should filter out folders not in topFolders", () => {
+      const multiFileCommit = {
+        ...fakeReleaseCommitNode1.commitNodeList[0].commit,
+        diffStatistics: {
+          changedFileCount: 2,
+          insertions: 80,
+          deletions: 15,
+          files: {
+            "src/components/Button.tsx": { insertions: 50, deletions: 10 },
+            "src/pages/Home.tsx": { insertions: 30, deletions: 5 },
+          },
+        },
+      };
+
+      const releaseGroups: ReleaseGroup[] = [
+        {
+          releaseTag: "v1.0.0",
+          commitCount: 1,
+          dateRange: {
+            start: new Date(multiFileCommit.commitDate),
+            end: new Date(multiFileCommit.commitDate),
+          },
+          commits: [multiFileCommit],
+        },
+      ];
+
+      const topFolders = ["src/components"];
+      const result = extractReleaseContributorActivities(releaseGroups, topFolders, 2);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].folderPath).toBe("src/components");
+      expect(result[0].changes).toBe(60);
+    });
+  });
+
+  describe("integration test", () => {
+    it("should complete full flow with multiple releases, folders, and contributors", () => {
+      const clusterNodes = [fakeReleaseCommitNode1, fakeReleaseCommitNode2, fakeReleaseCommitNode3];
+
+      // 1. Group commits by release tags
+      const releaseGroups = groupCommitsByReleaseTags(clusterNodes);
+      expect(releaseGroups).toHaveLength(3);
+
+      // 2. Analyze folder activities
+      const folderActivities = analyzeReleaseFolderActivity(releaseGroups, 2);
+      expect(folderActivities.length).toBeGreaterThan(0);
+
+      // 3. Get top folders
+      const topFolders = getTopFoldersByRelease(clusterNodes, 10, 2);
+      expect(topFolders.releaseGroups).toHaveLength(3);
+      expect(topFolders.topFolders).toContain("src/components");
+
+      // 4. Extract contributor activities
+      const contributorActivities = extractReleaseContributorActivities(releaseGroups, topFolders.topFolders, 2);
+      expect(contributorActivities.length).toBeGreaterThan(0);
+    });
+  });
+});
