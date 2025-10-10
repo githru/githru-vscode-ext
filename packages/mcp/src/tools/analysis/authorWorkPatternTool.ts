@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { I18n } from "../../common/i18n.js";
-import { AuthorWorkPatternAnalyzer, AuthorWorkPatternArgs } from "tool/authorWorkPattern.js";
+import { AuthorWorkPatternAnalyzer, AuthorWorkPatternArgs } from "../../tool/authorWorkPattern.js";
 
 export function registerAuthorWorkPatternTool(server: McpServer) {
   server.registerTool(
