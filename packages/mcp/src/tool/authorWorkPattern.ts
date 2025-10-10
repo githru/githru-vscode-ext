@@ -22,12 +22,23 @@ export interface AuthorWorkPatternArgs {
   chart?: boolean;
 }
 
+async function safeApiCall<T>(fn: () => Promise<T>, retries = 3, delay = 500): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    if (retries <= 0) throw err;
+    await new Promise((r) => setTimeout(r, delay));
+    return safeApiCall(fn, retries - 1, Math.min(delay * 2, 5000));
+  }
+}
+
 const TYPES = ["feat", "fix", "refactor", "chore", "docs", "style", "test", "build", "ci"] as const;
 type CommitType = (typeof TYPES)[number] | "other";
 
 function ciIncludes(hay: string | undefined | null, needle: string) {
   return (hay ?? "").toLowerCase().includes(needle.toLowerCase());
 }
+
 function classifyType(msg?: string | null): CommitType {
   const m = (msg ?? "").toLowerCase();
   for (const t of TYPES) {
@@ -65,17 +76,15 @@ export class AuthorWorkPatternAnalyzer {
     const { since, until } = GitHubUtils.parseTimeRange(this.since, this.until);
     const base = this.baseBranch || (await GitHubUtils.getDefaultBranch(this.token, this.owner, this.repo));
 
-    const commits = await GitHubUtils.safeApiCall<CommitListItem[]>(
-      () =>
-        octokit.paginate<CommitListItem>("GET /repos/{owner}/{repo}/commits", {
-          owner: this.owner,
-          repo: this.repo,
-          sha: base,
-          since,
-          until,
-          per_page: 100,
-        }),
-      I18n.t("errors.github_api_error")
+    const commits = await safeApiCall<CommitListItem[]>(() =>
+      octokit.paginate<CommitListItem>("GET /repos/{owner}/{repo}/commits", {
+        owner: this.owner,
+        repo: this.repo,
+        sha: base,
+        since,
+        until,
+        per_page: 100,
+      })
     );
 
     const picked: CommitListItem[] = commits.filter((c: CommitListItem) => {
@@ -89,9 +98,12 @@ export class AuthorWorkPatternAnalyzer {
 
     const details: GetCommitResponse[] = await Promise.all(
       picked.map(async (c: CommitListItem) => {
-        const resp = await GitHubUtils.safeApiCall<Awaited<ReturnType<typeof octokit.repos.getCommit>>>(
-          () => octokit.repos.getCommit({ owner: this.owner, repo: this.repo, ref: c.sha }),
-          I18n.t("errors.commit_detail_fetch")
+        const resp = await safeApiCall(() =>
+          octokit.repos.getCommit({
+            owner: this.owner,
+            repo: this.repo,
+            ref: c.sha,
+          })
         );
         const { data } = resp;
         return data as GetCommitResponse;
@@ -143,7 +155,9 @@ export class AuthorWorkPatternAnalyzer {
       .catch(() => false);
 
     if (!exists) {
-      return { content: [{ type: "text" as const, text: JSON.stringify(payload, null, 2) }] };
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(payload, null, 2) }],
+      };
     }
 
     const from = new Date(payload.period.from).toISOString().slice(0, 10);
