@@ -2,12 +2,12 @@ import type * as d3 from "d3";
 
 import type { ClusterNode } from "types";
 
-import { extractFolderFromPath, type FolderActivity } from "./FolderActivityFlow.analyzer";
 import {
   getTopFoldersByRelease,
   extractReleaseContributorActivities,
   type ReleaseGroup,
   type ReleaseFolderActivity,
+  extractFolderFromPath,
 } from "./FolderActivityFlow.releaseAnalyzer";
 import type {
   ContributorActivity,
@@ -19,7 +19,7 @@ import type {
 // 기여자 활동 데이터 추출
 export function extractContributorActivities(
   totalData: ClusterNode[],
-  topFolders: FolderActivity[],
+  topFolders: ReleaseFolderActivity[],
   currentPath: string
 ): ContributorActivity[] {
   const contributorActivities: ContributorActivity[] = [];
