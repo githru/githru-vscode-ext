@@ -7,7 +7,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "npx @smithery/cli dev",
-		"build": "npx tsc && copyfiles -u 1 \"src/locales/**/*\" dist/ && copyfiles -u 1 \"src/html/**/*\" dist/",
+		"build": "npx tsc && copyfiles -u 1 \"src/resources/locales/**/*\" dist/ && copyfiles -u 1 \"src/html/**/*\" dist/",
 		"build:clean": "rimraf dist && npm run build",
 		"watch": "npx tsc -w"
 	},

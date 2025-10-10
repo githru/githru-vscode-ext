@@ -16,7 +16,7 @@ class I18nManager {
 
   private loadFallback() {
     try {
-      const fallbackPath = path.join(__dirname, '../locales/en.json');
+      const fallbackPath = path.join(__dirname, '../resources/locales/en.json');
       const fallbackData = fs.readFileSync(fallbackPath, 'utf-8');
       this.fallbackTranslations = JSON.parse(fallbackData);
       this.translations = this.fallbackTranslations;
@@ -36,7 +36,7 @@ class I18nManager {
     }
 
     try {
-      const localePath = path.join(__dirname, `../locales/${locale}.json`);
+      const localePath = path.join(__dirname, `../resources/locales/${locale}.json`);
       const localeData = fs.readFileSync(localePath, 'utf-8');
       this.translations = JSON.parse(localeData);
     } catch (error) {
