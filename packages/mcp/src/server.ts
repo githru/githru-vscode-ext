@@ -1,8 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import fs from "node:fs/promises";
-import path from "node:path";
 import { testReactComponents } from "./tool/reactComponentTester.js";
 import { testDataDrivenComponents } from "./tool/dataDrivenComponentTester.js";
 import { renderStorylineUI } from "./tool/storylineRenderer.js";
@@ -10,6 +8,7 @@ import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs, ReactCo
 import { I18n } from "./common/i18n.js";
 import { generateNewViz } from "./tool/generateNewViz.js";
 import { registerTestTools } from "./tools/test/testTools.js";
+import { registerVisualizationTools } from "./tools/visualization/register.js";
 
 const server = new McpServer({
     name: "githru-mcp",
@@ -17,161 +16,7 @@ const server = new McpServer({
 });
 
 registerTestTools(server);
-
-server.registerTool(
-    "demo_chart",
-    {
-        title: "Demo Chart (SVG)",
-        description:
-        "Creates a simple bar chart from number array and returns as SVG. Uses random data (6 values) if no input provided.",
-        inputSchema: {
-            values: z.array(z.number()).min(1).max(20).optional().describe("Bar value array"),
-            width: z.number().int().min(120).max(1200).default(360).describe("SVG width (px)"),
-            height: z.number().int().min(80).max(800).default(180).describe("SVG height (px)")
-        }
-    },
-    async ({ values, width, height }: { values?: number[]; width?: number; height?: number }) => {
-    const data = values && values.length ? values : Array.from({ length: 6 }, () => Math.floor(Math.random() * 10) + 1);
-
-    const W = width ?? 360;
-    const H = height ?? 180;
-    const pad = 16;
-    const barGap = 8;
-    const maxVal = Math.max(...data, 1);
-    const chartW = W - pad * 2;
-    const chartH = H - pad * 2;
-    const barW = Math.max(4, Math.floor((chartW - barGap * (data.length - 1)) / data.length));
-
-    const rects = data.map((v, i) => {
-      const h = Math.max(1, Math.round((v / maxVal) * chartH));
-      const x = pad + i * (barW + barGap);
-        const y = H - pad - h;
-        return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" ry="3" fill="#888" />`;
-    }).join("");
-
-    const axis = `
-        <line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#999" stroke-width="1"/>
-        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H - pad}" stroke="#999" stroke-width="1"/>
-        <rect x="0" y="0" width="${W}" height="${H}" fill="white" stroke="#ddd"/>
-    `;
-
-    const svg = `<?xml version="1.0" encoding="UTF-8"?>
-    <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-        <style>
-            text{ font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif; font-size: 10px; fill:#333; }
-        </style>
-            ${axis}
-            ${rects}
-        <text x="${pad}" y="${pad - 4}" >Demo Chart</text>
-    </svg>`;
-
-    const base64 = Buffer.from(svg, "utf8").toString("base64");
-
-    return {
-        content: [
-            {
-                type: "image",
-                mimeType: "image/svg+xml",
-                data: base64
-            },
-        ]
-        };
-    }
-);
-
-server.registerTool(
-    "local_image_serving",
-    {
-        title: "Image Serving Test",
-        description: "Give image Claude Desktop",
-        inputSchema: {}
-    },
-
-    async () => {
-        const filePath = "Users/hiro/Desktop/playhive.png";
-        try {
-            const abs = path.resolve(filePath);
-            const stat = await fs.stat(abs);
-            if (!stat.isFile()) {
-                return { content: [{ type: "text", text: `Not a file: ${abs}` }] };
-            }
-            
-            const MAX = 5 * 1024 * 1024;
-            if (stat.size > MAX) {
-                return { content: [{ type: "text", text: `File too large (${stat.size} bytes). Max ${MAX} bytes.` }] };
-            }
-
-            const buf = await fs.readFile(abs);
-            if (!Buffer.isBuffer(buf)) {
-                return { content: [{ type: "text", text: `Failed to read as buffer: ${abs}` }] };
-            }
-
-            const b64 = buf.toString("base64");
-
-            const ext = path.extname(abs).toLowerCase();
-            const mime =
-                ext === ".png"  ? "image/png"  :
-                ext === ".jpg"  ? "image/jpeg" :
-                ext === ".jpeg" ? "image/jpeg" :
-                ext === ".svg"  ? "image/svg+xml" :
-                "application/octet-stream";
-
-            return {
-                content: [
-                    { type: "image", mimeType: "image/png", data: b64 },
-                    { type: "text", text: `Image served (mime=${mime}, bytes=${stat.size}) from ${abs}` }
-                ]
-            };
-        } catch (err: any) {
-            return { content: [{ type: "text", text: `Failed to read image: ${err?.message ?? String(err)}` }] };
-        }
-    }
-);
-
-server.registerTool(
-    "image_serving",
-    {
-        title: "Image Serving Test",
-        description: "Give image Claude Desktop",
-        inputSchema: {}
-    },
-
-    async () => {
-        const imageUrl = "https://media.playhive.co.kr/image/Logo.png";
-        try {
-            const response = await fetch(imageUrl);
-            
-            if (!response.ok) {
-                return { content: [{ type: "text", text: `Failed to fetch image: HTTP ${response.status} ${response.statusText}` }] };
-            }
-
-            const arrayBuffer = await response.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const b64 = buffer.toString("base64");
-            let mime = response.headers.get('content-type') || 'image/png';
-            if (!mime.startsWith('image/')) {
-                const ext = new URL(imageUrl).pathname.split('.').pop()?.toLowerCase();
-                mime = 
-                    ext === "png"  ? "image/png"  :
-                    ext === "jpg"  ? "image/jpeg" :
-                    ext === "jpeg" ? "image/jpeg" :
-                    ext === "gif"  ? "image/gif"  :
-                    ext === "webp" ? "image/webp" :
-                    ext === "svg"  ? "image/svg+xml" :
-                    "image/png";
-            }
-
-            return {
-                content: [
-                    { type: "image", mimeType: mime, data: b64 },
-                    { type: "text", text: `Image served (mime=${mime}, bytes=${buffer.length}) from ${imageUrl}` }
-                ]
-            };
-        } catch (err) {
-            return { content: [{ type: "text", text: `Failed to fetch image: ${String(err)}` }] };
-        }
-    }
-);
+registerVisualizationTools(server);
 
 // ✨ Feature Impact Analyzer
 server.registerTool(
