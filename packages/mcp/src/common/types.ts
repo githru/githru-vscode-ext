@@ -22,9 +22,8 @@ export interface ContributorRecommenderInputs {
   branch?: string;
   since?: string;
   until?: string;
-  githubToken: string;
   locale?: string;
-  chart?: boolean;
+  isChart?: boolean;
 }
 
 export interface ContributorCandidate {

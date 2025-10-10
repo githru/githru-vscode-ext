@@ -21,7 +21,6 @@ export async function renderStorylineUI(inputs: StorylineInputs): Promise<{ type
       repo: inputs.repo,
       githubToken: inputs.githubToken,
       baseBranchName: inputs.baseBranchName,
-      debug: inputs.debug || false
     });
 
 
