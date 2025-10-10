@@ -11,9 +11,6 @@
         "jsx": "react-jsx",
         "allowSyntheticDefaultImports": true,
         "baseUrl": "src",
-        "paths": {
-            "types": ["../analysis-engine/dist/types"]
-        }
     },
     "include": ["src"]
 }
