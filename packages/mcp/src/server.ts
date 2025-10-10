@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { testReactComponents } from "./tool/reactComponentTester.js";
 import { testDataDrivenComponents } from "./tool/dataDrivenComponentTester.js";
+import { renderStorylineUI } from "./tool/storylineRenderer.js";
 import type { FeatureImpactAnalyzerInputs, ContributorRecommenderInputs, ReactComponentTestInputs, DataDrivenComponentInputs } from "./common/types.js";
 import { I18n } from "./common/i18n.js";
 import { generateNewViz } from "./tool/generateNewViz.js";
@@ -515,6 +516,65 @@ server.registerTool(
       return {
         content: [
           { type: "text", text: `Data-driven component test error: ${err?.message ?? String(err)}` },
+        ],
+      };
+    }
+  }
+);
+
+server.registerTool(
+  "render_storyline_ui",
+  {
+    title: "Render Storyline UI",
+    description: "Generate storyline visualization using FolderActivityFlow component with CSMDict data",
+    inputSchema: {
+      repo: z.string().describe("GitHub repository in format 'owner/repo'"),
+      githubToken: z.string().describe("GitHub personal access token"),
+      baseBranchName: z.string().optional().describe("Base branch name (default: main)"),
+      locale: z.enum(["en", "ko"]).default("en").describe("Response language"),
+      debug: z.boolean().default(false).describe("Enable debug logging")
+    }
+  },
+
+  async ({ repo, githubToken, baseBranchName, locale, debug }) => {
+    try {
+      const result = await renderStorylineUI({
+        repo,
+        githubToken,
+        baseBranchName,
+        locale,
+        debug
+      });
+
+      if (result.type === 'image') {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "# 📊 Storyline Visualization\n\nGenerated storyline chart showing contributor activity flow across releases:",
+            },
+            {
+              type: "image",
+              data: result.data,
+              mimeType: result.mimeType,
+              annotations: result.annotations
+            }
+          ],
+        };
+      } else {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `# 📊 Storyline Visualization\n\n${result.data}`,
+            },
+          ],
+        };
+      }
+    } catch (err: any) {
+      return {
+        content: [
+          { type: "text", text: `Storyline UI rendering error: ${err?.message ?? String(err)}` },
         ],
       };
     }

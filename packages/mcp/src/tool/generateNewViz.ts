@@ -24,29 +24,46 @@ class EngineGenerator {
     const { repo, baseBranchName } = this.inputs;
     
     this.repoInfo = GitHubUtils.parseRepoUrl(repo);
-    console.debug(`Repository info - Owner: ${this.repoInfo.owner}, Repo: ${this.repoInfo.repo}`);
 
-    const targetBranch = baseBranchName || await GitHubUtils.getDefaultBranch(
-      this.inputs.githubToken, 
-      this.repoInfo.owner, 
-      this.repoInfo.repo
-    );
+    let targetBranch = baseBranchName;
+    if (!targetBranch) {
+      targetBranch = await GitHubUtils.getDefaultBranch(
+        this.inputs.githubToken, 
+        this.repoInfo.owner, 
+        this.repoInfo.repo
+      );
+    }
 
-    this.gitLog = await GitHubUtils.fetchGitLogFromGitHub(
+
+    const tempRepoPath = `/tmp/githru-temp-${Date.now()}`;
+    
+    await GitHubUtils.cloneRepository(
       this.inputs.githubToken,
       this.repoInfo.owner,
-      this.repoInfo.repo
+      this.repoInfo.repo,
+      tempRepoPath
     );
+
+    this.gitLog = await GitHubUtils.getGitLog("git", tempRepoPath);
+    
+    try {
+      const fs = await import('fs');
+      await fs.promises.rm(tempRepoPath, { recursive: true, force: true });
+    } catch (cleanupError) {
+      // ignore cleanup errors
+    }
+
 
     const originalConsoleLog = console.log;
     const originalConsoleError = console.error;
-    
-    console.log = () => {};
-    console.error = () => {};
+    if (!this.inputs.debug) {
+      console.log = () => {};
+      console.error = () => {};
+    }
     
     try {
       const analysisEngine = new AnalysisEngine({
-        isDebugMode: false,
+        isDebugMode: this.inputs.debug || false,
         gitLog: this.gitLog,
         owner: this.repoInfo.owner,
         repo: this.repoInfo.repo,

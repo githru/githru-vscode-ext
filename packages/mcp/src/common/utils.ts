@@ -2,10 +2,56 @@ import { Octokit } from "@octokit/rest";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
+import * as cp from "child_process";
 import type { GitHubRepoInfo } from "./types.js";
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
+
+// Git 로그 포맷 (vscode와 동일)
+const GIT_LOG_FORMAT =
+  "%n%n" +
+  [
+    "%H",
+    "%P",
+    "%D",
+    "%an",
+    "%ae",
+    "%ad",
+    "%cn",
+    "%ce",
+    "%cd",
+    "%w(0,0,4)%s",
+    "%b",
+  ].join("%n");
+
+function resolveSpawnOutput(cmd: cp.ChildProcess) {
+  return Promise.all([
+    new Promise<{ code: number; error: Error | null }>((resolve) => {
+      let resolved = false;
+      cmd.on("error", (error) => {
+        if (resolved) return;
+        resolve({ code: -1, error: error });
+        resolved = true;
+      });
+      cmd.on("exit", (code) => {
+        if (resolved) return;
+        resolve({ code: code || 0, error: null });
+        resolved = true;
+      });
+    }),
+    new Promise<Buffer>((resolve) => {
+      const chunks: Buffer[] = [];
+      cmd.stdout?.on("data", (chunk) => chunks.push(chunk));
+      cmd.stdout?.on("end", () => resolve(Buffer.concat(chunks)));
+    }),
+    new Promise<Buffer>((resolve) => {
+      const chunks: Buffer[] = [];
+      cmd.stderr?.on("data", (chunk) => chunks.push(chunk));
+      cmd.stderr?.on("end", () => resolve(Buffer.concat(chunks)));
+    }),
+  ]);
+}
 
 export const GitHubUtils = {
   createGitHubAPIClient(githubToken: string): Octokit {
@@ -100,128 +146,110 @@ export const GitHubUtils = {
     return null;
   },
 
-  async fetchGitLogFromGitHub(githubToken: string, owner: string, repo: string): Promise<string> {
-    const octokit = this.createGitHubAPIClient(githubToken);
-    
-    try {
-      const repoInfo = await octokit.repos.get({ owner, repo });
-      const defaultBranch = repoInfo.data.default_branch;
-      const branches = await octokit.repos.listBranches({ owner, repo });
-      
-      let allCommits: any[] = [];
-      const branchCommitMap = new Map<string, string[]>();
-      
-      for (const branch of branches.data) {
-        try {
-          let page = 1;
-          let hasMoreCommits = true;
-          const branchCommits: string[] = [];
-          
-          while (hasMoreCommits && page <= 5) {
-            const commits = await octokit.repos.listCommits({
-              owner,
-              repo,
-              sha: branch.name,
-              per_page: 100,
-              page
-            });
-            
-            allCommits.push(...commits.data.map(commit => ({ ...commit, branchName: branch.name })));
-            branchCommits.push(...commits.data.map(commit => commit.sha));
-            hasMoreCommits = commits.data.length === 100;
-            page++;
-          }
-          
-          branchCommitMap.set(branch.name, branchCommits);
-        } catch (error) {
-          console.debug(`Failed to fetch commits for branch ${branch.name}:`, error);
-        }
+  async getGitLog(gitPath: string, currentWorkspacePath: string): Promise<string> {
+    const args = [
+      "--no-pager",
+      "-c",
+      "core.quotepath=false",
+      "log",
+      "--all",
+      "--parents",
+      "--numstat",
+      "--date-order",
+      `--pretty=format:${GIT_LOG_FORMAT}`,
+      "--decorate",
+      "-c",
+    ];
+
+    const [status, stdout, stderr] = await resolveSpawnOutput(
+      cp.spawn(gitPath, args, {
+        cwd: currentWorkspacePath,
+        env: Object.assign({}, process.env),
+      })
+    );
+
+    if (status.code !== 0 || status.error) {
+      throw new Error(`Git command failed: ${stderr.toString()}`);
+    }
+
+    return stdout.toString();
+  },
+
+  async getBranches(
+    path: string,
+    repo: string
+  ): Promise<{
+    branchList: string[];
+    head: string | null;
+  }> {
+    const args = ["branch", "-a"];
+    let head = null;
+    const branchList = [];
+
+    const [status, stdout, stderr] = await resolveSpawnOutput(
+      cp.spawn(path, args, {
+        cwd: repo,
+        env: Object.assign({}, process.env),
+      })
+    );
+
+    if (status.code !== 0 || status.error) {
+      throw new Error(`Git command failed: ${stderr.toString()}`);
+    }
+
+    const branches = stdout.toString().split(/\r\n|\r|\n/g);
+    for (let branch of branches) {
+      branch = branch
+        .trim()
+        .replace(/(.*) -> (?:.*)/g, "$1")
+        .replace("remotes/", "");
+      if (branch.startsWith("* ")) {
+        if (branch.includes("HEAD detached")) continue;
+        branch = branch.replace("* ", "");
+        head = branch;
       }
+      branchList.push(branch);
+    }
 
-      const uniqueCommits = Array.from(
-        new Map(allCommits.map(commit => [commit.sha, commit])).values()
-      );
+    if (!head) head = this.getDefaultBranchName(branchList);
 
-      uniqueCommits.sort((a, b) =>
-        new Date(a.commit.committer.date).getTime() - new Date(b.commit.committer.date).getTime()
-      );
+    return { branchList, head };
+  },
 
-      const gitLogEntries = await Promise.all(
-        uniqueCommits.slice(0, 1000).map(async (commit) => {
-          const hash = commit.sha;
-          const parents = commit.parents.map((p: any) => p.sha).join(' ');
-          
-          const refs = [];
-          for (const [branchName, commits] of branchCommitMap.entries()) {
-            if (commits.includes(hash)) {
-              if (branchName === defaultBranch) {
-                refs.push(`origin/${branchName}`, branchName);
-              } else {
-                refs.push(`origin/${branchName}`);
-              }
-            }
-          }
-          
-          if (refs.length === 0 && commit.branchName) {
-            refs.push(`origin/${commit.branchName}`);
-          }
-          
-          const refString = refs.join(', ');
-          const authorName = commit.commit.author?.name || '';
-          const authorEmail = commit.commit.author?.email || '';
-          const authorDate = commit.commit.author?.date || '';
-          const committerName = commit.commit.committer?.name || '';
-          const committerEmail = commit.commit.committer?.email || '';
-          const committerDate = commit.commit.committer?.date || '';
-          const message = commit.commit.message || '';
-          const messageLines = message.split('\n');
-          const subject = messageLines[0] || '';
-          const body = messageLines.slice(1).join('\n').trim();
-          
-          let fileStats = '';
-          try {
-            const commitDetail = await octokit.repos.getCommit({
-              owner,
-              repo,
-              ref: hash
-            });
-            
-            if (commitDetail.data.files && commitDetail.data.files.length > 0) {
-              fileStats = '\n' + commitDetail.data.files.map((file: any) => {
-                const additions = file.additions || 0;
-                const deletions = file.deletions || 0;
-                const filename = file.filename || '';
-                return `${additions}\t${deletions}\t${filename}`;
-              }).join('\n');
-            }
-          } catch (error) {
-            console.debug(`Failed to fetch file stats for commit ${hash}`);
-          }
+  getDefaultBranchName(branchList: string[]): string {
+    const branchSet = new Set(branchList);
+    return branchSet.has("main") ? "main" : branchSet.has("master") ? "master" : branchList?.[0];
+  },
 
-          const commitParts = [
-            hash,
-            parents,
-            refString,
-            authorName,
-            authorEmail,
-            authorDate,
-            committerName,
-            committerEmail,
-            committerDate,
-            `    ${subject}`,
-          ];
-          
-          if (body) {
-            commitParts.push(body);
-          }
+  // 현재 브랜치 이름 가져오기 (vscode와 동일)
+  async getCurrentBranchName(path: string, repo: string): Promise<string> {
+    const args = ["branch", "--show-current"];
 
-          return commitParts.join('\n') + fileStats;
-        })
-      );
+    const [status, stdout, stderr] = await resolveSpawnOutput(
+      cp.spawn(path, args, {
+        cwd: repo,
+        env: Object.assign({}, process.env),
+      })
+    );
 
-      return '\n\n' + gitLogEntries.join('\n\n\n\n');
-    } catch (error: any) {
-      throw new Error(`Failed to fetch commits from GitHub: ${error.message}`);
+    if (status.code !== 0 || status.error) {
+      throw new Error(`Git command failed: ${stderr.toString()}`);
+    }
+
+    return stdout.toString().trim();
+  },
+
+  async cloneRepository(githubToken: string, owner: string, repo: string, targetPath: string): Promise<void> {
+    const repoUrl = `https://${githubToken}@github.com/${owner}/${repo}.git`;
+    
+    const [status, stdout, stderr] = await resolveSpawnOutput(
+      cp.spawn("git", ["clone", repoUrl, targetPath], {
+        env: Object.assign({}, process.env),
+      })
+    );
+
+    if (status.code !== 0 || status.error) {
+      throw new Error(`Git clone failed: ${stderr.toString()}`);
     }
   },
 
@@ -233,28 +261,6 @@ export const GitHubUtils = {
       return repoInfo.data.default_branch;
     } catch (error: any) {
       throw new Error(`Failed to get default branch: ${error.message}`);
-    }
-  },
-
-  async safeApiCall<T>(
-    apiCall: () => Promise<T>,
-    errorMessage: string
-  ): Promise<T> {
-    try {
-      return await apiCall();
-    } catch (error: any) {
-      const status = error?.status || error?.response?.status;
-      const message = error?.message || String(error);
-      
-      if (status === 401) {
-        throw new Error(`GitHub authentication error: Please check your token. ${message}`);
-      } else if (status === 403) {
-        throw new Error(`GitHub API permission error: ${message}`);
-      } else if (status === 404) {
-        throw new Error(`Repository not found: ${message}`);
-      } else {
-        throw new Error(`${errorMessage}: ${message}`);
-      }
     }
   }
 };
