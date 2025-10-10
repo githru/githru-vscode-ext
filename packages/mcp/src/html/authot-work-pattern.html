@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{TITLE}}</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <style>
+      :root {
+        --card-bg: #fafafa;
+        --card-border: #ddd;
+        --muted: #666;
+        --thead: #f5f5f5;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        margin: 0 0 4px 0;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 8px 0 16px;
+      }
+      .card {
+        border: 1px solid var(--card-border);
+        border-radius: 6px;
+        padding: 10px 14px;
+        background: var(--card-bg);
+        min-width: 140px;
+      }
+      .card h3 {
+        margin: 0 0 4px 0;
+        font-size: 13px;
+        color: #444;
+      }
+      .card .val {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 900px) {
+        .grid {
+          grid-template-columns: 1.2fr 0.8fr;
+        }
+      }
+      .panel h2 {
+        margin: 8px 0;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 6px 8px;
+      }
+      th {
+        background: var(--thead);
+      }
+      td.val-right {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{TITLE}}</h1>
+    <div class="sub">{{NOTES}}</div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>커밋 수</h3>
+        <div class="val">{{COMMITS}}</div>
+      </div>
+      <div class="card">
+        <h3>삽입 LOC</h3>
+        <div class="val">{{INSERTIONS}}</div>
+      </div>
+      <div class="card">
+        <h3>삭제 LOC</h3>
+        <div class="val">{{DELETIONS}}</div>
+      </div>
+      <div class="card">
+        <h3>Churn(±)</h3>
+        <div class="val">{{CHURN}}</div>
+      </div>
+      <div class="card">
+        <h3>브랜치</h3>
+        <div class="val">{{BRANCH}}</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>Commits vs Churn</h2>
+        <canvas
+          id="barChart"
+          height="160"
+        ></canvas>
+      </div>
+      <div class="panel">
+        <h2>Commit Type Mix</h2>
+        <canvas
+          id="donutChart"
+          height="160"
+        ></canvas>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px">
+      <h2>타입별 건수</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%">Type</th>
+            <th class="val-right">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{TYPE_TABLE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const tooltipStyle = {
+        backgroundColor: "#1e293b",
+        borderColor: "#475569",
+        borderWidth: 2,
+        cornerRadius: 8,
+        padding: 12,
+        titleColor: "#f8fafc",
+        bodyColor: "#f1f5f9",
+        titleFont: { weight: "700" },
+        bodyFont: { weight: "600" },
+      };
+
+      const ctxBar = document.getElementById("barChart").getContext("2d");
+      new Chart(ctxBar, {
+        type: "bar",
+        data: {
+          labels: JSON.parse("{{BAR_LABELS_JSON}}"),
+          datasets: [
+            {
+              label: "값",
+              data: JSON.parse("{{BAR_VALUES_JSON}}"),
+              backgroundColor: ["rgba(54, 162, 235, 0.85)", "rgba(255, 99, 132, 0.85)"],
+              borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Commits & Churn" },
+            tooltip: tooltipStyle,
+          },
+          scales: { y: { beginAtZero: true } },
+        },
+      });
+
+      const ctxDonut = document.getElementById("donutChart").getContext("2d");
+      new Chart(ctxDonut, {
+        type: "doughnut",
+        data: {
+          labels: JSON.parse("{{DONUT_LABELS_JSON}}"),
+          datasets: [
+            {
+              data: JSON.parse("{{DONUT_VALUES_JSON}}"),
+              backgroundColor: JSON.parse("{{DONUT_COLORS_JSON}}"),
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "right" },
+            tooltip: tooltipStyle,
+          },
+          cutout: "55%",
+        },
+      });
+    </script>
+  </body>
+</html>

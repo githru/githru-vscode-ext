@@ -6,10 +6,11 @@ import { registerReactTools } from "./tools/react/register.js";
 import { registerContributorRecommenderTool } from "./tools/analysis/contributorRecommenderTool.js";
 import { registerFeatureImpactTool } from "./tools/analysis/featureImpactTool.js";
 import { registerStorylineUITool } from "./tools/storyLineUI/storyLineUITool.js";
+import { registerAuthorWorkPatternTool } from "tools/analysis/authorWorkPatternTool.js";
 
 const server = new McpServer({
-    name: "githru-mcp",
-    version: "0.0.1"
+  name: "githru-mcp",
+  version: "0.0.1",
 });
 
 registerTestTools(server);
@@ -18,14 +19,14 @@ registerReactTools(server);
 registerContributorRecommenderTool(server);
 registerFeatureImpactTool(server);
 registerStorylineUITool(server);
-
+registerAuthorWorkPatternTool(server);
 
 async function main() {
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
 }
 
 main().catch((err) => {
-    console.error("Server error:", err);
-    process.exit(1);
+  console.error("Server error:", err);
+  process.exit(1);
 });

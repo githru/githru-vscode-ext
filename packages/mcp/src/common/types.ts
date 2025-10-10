@@ -150,3 +150,29 @@ export interface DataDrivenComponentResult {
   components: DataDrivenComponentDefinition[];
   testQuestions: string[];
 }
+
+export interface AuthorWorkPatternArgs {
+  repoPath: string;
+  author: string;
+  branch?: string;
+  since?: string;
+  until?: string;
+  githubToken: string;
+  locale?: "en" | "ko";
+  chart?: boolean;
+}
+
+export interface AuthorWorkPatternPayload {
+  repo: string;
+  author: string;
+  period: { from: string | null; to: string | null };
+  branch: string;
+  metrics: {
+    commits: number;
+    insertions: number;
+    deletions: number;
+    churn: number;
+  };
+  typeMix: Array<{ label: string; value: number }>;
+  locale?: "en" | "ko";
+}
