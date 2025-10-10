@@ -103,6 +103,7 @@
     margin: 0 auto;
     cursor: grab;
     background: $color-background;
+    overflow: visible;
 
     &:active {
       cursor: grabbing;
@@ -112,25 +113,55 @@
   &__tooltip {
     position: absolute;
     display: none;
-    padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    border-radius: 4px;
-    font-size: 0.75rem;
+    padding: 0;
+    background: transparent;
     pointer-events: none;
     z-index: 1000;
 
     .contributor-activity-tooltip {
+      background: rgba(60, 64, 72, 0.9);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.6;
+      position: relative;
+
       p {
         margin: 0.25rem 0;
-        
+
         &:first-child {
           margin-top: 0;
           font-weight: 600;
         }
-        
+
         &:last-child {
           margin-bottom: 0;
+        }
+      }
+
+      .insertions {
+        color: #1fc3b5;
+        display: inline;
+      }
+
+      .deletions {
+        color: #e84b6b;
+        display: inline;
+      }
+
+      .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
         }
       }
     }
@@ -160,11 +191,6 @@
   .activity-dot {
     cursor: pointer;
     transition: all 0.2s ease;
-    
-    &:hover {
-      stroke-width: 2;
-      r: 8;
-    }
   }
 
   .flow-line {

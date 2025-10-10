@@ -1,8 +1,6 @@
 import * as d3 from "d3";
 import type React from "react";
 
-import { pxToRem } from "utils/pxToRem";
-
 import { DIMENSIONS } from "./FolderActivityFlow.const";
 import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
 import {
@@ -178,27 +176,62 @@ export const renderReleaseVisualization = ({
 
   // 툴팁 이벤트
   dots
-    .on("mouseover", (event: MouseEvent, d: ReleaseContributorActivity) => {
+    .on("mouseover", function (event: MouseEvent, d: ReleaseContributorActivity) {
+      const currentRadius = sizeScale(d.changes);
+      const hoveredRadius = currentRadius * 1.2;
+
+      // 노드 크기 확대
+      d3.select(this).attr("r", hoveredRadius).attr("stroke-width", 2).attr("stroke", "rgba(255, 255, 255, 0.5)");
+
+      // 노드 위치 계산
+      const nodeElement = event.target as SVGCircleElement;
+      const cx = parseFloat(nodeElement.getAttribute("cx") || "0");
+      const cy = parseFloat(nodeElement.getAttribute("cy") || "0");
+
+      // SVG 좌표를 화면 좌표로 변환
+      const svgPoint = nodeElement.ownerSVGElement!.createSVGPoint();
+      svgPoint.x = cx;
+      svgPoint.y = cy;
+      const ctm = nodeElement.getScreenCTM();
+      if (!ctm) return;
+      const screenPoint = svgPoint.matrixTransform(ctm);
+
+      const tooltipLeft = screenPoint.x;
+      const tooltipTop = screenPoint.y;
+
+      // 툴팁 표시
       tooltip
         .style("display", "inline-block")
-        .style("left", pxToRem(event.pageX + 10))
-        .style("top", pxToRem(event.pageY - 10)).html(`
+        .style("left", `${tooltipLeft}px`)
+        .style("top", `${tooltipTop}px`)
+        .style("transform", "translateX(-50%)")
+        .style("opacity", "0")
+        .style("transition", "opacity 0.2s ease-in-out").html(`
           <div class="contributor-activity-tooltip">
-            <p><strong>${d.contributorName}</strong></p>
-            <p>Release: ${d.releaseTag}</p>
-            <p>Folder: ${d.folderPath === "." ? "root" : d.folderPath}</p>
-            <p>Date: ${d.date.toLocaleDateString()}</p>
-            <p>Changes: ${d.changes}</p>
-            <p style="color: #28a745;">+${d.insertions} insertions</p>
-            <p style="color: #dc3545;">-${d.deletions} deletions</p>
+            <p><strong>${d.contributorName}'s contribute</strong></p>
+            <p class="insertions">+${d.insertions}</p> / <p class="deletions">-${d.deletions}</p>
+            <p>CLOC # → ${d.changes}</p>
+            <p><span class="icon-wrapper"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>${d.folderPath === "." ? "root" : d.folderPath.split("/").pop() || d.folderPath}</span></p>
+            <p><span class="icon-wrapper"><svg viewBox="0 0 24 24"><path d="M7 11h2v2H7v-2zm14-5v14c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2l.01-14c0-1.1.88-2 1.99-2h1V2h2v2h8V2h2v2h1c1.1 0 2 .9 2 2zM5 8h14V6H5v2zm14 12V10H5v10h14zm-4-7h2v-2h-2v2zm-4 0h2v-2h-2v2z"/></svg>${d.date.toLocaleDateString()}</span></p>
           </div>
         `);
+
+      // 페이드 인 애니메이션
+      setTimeout(() => {
+        tooltip.style("opacity", "1");
+      }, 10);
     })
-    .on("mousemove", (event: MouseEvent) => {
-      tooltip.style("left", pxToRem(event.pageX + 10)).style("top", pxToRem(event.pageY - 10));
-    })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
+    .on("mouseout", function (_event: MouseEvent, d: ReleaseContributorActivity) {
+      const currentRadius = sizeScale(d.changes);
+
+      // 노드 크기 원래대로
+      d3.select(this).attr("r", currentRadius).attr("stroke-width", 0);
+
+      // 페이드 아웃 애니메이션
+      tooltip.style("opacity", "0");
+      setTimeout(() => {
+        tooltip.style("display", "none");
+      }, 200);
     });
 
   // 기여자별 첫 노드에 이름 라벨
