@@ -19,7 +19,7 @@ registerReactTools(server);
 registerContributorRecommenderTool(server);
 registerFeatureImpactTool(server);
 registerStorylineUITool(server);
-registerAuthorWorkPatternTool;
+registerAuthorWorkPatternTool(server);
 
 async function main() {
   const transport = new StdioServerTransport();
