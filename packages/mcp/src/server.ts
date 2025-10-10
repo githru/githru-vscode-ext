@@ -6,7 +6,7 @@ import { registerReactTools } from "./tools/react/register.js";
 import { registerContributorRecommenderTool } from "./tools/analysis/contributorRecommenderTool.js";
 import { registerFeatureImpactTool } from "./tools/analysis/featureImpactTool.js";
 import { registerStorylineUITool } from "./tools/storyLineUI/storyLineUITool.js";
-import { registerAuthorWorkPatternTool } from "tools/analysis/authorWorkPatternTool.js";
+import { registerAuthorWorkPatternTool } from "./tools/analysis/authorWorkPatternTool.js";
 
 const server = new McpServer({
   name: "githru-mcp",
