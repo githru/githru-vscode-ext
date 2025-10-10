@@ -1,4 +1,5 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
+// import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
+import { AnalysisEngine } from "../engine/Engine.js";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { GitHubRepoInfo, CSMDictGeneratorInputs, CSMDictResult, AnalysisResult } from "../common/types.js";

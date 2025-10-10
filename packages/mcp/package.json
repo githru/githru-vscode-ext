@@ -15,9 +15,12 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@githru-vscode-ext/analysis-engine": "^0.7.2",
 		"@modelcontextprotocol/sdk": "^1.12.1",
-		"@octokit/rest": "^22.0.0",
+		"@octokit/core": "^4.0.4",
+		"@octokit/plugin-retry": "^3.0.9",
+		"@octokit/plugin-throttling": "^4.1.0",
+		"@octokit/rest": "^19.0.3",
+		"@octokit/types": "^13.5.0",
 		"cors": "^2.8.5",
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.18",
@@ -31,6 +34,7 @@
 	"devDependencies": {
 		"@smithery/cli": "^1.2.4",
 		"@types/d3": "^7.4.3",
+		"@types/node": "^24.7.1",
 		"@types/react": "^18.2.0",
 		"@types/react-dom": "^18.2.0",
 		"copyfiles": "^2.4.1",
