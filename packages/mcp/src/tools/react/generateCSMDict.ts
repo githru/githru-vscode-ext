@@ -13,15 +13,13 @@ export function registerGenerateCsmDictTool(server: McpServer) {
         repo: z.string().describe("GitHub repository (format: 'owner/repo' or 'https://github.com/owner/repo')"),
         baseBranchName: z.string().optional().describe("Base branch name to analyze (default: repository's default branch)"),
         locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
-        debug: z.boolean().default(false).describe("Enable debug mode for detailed logging"),
       },
     },
 
-    async ({ repo, baseBranchName, locale, debug }: {
+    async ({ repo, baseBranchName, locale }: {
       repo: string;
       baseBranchName?: string;
       locale?: string;
-      debug?: boolean;
     }) => {
       try {
         const config = Config.getInstance();
@@ -32,7 +30,6 @@ export function registerGenerateCsmDictTool(server: McpServer) {
           githubToken,
           baseBranchName,
           locale,
-          debug
         });
 
         return {

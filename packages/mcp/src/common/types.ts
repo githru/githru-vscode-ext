@@ -47,7 +47,6 @@ export interface CSMDictGeneratorInputs {
   githubToken: string;
   baseBranchName?: string;
   locale?: string;
-  debug?: boolean;
 }
 
 export interface GitUser {
