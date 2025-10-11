@@ -14,6 +14,10 @@
   --chart-color-9: #3a4776;  // mono-sec
   --chart-color-10: #aa4b72; // mono-fai
 
+  --title-left-offset: 30px;
+  --title-icon-size: 34px;
+  --title-gap: 4px;
+
 
   padding: 1rem;
   margin-bottom: 2rem;
@@ -21,32 +25,48 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
+  &__head {
+    margin-top: 40px;
+    margin-left: var(--title-left-offset);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
   &__title {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    padding-left: 50px;
-    margin-bottom: 1rem;
+    column-gap: var(--title-gap);
     color: $color-white;
     font-size: 34px;
     letter-spacing: 0.25px;
     line-height: 42px;
     font-weight: $font-weight-regular;
     white-space: nowrap;
+  }
 
-    svg {
-      width: 1.2em;
-      height: 1.2em;
-      color: $color-white;
-    }
+  &__title-icon {
+    font-size: var(--title-icon-size);
+    width: 1em;
+    height: 1em;
+    color: $color-white;
+  }
+
+  &__title-text {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__subtitle {
+    color: $color-white;
+    font-size: 20px;
+    font-weight: $font-weight-regular;
   }
 
   &__breadcrumb {
-    margin-bottom: 1rem;
-
-    .MuiBreadcrumbs-ol {
-      padding-left: calc(50px + 41px + 0.25rem);
-    }
+    display: inline-block;
+    margin-bottom: 0.5rem;
 
     .MuiBreadcrumbs-separator {
       color: $color-white;
