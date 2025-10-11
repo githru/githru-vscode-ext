@@ -5,10 +5,10 @@ import { useShallow } from "zustand/react/shallow";
 
 import type { ClusterNode } from "types";
 import { Detail } from "components";
+import { Author } from "components/Common/Author";
 import { useDataStore } from "store";
 
 import "./Summary.scss";
-import { Author } from "../../@common/Author";
 import { selectedDataUpdater } from "../VerticalClusterList.util";
 import { ClusterGraph } from "../ClusterGraph";
 import { getClusterSizes } from "../ClusterGraph/ClusterGraph.util";
