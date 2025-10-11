@@ -45,18 +45,20 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    // 폴더 개수에 따라 동적으로 높이 계산
-    const chartHeight = calculateChartHeight(releaseTopFolderPaths.length);
-    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", chartHeight);
-
-    svg.selectAll("*").remove();
-
+    // 실제로 activity가 있는 폴더만 카운트
     const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
     const releaseContributorActivities = extractReleaseBasedContributorActivities(
       totalData,
       releaseTopFolderPaths,
       currentDepth
     );
+    const activeFolderCount = new Set(releaseContributorActivities.map((a) => a.folderPath)).size;
+
+    // 폴더 개수에 따라 동적으로 높이 계산
+    const chartHeight = calculateChartHeight(activeFolderCount);
+    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", chartHeight);
+
+    svg.selectAll("*").remove();
 
     if (releaseContributorActivities.length === 0) {
       svg
