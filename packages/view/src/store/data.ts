@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Dispatch, SetStateAction } from "react";
+import { immer } from "zustand/middleware/immer";
 
 import type { ClusterNode } from "types";
 
@@ -9,17 +9,23 @@ type DataState = {
   selectedData: ClusterNode[];
   setData: (data: ClusterNode[]) => void;
   setFilteredData: (filteredData: ClusterNode[]) => void;
-  setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
+  setSelectedData: (selectedData: ClusterNode[]) => void;
+  toggleSelectedData: (selected: ClusterNode, clusterId: number) => void;
 };
 
-export const useDataStore = create<DataState>((set) => ({
-  data: [],
-  filteredData: [],
-  selectedData: [],
-  setData: (data) => set({ data }),
-  setFilteredData: (filteredData) => set({ filteredData }),
-  setSelectedData: (selectedData) =>
-    set((state) => ({
-      selectedData: typeof selectedData === "function" ? selectedData(state.selectedData) : selectedData,
-    })),
-}));
+export const useDataStore = create<DataState>()(
+  immer((set) => ({
+    data: [],
+    filteredData: [],
+    selectedData: [],
+    setData: (data) => set({ data }),
+    setFilteredData: (filteredData) => set({ filteredData }),
+    setSelectedData: (selectedData) => set({ selectedData }),
+    toggleSelectedData: (selected: ClusterNode, clusterId: number) =>
+      set((state) => {
+        const selectedIndex = state.selectedData.findIndex((data) => data.commitNodeList[0].clusterId === clusterId);
+        if (selectedIndex === -1) state.selectedData.push(selected);
+        else state.selectedData.splice(selectedIndex, 1);
+      }),
+  }))
+);
