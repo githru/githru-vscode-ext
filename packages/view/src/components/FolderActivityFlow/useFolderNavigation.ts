@@ -37,36 +37,6 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
   );
 
   /**
-   * Navigate up to parent folder
-   */
-  const navigateUp = useCallback(() => {
-    if (currentPath === "") {
-      return;
-    }
-
-    const parentPath = currentPath.includes("/") ? currentPath.substring(0, currentPath.lastIndexOf("/")) : "";
-
-    if (parentPath === "") {
-      setCurrentPath("");
-      setFolderDepth(1);
-
-      const rootResult = getRootFolders(totalData);
-
-      setReleaseTopFolderPaths(rootResult.folders as string[]);
-      if (rootResult.releaseGroups) {
-        setReleaseGroups(rootResult.releaseGroups);
-      }
-    } else {
-      setCurrentPath(parentPath);
-      setFolderDepth((prev) => Math.max(1, prev - 1));
-
-      const subFolders = getReleaseSubFolders(totalData, parentPath);
-
-      setReleaseTopFolderPaths(subFolders as string[]);
-    }
-  }, [currentPath, totalData]);
-
-  /**
    * Navigate to breadcrumb by index
    */
   const navigateToBreadcrumb = useCallback(
@@ -137,7 +107,6 @@ export function useFolderNavigation(totalData: ClusterNode[]) {
 
     // Actions
     navigateToFolder,
-    navigateUp,
     navigateToBreadcrumb,
     initializeRootFolders,
     getBreadcrumbs,

@@ -1,5 +1,5 @@
 export const DIMENSIONS = {
   width: 800,
-  height: 400,
-  margin: { top: 40, right: 120, bottom: 60, left: 20 },
+  height: 500, // 고정 높이
+  margin: { top: 20, right: 70, bottom: 20, left: 20 },
 };

@@ -54,15 +54,21 @@ export const renderReleaseVisualization = ({
     releaseTagsByIndex.set(a.releaseIndex, a.releaseTag);
   });
 
+  // 실제로 노드(activity)가 있는 폴더만 필터링
+  const activeFolderPaths = Array.from(new Set(releaseContributorActivities.map((a) => a.folderPath)));
+  const filteredFolderPaths = releaseTopFolderPaths.filter((path) => activeFolderPaths.includes(path));
+
+  const chartWidth = Number(svg.attr("width"));
+
   const xScale = d3
     .scaleBand()
     .domain(uniqueReleases.map(String))
-    .range([DIMENSIONS.margin.left, DIMENSIONS.width - DIMENSIONS.margin.right])
+    .range([DIMENSIONS.margin.left, chartWidth - DIMENSIONS.margin.right])
     .paddingInner(0.1);
 
   const yScale = d3
     .scaleBand()
-    .domain(releaseTopFolderPaths)
+    .domain(filteredFolderPaths)
     .range([DIMENSIONS.margin.top, DIMENSIONS.height - DIMENSIONS.margin.bottom])
     .paddingInner(0.2);
 
@@ -85,14 +91,14 @@ export const renderReleaseVisualization = ({
 
   mainGroup
     .selectAll(".folder-label")
-    .data(releaseTopFolderPaths)
+    .data(filteredFolderPaths)
     .enter()
     .append("text")
     .attr("class", (folderPath: string) => {
       const isFile = folderPath.includes(".");
       return isFile ? "folder-label" : "folder-label clickable";
     })
-    .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
+    .attr("x", chartWidth - DIMENSIONS.margin.right + 10)
     .attr("y", (folderPath: string) => (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("text-anchor", "start")
     .attr("dominant-baseline", "middle")
