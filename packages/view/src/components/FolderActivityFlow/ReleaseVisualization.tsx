@@ -58,7 +58,7 @@ export const renderReleaseVisualization = ({
   const activeFolderPaths = Array.from(new Set(releaseContributorActivities.map((a) => a.folderPath)));
   const filteredFolderPaths = releaseTopFolderPaths.filter((path) => activeFolderPaths.includes(path));
 
-  const chartWidth = (svg.node()?.parentElement?.clientWidth || DIMENSIONS.width) - 100;
+  const chartWidth = Number(svg.attr("width"));
 
   const xScale = d3
     .scaleBand()
