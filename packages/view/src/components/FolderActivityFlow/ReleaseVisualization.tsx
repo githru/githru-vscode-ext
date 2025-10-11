@@ -24,10 +24,6 @@ interface ReleaseVisualizationProps {
   tooltipRef: React.RefObject<HTMLDivElement>;
   /** Callback when folder is clicked */
   onFolderClick: (folderPath: string) => void;
-  /** Chart height (calculated dynamically based on folder count) */
-  chartHeight: number;
-  /** Chart width (calculated dynamically based on container width) */
-  chartWidth: number;
 }
 
 /**
@@ -45,8 +41,6 @@ export const renderReleaseVisualization = ({
   releaseTopFolderPaths,
   tooltipRef,
   onFolderClick,
-  chartHeight,
-  chartWidth,
 }: ReleaseVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
 
@@ -64,6 +58,8 @@ export const renderReleaseVisualization = ({
   const activeFolderPaths = Array.from(new Set(releaseContributorActivities.map((a) => a.folderPath)));
   const filteredFolderPaths = releaseTopFolderPaths.filter((path) => activeFolderPaths.includes(path));
 
+  const chartWidth = (svg.node()?.parentElement?.clientWidth || DIMENSIONS.width) - 100;
+
   const xScale = d3
     .scaleBand()
     .domain(uniqueReleases.map(String))
@@ -73,7 +69,7 @@ export const renderReleaseVisualization = ({
   const yScale = d3
     .scaleBand()
     .domain(filteredFolderPaths)
-    .range([DIMENSIONS.margin.top, chartHeight - DIMENSIONS.margin.bottom])
+    .range([DIMENSIONS.margin.top, DIMENSIONS.height - DIMENSIONS.margin.bottom])
     .paddingInner(0.2);
 
   const sizeScale = d3
@@ -156,7 +152,7 @@ export const renderReleaseVisualization = ({
   mainGroup
     .append("g")
     .attr("class", "x-axis")
-    .attr("transform", `translate(0, ${chartHeight - DIMENSIONS.margin.bottom})`)
+    .attr("transform", `translate(0, ${DIMENSIONS.height - DIMENSIONS.margin.bottom})`)
     .call(xAxis);
 
   // 릴리즈별 노드 위치 계산

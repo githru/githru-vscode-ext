@@ -81,8 +81,6 @@ const FolderActivityFlow = () => {
       releaseTopFolderPaths,
       tooltipRef,
       onFolderClick: navigateToFolder,
-      chartHeight: DIMENSIONS.height,
-      chartWidth: (containerRef.current?.clientWidth || DIMENSIONS.width) - 100,
     });
   }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
 
