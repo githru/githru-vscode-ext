@@ -76,7 +76,14 @@
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
     "react/prop-types": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["acc", "accumulator", "state"]
+      }
+    ]
   },
   "settings": {
     "import/resolver": {
