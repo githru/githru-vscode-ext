@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { generateNewViz } from '../tool/generateNewViz.js';
+import { generateNewViz } from './generateNewViz.js';
 import ServerSideFolderActivityFlow from '../component/FolderActivityFlow/ServerSideFolderActivityFlow.js';
 import { analyzeReleaseBasedFolders, extractReleaseBasedContributorActivities, generateReleaseFlowLineData, findFirstReleaseContributorNodes } from '../component/FolderActivityFlow/FolderActivityFlow.util.js';
 // @ts-ignore

@@ -1,3 +1,5 @@
+import type { RestEndpointMethodTypes } from "@octokit/rest";
+
 export interface GitHubRepoInfo {
   owner: string;
   repo: string;
@@ -77,6 +79,26 @@ export interface CommitNode {
   stemId?: string;
   commit: CommitRaw;
 }
+
+export type CommitDict = Map<string, CommitNode>;
+
+export const CommitMessageTypeList = [
+  "build",
+  "chore",
+  "ci",
+  "docs",
+  "feat",
+  "fix",
+  "pert",
+  "refactor",
+  "revert",
+  "style",
+  "test",
+];
+
+const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
+
+export type CommitMessageType = (typeof COMMIT_MESSAGE_TYPE)[number];
 
 export interface CSMNode {
   base: CommitNode;
@@ -173,3 +195,16 @@ export interface AuthorWorkPatternPayload {
   typeMix: Array<{ label: string; value: number }>;
   locale?: "en" | "ko";
 }
+
+export interface Stem {
+  nodes: CommitNode[];
+}
+
+export type StemDict = Map<string, Stem>;
+
+export interface PullRequest {
+  detail: RestEndpointMethodTypes["pulls"]["get"]["response"];
+  commitDetails: RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
+}
+
+export type PullRequestDict = Map<string, PullRequest>;
