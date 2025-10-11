@@ -5,6 +5,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
 import { useDataStore } from "store";
 
@@ -36,6 +37,38 @@ const FolderActivityFlow = () => {
   }, [initializeRootFolders]);
 
   const breadcrumbs = useMemo(() => getBreadcrumbs(), [getBreadcrumbs]);
+
+  const topContributor = useMemo(() => {
+    if (releaseGroups.length === 0 || releaseTopFolderPaths.length === 0) {
+      return null;
+    }
+
+    const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
+    const releaseContributorActivities = extractReleaseBasedContributorActivities(
+      totalData,
+      releaseTopFolderPaths,
+      currentDepth
+    );
+
+    // 기여자별 총 CLOC 계산
+    const contributorClocs = new Map<string, number>();
+    releaseContributorActivities.forEach((activity) => {
+      const current = contributorClocs.get(activity.contributorName) || 0;
+      contributorClocs.set(activity.contributorName, current + activity.changes);
+    });
+
+    // 가장 많은 CLOC를 기록한 기여자 찾기
+    let maxCloc = 0;
+    let topContributorName = "";
+    contributorClocs.forEach((cloc, name) => {
+      if (cloc > maxCloc) {
+        maxCloc = cloc;
+        topContributorName = name;
+      }
+    });
+
+    return topContributorName || null;
+  }, [totalData, releaseGroups, releaseTopFolderPaths, currentPath]);
 
   useEffect(() => {
     if (!totalData || totalData.length === 0) {
@@ -84,16 +117,16 @@ const FolderActivityFlow = () => {
     });
   }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
 
+  const topContributorLabel = topContributor || "...";
+
   return (
     <div
       className="folder-activity-flow"
       ref={containerRef}
     >
-      <div className="folder-activity-flow__header">
-        <div>
-          <p className="folder-activity-flow__title">Contributors Folder Activity Flow</p>
-          <div className="folder-activity-flow__subtitle">Contributors moving between folders across releases</div>
-        </div>
+      <div className="folder-activity-flow__title">
+        <WorkspacePremiumIcon />
+        <span>Top contributor is {topContributorLabel}</span>
       </div>
 
       <Breadcrumbs
@@ -121,6 +154,7 @@ const FolderActivityFlow = () => {
           );
         })}
       </Breadcrumbs>
+
       <svg
         className="folder-activity-flow__chart"
         ref={svgRef}

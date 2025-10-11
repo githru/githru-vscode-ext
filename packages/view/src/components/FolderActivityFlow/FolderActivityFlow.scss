@@ -21,41 +21,32 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-
   &__title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-left: 50px;
+    margin-bottom: 1rem;
     color: $color-white;
-  }
+    font-size: 34px;
+    letter-spacing: 0.25px;
+    line-height: 42px;
+    font-weight: $font-weight-regular;
+    white-space: nowrap;
 
-  &__subtitle {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.875rem;
-    color: $color-light-gray;
-  }
-
-  &__mode-toggle {
-    transition: all 0.2s ease;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    &:active {
-      transform: translateY(0);
+    svg {
+      width: 1.2em;
+      height: 1.2em;
+      color: $color-white;
     }
   }
 
   &__breadcrumb {
-    padding-left: 50px;
+    margin-bottom: 1rem;
+
+    .MuiBreadcrumbs-ol {
+      padding-left: calc(50px + 41px + 0.25rem);
+    }
 
     .MuiBreadcrumbs-separator {
       color: $color-white;
