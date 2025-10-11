@@ -26,6 +26,8 @@ interface ReleaseVisualizationProps {
   onFolderClick: (folderPath: string) => void;
   /** Chart height (calculated dynamically based on folder count) */
   chartHeight: number;
+  /** Chart width (calculated dynamically based on container width) */
+  chartWidth: number;
 }
 
 /**
@@ -44,6 +46,7 @@ export const renderReleaseVisualization = ({
   tooltipRef,
   onFolderClick,
   chartHeight,
+  chartWidth,
 }: ReleaseVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
 
@@ -64,7 +67,7 @@ export const renderReleaseVisualization = ({
   const xScale = d3
     .scaleBand()
     .domain(uniqueReleases.map(String))
-    .range([DIMENSIONS.margin.left, DIMENSIONS.width - DIMENSIONS.margin.right])
+    .range([DIMENSIONS.margin.left, chartWidth - DIMENSIONS.margin.right])
     .paddingInner(0.1);
 
   const yScale = d3
@@ -99,7 +102,7 @@ export const renderReleaseVisualization = ({
       const isFile = folderPath.includes(".");
       return isFile ? "folder-label" : "folder-label clickable";
     })
-    .attr("x", DIMENSIONS.width - DIMENSIONS.margin.right + 10)
+    .attr("x", chartWidth - DIMENSIONS.margin.right + 10)
     .attr("y", (folderPath: string) => (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("text-anchor", "start")
     .attr("dominant-baseline", "middle")
