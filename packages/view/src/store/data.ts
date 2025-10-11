@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -10,7 +9,8 @@ type DataState = {
   selectedData: ClusterNode[];
   setData: (data: ClusterNode[]) => void;
   setFilteredData: (filteredData: ClusterNode[]) => void;
-  setSelectedData: Dispatch<SetStateAction<ClusterNode[]>>;
+  setSelectedData: (selectedData: ClusterNode[]) => void;
+  toggleSelectedData: (selected: ClusterNode, clusterId: number) => void;
 };
 
 export const useDataStore = create<DataState>()(
@@ -20,9 +20,12 @@ export const useDataStore = create<DataState>()(
     selectedData: [],
     setData: (data) => set({ data }),
     setFilteredData: (filteredData) => set({ filteredData }),
-    setSelectedData: (selectedData) =>
+    setSelectedData: (selectedData) => set({ selectedData }),
+    toggleSelectedData: (selected: ClusterNode, clusterId: number) =>
       set((state) => {
-        state.selectedData = typeof selectedData === "function" ? selectedData(state.selectedData) : selectedData;
+        const selectedIndex = state.selectedData.findIndex((data) => data.commitNodeList[0].clusterId === clusterId);
+        if (selectedIndex === -1) state.selectedData.push(selected);
+        else state.selectedData.splice(selectedIndex, 1);
       }),
   }))
 );
