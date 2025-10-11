@@ -27,3 +27,13 @@ export interface CommitItemProps {
   handleCommitIdCopy: (id: string) => () => Promise<void>;
   linkedMessage: IssueLinkedMessage;
 }
+
+export type VirtualizedItem =
+  | {
+      type: "summary";
+      data: ClusterNode["commitNodeList"];
+    }
+  | {
+      type: "commit";
+      data: Commit;
+    };
