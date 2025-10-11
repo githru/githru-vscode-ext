@@ -1,10 +1,14 @@
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 import { useDataStore } from "store";
 
-import { DIMENSIONS } from "./FolderActivityFlow.const";
+import { DIMENSIONS, calculateChartHeight } from "./FolderActivityFlow.const";
 import "./FolderActivityFlow.scss";
 import { extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
@@ -21,7 +25,6 @@ const FolderActivityFlow = () => {
     releaseGroups,
     releaseTopFolderPaths,
     navigateToFolder,
-    navigateUp,
     navigateToBreadcrumb,
     initializeRootFolders,
     getBreadcrumbs,
@@ -30,6 +33,8 @@ const FolderActivityFlow = () => {
   useEffect(() => {
     initializeRootFolders();
   }, [initializeRootFolders]);
+
+  const breadcrumbs = useMemo(() => getBreadcrumbs(), [getBreadcrumbs]);
 
   useEffect(() => {
     if (!totalData || totalData.length === 0) {
@@ -40,7 +45,9 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", DIMENSIONS.height);
+    // 폴더 개수에 따라 동적으로 높이 계산
+    const chartHeight = calculateChartHeight(releaseTopFolderPaths.length);
+    const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", chartHeight);
 
     svg.selectAll("*").remove();
 
@@ -55,7 +62,7 @@ const FolderActivityFlow = () => {
       svg
         .append("text")
         .attr("x", DIMENSIONS.width / 2)
-        .attr("y", DIMENSIONS.height / 2)
+        .attr("y", chartHeight / 2)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
         .text("No release activity data available")
@@ -70,6 +77,7 @@ const FolderActivityFlow = () => {
       releaseTopFolderPaths,
       tooltipRef,
       onFolderClick: navigateToFolder,
+      chartHeight,
     });
   }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
 
@@ -82,36 +90,35 @@ const FolderActivityFlow = () => {
         </div>
       </div>
 
-      <div className="folder-activity-flow__breadcrumb">
-        {getBreadcrumbs().map((crumb, index) => (
-          <span key={crumb}>
-            {index > 0 && <span className="separator"> / </span>}
-            <span
-              className={index === getBreadcrumbs().length - 1 ? "current" : "clickable"}
-              onClick={() => navigateToBreadcrumb(index, getBreadcrumbs().length)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  navigateToBreadcrumb(index, getBreadcrumbs().length);
-                }
-              }}
-              role="button"
-              tabIndex={index === getBreadcrumbs().length - 1 ? -1 : 0}
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+        className="folder-activity-flow__breadcrumb"
+      >
+        {breadcrumbs.map((crumb, index) => {
+          const isLast = index === breadcrumbs.length - 1;
+
+          if (isLast) {
+            return (
+              <Typography key={crumb}>
+                {crumb}
+              </Typography>
+            );
+          }
+
+          return (
+            <Link
+              key={crumb}
+              underline="hover"
+              component="button"
+              onClick={() => navigateToBreadcrumb(index, breadcrumbs.length)}
+              sx={{ cursor: "pointer" }}
             >
               {crumb}
-            </span>
-          </span>
-        ))}
-        {currentPath !== "" && (
-          <button
-            type="button"
-            className="folder-activity-flow__back-btn"
-            onClick={navigateUp}
-          >
-            ← Up
-          </button>
-        )}
-      </div>
+            </Link>
+          );
+        })}
+      </Breadcrumbs>
       <svg
         className="folder-activity-flow__chart"
         ref={svgRef}
