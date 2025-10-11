@@ -46,15 +46,12 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    // 컨테이너 너비 계산 (패딩 50px * 2 = 100px 제외)
-    const containerWidth = containerRef.current?.clientWidth || DIMENSIONS.width;
-    const chartWidth = containerWidth - 100; // 좌우 패딩 50px씩 제외
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", (containerRef.current?.clientWidth || DIMENSIONS.width) - 100)
+      .attr("height", DIMENSIONS.height);
 
-    // 차트 높이 고정
-    const chartHeight = DIMENSIONS.height;
-    const svg = d3.select(svgRef.current).attr("width", chartWidth).attr("height", chartHeight);
-
-    // 실제로 activity가 있는 폴더만 카운트
+    //activity가 있는 폴더 카운트
     const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
     const releaseContributorActivities = extractReleaseBasedContributorActivities(
       totalData,
@@ -65,10 +62,11 @@ const FolderActivityFlow = () => {
     svg.selectAll("*").remove();
 
     if (releaseContributorActivities.length === 0) {
+      const chartWidth = (containerRef.current?.clientWidth || DIMENSIONS.width) - 100;
       svg
         .append("text")
         .attr("x", chartWidth / 2)
-        .attr("y", chartHeight / 2)
+        .attr("y", DIMENSIONS.height / 2)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
         .text("No release activity data available")
@@ -83,13 +81,16 @@ const FolderActivityFlow = () => {
       releaseTopFolderPaths,
       tooltipRef,
       onFolderClick: navigateToFolder,
-      chartHeight,
-      chartWidth,
+      chartHeight: DIMENSIONS.height,
+      chartWidth: (containerRef.current?.clientWidth || DIMENSIONS.width) - 100,
     });
   }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
 
   return (
-    <div className="folder-activity-flow" ref={containerRef}>
+    <div
+      className="folder-activity-flow"
+      ref={containerRef}
+    >
       <div className="folder-activity-flow__header">
         <div>
           <p className="folder-activity-flow__title">Contributors Folder Activity Flow</p>
@@ -106,11 +107,7 @@ const FolderActivityFlow = () => {
           const isLast = index === breadcrumbs.length - 1;
 
           if (isLast) {
-            return (
-              <Typography key={crumb}>
-                {crumb}
-              </Typography>
-            );
+            return <Typography key={crumb}>{crumb}</Typography>;
           }
 
           return (
