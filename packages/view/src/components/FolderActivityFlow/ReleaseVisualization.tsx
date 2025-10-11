@@ -24,6 +24,8 @@ interface ReleaseVisualizationProps {
   tooltipRef: React.RefObject<HTMLDivElement>;
   /** Callback when folder is clicked */
   onFolderClick: (folderPath: string) => void;
+  /** Chart height (calculated dynamically based on folder count) */
+  chartHeight: number;
 }
 
 /**
@@ -41,6 +43,7 @@ export const renderReleaseVisualization = ({
   releaseTopFolderPaths,
   tooltipRef,
   onFolderClick,
+  chartHeight,
 }: ReleaseVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
 
@@ -63,7 +66,7 @@ export const renderReleaseVisualization = ({
   const yScale = d3
     .scaleBand()
     .domain(releaseTopFolderPaths)
-    .range([DIMENSIONS.margin.top, DIMENSIONS.height - DIMENSIONS.margin.bottom])
+    .range([DIMENSIONS.margin.top, chartHeight - DIMENSIONS.margin.bottom])
     .paddingInner(0.2);
 
   const sizeScale = d3
@@ -146,7 +149,7 @@ export const renderReleaseVisualization = ({
   mainGroup
     .append("g")
     .attr("class", "x-axis")
-    .attr("transform", `translate(0, ${DIMENSIONS.height - DIMENSIONS.margin.bottom})`)
+    .attr("transform", `translate(0, ${chartHeight - DIMENSIONS.margin.bottom})`)
     .call(xAxis);
 
   // 릴리즈별 노드 위치 계산
