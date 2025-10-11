@@ -56,32 +56,21 @@
 
   &__breadcrumb {
     padding-left: 50px;
-    font-size: $font-size-body;
-    min-height: 24px; // 최소 높이 고정
-    display: flex;
-    align-items: center;
-
-    .MuiBreadcrumbs-ol {
-      flex-wrap: nowrap; // 줄바꿈 방지
-    }
 
     .MuiBreadcrumbs-separator {
       color: $color-white;
-      margin: 0 4px; // 고정 간격
     }
 
     .MuiTypography-root {
       color: $color-white;
       font-size: $font-size-body;
       font-weight: $font-weight-regular;
-      white-space: nowrap; // 텍스트 줄바꿈 방지
     }
 
     .MuiLink-root {
       color: $color-white;
       font-size: $font-size-body;
       font-weight: $font-weight-regular;
-      white-space: nowrap; // 텍스트 줄바꿈 방지
       text-decoration: none;
 
       &:hover {
@@ -92,7 +81,6 @@
 
     svg {
       color: $color-light-gray;
-      display: block; // 인라인 간격 제거
     }
   }
 
