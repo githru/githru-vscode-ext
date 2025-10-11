@@ -48,13 +48,18 @@
 
   &__title-icon {
     font-size: var(--title-icon-size);
-    width: 1em;
-    height: 1em;
+    width: var(--title-icon-size);
+    height: var(--title-icon-size);
+    transform: translateY(-2px);
     color: $color-white;
+
+    &.MuiSvgIcon-root {
+      font-size: var(--title-icon-size);
+    }
   }
 
   &__title-text {
-    display: inline-flex;
+    display: flex;
     align-items: center;
   }
 
@@ -65,7 +70,8 @@
   }
 
   &__breadcrumb {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     margin-bottom: 0.5rem;
 
     .MuiBreadcrumbs-separator {
