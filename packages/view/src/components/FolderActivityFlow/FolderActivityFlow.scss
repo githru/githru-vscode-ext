@@ -89,6 +89,7 @@
       font-size: $font-size-body;
       font-weight: $font-weight-regular;
       text-decoration: none;
+      cursor: pointer;
 
       &:hover {
         color: $color-white;

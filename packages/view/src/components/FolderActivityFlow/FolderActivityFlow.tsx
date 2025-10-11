@@ -173,7 +173,6 @@ const FolderActivityFlow = () => {
                 underline="none"
                 component="button"
                 onClick={() => navigateToBreadcrumb(index, breadcrumbs.length)}
-                sx={{ cursor: "pointer" }}
               >
                 {crumb}
               </Link>
