@@ -5,7 +5,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
 
 import { useDataStore } from "store";
 
@@ -92,8 +92,7 @@ const FolderActivityFlow = () => {
 
     const firstReleaseLabel = resolvedTags[0] || "...";
     const lastReleaseLabel = resolvedTags[resolvedTags.length - 1] || firstReleaseLabel;
-    const rangeLabel =
-      resolvedTags.length <= 1 ? firstReleaseLabel : `${firstReleaseLabel} to ${lastReleaseLabel}`;
+    const rangeLabel = resolvedTags.length <= 1 ? firstReleaseLabel : `${firstReleaseLabel} to ${lastReleaseLabel}`;
 
     return {
       topContributorName: mostActiveContributor || null,
@@ -183,10 +182,8 @@ const FolderActivityFlow = () => {
         </Breadcrumbs>
 
         <div className="folder-activity-flow__title">
-          <AutoAwesomeIcon className="folder-activity-flow__title-icon" />
-          <span className="folder-activity-flow__title-text">
-            Top contributor is {topContributorLabel}
-          </span>
+          <WorkspacePremiumRoundedIcon className="folder-activity-flow__title-icon" />
+          <span className="folder-activity-flow__title-text">Top contributor is {topContributorLabel}</span>
         </div>
 
         <div className="folder-activity-flow__subtitle">{releaseRangeLabel}</div>
