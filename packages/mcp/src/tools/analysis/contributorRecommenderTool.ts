@@ -25,7 +25,7 @@ export function registerContributorRecommenderTool(server: McpServer) {
         try {
           I18n.setLocale(locale || 'en');
 
-          const { ContributorRecommender } = await import('../../tool/contributorRecommender.js');
+          const { ContributorRecommender } = await import('../../core/contributorRecommender.js');
           const recommender = new ContributorRecommender({
               repoPath,
               pr,
