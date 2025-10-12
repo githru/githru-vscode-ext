@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { renderStorylineUI } from "../../tool/storylineRenderer.js";
+import { renderStorylineUI } from "../../core/storylineRenderer.js";
 
 export function registerStorylineUITool(server: McpServer) {
     server.registerTool(

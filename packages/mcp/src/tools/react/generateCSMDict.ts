@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { generateNewViz } from "../../tool/generateNewViz.js";
+import { generateNewViz } from "../../core/generateNewViz.js";
 import { Config } from "../../common/config.js";
 
 export function registerGenerateCsmDictTool(server: McpServer) {

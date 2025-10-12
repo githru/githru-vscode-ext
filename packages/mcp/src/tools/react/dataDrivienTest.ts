@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { testDataDrivenComponents } from "../../tool/dataDrivenComponentTester.js";
+import { testDataDrivenComponents } from "../../core/dataDrivenComponentTester.js";
 import type { DataDrivenComponentInputs } from "../../common/types.js";
 
 export function registerDataDrivenComponentTestTool(server: McpServer) {

@@ -26,7 +26,7 @@ export function registerFeatureImpactTool(server: McpServer) {
         try {
         I18n.setLocale(locale || 'en');
         
-        const { McpReportGenerator } = await import("../../tool/featureImpactAnalyzer.js");
+        const { McpReportGenerator } = await import("../../core/featureImpactAnalyzer.js");
         const analyzeFeatureImpact = new McpReportGenerator({ repoUrl, prNumber, locale });
 
         const payload = await analyzeFeatureImpact.generateWithOutlierRatings();
