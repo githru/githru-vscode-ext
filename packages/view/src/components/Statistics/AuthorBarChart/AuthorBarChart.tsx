@@ -57,16 +57,22 @@ const AuthorBarChart = () => {
     const svg = d3.select(svgRef.current).attr("width", DIMENSIONS.width).attr("height", DIMENSIONS.height);
     const tooltip = d3.select(tooltipRef.current);
 
-    svg.selectAll("*").remove();
-
     const totalMetricValues = data.reduce((acc, item) => acc + item[metric], 0);
 
     const xAxisGroup = svg
-      .append("g")
+      .selectAll(".x-axis")
+      .data([null])
+      .join("g")
       .attr("class", "author-bar-chart__axis x-axis")
       .style("transform", `translateY(${pxToRem(DIMENSIONS.height)})`);
-    const yAxisGroup = svg.append("g").attr("class", "author-bar-chart__axis y-axis");
-    const barGroup = svg.append("g").attr("class", "author-bar-chart__container");
+
+    const yAxisGroup = svg.selectAll(".y-axis").data([null]).join("g").attr("class", "author-bar-chart__axis y-axis");
+
+    const barGroup = svg
+      .selectAll(".author-bar-chart__container")
+      .data([null])
+      .join("g")
+      .attr("class", "author-bar-chart__container");
 
     // Scales
     const xScale = d3
@@ -84,13 +90,15 @@ const AuthorBarChart = () => {
 
     // Axis
     const xAxis = d3.axisBottom(xScale).ticks(0).tickSizeInner(0).tickSizeOuter(0);
-    xAxisGroup.call(xAxis);
+    xAxisGroup.call(xAxis as any);
 
     const yAxis = d3.axisLeft(yScale).ticks(10).tickFormat(convertNumberFormat).tickSizeOuter(0);
-    yAxisGroup.call(yAxis);
+    yAxisGroup.call(yAxis as any);
 
     xAxisGroup
-      .append("text")
+      .selectAll(".x-axis__label")
+      .data([null])
+      .join("text")
       .attr("class", "x-axis__label")
       .style("transform", `translate(${pxToRem(DIMENSIONS.width / 2)}, ${pxToRem(DIMENSIONS.margins - 10)})`)
       .text(`${metric} # / Total ${metric} # (%)`);
@@ -159,48 +167,88 @@ const AuthorBarChart = () => {
     };
 
     // Draw bars
-    barGroup
-      .selectAll("rect")
-      .data(data)
+    const bars = barGroup
+      .selectAll(".author-bar-chart__bar")
+      .data(data, (d: any) => d?.name || "")
       .join(
-        (enter) =>
-          enter
-            .append("g")
-            .attr("class", "author-bar-chart__bar")
+        (enter) => {
+          const barElement = enter.append("g").attr("class", "author-bar-chart__bar");
+
+          // 각 바 그룹에 rect 추가
+          barElement
             .append("rect")
             .attr("width", xScale.bandwidth())
             .attr("height", 0)
-            .attr("x", (d) => xScale(d.name) || 0)
-            .attr("y", DIMENSIONS.height),
-        (update) => update,
-        (exit) => exit.attr("height", 0).attr("y", 0).remove()
-      )
-      .on("mouseover", handleMouseOver)
-      .on("mousemove", handleMouseMove)
-      .on("mouseout", handleMouseOut)
-      .on("click", handleClickBar)
+            .attr("x", (d: any) => xScale(d?.name) || 0)
+            .attr("y", DIMENSIONS.height)
+            .on("mouseover", handleMouseOver)
+            .on("mousemove", handleMouseMove)
+            .on("mouseout", handleMouseOut)
+            .on("click", handleClickBar);
+
+          return barElement;
+        },
+        (update) => {
+          update
+            .select("rect")
+            .on("mouseover", handleMouseOver)
+            .on("mousemove", handleMouseMove)
+            .on("mouseout", handleMouseOut)
+            .on("click", handleClickBar);
+
+          return update;
+        },
+        (exit) => {
+          exit.select("rect").transition().duration(250).attr("height", 0).attr("y", DIMENSIONS.height);
+
+          return exit.transition().duration(250).remove();
+        }
+      );
+
+    bars
+      .select("rect")
       .transition()
       .duration(500)
       .attr("width", xScale.bandwidth())
-      .attr("height", (d: AuthorDataType) => DIMENSIONS.height - yScale(d[metric]))
-      .attr("x", (d: AuthorDataType) => xScale(d.name) || 0)
-      .attr("y", (d: AuthorDataType) => yScale(d[metric]));
+      .attr("height", (d: any) => DIMENSIONS.height - yScale(d?.[metric] || 0))
+      .attr("x", (d: any) => xScale(d?.name) || 0)
+      .attr("y", (d: any) => yScale(d?.[metric] || 0));
 
     // Draw author thumbnails
-    const barElements = d3.selectAll(".author-bar-chart__bar").nodes();
-    if (!barElements.length) return;
+    bars.selectAll("image.author-bar-chart__profile-image").remove();
 
-    barElements.forEach(async (barElement, i) => {
-      const bar = d3.select(barElement).datum(data[i]);
-      const profileImgSrc: string = await getAuthorProfileImgSrc(data[i].name).then((res: AuthorInfo) => res.src);
-      bar
+    // 새로운 이미지들 추가 (비동기 로딩)
+    const imagePromises = data.map(async (d: AuthorDataType) => {
+      if (!d?.name) return null;
+
+      try {
+        const profileImgSrc: string = await getAuthorProfileImgSrc(d.name).then((res: AuthorInfo) => res.src);
+        return { name: d.name, src: profileImgSrc };
+      } catch (error) {
+        console.warn(`Failed to load profile image for ${d.name}:`, error);
+        return null;
+      }
+    });
+
+    // 모든 이미지 로딩 완료 후 한번에 표시
+    Promise.all(imagePromises).then((imageResults) => {
+      const validImages = imageResults.filter((result) => result !== null);
+
+      bars
+        .selectAll("image.author-bar-chart__profile-image")
+        .data(validImages, (d: any) => d?.name || "")
+        .enter()
         .append("image")
         .attr("class", "author-bar-chart__profile-image")
-        .attr("xlink:href", profileImgSrc ?? "")
-        .attr("x", (d: AuthorDataType) => (xScale(d.name) ?? 0) + xScale.bandwidth() / 2 - 7)
+        .attr("x", (d: any) => (xScale(d?.name) ?? 0) + xScale.bandwidth() / 2 - 7)
         .attr("y", 204)
         .attr("width", 14)
-        .attr("height", 14);
+        .attr("height", 14)
+        .attr("xlink:href", (d: any) => d?.src ?? "")
+        .style("opacity", 0)
+        .transition()
+        .duration(300)
+        .style("opacity", 1);
     });
   }, [
     data,
