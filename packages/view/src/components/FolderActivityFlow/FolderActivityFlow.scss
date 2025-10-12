@@ -147,12 +147,12 @@
       }
 
       .insertions {
-        color: #1fc3b5;
+        color: var(--color-success);
         display: inline;
       }
 
       .deletions {
-        color: #e84b6b;
+        color: var(--color-failed);
         display: inline;
       }
 
@@ -174,7 +174,7 @@
     transition: fill 0.2s ease;
 
     &:hover {
-      fill: #757880;
+      fill: $color-medium-gray;
     }
   }
 
