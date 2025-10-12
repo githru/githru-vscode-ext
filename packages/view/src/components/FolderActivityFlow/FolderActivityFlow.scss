@@ -14,6 +14,10 @@
   --chart-color-9: #3a4776;  // mono-sec
   --chart-color-10: #aa4b72; // mono-fai
 
+  --title-left-offset: 30px;
+  --title-icon-size: 34px;
+  --title-gap: 4px;
+
 
   padding: 1rem;
   margin-bottom: 2rem;
@@ -21,41 +25,54 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  &__header {
+  &__head {
+    margin-top: 40px;
+    margin-left: var(--title-left-offset);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    gap: 0.25rem;
   }
 
   &__title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    column-gap: var(--title-gap);
     color: $color-white;
+    font-size: 34px;
+    letter-spacing: 0.25px;
+    line-height: 42px;
+    font-weight: $font-weight-regular;
+    white-space: nowrap;
+  }
+
+  &__title-icon {
+    font-size: var(--title-icon-size);
+    width: var(--title-icon-size);
+    height: var(--title-icon-size);
+    transform: translateY(-2px);
+    color: $color-white;
+
+    &.MuiSvgIcon-root {
+      font-size: var(--title-icon-size);
+    }
+  }
+
+  &__title-text {
+    display: flex;
+    align-items: center;
   }
 
   &__subtitle {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.875rem;
-    color: $color-light-gray;
-  }
-
-  &__mode-toggle {
-    transition: all 0.2s ease;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
+    color: $color-white;
+    font-size: 20px;
+    font-weight: $font-weight-regular;
   }
 
   &__breadcrumb {
-    padding-left: 50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
 
     .MuiBreadcrumbs-separator {
       color: $color-white;
@@ -72,6 +89,7 @@
       font-size: $font-size-body;
       font-weight: $font-weight-regular;
       text-decoration: none;
+      cursor: pointer;
 
       &:hover {
         color: $color-white;
