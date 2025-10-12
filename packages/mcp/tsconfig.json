@@ -11,6 +11,11 @@
         "jsx": "react-jsx",
         "allowSyntheticDefaultImports": true,
         "baseUrl": "src",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "paths": {
+          "@octokit/*": ["../../node_modules/@octokit/*"]
+        }
     },
     "include": ["src"]
 }
