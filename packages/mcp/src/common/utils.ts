@@ -4,26 +4,15 @@ import relativeTime from "dayjs/plugin/relativeTime.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import * as cp from "child_process";
 import type { GitHubRepoInfo } from "./types.js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
 // Git 로그 포맷 (vscode와 동일)
 const GIT_LOG_FORMAT =
-  "%n%n" +
-  [
-    "%H",
-    "%P",
-    "%D",
-    "%an",
-    "%ae",
-    "%ad",
-    "%cn",
-    "%ce",
-    "%cd",
-    "%w(0,0,4)%s",
-    "%b",
-  ].join("%n");
+  "%n%n" + ["%H", "%P", "%D", "%an", "%ae", "%ad", "%cn", "%ce", "%cd", "%w(0,0,4)%s", "%b"].join("%n");
 
 function resolveSpawnOutput(cmd: cp.ChildProcess) {
   return Promise.all([
@@ -62,26 +51,30 @@ export const GitHubUtils = {
       .replace(/^https?:\/\/github\.com\//, "")
       .replace(/\.git$/, "")
       .replace(/\/+$/, "");
-    
+
     const [owner, repo] = cleaned.split("/");
-    
+
     if (!owner || !repo) {
-      throw new Error(`Invalid repository path: ${repoUrlOrPath}. Expected format: "owner/repo" or "https://github.com/owner/repo"`);
+      throw new Error(
+        `Invalid repository path: ${repoUrlOrPath}. Expected format: "owner/repo" or "https://github.com/owner/repo"`
+      );
     }
-    
+
     return { owner, repo };
   },
 
   parseTimeRange(since?: string, until?: string): { since: string; until: string } {
     const now = dayjs();
 
-    let sinceDate = now.subtract(90, 'day');
+    let sinceDate = now.subtract(90, "day");
     if (since) {
       const parsedSince = this.parseFlexibleDate(since);
       if (parsedSince) {
         sinceDate = parsedSince;
       } else {
-        throw new Error(`Invalid date format: ${since}. Try formats like "30 days ago", "2024-01-01", "last month", "yesterday", or "30d"`);
+        throw new Error(
+          `Invalid date format: ${since}. Try formats like "30 days ago", "2024-01-01", "last month", "yesterday", or "30d"`
+        );
       }
     }
 
@@ -91,7 +84,9 @@ export const GitHubUtils = {
       if (parsedUntil) {
         untilDate = parsedUntil;
       } else {
-        throw new Error(`Invalid date format: ${until}. Try formats like "yesterday", "2024-01-01", "last week", or "today"`);
+        throw new Error(
+          `Invalid date format: ${until}. Try formats like "yesterday", "2024-01-01", "last week", or "today"`
+        );
       }
     }
 
@@ -106,14 +101,14 @@ export const GitHubUtils = {
     const now = dayjs();
 
     const patterns = [
-      { regex: /^(\d+)\s*days?\s*ago$/i, unit: 'day' },
-      { regex: /^(\d+)\s*weeks?\s*ago$/i, unit: 'week' },
-      { regex: /^(\d+)\s*months?\s*ago$/i, unit: 'month' },
-      { regex: /^(\d+)\s*years?\s*ago$/i, unit: 'year' },
-      { regex: /^(\d+)d$/i, unit: 'day' },
-      { regex: /^(\d+)w$/i, unit: 'week' },
-      { regex: /^(\d+)m$/i, unit: 'month' },
-      { regex: /^(\d+)y$/i, unit: 'year' },
+      { regex: /^(\d+)\s*days?\s*ago$/i, unit: "day" },
+      { regex: /^(\d+)\s*weeks?\s*ago$/i, unit: "week" },
+      { regex: /^(\d+)\s*months?\s*ago$/i, unit: "month" },
+      { regex: /^(\d+)\s*years?\s*ago$/i, unit: "year" },
+      { regex: /^(\d+)d$/i, unit: "day" },
+      { regex: /^(\d+)w$/i, unit: "week" },
+      { regex: /^(\d+)m$/i, unit: "month" },
+      { regex: /^(\d+)y$/i, unit: "year" },
     ];
 
     for (const { regex, unit } of patterns) {
@@ -127,11 +122,11 @@ export const GitHubUtils = {
     }
 
     const quickFormats = {
-      'yesterday': () => now.subtract(1, 'day'),
-      'today': () => now,
-      'last week': () => now.subtract(1, 'week'),
-      'last month': () => now.subtract(1, 'month'),
-      'last year': () => now.subtract(1, 'year'),
+      yesterday: () => now.subtract(1, "day"),
+      today: () => now,
+      "last week": () => now.subtract(1, "week"),
+      "last month": () => now.subtract(1, "month"),
+      "last year": () => now.subtract(1, "year"),
     };
 
     if (quickFormats[str as keyof typeof quickFormats]) {
@@ -241,7 +236,7 @@ export const GitHubUtils = {
 
   async cloneRepository(githubToken: string, owner: string, repo: string, targetPath: string): Promise<void> {
     const repoUrl = `https://${githubToken}@github.com/${owner}/${repo}.git`;
-    
+
     const [status, stdout, stderr] = await resolveSpawnOutput(
       cp.spawn("git", ["clone", repoUrl, targetPath], {
         env: Object.assign({}, process.env),
@@ -255,14 +250,14 @@ export const GitHubUtils = {
 
   async getDefaultBranch(githubToken: string, owner: string, repo: string): Promise<string> {
     const octokit = this.createGitHubAPIClient(githubToken);
-    
+
     try {
       const repoInfo = await octokit.repos.get({ owner, repo });
       return repoInfo.data.default_branch;
     } catch (error: any) {
       throw new Error(`Failed to get default branch: ${error.message}`);
     }
-  }
+  },
 };
 
 export const CommonUtils = {
@@ -280,9 +275,26 @@ export const CommonUtils = {
     return chunks;
   },
   safeParseInt(value: string | number): number {
-    if (typeof value === 'number') return value;
+    if (typeof value === "number") return value;
     const parsed = parseInt(value);
     return isNaN(parsed) ? 0 : parsed;
-  }
+  },
 };
 
+export function getFilename(): string {
+  if (typeof __filename !== "undefined") return __filename;
+  try {
+    const metaUrl = (0, eval)("import.meta.url");
+    if (metaUrl) return fileURLToPath(metaUrl);
+  } catch {}
+  return path.join(process.cwd(), "index.js");
+}
+
+export function getDirname(): string {
+  if (typeof __dirname !== "undefined") return __dirname;
+  try {
+    const metaUrl = (0, eval)("import.meta.url");
+    if (metaUrl) return path.dirname(fileURLToPath(metaUrl));
+  } catch {}
+  return process.cwd();
+}
