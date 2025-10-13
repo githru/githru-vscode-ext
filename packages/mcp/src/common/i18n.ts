@@ -50,7 +50,7 @@ class I18nManager {
     }
 
     try {
-      const localePath = path.join(__dirname, `../resources/locales/${locale}.json`);
+      const localePath = path.join(LOCALES_DIR, `${locale}.json`);
       const localeData = fs.readFileSync(localePath, "utf-8");
       this.translations = JSON.parse(localeData);
     } catch (error) {
