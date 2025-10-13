@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import type React from "react";
 
-import { DIMENSIONS } from "./FolderActivityFlow.const";
+import { DIMENSIONS, LABEL_COLUMN_PADDING } from "./FolderActivityFlow.const";
 import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
 import {
   calculateReleaseNodePosition,
@@ -15,7 +15,7 @@ import {
  */
 interface ReleaseVisualizationProps {
   /** D3 SVG selection to render into */
-  svg: d3.Selection<SVGSVGElement | null, unknown, null, undefined>;
+  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   /** Contributor activities grouped by release */
   releaseContributorActivities: ReleaseContributorActivity[];
   /** Top folder paths to display as lanes */
@@ -64,7 +64,8 @@ export const renderReleaseVisualization = ({
     .scaleBand()
     .domain(uniqueReleases.map(String))
     .range([DIMENSIONS.margin.left, chartWidth - DIMENSIONS.margin.right])
-    .paddingInner(0.1);
+    .paddingInner(0.1)
+    .paddingOuter(0.05);
 
   const yScale = d3
     .scaleBand()
@@ -98,7 +99,7 @@ export const renderReleaseVisualization = ({
       const isFile = folderPath.includes(".");
       return isFile ? "folder-label" : "folder-label clickable";
     })
-    .attr("x", chartWidth - DIMENSIONS.margin.right + 10)
+    .attr("x", chartWidth - DIMENSIONS.margin.right + LABEL_COLUMN_PADDING)
     .attr("y", (folderPath: string) => (yScale(folderPath) || 0) + yScale.bandwidth() / 2)
     .attr("text-anchor", "start")
     .attr("dominant-baseline", "middle")

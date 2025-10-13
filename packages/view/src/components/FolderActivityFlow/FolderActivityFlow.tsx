@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
@@ -9,7 +9,7 @@ import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRou
 
 import { useDataStore } from "store";
 
-import { DIMENSIONS } from "./FolderActivityFlow.const";
+import { DIMENSIONS, getResponsiveChartWidth } from "./FolderActivityFlow.const";
 import "./FolderActivityFlow.scss";
 import { extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
@@ -21,6 +21,7 @@ const FolderActivityFlow = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [chartWidth, setChartWidth] = useState(0);
 
   const {
     currentPath,
@@ -37,6 +38,32 @@ const FolderActivityFlow = () => {
   }, [initializeRootFolders]);
 
   const breadcrumbs = useMemo(() => getBreadcrumbs(), [getBreadcrumbs]);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      const containerWidth = containerRef.current?.clientWidth;
+      setChartWidth(getResponsiveChartWidth(containerWidth));
+    };
+
+    updateWidth();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(() => updateWidth());
+      const containerElement = containerRef.current;
+      if (containerElement) {
+        observer.observe(containerElement);
+      }
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+
+    window.addEventListener("resize", updateWidth);
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   const { topContributorName, releaseRangeLabel } = useMemo(() => {
     if (!totalData || totalData.length === 0 || releaseTopFolderPaths.length === 0) {
@@ -109,9 +136,13 @@ const FolderActivityFlow = () => {
       return;
     }
 
+    if (!svgRef.current || chartWidth <= 0) {
+      return;
+    }
+
     const svg = d3
       .select(svgRef.current)
-      .attr("width", (containerRef.current?.clientWidth || DIMENSIONS.width) - 100)
+      .attr("width", chartWidth)
       .attr("height", DIMENSIONS.height);
 
     //activity가 있는 폴더 카운트
@@ -125,7 +156,6 @@ const FolderActivityFlow = () => {
     svg.selectAll("*").remove();
 
     if (releaseContributorActivities.length === 0) {
-      const chartWidth = (containerRef.current?.clientWidth || DIMENSIONS.width) - 100;
       svg
         .append("text")
         .attr("x", chartWidth / 2)
@@ -145,7 +175,7 @@ const FolderActivityFlow = () => {
       tooltipRef,
       onFolderClick: navigateToFolder,
     });
-  }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath]);
+  }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath, chartWidth]);
 
   const topContributorLabel = topContributorName || "...";
 

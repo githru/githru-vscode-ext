@@ -20,10 +20,9 @@
 
 
   padding: 1rem;
-  margin-bottom: 2rem;
   background: $color-background;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
 
   &__head {
     margin-top: 40px;
@@ -105,8 +104,6 @@
   &__chart {
     display: block;
     width: 100%;
-    padding: 0 50px;
-    box-sizing: border-box;
     cursor: grab;
     background: $color-background;
     overflow: visible;
@@ -150,12 +147,12 @@
       }
 
       .insertions {
-        color: #1fc3b5;
+        color: var(--color-success);
         display: inline;
       }
 
       .deletions {
-        color: #e84b6b;
+        color: var(--color-failed);
         display: inline;
       }
 
@@ -177,7 +174,7 @@
     transition: fill 0.2s ease;
 
     &:hover {
-      fill: #757880;
+      fill: $color-medium-gray;
     }
   }
 
