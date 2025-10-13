@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerGenerateCsmDictTool } from "./generateCsmDict.js";
+import { registerGenerateCsmDictTool } from "./generateCSMDict.js";
 import { registerReactComponentTestTool } from "./reactComponentTest.js";
 import { registerDataDrivenComponentTestTool } from "./dataDrivienTest.js";
 
