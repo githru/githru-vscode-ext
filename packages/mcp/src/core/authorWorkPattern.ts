@@ -1,13 +1,12 @@
 import * as fs from "fs/promises";
 import * as path from "path";
-import { fileURLToPath } from "url";
+import { getDirname } from "../common/utils.js";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import { Config } from "../common/config.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = getDirname();
 
 type CommitListItem = RestEndpointMethodTypes["repos"]["listCommits"]["response"]["data"][number];
 type GetCommitResponse = RestEndpointMethodTypes["repos"]["getCommit"]["response"]["data"];

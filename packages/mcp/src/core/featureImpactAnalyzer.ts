@@ -3,21 +3,21 @@ import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import * as fs from "fs";
 import * as path from "path";
-import { fileURLToPath } from "url";
+import { getDirname } from "../common/utils.js";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 import { Config } from "../common/config.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = getDirname();
 
 async function retry<T>(fn: () => Promise<T>, tries = 3, baseMs = 500): Promise<T> {
   let lastErr: any;
-  for (let i=0; i<tries; i++) {
-    try { return await fn(); }
-    catch (e:any) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fn();
+    } catch (e: any) {
       lastErr = e;
       const ms = baseMs * Math.pow(2, i);
-      await new Promise(r => setTimeout(r, ms));
+      await new Promise((r) => setTimeout(r, ms));
     }
   }
   throw lastErr;
@@ -28,9 +28,9 @@ function robustZScores(values: number[]) {
   if (!arr.length) return [];
   const sorted = arr.slice().sort((a, b) => a - b);
   const med = quantile(sorted, 0.5);
-  const absDevs = arr.map(v => Math.abs(v - med)).sort((a, b) => a - b);
+  const absDevs = arr.map((v) => Math.abs(v - med)).sort((a, b) => a - b);
   const mad = quantile(absDevs, 0.5) || 1e-9;
-  return arr.map(v => (v - med) / (1.4826 * mad));
+  return arr.map((v) => (v - med) / (1.4826 * mad));
 }
 
 function quantile(sorted: number[], q: number) {
@@ -44,8 +44,13 @@ function quantile(sorted: number[], q: number) {
   return sorted[base];
 }
 
-function thresholdsP05P95(valuesOrSorted: number[], alreadySorted=false) {
-  const arr = alreadySorted ? valuesOrSorted : valuesOrSorted.filter(Number.isFinite).slice().sort((a,b)=>a-b);
+function thresholdsP05P95(valuesOrSorted: number[], alreadySorted = false) {
+  const arr = alreadySorted
+    ? valuesOrSorted
+    : valuesOrSorted
+        .filter(Number.isFinite)
+        .slice()
+        .sort((a, b) => a - b);
   return { p05: quantile(arr, 0.05), p95: quantile(arr, 0.95), n: arr.length };
 }
 
@@ -80,16 +85,22 @@ export class McpReportGenerator {
   private async _getGitDataForPR(owner: string, repo: string, prNumber: number) {
     const [commits, files] = await Promise.all([
       this.octokit.paginate(this.octokit.pulls.listCommits, {
-        owner, repo, pull_number: prNumber, per_page: 100
+        owner,
+        repo,
+        pull_number: prNumber,
+        per_page: 100,
       }),
       this.octokit.paginate(this.octokit.pulls.listFiles, {
-        owner, repo, pull_number: prNumber, per_page: 100
+        owner,
+        repo,
+        pull_number: prNumber,
+        per_page: 100,
       }),
     ]);
 
-    const prFilesAll = files.map(f => f.filename);
+    const prFilesAll = files.map((f) => f.filename);
 
-    const commitsSimplified = commits.map(c => ({
+    const commitsSimplified = commits.map((c) => ({
       sha: c.sha,
       message: c.commit.message,
       authorDate: c.commit.author?.date ?? c.commit.committer?.date ?? "",
@@ -99,25 +110,25 @@ export class McpReportGenerator {
     return { commits: commitsSimplified, files: prFilesAll };
   }
 
-  private _calculateScale(commits: any[]): number { return commits.length; }
+  private _calculateScale(commits: any[]): number {
+    return commits.length;
+  }
 
   private _calculateDispersion(commits: any[]): number {
-    const changedFiles = new Set<string>(commits.flatMap(c => c.changedFiles ?? []));
-    const topLevelDirs = new Set(Array.from(changedFiles).map(f => f.split("/")[0]));
+    const changedFiles = new Set<string>(commits.flatMap((c) => c.changedFiles ?? []));
+    const topLevelDirs = new Set(Array.from(changedFiles).map((f) => f.split("/")[0]));
     return topLevelDirs.size;
   }
 
   private _calculateChaos(commits: any[]): number {
     const isFix = (msg: string) => /\b(fix|hotfix|bugfix)\b/i.test(msg ?? "");
-    const fixCount = commits.filter(c => isFix(c.message)).length;
+    const fixCount = commits.filter((c) => isFix(c.message)).length;
     return commits.length ? (fixCount / commits.length) * 100 : 0;
   }
 
   private _calculateIsolation(commits: any[], prMetadata: any): number {
     if (!commits?.length) return 0;
-    const tsList = commits
-      .map(c => new Date(c.authorDate).getTime())
-      .filter(n => Number.isFinite(n));
+    const tsList = commits.map((c) => new Date(c.authorDate).getTime()).filter((n) => Number.isFinite(n));
     if (!tsList.length) return 0;
     const firstCommitTs = Math.min(...tsList);
     const prCreationTs = new Date(prMetadata.created_at).getTime();
@@ -134,7 +145,7 @@ export class McpReportGenerator {
   }
 
   private _calculateCoupling(commits: any[]): number {
-    const allFiles = Array.from(new Set(commits.flatMap(c => c.changedFiles ?? [])));
+    const allFiles = Array.from(new Set(commits.flatMap((c) => c.changedFiles ?? [])));
     const N = allFiles.length;
     const MAX_FILES = 400;
 
@@ -166,7 +177,7 @@ export class McpReportGenerator {
     const all = Array.from(bucket.entries());
     const scores = all.map(([, s]) => s);
 
-    const sortedScores = scores.slice().sort((a,b)=>a-b);
+    const sortedScores = scores.slice().sort((a, b) => a - b);
     const { p95 } = thresholdsP05P95(sortedScores, true);
     const zs = robustZScores(scores);
 
@@ -176,12 +187,12 @@ export class McpReportGenerator {
 
     const madList = all
       .map(([path, score], i) => ({ path, score, z: Math.abs(zs[i] ?? 0) }))
-      .filter(x => x.z >= 3)
+      .filter((x) => x.z >= 3)
       .map(({ path, score }) => ({ path, score, rule: "MAD|z>=3" as const }));
 
     const seen = new Set<string>();
     const pathLongTail = [...p95List, ...madList]
-      .filter(x => (seen.has(x.path) ? false : (seen.add(x.path), true)))
+      .filter((x) => (seen.has(x.path) ? false : (seen.add(x.path), true)))
       .sort((a, b) => b.score - a.score);
 
     return { pathLongTail };
@@ -189,9 +200,7 @@ export class McpReportGenerator {
 
   async generateWithOutlierRatings() {
     const prMetadata = await this._fetchPRMetadata(this.owner, this.repo, this.prNumber);
-    const { commits, files } = await retry(
-      () => this._getGitDataForPR(this.owner, this.repo, this.prNumber)
-    );
+    const { commits, files } = await retry(() => this._getGitDataForPR(this.owner, this.repo, this.prNumber));
 
     const metrics = {
       scale: this._calculateScale(commits),
@@ -214,92 +223,96 @@ export class McpReportGenerator {
   generateReport(payload: {
     prInfo: { repoUrl: string; prNumber: number };
     metrics: {
-      scale: number; dispersion: number; chaos: number;
-      isolation: number; lag: number; coupling: number
+      scale: number;
+      dispersion: number;
+      chaos: number;
+      isolation: number;
+      lag: number;
+      coupling: number;
     };
     pathLongTail: Array<{ path: string; score: number; rule: string }>;
-    }): string {
+  }): string {
+    const { prInfo, metrics, pathLongTail } = payload;
 
-      const { prInfo, metrics, pathLongTail } = payload;
+    const htmlEscape = (s: string) =>
+      String(s ?? "").replace(
+        /[&<>"']/g,
+        (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string
+      );
 
-      const htmlEscape = (s: string) =>
-        String(s ?? "").replace(/[&<>"']/g, (ch) =>
-          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch] as string)
-        );
+    try {
+      const baseDir = path.join(__dirname, "../html");
+      const mainTplPath = path.join(baseDir, "feature-impact.html");
 
-      try {
-        const baseDir = path.join(__dirname, "../html");
-        const mainTplPath = path.join(baseDir, "feature-impact.html");
+      const title = `Feature Impact · ${prInfo.repoUrl} · PR #${prInfo.prNumber}`;
 
-        const title = `Feature Impact · ${prInfo.repoUrl} · PR #${prInfo.prNumber}`;
+      if (!fs.existsSync(mainTplPath)) {
+        throw new Error(`Missing template: ${mainTplPath}`);
+      }
 
-        if (!fs.existsSync(mainTplPath)) {
-          throw new Error(`Missing template: ${mainTplPath}`);
-        }
-
-        const rows = (pathLongTail.length
-          ? pathLongTail
-              .map((x) => {
-                const p = htmlEscape(x.path ?? "");
-                const s = Number(x.score ?? 0);
-                const r = htmlEscape(String(x.rule ?? ""));
-                return `<tr>
+      const rows = pathLongTail.length
+        ? pathLongTail
+            .map((x) => {
+              const p = htmlEscape(x.path ?? "");
+              const s = Number(x.score ?? 0);
+              const r = htmlEscape(String(x.rule ?? ""));
+              return `<tr>
                           <td>${p}</td>
                           <td class="val-right">${s}</td>
                           <td class="val-center">${r}</td>
                         </tr>`;
-              })
-              .join("")
-          : `<tr><td colspan="3" class="val-center" style="color:#777;">No long-tail items</td></tr>`);
+            })
+            .join("")
+        : `<tr><td colspan="3" class="val-center" style="color:#777;">No long-tail items</td></tr>`;
 
-        const labelsJson = JSON.stringify(pathLongTail.map((x) => x.path ?? ""));
-        const scoresJson = JSON.stringify(pathLongTail.map((x) => Number(x.score ?? 0)));
+      const labelsJson = JSON.stringify(pathLongTail.map((x) => x.path ?? ""));
+      const scoresJson = JSON.stringify(pathLongTail.map((x) => Number(x.score ?? 0)));
 
-        let template = fs.readFileSync(mainTplPath, "utf8");
-        const notesHtml = "";
-        
-        const html = replaceMapSafe(template, {
-          TITLE: htmlEscape(title),
-          METRICS_SCALE: String(metrics.scale ?? "-"),
-          METRICS_DISPERSION: String(metrics.dispersion ?? "-"),
-          METRICS_CHAOS: (Number.isFinite(metrics.chaos) ? (Number(metrics.chaos).toFixed(2)) : "-"),
-          METRICS_ISOLATION: String(metrics.isolation ?? "-"),
-          METRICS_LAG: String(metrics.lag ?? "-"),
-          METRICS_COUPLING: String(metrics.coupling ?? "-"),
-          LONG_TAIL_TABLE_ROWS: rows,
-          LONG_TAIL_LABELS_JSON: labelsJson,
-          LONG_TAIL_SCORES_JSON: scoresJson,
-          NOTES: notesHtml,
-        });
+      let template = fs.readFileSync(mainTplPath, "utf8");
+      const notesHtml = "";
 
-        return html;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error("Chart generation error:", error);
+      const html = replaceMapSafe(template, {
+        TITLE: htmlEscape(title),
+        METRICS_SCALE: String(metrics.scale ?? "-"),
+        METRICS_DISPERSION: String(metrics.dispersion ?? "-"),
+        METRICS_CHAOS: Number.isFinite(metrics.chaos) ? Number(metrics.chaos).toFixed(2) : "-",
+        METRICS_ISOLATION: String(metrics.isolation ?? "-"),
+        METRICS_LAG: String(metrics.lag ?? "-"),
+        METRICS_COUPLING: String(metrics.coupling ?? "-"),
+        LONG_TAIL_TABLE_ROWS: rows,
+        LONG_TAIL_LABELS_JSON: labelsJson,
+        LONG_TAIL_SCORES_JSON: scoresJson,
+        NOTES: notesHtml,
+      });
 
-        const errorTemplatePath = path.join(__dirname, "../html/error-chart.html");
+      return html;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Chart generation error:", error);
 
-        let errorTemplate = fs.existsSync(errorTemplatePath)
-          ? fs.readFileSync(errorTemplatePath, "utf8")
-          : `<!doctype html><meta charset="utf-8"><pre>{{ERROR_MESSAGE}}</pre>`;
+      const errorTemplatePath = path.join(__dirname, "../html/error-chart.html");
 
-        const templatePath = path.join(__dirname, "../html/feature-impact.html");
+      let errorTemplate = fs.existsSync(errorTemplatePath)
+        ? fs.readFileSync(errorTemplatePath, "utf8")
+        : `<!doctype html><meta charset="utf-8"><pre>{{ERROR_MESSAGE}}</pre>`;
 
-        const debugInfo = [
-          `Template directory exists: ${fs.existsSync(path.join(__dirname, "../html"))}`,
-          `Chart template exists: ${fs.existsSync(templatePath)}`,
-          `Error template exists: ${fs.existsSync(errorTemplatePath)}`
-        ].join("\n");
+      const templatePath = path.join(__dirname, "../html/feature-impact.html");
 
-        errorTemplate = replaceMapSafe(errorTemplate, {
-          ERROR_MESSAGE: errorMessage,
-          TEMPLATE_PATH: templatePath,
-          CURRENT_DIR: __dirname,
-          DEBUG_INFO: debugInfo,
-        });
+      const debugInfo = [
+        `Template directory exists: ${fs.existsSync(path.join(__dirname, "../html"))}`,
+        `Chart template exists: ${fs.existsSync(templatePath)}`,
+        `Error template exists: ${fs.existsSync(errorTemplatePath)}`,
+      ].join("\n");
 
-        return errorTemplate;
-      }
+      errorTemplate = replaceMapSafe(errorTemplate, {
+        ERROR_MESSAGE: errorMessage,
+        TEMPLATE_PATH: templatePath,
+        CURRENT_DIR: __dirname,
+        DEBUG_INFO: debugInfo,
+      });
+
+      return errorTemplate;
+    }
   }
 }
 
