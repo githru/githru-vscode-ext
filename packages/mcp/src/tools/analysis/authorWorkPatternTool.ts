@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { I18n } from "../../common/i18n.js";
-import { AuthorWorkPatternAnalyzer, AuthorWorkPatternArgs } from "../../tool/authorWorkPattern.js";
+import { AuthorWorkPatternAnalyzer, AuthorWorkPatternArgs } from "../../core/authorWorkPattern.js";
 
 export function registerAuthorWorkPatternTool(server: McpServer) {
   server.registerTool(
@@ -16,7 +16,6 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
         branch: z.string().optional().describe("브랜치/커밋 SHA (기본: 기본 브랜치)"),
         since: z.string().optional().describe('시작 시점 (예: "2025-09-01" 또는 "30d")'),
         until: z.string().optional().describe("종료 시점 (미지정 시 현재)"),
-        githubToken: z.string().describe("GitHub Personal Access Token"),
         locale: z.enum(["en", "ko"]).default("en").describe("응답 언어"),
         chart: z.boolean().default(false).describe("HTML 차트 리포트 반환 여부"),
       },
@@ -28,7 +27,6 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
       branch,
       since,
       until,
-      githubToken,
       locale,
       chart,
     }: AuthorWorkPatternArgs & { locale?: "en" | "ko"; chart?: boolean }) => {
@@ -41,7 +39,6 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
           branch,
           since,
           until,
-          githubToken,
           locale,
           chart,
         });

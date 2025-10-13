@@ -1,3 +1,5 @@
+import type { RestEndpointMethodTypes } from "@octokit/rest";
+
 export interface GitHubRepoInfo {
   owner: string;
   repo: string;
@@ -12,7 +14,6 @@ export interface GitHubApiInputs {
 export interface FeatureImpactAnalyzerInputs {
   repoUrl: string;
   prNumber: number;
-  githubToken: string;
   locale?: string;
 }
 export interface ContributorRecommenderInputs {
@@ -22,9 +23,8 @@ export interface ContributorRecommenderInputs {
   branch?: string;
   since?: string;
   until?: string;
-  githubToken: string;
   locale?: string;
-  chart?: boolean;
+  isChart?: boolean;
 }
 
 export interface ContributorCandidate {
@@ -47,7 +47,6 @@ export interface CSMDictGeneratorInputs {
   githubToken: string;
   baseBranchName?: string;
   locale?: string;
-  debug?: boolean;
 }
 
 export interface GitUser {
@@ -80,6 +79,26 @@ export interface CommitNode {
   stemId?: string;
   commit: CommitRaw;
 }
+
+export type CommitDict = Map<string, CommitNode>;
+
+export const CommitMessageTypeList = [
+  "build",
+  "chore",
+  "ci",
+  "docs",
+  "feat",
+  "fix",
+  "pert",
+  "refactor",
+  "revert",
+  "style",
+  "test",
+];
+
+const COMMIT_MESSAGE_TYPE = [...CommitMessageTypeList] as const;
+
+export type CommitMessageType = (typeof COMMIT_MESSAGE_TYPE)[number];
 
 export interface CSMNode {
   base: CommitNode;
@@ -176,3 +195,16 @@ export interface AuthorWorkPatternPayload {
   typeMix: Array<{ label: string; value: number }>;
   locale?: "en" | "ko";
 }
+
+export interface Stem {
+  nodes: CommitNode[];
+}
+
+export type StemDict = Map<string, Stem>;
+
+export interface PullRequest {
+  detail: RestEndpointMethodTypes["pulls"]["get"]["response"];
+  commitDetails: RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
+}
+
+export type PullRequestDict = Map<string, PullRequest>;

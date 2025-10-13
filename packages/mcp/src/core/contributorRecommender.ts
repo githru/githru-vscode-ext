@@ -10,6 +10,7 @@ import type {
   ContributorCandidate, 
   ContributorRecommendation 
 } from "../common/types.js";
+import { Config } from "../common/config.js";
 
 // ES modules에서 __dirname 대체
 const __filename = fileURLToPath(import.meta.url);
@@ -31,11 +32,14 @@ export class ContributorRecommender {
   private until: string;
 
   constructor(inputs: ContributorRecommenderInputs) {
+    const config = Config.getInstance();
+    const githubToken = config.getGithubToken();
+
     if (inputs.locale) {
       I18n.setLocale(inputs.locale);
     }
     
-    this.octokit = GitHubUtils.createGitHubAPIClient(inputs.githubToken);
+    this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);
     
     const { owner, repo } = GitHubUtils.parseRepoUrl(inputs.repoPath);
     this.owner = owner;

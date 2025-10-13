@@ -1,4 +1,4 @@
-import { AnalysisEngine } from "@githru-vscode-ext/analysis-engine";
+import { AnalysisEngine } from "../engine/analysis-engine.js";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { GitHubRepoInfo, CSMDictGeneratorInputs, CSMDictResult, AnalysisResult } from "../common/types.js";
@@ -34,7 +34,6 @@ class EngineGenerator {
       );
     }
 
-
     const tempRepoPath = `/tmp/githru-temp-${Date.now()}`;
     
     await GitHubUtils.cloneRepository(
@@ -52,18 +51,9 @@ class EngineGenerator {
     } catch (cleanupError) {
       // ignore cleanup errors
     }
-
-
-    const originalConsoleLog = console.log;
-    const originalConsoleError = console.error;
-    if (!this.inputs.debug) {
-      console.log = () => {};
-      console.error = () => {};
-    }
     
     try {
       const analysisEngine = new AnalysisEngine({
-        isDebugMode: this.inputs.debug || false,
         gitLog: this.gitLog,
         owner: this.repoInfo.owner,
         repo: this.repoInfo.repo,
@@ -73,8 +63,6 @@ class EngineGenerator {
 
       this.analysisResult = await analysisEngine.analyzeGit();
     } finally {
-      console.log = originalConsoleLog;
-      console.error = originalConsoleError;
     }
   }
 }
@@ -87,16 +75,14 @@ class NewViz {
   }
   
   async generate(): Promise<any> {
-    const { debug = false } = this.engine.inputs;
-    
     if (!this.engine.repoInfo || !this.engine.analysisResult) {
       throw new Error('Engine not initialized');
     }
 
-    return this.buildResult(debug);
+    return this.buildResult();
   }
   
-  private buildResult(debug: boolean): any {
+  private buildResult(): any {
     if (!this.engine.repoInfo || !this.engine.analysisResult) {
       throw new Error('Required data not available');
     }

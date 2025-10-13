@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { testReactComponents } from "../../tool/reactComponentTester.js";
+import { testReactComponents } from "../../core/reactComponentTester.js";
 import type { ReactComponentTestInputs } from "../../common/types.js";
 
 export function registerReactComponentTestTool(server: McpServer) {

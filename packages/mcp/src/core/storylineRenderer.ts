@@ -1,27 +1,27 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { generateNewViz } from '../tool/generateNewViz.js';
+import { generateNewViz } from './generateNewViz.js';
 import ServerSideFolderActivityFlow from '../component/FolderActivityFlow/ServerSideFolderActivityFlow.js';
 import { analyzeReleaseBasedFolders, extractReleaseBasedContributorActivities, generateReleaseFlowLineData, findFirstReleaseContributorNodes } from '../component/FolderActivityFlow/FolderActivityFlow.util.js';
 // @ts-ignore
 import sharp from 'sharp';
+import { Config } from "../common/config.js";
 
 interface StorylineInputs {
   repo: string;
-  githubToken: string;
   baseBranchName?: string;
   locale?: string;
-  debug?: boolean;
 }
 
 export async function renderStorylineUI(inputs: StorylineInputs): Promise<{ type: 'image'; data: string; mimeType: string; annotations?: any } | { type: 'text'; data: string }> {
   try {
+    const config = Config.getInstance();
+    const githubToken = config.getGithubToken();
 
     const totalData = await generateNewViz({
       repo: inputs.repo,
-      githubToken: inputs.githubToken,
+      githubToken: githubToken,
       baseBranchName: inputs.baseBranchName,
-      debug: inputs.debug || false
     });
 
 

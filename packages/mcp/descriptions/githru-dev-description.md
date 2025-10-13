@@ -77,7 +77,8 @@ You need to modify the path inside args in ```githru-mcp/claude_desktop_config.j
           "AbsolutePath/githru-vscode-ext/packages/mcp/dist/server.js"
         ],
         "env": {
-          "NODE_NO_WARNINGS": "1"
+          "NODE_NO_WARNINGS": "1",
+          "GITHUB_TOKEN": "ghphvhvhvhvhvhvhvhvhvhvhvhvhvhvhv"
         }
       }
   }

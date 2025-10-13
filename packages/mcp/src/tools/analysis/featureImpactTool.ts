@@ -17,18 +17,17 @@ export function registerFeatureImpactTool(server: McpServer) {
         inputSchema: {
         repoUrl: z.string().url().describe("Full URL of GitHub repository to analyze (e.g. https://github.com/owner/repo)"),
         prNumber: z.number().int().positive().describe("Pull Request number to analyze"),
-        githubToken: z.string().describe("GitHub authentication token"),
         locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
         isChart: z.boolean().default(false).describe("Return HTML chart (true) or JSON (false, default)"),
         },
     },
 
-    async ({ repoUrl, prNumber, githubToken, locale, isChart }: FeatureImpactAnalyzerInputs & { locale?: string; isChart?: boolean }) => {
+    async ({ repoUrl, prNumber, locale, isChart }: FeatureImpactAnalyzerInputs & { locale?: string; isChart?: boolean }) => {
         try {
         I18n.setLocale(locale || 'en');
         
-        const { McpReportGenerator } = await import("../../tool/featureImpactAnalyzer.js");
-        const analyzeFeatureImpact = new McpReportGenerator({ repoUrl, prNumber, githubToken, locale });
+        const { McpReportGenerator } = await import("../../core/featureImpactAnalyzer.js");
+        const analyzeFeatureImpact = new McpReportGenerator({ repoUrl, prNumber, locale });
 
         const payload = await analyzeFeatureImpact.generateWithOutlierRatings();
         
