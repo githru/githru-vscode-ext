@@ -3,6 +3,7 @@ import { FetchDataRequestPayload, RefreshDataRequestPayload } from "types";
 import { diContainer } from "container";
 import { DI_IDENTIFIERS } from "container/identifiers";
 import type { IDESentEvents } from "types";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 export const sendUpdateThemeCommand = (theme: string) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
@@ -28,7 +29,7 @@ export const sendFetchBranchListCommand = () => {
 export const initializeIDEConnection = (callbacks: IDESentEvents) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
   ideAdapter.addIDESentEventListener(callbacks);
-  ideAdapter.sendFetchAnalyzedDataMessage();
+  ideAdapter.sendFetchAnalyzedDataMessage({ commitCountPerPage: COMMIT_COUNT_PER_PAGE });
   ideAdapter.sendFetchBranchListMessage();
   ideAdapter.sendFetchGithubInfo();
 };

@@ -10,7 +10,7 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
-import { initializeIDEConnection } from "services";
+import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
 import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const App = () => {
@@ -35,10 +35,6 @@ const App = () => {
         handleGithubInfo,
       };
       setLoading(true);
-      ideAdapter.addIDESentEventListener(callbacks);
-      ideAdapter.sendFetchAnalyzedDataMessage({ commitCountPerPage: COMMIT_COUNT_PER_PAGE });
-      ideAdapter.sendFetchBranchListMessage();
-      ideAdapter.sendFetchGithubInfo();
       initializeIDEConnection(callbacks);
       initRef.current = true;
     }
@@ -48,7 +44,7 @@ const App = () => {
     if (loading || isLastPage) return;
 
     setLoading(true);
-    ideAdapter.sendFetchAnalyzedDataMessage({
+    sendFetchAnalyzedDataCommand({
       commitCountPerPage: COMMIT_COUNT_PER_PAGE,
       lastCommitId: nextCommitId,
     });
