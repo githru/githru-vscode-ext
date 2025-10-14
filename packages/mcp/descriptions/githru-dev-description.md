@@ -25,7 +25,7 @@ githru-vscode-ext/
 
 Since githru-mcp is deployed on Smithery, you can use the remote MCP server directly without any build or local execution.
 
-[Abount Details](./smithery-description.md)
+[About Details](./smithery-description.md)
 
 ---
 
