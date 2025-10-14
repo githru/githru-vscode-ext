@@ -509,11 +509,11 @@ describe("csm", () => {
     it("should throw error when perPage is less than or equal to 0", () => {
       expect(() => {
         buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", 0);
-      }).toThrow("perPage must be greater than 0");
+      }).toThrow("commitCountPerPage must be greater than 0");
 
       expect(() => {
         buildPaginatedCSMDict(fakeCommitNodeDict, fakeStemDict, "master", -1);
-      }).toThrow("perPage must be greater than 0");
+      }).toThrow("commitCountPerPage must be greater than 0");
     });
 
     it("should throw error when base branch does not exist", () => {

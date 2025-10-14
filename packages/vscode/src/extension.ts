@@ -5,7 +5,7 @@ import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } 
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
-import { ClusterNodesResult } from "./types/Node";
+import type { ClusterNodesResult } from "./types/Node";
 import { mapClusterNodesFrom } from "./utils/csmMapper";
 import {
   fetchGitLogInParallel,

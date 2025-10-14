@@ -1,9 +1,9 @@
 import "reflect-metadata";
 
-import { diContainer } from "./container";
-import { DI_IDENTIFIERS } from "./diIdentifiers";
 import { buildCommitDict } from "./commit.util";
+import { diContainer } from "./container";
 import { buildCSMDict, buildPaginatedCSMDict } from "./csm";
+import { DI_IDENTIFIERS } from "./diIdentifiers";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
