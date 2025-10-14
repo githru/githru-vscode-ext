@@ -89,6 +89,7 @@ const App = () => {
             </div>
             <div className="load-more-container">
               <button
+                className="load-more-button"
                 onClick={handleLoadMore}
                 disabled={isLastPage || loading}
               >
