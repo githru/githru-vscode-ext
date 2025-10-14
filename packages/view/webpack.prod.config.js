@@ -32,6 +32,8 @@ const config = {
       hooks: path.resolve(__dirname, "src/hooks/"),
       store: path.resolve(__dirname, "src/store/"),
       constants: path.resolve(__dirname, "src/constants/"),
+      ide: path.resolve(__dirname, "src/ide/"),
+      container: path.resolve(__dirname, "src/container/"),
     },
   },
   module: {

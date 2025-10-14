@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
-import { container } from "tsyringe";
-
+import { diContainer } from "./container";
+import { DI_IDENTIFIERS } from "./diIdentifiers";
 import { buildCommitDict } from "./commit.util";
 import { buildCSMDict, buildPaginatedCSMDict } from "./csm";
 import getCommitRaws from "./parser";
@@ -45,16 +45,12 @@ export class AnalysisEngine {
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
-    container.register("OctokitOptions", {
-      useValue: {
-        owner,
-        repo,
-        options: {
-          auth,
-        },
-      },
+    diContainer.rebindSync(DI_IDENTIFIERS.OctokitOptions).toConstantValue({
+      owner,
+      repo,
+      options: { auth },
     });
-    this.octokit = container.resolve(PluginOctokit);
+    this.octokit = diContainer.get(PluginOctokit);
   };
 
   public init = async () => {
@@ -132,7 +128,6 @@ export class AnalysisEngine {
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {
-    if (container.isRegistered("OctokitOptions")) container.clearInstances();
     this.insertArgs(args);
     // Clear cached data
     this.commitDict = undefined;

@@ -116,7 +116,7 @@ const drawIcicleTree = async ($target: RefObject<SVGSVGElement>, data: FileChang
 };
 
 const destroyIcicleTree = ($target: RefObject<SVGSVGElement>) => {
-  d3.select($target.current).selectAll("svg").remove();
+  d3.select($target.current).selectAll("g").remove();
 };
 
 const FileIcicleSummary = () => {

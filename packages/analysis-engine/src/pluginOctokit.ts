@@ -2,19 +2,21 @@ import type { OctokitOptions } from "@octokit/core/dist-types/types";
 import { throttling } from "@octokit/plugin-throttling";
 import type { ThrottlingOptions } from "@octokit/plugin-throttling/dist-types/types";
 import { Octokit, type RestEndpointMethodTypes } from "@octokit/rest";
-import { inject, singleton } from "tsyringe";
+import { inject, injectable } from "inversify";
+
+import { DI_IDENTIFIERS } from "./diIdentifiers";
 
 type PullsListResponseData = RestEndpointMethodTypes["pulls"]["get"]["response"];
 type PullsListCommitsResponseData = RestEndpointMethodTypes["pulls"]["listCommits"]["response"];
 
-@singleton()
+@injectable()
 export class PluginOctokit extends Octokit.plugin(throttling) {
   private owner: string;
 
   private repo: string;
 
   constructor(
-    @inject("OctokitOptions")
+    @inject(DI_IDENTIFIERS.OctokitOptions)
     props: {
       owner: string;
       repo: string;
@@ -55,13 +57,13 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
   private _getPullRequest = async (pullNumber: number) => {
     const { owner, repo } = this;
 
-    const pullRequestDetail:PullsListResponseData = await this.rest.pulls.get({
+    const pullRequestDetail: PullsListResponseData = await this.rest.pulls.get({
       owner,
       repo,
       pull_number: pullNumber,
     });
 
-    const pullRequestCommits:PullsListCommitsResponseData = await this.rest.pulls.listCommits({
+    const pullRequestCommits: PullsListCommitsResponseData = await this.rest.pulls.listCommits({
       owner,
       repo,
       pull_number: pullNumber,
@@ -73,11 +75,12 @@ export class PluginOctokit extends Octokit.plugin(throttling) {
     };
   };
 
-
-  public getPullRequests = async (): Promise<{
-    detail: PullsListResponseData,
-    commitDetails: PullsListCommitsResponseData
-  }[]> => {
+  public getPullRequests = async (): Promise<
+    {
+      detail: PullsListResponseData;
+      commitDetails: PullsListCommitsResponseData;
+    }[]
+  > => {
     const { owner, repo } = this;
 
     const { data } = await this.rest.pulls.list({

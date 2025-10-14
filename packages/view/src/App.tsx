@@ -1,17 +1,16 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
 import { useEffect, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
 import "./App.scss";
-import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
+import { initializeIDEConnection } from "services";
 import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const App = () => {
@@ -27,7 +26,6 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
-  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
   useEffect(() => {
     if (initRef.current === false) {
@@ -41,9 +39,10 @@ const App = () => {
       ideAdapter.sendFetchAnalyzedDataMessage({ commitCountPerPage: COMMIT_COUNT_PER_PAGE });
       ideAdapter.sendFetchBranchListMessage();
       ideAdapter.sendFetchGithubInfo();
+      initializeIDEConnection(callbacks);
       initRef.current = true;
     }
-  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
+  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, setLoading]);
 
   const handleLoadMore = () => {
     if (loading || isLastPage) return;
