@@ -11,7 +11,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ["ts", "tsx", "js", "mjs", "cjs", "jsx", "json", "node"],
   moduleNameMapper: {
     "^utils/(.*)$": "<rootDir>/src/utils/$1",
-    "^constants$": "<rootDir>/src/constants/constants.ts",
+    "^constants/(.*)$": "<rootDir>/src/constants/$1",
     d3: "<rootDir>/../../node_modules/d3/dist/d3.min.js",
   },
 };
