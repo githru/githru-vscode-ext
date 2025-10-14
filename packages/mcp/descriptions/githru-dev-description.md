@@ -10,13 +10,13 @@ Deployed as a **remote MCP server** via Smithery, allowing direct connection and
 ``` 
 githru-vscode-ext/
 └─ packages/
-  └─ githru-mcp/
-  ├─ src/
-  │ └─ index.ts
-  ├─ smithery.yml
-  ├─ package.json
-  ├─ tsconfig.json
-  └─ .gitignore
+  └─ mcp/
+    ├─ src/
+    │ └─ index.ts
+    ├─ smithery.yml
+    ├─ package.json
+    ├─ tsconfig.json
+    └─ .gitignore
 ```
 
 ---
@@ -25,18 +25,7 @@ githru-vscode-ext/
 
 Since githru-mcp is deployed on Smithery, you can use the remote MCP server directly without any build or local execution.
 
-1. Access the remote server page  
-   👉 [https://server.smithery.ai/@Kyoungwoong/githru-vscode-ext/mcp](https://server.smithery.ai/@Kyoungwoong/githru-vscode-ext/mcp)
-
-2. Click the **"Add to Claude"** button  
-   - Automatically registers to Claude Desktop.  
-   - If failed, you can manually add it in Claude Desktop settings.  
-
-3. Use MCP tools after restarting Claude Desktop  
-   - Available tool examples:
-     - `ping` → Server health check (returns "pong")
-     - `echo` → Returns input text as-is
-     - `bmi_calculator` → Input height/weight → Returns BMI calculation result
+[Abount Details](./smithery-description.md)
 
 ---
 
