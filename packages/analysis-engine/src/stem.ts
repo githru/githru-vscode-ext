@@ -1,4 +1,4 @@
-import { getLeafNodes } from "./commit.util";
+import { getLeafNodes, latestFirstComparator } from "./commit.util";
 import Queue from "./queue";
 import type { CommitDict, CommitNode, Stem, StemDict } from "./types";
 
@@ -27,16 +27,6 @@ export function getStemNodes(
     now = commitDict.get(now.commit.parents?.[0]);
   }
   return nodes;
-}
-
-function compareCommitPriority(a: CommitNode, b: CommitNode): number {
-  // branches 값 존재하는 노드 => leaf / main / HEAD 노드.
-  // 이 노드는 큐에 들어올 때 순서가 정해져 있기 때문에 순서를 바꾸지 않음.
-  if (a.commit.branches.length || b.commit.branches.length) {
-    return 0;
-  }
-  // 나중에 커밋된 것을 먼저 담기
-  return new Date(b.commit.committerDate).getTime() - new Date(a.commit.committerDate).getTime();
 }
 
 function buildGetStemId() {
@@ -68,7 +58,7 @@ function buildGetStemId() {
  * @param baseBranchName
  */
 export function buildStemDict(commitDict: CommitDict, baseBranchName: string): StemDict {
-  const q = new Queue<CommitNode>(compareCommitPriority);
+  const q = new Queue<CommitNode>(latestFirstComparator);
 
   /**
    * 처음 큐에 담기는 순서
