@@ -3,215 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("PR 커밋 상세 정보 확인 기능 E2E 테스트", () => {
   // 앱이 완전히 로드될 때까지 대기
   test.beforeEach(async ({ page }) => {
-    // 모킹 데이터를 주입하기 위한 스크립트 추가
-    await page.addInitScript(() => {
-      // Zustand store에 모킹 데이터 주입
-      (window as any).__GITHRU_MOCK_DATA__ = {
-        clusterNodes: [
-          {
-            nodeTypeName: "CLUSTER",
-            commitNodeList: [
-              {
-                nodeTypeName: "COMMIT",
-                commit: {
-                  id: "a1b2c3d4e5f6789012345678901234567890abcd",
-                  parentIds: [],
-                  author: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  committer: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  authorDate: "Mon Dec 18 2023 10:30:00 GMT+0900 (Korean Standard Time)",
-                  commitDate: "Mon Dec 18 2023 10:30:00 GMT+0900 (Korean Standard Time)",
-                  diffStatistics: {
-                    changedFileCount: 3,
-                    insertions: 150,
-                    deletions: 25,
-                    files: {
-                      "src/components/Detail/Detail.tsx": {
-                        insertions: 120,
-                        deletions: 20,
-                      },
-                      "src/components/Detail/Detail.scss": {
-                        insertions: 25,
-                        deletions: 5,
-                      },
-                      "src/components/Detail/Detail.type.ts": {
-                        insertions: 5,
-                        deletions: 0,
-                      },
-                    },
-                  },
-                  message:
-                    "feat: PR 커밋 상세 정보 표시 기능 추가\n\n- 커밋 목록 표시 기능 구현\n- 통계 정보 표시 기능 추가\n- 커밋 제목 hover 툴팁 기능 구현\n- 반응형 디자인 적용",
-                  tags: [],
-                  releaseTags: [],
-                },
-                seq: 0,
-                clusterId: 0,
-              },
-              {
-                nodeTypeName: "COMMIT",
-                commit: {
-                  id: "b2c3d4e5f6789012345678901234567890abcde",
-                  parentIds: ["a1b2c3d4e5f6789012345678901234567890abcd"],
-                  author: {
-                    id: "user-2",
-                    names: ["이코더"],
-                    emails: ["lee.coder@example.com"],
-                  },
-                  committer: {
-                    id: "user-2",
-                    names: ["이코더"],
-                    emails: ["lee.coder@example.com"],
-                  },
-                  authorDate: "Mon Dec 18 2023 11:15:00 GMT+0900 (Korean Standard Time)",
-                  commitDate: "Mon Dec 18 2023 11:15:00 GMT+0900 (Korean Standard Time)",
-                  diffStatistics: {
-                    changedFileCount: 2,
-                    insertions: 80,
-                    deletions: 15,
-                    files: {
-                      "src/components/Detail/Detail.util.ts": {
-                        insertions: 60,
-                        deletions: 10,
-                      },
-                      "src/components/Detail/Detail.hook.tsx": {
-                        insertions: 20,
-                        deletions: 5,
-                      },
-                    },
-                  },
-                  message:
-                    "refactor: 커밋 상세 정보 유틸리티 함수 개선\n\n- getCommitListDetail 함수 최적화\n- 타입 안정성 향상\n- 성능 개선",
-                  tags: [],
-                  releaseTags: [],
-                },
-                seq: 1,
-                clusterId: 0,
-              },
-              {
-                nodeTypeName: "COMMIT",
-                commit: {
-                  id: "c3d4e5f6789012345678901234567890abcdef",
-                  parentIds: ["b2c3d4e5f6789012345678901234567890abcde"],
-                  author: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  committer: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  authorDate: "Mon Dec 18 2023 14:45:00 GMT+0900 (Korean Standard Time)",
-                  commitDate: "Mon Dec 18 2023 14:45:00 GMT+0900 (Korean Standard Time)",
-                  diffStatistics: {
-                    changedFileCount: 1,
-                    insertions: 30,
-                    deletions: 5,
-                    files: {
-                      "src/components/Detail/Detail.scss": {
-                        insertions: 30,
-                        deletions: 5,
-                      },
-                    },
-                  },
-                  message: "style: 커밋 아이템 스타일링 개선\n\n- 반응형 디자인 적용\n- 접근성 개선\n- 다크모드 지원",
-                  tags: [],
-                  releaseTags: [],
-                },
-                seq: 2,
-                clusterId: 0,
-              },
-              {
-                nodeTypeName: "COMMIT",
-                commit: {
-                  id: "d4e5f6789012345678901234567890abcdef1",
-                  parentIds: ["c3d4e5f6789012345678901234567890abcdef"],
-                  author: {
-                    id: "user-3",
-                    names: ["박테스터"],
-                    emails: ["park.tester@example.com"],
-                  },
-                  committer: {
-                    id: "user-3",
-                    names: ["박테스터"],
-                    emails: ["park.tester@example.com"],
-                  },
-                  authorDate: "Mon Dec 18 2023 16:20:00 GMT+0900 (Korean Standard Time)",
-                  commitDate: "Mon Dec 18 2023 16:20:00 GMT+0900 (Korean Standard Time)",
-                  diffStatistics: {
-                    changedFileCount: 2,
-                    insertions: 45,
-                    deletions: 8,
-                    files: {
-                      "src/components/Detail/Detail.test.tsx": {
-                        insertions: 35,
-                        deletions: 3,
-                      },
-                      "src/components/Detail/Detail.util.test.ts": {
-                        insertions: 10,
-                        deletions: 5,
-                      },
-                    },
-                  },
-                  message:
-                    "test: 커밋 상세 정보 컴포넌트 테스트 추가\n\n- 단위 테스트 작성\n- E2E 테스트 시나리오 추가\n- 테스트 커버리지 향상",
-                  tags: [],
-                  releaseTags: [],
-                },
-                seq: 3,
-                clusterId: 0,
-              },
-              {
-                nodeTypeName: "COMMIT",
-                commit: {
-                  id: "e5f6789012345678901234567890abcdef12",
-                  parentIds: ["d4e5f6789012345678901234567890abcdef1"],
-                  author: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  committer: {
-                    id: "user-1",
-                    names: ["김개발"],
-                    emails: ["kim.dev@example.com"],
-                  },
-                  authorDate: "Mon Dec 18 2023 17:30:00 GMT+0900 (Korean Standard Time)",
-                  commitDate: "Mon Dec 18 2023 17:30:00 GMT+0900 (Korean Standard Time)",
-                  diffStatistics: {
-                    changedFileCount: 1,
-                    insertions: 20,
-                    deletions: 2,
-                    files: {
-                      "README.md": {
-                        insertions: 20,
-                        deletions: 2,
-                      },
-                    },
-                  },
-                  message:
-                    "docs: PR 커밋 상세 정보 기능 문서화\n\n- 사용법 가이드 추가\n- API 문서 업데이트\n- 예제 코드 추가",
-                  tags: [],
-                  releaseTags: [],
-                },
-                seq: 4,
-                clusterId: 0,
-              },
-            ],
-          },
-        ],
-      };
-    });
-
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
@@ -302,22 +93,24 @@ test.describe("PR 커밋 상세 정보 확인 기능 E2E 테스트", () => {
       { key: "deletions", display: "deletions" },
     ];
 
-    for (const { key, display } of expectedStats) {
-      // 실제 표시되는 텍스트로 검색
-      const statItem = detailSummary.locator(
-        `.detail__summary-item:has(.detail__summary-item-name:has-text("${display}"))`
-      );
-      await expect(statItem, `${key} 통계가 표시되어야 함`).toBeVisible();
+    await Promise.all(
+      expectedStats.map(async ({ key, display }) => {
+        // 실제 표시되는 텍스트로 검색
+        const statItem = detailSummary.locator(
+          `.detail__summary-item:has(.detail__summary-item-name:has-text("${display}"))`
+        );
+        await expect(statItem, `${key} 통계가 표시되어야 함`).toBeVisible();
 
-      // 숫자 값이 표시되는지 확인
-      const countElement = statItem.locator("strong");
-      await expect(countElement, `${key}의 숫자 값이 표시되어야 함`).toBeVisible();
+        // 숫자 값이 표시되는지 확인
+        const countElement = statItem.locator("strong");
+        await expect(countElement, `${key}의 숫자 값이 표시되어야 함`).toBeVisible();
 
-      const countText = await countElement.textContent();
-      const trimmedCount = countText?.trim();
-      expect(trimmedCount, `${key}의 값이 숫자여야 함`).toMatch(/^\d+$/);
-      console.log(`✅ ${key}: ${trimmedCount}`);
-    }
+        const countText = await countElement.textContent();
+        const trimmedCount = countText?.trim();
+        expect(trimmedCount, `${key}의 값이 숫자여야 함`).toMatch(/^\d+$/);
+        console.log(`✅ ${key}: ${trimmedCount}`);
+      })
+    );
   });
 
   test("각 커밋의 상세 정보(제목, 작성자, 날짜, 해시)가 올바르게 표시된다", async ({ page }) => {
@@ -424,13 +217,17 @@ test.describe("PR 커밋 상세 정보 확인 기능 E2E 테스트", () => {
     ];
 
     let tooltip = null;
-    for (const selector of tooltipSelectors) {
+    let i = 0;
+    while (i < tooltipSelectors.length) {
+      const selector = tooltipSelectors[i];
       const tooltipElement = page.locator(selector);
-      if ((await tooltipElement.count()) > 0) {
+      const count = tooltipElement.count();
+      if ((await count) > 0) {
         tooltip = tooltipElement;
         console.log(`툴팁 발견: ${selector}`);
         break;
       }
+      i += 1;
     }
 
     if (tooltip) {
