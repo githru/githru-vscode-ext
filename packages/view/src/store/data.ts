@@ -7,10 +7,14 @@ type DataState = {
   data: ClusterNode[];
   filteredData: ClusterNode[];
   selectedData: ClusterNode[];
+  isLastPage: boolean;
+  nextCommitId?: string;
   setData: (data: ClusterNode[]) => void;
+  addData: (newData: ClusterNode[]) => void;
   setFilteredData: (filteredData: ClusterNode[]) => void;
   setSelectedData: (selectedData: ClusterNode[]) => void;
   toggleSelectedData: (selected: ClusterNode, clusterId: number) => void;
+  setPagination: (isLastPage: boolean, nextCommitId?: string) => void;
 };
 
 export const useDataStore = create<DataState>()(
@@ -18,7 +22,14 @@ export const useDataStore = create<DataState>()(
     data: [],
     filteredData: [],
     selectedData: [],
+    isLastPage: false,
+    nextCommitId: undefined,
     setData: (data) => set({ data }),
+    addData: (newData) =>
+      set((state) => ({
+        data: [...state.data, ...newData],
+        filteredData: [...state.filteredData, ...newData],
+      })),
     setFilteredData: (filteredData) => set({ filteredData }),
     setSelectedData: (selectedData) => set({ selectedData }),
     toggleSelectedData: (selected: ClusterNode, clusterId: number) =>
@@ -27,5 +38,6 @@ export const useDataStore = create<DataState>()(
         if (selectedIndex === -1) state.selectedData.push(selected);
         else state.selectedData.splice(selectedIndex, 1);
       }),
+    setPagination: (isLastPage, nextCommitId) => set({ isLastPage, nextCommitId }),
   }))
 );
