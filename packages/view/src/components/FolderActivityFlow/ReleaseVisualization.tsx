@@ -44,6 +44,9 @@ export const renderReleaseVisualization = ({
 }: ReleaseVisualizationProps) => {
   const tooltip = d3.select(tooltipRef.current);
 
+  let tooltipShowTimer: ReturnType<typeof setTimeout> | null = null;
+  let tooltipHideTimer: ReturnType<typeof setTimeout> | null = null;
+
   // 스케일 설정
   const uniqueContributors = Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName)));
   const uniqueReleases = Array.from(new Set(releaseContributorActivities.map((a) => a.releaseIndex))).sort(
@@ -184,6 +187,15 @@ export const renderReleaseVisualization = ({
   // 툴팁 이벤트
   dots
     .on("mouseover", function (event: MouseEvent, d: ReleaseContributorActivity) {
+      if (tooltipHideTimer) {
+        clearTimeout(tooltipHideTimer);
+        tooltipHideTimer = null;
+      }
+      if (tooltipShowTimer) {
+        clearTimeout(tooltipShowTimer);
+        tooltipShowTimer = null;
+      }
+
       const currentRadius = sizeScale(d.changes);
       const hoveredRadius = currentRadius * 1.2;
 
@@ -196,7 +208,9 @@ export const renderReleaseVisualization = ({
       const cy = parseFloat(nodeElement.getAttribute("cy") || "0");
 
       // SVG 좌표를 화면 좌표로 변환
-      const svgPoint = nodeElement.ownerSVGElement!.createSVGPoint();
+      const ownerSvgElement = nodeElement.ownerSVGElement;
+      if (!ownerSvgElement) return;
+      const svgPoint = ownerSvgElement.createSVGPoint();
       svgPoint.x = cx;
       svgPoint.y = cy;
       const ctm = nodeElement.getScreenCTM();
@@ -224,11 +238,21 @@ export const renderReleaseVisualization = ({
         `);
 
       // 페이드 인 애니메이션
-      setTimeout(() => {
+      tooltipShowTimer = setTimeout(() => {
         tooltip.style("opacity", "1");
+        tooltipShowTimer = null;
       }, 10);
     })
     .on("mouseout", function (_event: MouseEvent, d: ReleaseContributorActivity) {
+      if (tooltipShowTimer) {
+        clearTimeout(tooltipShowTimer);
+        tooltipShowTimer = null;
+      }
+      if (tooltipHideTimer) {
+        clearTimeout(tooltipHideTimer);
+        tooltipHideTimer = null;
+      }
+
       const currentRadius = sizeScale(d.changes);
 
       // 노드 크기 원래대로
@@ -236,8 +260,9 @@ export const renderReleaseVisualization = ({
 
       // 페이드 아웃 애니메이션
       tooltip.style("opacity", "0");
-      setTimeout(() => {
+      tooltipHideTimer = setTimeout(() => {
         tooltip.style("display", "none");
+        tooltipHideTimer = null;
       }, 200);
     });
 

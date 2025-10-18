@@ -2,10 +2,10 @@ import * as d3 from "d3";
 import { useEffect, useRef, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
+import { Link } from "@mui/material";
 
 import { useDataStore } from "store";
 
@@ -140,12 +140,9 @@ const FolderActivityFlow = () => {
       return;
     }
 
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", chartWidth)
-      .attr("height", DIMENSIONS.height);
+    const svg = d3.select(svgRef.current).attr("width", chartWidth).attr("height", DIMENSIONS.height);
 
-    //activity가 있는 폴더 카운트
+    // activity가 있는 폴더 카운트
     const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
     const releaseContributorActivities = extractReleaseBasedContributorActivities(
       totalData,
@@ -200,9 +197,13 @@ const FolderActivityFlow = () => {
             return (
               <Link
                 key={crumb}
+                href={`#breadcrumb-${crumb}`}
                 underline="none"
-                component="button"
-                onClick={() => navigateToBreadcrumb(index, breadcrumbs.length)}
+                aria-label={`Navigate to ${crumb}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateToBreadcrumb(index, breadcrumbs.length);
+                }}
               >
                 {crumb}
               </Link>
