@@ -46,7 +46,6 @@ export const renderReleaseVisualization = ({
 
   let tooltipShowTimer: ReturnType<typeof setTimeout> | null = null;
   let tooltipHideTimer: ReturnType<typeof setTimeout> | null = null;
-  let isTooltipVisible = false;
 
   // 스케일 설정
   const uniqueContributors = Array.from(new Set(releaseContributorActivities.map((a) => a.contributorName)));
@@ -188,10 +187,6 @@ export const renderReleaseVisualization = ({
   // 툴팁 이벤트
   dots
     .on("mouseover", function (event: MouseEvent, d: ReleaseContributorActivity) {
-      if (isTooltipVisible) {
-        return;
-      }
-
       if (tooltipHideTimer) {
         clearTimeout(tooltipHideTimer);
         tooltipHideTimer = null;
@@ -245,7 +240,6 @@ export const renderReleaseVisualization = ({
       // 페이드 인 애니메이션
       tooltipShowTimer = setTimeout(() => {
         tooltip.style("opacity", "1");
-        isTooltipVisible = true;
         tooltipShowTimer = null;
       }, 10);
     })
@@ -266,7 +260,6 @@ export const renderReleaseVisualization = ({
 
       // 페이드 아웃 애니메이션
       tooltip.style("opacity", "0");
-      isTooltipVisible = false;
       tooltipHideTimer = setTimeout(() => {
         tooltip.style("display", "none");
         tooltipHideTimer = null;
