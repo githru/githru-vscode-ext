@@ -21,6 +21,14 @@ import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeS
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { NetworkGraph } from "components/NetworkGraph";
 import { InsightsButton } from "components/InsightsButton";
+import { Dialog, dialogClasses } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
+import { pxToRem } from "utils";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -28,7 +36,7 @@ const App = () => {
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
-  const { handleGithubInfo } = useGithubInfo();
+  const { handleGithubInfo, repo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
@@ -111,34 +119,43 @@ const App = () => {
 
       {/* Folder Activity Flow Modal */}
       {showFolderActivityFlowModal && (
-        <div
-          className="folder-activity-flow-modal"
-          onClick={handleCloseFolderActivityFlowModal}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              handleCloseFolderActivityFlowModal();
-            }
+        <Dialog
+          fullScreen
+          open={showFolderActivityFlowModal}
+          onClose={handleCloseFolderActivityFlowModal}
+          sx={{
+            [`& .${dialogClasses.paper}`]: {
+              backgroundColor: "#222324",
+            },
           }}
-          role="button"
-          tabIndex={0}
         >
-          <div
-            className="folder-activity-flow-modal-content"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="dialog"
-            tabIndex={-1}
-          >
-            <button
-              type="button"
-              className="folder-activity-flow-modal-close"
-              onClick={handleCloseFolderActivityFlowModal}
-            >
-              ×
-            </button>
-            <FolderActivityFlow />
-          </div>
-        </div>
+          <AppBar sx={{ position: "relative", backgroundColor: "#222324", paddingY: pxToRem(20) }}>
+            <Toolbar>
+              <Typography
+                sx={{ pl: pxToRem(25), flex: 1 }}
+                variant="h4"
+                component="div"
+              >
+                {`Storyline of ${repo}`}
+              </Typography>
+              <IconButton
+                edge="end"
+                color="inherit"
+                onClick={handleCloseFolderActivityFlowModal}
+                size="large"
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Divider
+            sx={{
+              backgroundColor: "#F7F7F780",
+            }}
+          />
+          <FolderActivityFlow />
+        </Dialog>
       )}
     </>
   );
