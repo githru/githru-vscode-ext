@@ -46,36 +46,3 @@ body {
     margin: 2.5rem 0 0 0;
   }
 }
-
-.folder-activity-flow-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.folder-activity-flow-modal-content {
-  background-color: white;
-  padding: 1.25rem;
-  border-radius: 0.5rem;
-  width: 90%;
-  height: 80%;
-  overflow: auto;
-  position: relative;
-}
-
-.folder-activity-flow-modal-close {
-  position: absolute;
-  top: 0.625rem;
-  right: 0.625rem;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
