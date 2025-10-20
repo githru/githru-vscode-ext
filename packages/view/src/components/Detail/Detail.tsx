@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -26,6 +26,10 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const selectedData = useDataStore((state) => state.selectedData);
   const { owner, repo } = useGithubInfo();
 
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const prevIndexRef = useRef<number | null>(null);
+  const listRef = useRef<List>(null);
+
   const commitNodeListInCluster = useMemo(
     () =>
       selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [],
@@ -39,11 +43,30 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const { cache, virtualizedItems, showScrollIndicator, handleRowsRendered } =
     useVirtualizedList(commitNodeListInCluster);
 
+  useLayoutEffect(() => {
+    const [currentIndex, prevIndex] = [hoverIndex, prevIndexRef.current];
+    const refreshRowHeight = (index: number) => {
+      cache.clear(index, 0);
+      listRef.current?.recomputeRowHeights(index);
+    };
+
+    requestAnimationFrame(() => {
+      if (prevIndex != null) refreshRowHeight(prevIndex);
+      if (currentIndex != null) {
+        refreshRowHeight(currentIndex);
+        requestAnimationFrame(() => {
+          listRef.current?.scrollToRow?.(currentIndex);
+        });
+      }
+      prevIndexRef.current = currentIndex;
+    });
+  }, [hoverIndex, cache]);
+
   const renderCommitItem = useCallback(
-    (props: { index: number; key: string }) => {
-      const { index, key } = props;
+    (props: { index: number; key: string; expanded: boolean }) => {
+      const { index, key, expanded } = props;
       const item = virtualizedItems[index];
-      const showMessageBody = !(index === 1 && !(commitNodeListInCluster.length === 1));
+      const showMessageBody = !(index === 1 && commitNodeListInCluster.length > 1);
 
       if (item.type === "summary") {
         return <DetailSummary commitNodeListInCluster={item.data} />;
@@ -58,6 +81,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
           authSrcMap={authSrcMap}
           handleCommitIdCopy={handleCommitIdCopy}
           showMessageBody={showMessageBody}
+          expanded={expanded}
         />
       );
     },
@@ -73,10 +97,16 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
         columnIndex={0}
         rowIndex={index}
       >
-        <div style={style}>{renderCommitItem({ index, key })}</div>
+        <div
+          style={style}
+          onMouseEnter={() => setHoverIndex(index)}
+          onMouseLeave={() => setHoverIndex(null)}
+        >
+          {renderCommitItem({ index, key, expanded: hoverIndex === index })}
+        </div>
       </CellMeasurer>
     ),
-    [cache, renderCommitItem]
+    [cache, renderCommitItem, hoverIndex]
   );
 
   if (!selectedData || selectedData.length === 0) return null;
@@ -87,6 +117,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
         {({ height, width }) => {
           return (
             <List
+              ref={listRef}
               height={height}
               width={width}
               rowCount={virtualizedItems.length}
@@ -95,6 +126,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
               onRowsRendered={handleRowsRendered}
               className="detail__virtualized-list"
               estimatedRowSize={120}
+              deferredMeasurementCache={cache}
             />
           );
         }}
@@ -111,14 +143,22 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
 
 export default Detail;
 
-function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, showMessageBody }: CommitItemProps) {
+function CommitItem({
+  commit,
+  owner,
+  repo,
+  authSrcMap,
+  handleCommitIdCopy,
+  showMessageBody,
+  expanded,
+}: CommitItemProps) {
   const { id, message, author, commitDate } = commit;
 
   const { issueLinkedTitle, body } = useMemo(() => {
-    const [title, ...rest] = message.split("\n");
+    const [title, ...bodyLines] = message.split("\n");
     return {
       issueLinkedTitle: renderIssueLinkedNodes(title, owner, repo),
-      body: rest.filter((line) => line.trim()).join("\n"),
+      body: bodyLines.filter(Boolean).join("\n"),
     };
   }, [message, owner, repo]);
 
@@ -158,7 +198,9 @@ function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, showM
                 </div>
               </div>
             </div>
-            {showMessageBody && body && <div className="commit-message__body">{body}</div>}
+            {showMessageBody && body && (
+              <div className={`commit-message__body${expanded ? "--visible" : ""}`}>{expanded ? body : null}</div>
+            )}
           </div>
         </div>
       </div>

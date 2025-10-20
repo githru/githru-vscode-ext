@@ -25,6 +25,7 @@ export interface CommitItemProps {
   authSrcMap: AuthSrcMap | null;
   handleCommitIdCopy: (id: string) => () => Promise<void>;
   showMessageBody: boolean;
+  expanded: boolean;
 }
 
 export type VirtualizedItem =
