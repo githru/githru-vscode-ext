@@ -87,7 +87,13 @@ export default class FakeIDEAdapter implements IDEPort {
       case "refresh":
         return {
           command,
-          payload: JSON.stringify(fakeData),
+          payload: JSON.stringify({
+            clusterNodes: fakeData,
+            isLastPage: true,
+            nextCommitId: undefined,
+            isLoadMore: false,
+            isPRSuccess: true,
+          }),
         };
       case "fetchBranchList":
         return {
