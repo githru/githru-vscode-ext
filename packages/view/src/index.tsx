@@ -7,6 +7,6 @@ import { DI_IDENTIFIERS } from "container/identifiers";
 
 import { initRender } from "./index.common";
 
-diContainer.bind<IDEPort>(DI_IDENTIFIERS.IDEAdapter).to(FakeIDEAdapter);
+diContainer.bind<IDEPort>(DI_IDENTIFIERS.IDEAdapter).to(FakeIDEAdapter).inSingletonScope();
 
 initRender();
