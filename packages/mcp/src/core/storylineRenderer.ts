@@ -10,17 +10,22 @@ import { Config } from "../common/config.js";
 interface StorylineInputs {
   repo: string;
   baseBranchName?: string;
+  githubToken: string
   locale?: string;
 }
 
 export async function renderStorylineUI(inputs: StorylineInputs): Promise<{ type: 'image'; data: string; mimeType: string; annotations?: any } | { type: 'text'; data: string }> {
   try {
-    const config = Config.getInstance();
-    const githubToken = config.getGithubToken();
+    /**
+     * @TODO: Issue #1012
+     * Remote MCP 서버에서 Github Token을 읽어들일 수가 없는 이슈로 인해 주석처리
+     */
+      // const config = Config.getInstance();
+      // const githubToken = config.getGithubToken();
 
     const totalData = await generateNewViz({
       repo: inputs.repo,
-      githubToken: githubToken,
+      githubToken: inputs.githubToken,
       baseBranchName: inputs.baseBranchName,
     });
 

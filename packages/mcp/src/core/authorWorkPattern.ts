@@ -17,6 +17,7 @@ export interface AuthorWorkPatternArgs {
   branch?: string;
   since?: string;
   until?: string;
+  githubToken: string;
   locale?: "en" | "ko";
   chart?: boolean;
 }
@@ -49,7 +50,7 @@ function classifyType(msg?: string | null): CommitType {
 export class AuthorWorkPatternAnalyzer {
   private owner: string;
   private repo: string;
-  private token: string;
+  private githubToken: string;
   private authorQuery: string;
   private baseBranch?: string;
   private since?: string;
@@ -58,12 +59,16 @@ export class AuthorWorkPatternAnalyzer {
 
   constructor(private args: AuthorWorkPatternArgs) {
     const { owner, repo } = GitHubUtils.parseRepoUrl(args.repoPath);
-    const config = Config.getInstance();
-    const githubToken = config.getGithubToken();
+    /**
+     * @TODO: Issue #1012
+     * Remote MCP 서버에서 Github Token을 읽어들일 수가 없는 이슈로 인해 주석처리
+     */
+    // const config = Config.getInstance();
+    // const githubToken = config.getGithubToken();
 
     this.owner = owner;
     this.repo = repo;
-    this.token = githubToken;
+    this.githubToken = args.githubToken;
     this.authorQuery = args.author;
     this.baseBranch = args.branch;
     this.since = args.since;
@@ -74,9 +79,9 @@ export class AuthorWorkPatternAnalyzer {
   async analyze() {
     I18n.setLocale(this.locale);
 
-    const octokit = GitHubUtils.createGitHubAPIClient(this.token);
+    const octokit = GitHubUtils.createGitHubAPIClient(this.githubToken);
     const { since, until } = GitHubUtils.parseTimeRange(this.since, this.until);
-    const base = this.baseBranch || (await GitHubUtils.getDefaultBranch(this.token, this.owner, this.repo));
+    const base = this.baseBranch || (await GitHubUtils.getDefaultBranch(this.githubToken, this.owner, this.repo));
 
     const commits = await safeApiCall<CommitListItem[]>(() =>
       octokit.paginate<CommitListItem>("GET /repos/{owner}/{repo}/commits", {

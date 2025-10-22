@@ -16,12 +16,13 @@ export function registerContributorRecommenderTool(server: McpServer) {
           branch: z.string().optional().describe("Branch-based recommendation (default: main)"),
           since: z.string().optional().describe("Analysis period start (default 90 days, 30d/ISO date etc.)"),
           until: z.string().optional().describe("Analysis period end (current if unspecified)"),
+          githubToken: z.string().describe("GithubToken when use repository clone"),
           locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
           isChart: z.boolean().default(false).describe("Generate interactive chart visualization (true: HTML chart display, false: JSON data)"),
         },
     },
 
-    async ({ repoPath, pr, paths, branch, since, until, locale, isChart }: ContributorRecommenderInputs & { locale?: string; chart?: boolean }) => {
+    async ({ repoPath, pr, paths, branch, since, until, githubToken, locale, isChart }: ContributorRecommenderInputs & { locale?: string; chart?: boolean }) => {
         try {
           I18n.setLocale(locale || 'en');
 
@@ -33,6 +34,7 @@ export function registerContributorRecommenderTool(server: McpServer) {
               branch,
               since,
               until,
+              githubToken,
               locale,
           });
         

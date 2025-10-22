@@ -11,15 +11,17 @@ export function registerStorylineUITool(server: McpServer) {
         inputSchema: {
           repo: z.string().describe("GitHub repository in format 'owner/repo'"),
           baseBranchName: z.string().optional().describe("Base branch name (default: main)"),
+          githubToken: z.string().describe("GithubToken when use repository clone"),
           locale: z.enum(["en", "ko"]).default("en").describe("Response language"),
         }
     },
 
-    async ({ repo, baseBranchName, locale }) => {
+    async ({ repo, baseBranchName, githubToken, locale }) => {
         try {
           const result = await renderStorylineUI({
               repo,
               baseBranchName,
+              githubToken,
               locale,
           });
 
