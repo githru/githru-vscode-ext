@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import type { ThemeName } from "theme/theme.type";
+
 interface ThemeState {
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: ThemeName;
+  setTheme: (theme: ThemeName) => void;
 }
 
 export const useThemeStore = create<ThemeState>()(

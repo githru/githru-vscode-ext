@@ -4,10 +4,11 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { sendUpdateThemeCommand } from "services";
+import { useThemeStore } from "store/theme";
+import type { ThemeName } from "theme/theme.type";
 
 import { THEME_INFO } from "./ThemeSelector.const";
 import type { ThemeInfo } from "./ThemeSelector.type";
-import { useThemeStore } from "store/theme";
 
 type ThemeIconsProps = ThemeInfo[keyof ThemeInfo] & {
   theme: string;
@@ -42,7 +43,7 @@ const ThemeSelector = () => {
 
   const { theme, setTheme } = useThemeStore();
 
-  const handleTheme = (value: string) => {
+  const handleTheme = (value: ThemeName) => {
     setTheme(value);
     sendUpdateThemeCommand(value);
     document.documentElement.setAttribute("theme", value);
