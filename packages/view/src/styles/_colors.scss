@@ -1,46 +1,24 @@
 $color-white: #f7f7f7;
-$color-black: #010818;
-$color-light-gray: #b4bac6;
-$color-medium-gray: #757880;
-$color-dark-gray: #3c4048;
-$color-background: #222324;
+$color-background: #10131a;
 
-html[theme="githru"] {
-  --color-primary: #e06091;
-  --color-secondary: #8840bb;
-  --color-tertiary: #ffd08a;
-  --color-success: #07bebe;
-  --color-failed: #ee2479;
-}
-
-html[theme="hacker-blue"] {
-  --color-primary: #456cf7;
-  --color-secondary: #3f4c73;
-  --color-tertiary: #6c60f0;
-  --color-success: #1fc7a9;
-  --color-failed: #ee2479;
-}
-
-html[theme="aqua"] {
-  --color-primary: #51decd;
-  --color-secondary: #0687a3;
-  --color-tertiary: #a7ffff;
-  --color-success: #008cde;
-  --color-failed: #ee2479;
-}
-
-html[theme="cotton-candy"] {
-  --color-primary: #ffcccb;
-  --color-secondary: #feffd1;
-  --color-tertiary: #a39aeb;
-  --color-success: #7ad5c4;
-  --color-failed: #ff8bbc;
-}
-
-html[theme="mono"] {
-  --color-primary: #68788f;
-  --color-secondary: #3a4776;
-  --color-tertiary: #9aaed1;
-  --color-success: #6cafaf;
-  --color-failed: #aa4b72;
+html {
+  --color-primary: var(--mui-palette-primary-main);
+  --color-primary-light: var(--mui-palette-primary-light);
+  --color-primary-dark: var(--mui-palette-primary-dark);
+  --color-secondary: var(--mui-palette-secondary-main);
+  --color-secondary-light: var(--mui-palette-secondary-light);
+  --color-secondary-dark: var(--mui-palette-secondary-dark);
+  --color-success: var(--mui-palette-success-main);
+  --color-failed: var(--mui-palette-failed-main);
+  --color-grey-50: var(--mui-palette-grey-50);
+  --color-grey-100: var(--mui-palette-grey-100);
+  --color-grey-200: var(--mui-palette-grey-200);
+  --color-grey-300: var(--mui-palette-grey-300);
+  --color-grey-400: var(--mui-palette-grey-400);
+  --color-grey-500: var(--mui-palette-grey-500);
+  --color-grey-600: var(--mui-palette-grey-600);
+  --color-grey-700: var(--mui-palette-grey-700);
+  --color-background: var(--mui-palette-background-default);
+  --color-white: var(--mui-palette-common-white);
+  --color-black: var(--mui-palette-common-black);
 }

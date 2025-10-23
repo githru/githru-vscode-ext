@@ -45,7 +45,7 @@ body {
 
 .load-more-button {
   background-color: var(--color-primary);
-  color: $color-white;
+  color: var(--color-white);
   border: none;
   border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
@@ -59,7 +59,7 @@ body {
   }
 
   &:disabled {
-    background-color: $color-medium-gray;
+    background-color: var(--color-grey-100);
     cursor: not-allowed;
   }
 }

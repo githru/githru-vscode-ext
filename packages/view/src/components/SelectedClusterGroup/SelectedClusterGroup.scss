@@ -11,7 +11,7 @@
     align-items: center;
     border: 0;
     background-color: transparent;
-    color: $color-white;
+    color: var(--color-white);
     font-size: $font-size-title;
     font-weight: $font-weight-semibold;
     cursor: pointer;
@@ -24,7 +24,7 @@
     max-height: 15rem;
     overflow-y: auto;
     padding: 0.3125rem;
-    background-color: $color-dark-gray;
+    background-color: var(--color-grey-100);
     border-radius: 0.5rem;
     box-shadow: 0rem 0rem 0.625rem $color-background;
     z-index: 10;
@@ -38,8 +38,8 @@
       text-overflow: ellipsis;
       justify-content: space-between;
       margin: 0.3125rem;
-      color: $color-white;
-      background-color: #4f5662;
+      color: var(--color-white);
+      background-color: var(--color-grey-300);
     }
   }
 }
