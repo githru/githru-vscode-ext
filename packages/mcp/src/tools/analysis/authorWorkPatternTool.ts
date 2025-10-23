@@ -16,6 +16,7 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
         branch: z.string().optional().describe("Branch to analyze (default: main)"),
         since: z.string().optional().describe("Analysis period start"),
         until: z.string().optional().describe("Analysis period end (defaults to now if unspecified)"),
+        githubToken: z.string().describe("GithubToken when use repository clone"),
         locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
         chart: z.boolean().default(false).describe("Return HTML chart (true)"),
       },
@@ -27,6 +28,7 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
       branch,
       since,
       until,
+      githubToken,
       locale,
       chart,
     }: AuthorWorkPatternArgs & { locale?: "en" | "ko"; chart?: boolean }) => {
@@ -39,6 +41,7 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
           branch,
           since,
           until,
+          githubToken,
           locale,
           chart,
         });

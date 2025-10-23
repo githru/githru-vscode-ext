@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+
 import { getDirname } from "./utils.js";
 
 const __dirname = getDirname();
@@ -8,6 +9,7 @@ function findLocalesDir(): string {
   const cands = [
     path.resolve(__dirname, "../resources/locales"),
     path.resolve(__dirname, "../../resources/locales"),
+    path.resolve(process.cwd(), "dist/resources/locales"),
     path.resolve(process.cwd(), "src/resources/locales"),
     path.resolve(process.cwd(), "resources/locales"),
   ];
