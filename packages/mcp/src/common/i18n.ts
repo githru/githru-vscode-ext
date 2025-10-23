@@ -1,11 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { fileURLToPath } from 'url';
+
 import { getDirname } from "./utils.js";
 
-// const __dirname = getDirname();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = getDirname();
 
 function findLocalesDir(): string {
   const cands = [
@@ -21,7 +19,7 @@ function findLocalesDir(): string {
   throw new Error("Cannot locate locales directory. Tried:\n" + cands.map((p) => " - " + p).join("\n"));
 }
 
-// const LOCALES_DIR = findLocalesDir();
+const LOCALES_DIR = findLocalesDir();
 
 class I18nManager {
   private currentLocale = "en";
@@ -34,10 +32,8 @@ class I18nManager {
 
   private loadFallback() {
     try {
-      // const fallbackPath = path.join(LOCALES_DIR, "en.json");
-      // const fallbackData = fs.readFileSync(fallbackPath, "utf-8");
-      const fallbackPath = path.join(__dirname, '../resources/locales/en.json');
-      const fallbackData = fs.readFileSync(fallbackPath, 'utf-8');
+      const fallbackPath = path.join(LOCALES_DIR, "en.json");
+      const fallbackData = fs.readFileSync(fallbackPath, "utf-8");
       this.fallbackTranslations = JSON.parse(fallbackData);
       this.translations = this.fallbackTranslations;
     } catch (error) {
@@ -56,10 +52,8 @@ class I18nManager {
     }
 
     try {
-      // const localePath = path.join(LOCALES_DIR, `${locale}.json`);
-      // const localeData = fs.readFileSync(localePath, "utf-8");
-      const localePath = path.join(__dirname, `../resources/locales/${locale}.json`);
-      const localeData = fs.readFileSync(localePath, 'utf-8');
+      const localePath = path.join(LOCALES_DIR, `${locale}.json`);
+      const localeData = fs.readFileSync(localePath, "utf-8");
       this.translations = JSON.parse(localeData);
     } catch (error) {
       console.error(`Locale '${locale}' not found, using English fallback`);
