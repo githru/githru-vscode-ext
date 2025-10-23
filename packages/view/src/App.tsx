@@ -10,12 +10,18 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
-import { initializeIDEConnection } from "services";
+import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
-  const filteredData = useDataStore((state) => state.filteredData);
+  const { filteredData, nextCommitId, isLastPage } = useDataStore((state) => ({
+    filteredData: state.filteredData,
+    nextCommitId: state.nextCommitId,
+    isLastPage: state.isLastPage,
+  }));
+
   const { handleChangeBranchList } = useBranchStore();
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
@@ -24,7 +30,7 @@ const App = () => {
   useEffect(() => {
     if (initRef.current === false) {
       const callbacks: IDESentEvents = {
-        handleChangeAnalyzedData,
+        handleChangeAnalyzedData: (payload) => handleChangeAnalyzedData(payload),
         handleChangeBranchList,
         handleGithubInfo,
       };
@@ -33,6 +39,16 @@ const App = () => {
       initRef.current = true;
     }
   }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, setLoading]);
+
+  const handleLoadMore = () => {
+    if (loading || isLastPage) return;
+
+    setLoading(true);
+    sendFetchAnalyzedDataCommand({
+      commitCountPerPage: COMMIT_COUNT_PER_PAGE,
+      lastCommitId: nextCommitId,
+    });
+  };
 
   if (loading) {
     return (
@@ -61,10 +77,21 @@ const App = () => {
       </div>
       <div>
         {filteredData.length !== 0 ? (
-          <div className="middle-container">
-            <VerticalClusterList />
-            <Statistics />
-          </div>
+          <>
+            <div className="middle-container">
+              <VerticalClusterList />
+              <Statistics />
+            </div>
+            <div className="load-more-container">
+              <button
+                className="load-more-button"
+                onClick={handleLoadMore}
+                disabled={isLastPage || loading}
+              >
+                {loading ? "Loading..." : isLastPage ? "No More Commits" : "Load More"}
+              </button>
+            </div>
+          </>
         ) : (
           <div className="no-commits-container">
             <MonoLogo />

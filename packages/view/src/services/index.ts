@@ -1,21 +1,23 @@
 import type IDEPort from "ide/IDEPort";
+import { FetchDataRequestPayload, RefreshDataRequestPayload } from "types";
 import { diContainer } from "container";
 import { DI_IDENTIFIERS } from "container/identifiers";
 import type { IDESentEvents } from "types";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 export const sendUpdateThemeCommand = (theme: string) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
   ideAdapter.sendUpdateThemeMessage(theme);
 };
 
-export const sendFetchAnalyzedDataCommand = (selectedBranch?: string) => {
+export const sendFetchAnalyzedDataCommand = (payload: FetchDataRequestPayload) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
-  ideAdapter.sendFetchAnalyzedDataMessage(selectedBranch);
+  ideAdapter.sendFetchAnalyzedDataMessage(payload);
 };
 
-export const sendRefreshDataCommand = (selectedBranch?: string) => {
+export const sendRefreshDataCommand = (payload: RefreshDataRequestPayload) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
-  ideAdapter.sendRefreshDataMessage(selectedBranch);
+  ideAdapter.sendRefreshDataMessage(payload);
   ideAdapter.sendFetchBranchListMessage();
 };
 
@@ -27,7 +29,7 @@ export const sendFetchBranchListCommand = () => {
 export const initializeIDEConnection = (callbacks: IDESentEvents) => {
   const ideAdapter = diContainer.get<IDEPort>(DI_IDENTIFIERS.IDEAdapter);
   ideAdapter.addIDESentEventListener(callbacks);
-  ideAdapter.sendFetchAnalyzedDataMessage();
+  ideAdapter.sendFetchAnalyzedDataMessage({ commitCountPerPage: COMMIT_COUNT_PER_PAGE });
   ideAdapter.sendFetchBranchListMessage();
   ideAdapter.sendFetchGithubInfo();
 };

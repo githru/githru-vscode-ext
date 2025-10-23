@@ -1,6 +1,6 @@
 ﻿import { injectable } from "inversify";
 
-import type { IDEMessage, IDEMessageEvent } from "types";
+import type { FetchDataRequestPayload, IDEMessage, IDEMessageEvent, RefreshDataRequestPayload } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
 
 import fakeData from "../fake-assets/cluster-nodes.json";
@@ -31,7 +31,8 @@ export default class FakeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
-  public sendRefreshDataMessage(payload?: string) {
+  public sendRefreshDataMessage(requestParams?: RefreshDataRequestPayload) {
+    const payload = requestParams ? JSON.stringify(requestParams) : undefined;
     const message: IDEMessage = {
       command: "refresh",
       payload,
@@ -39,7 +40,8 @@ export default class FakeIDEAdapter implements IDEPort {
     this.sendMessageToMe(message);
   }
 
-  public sendFetchAnalyzedDataMessage(payload?: string) {
+  public sendFetchAnalyzedDataMessage(requestParams?: FetchDataRequestPayload) {
+    const payload = requestParams ? JSON.stringify(requestParams) : undefined;
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
       payload,
