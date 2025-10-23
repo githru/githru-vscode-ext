@@ -12,18 +12,24 @@ export function registerGenerateCsmDictTool(server: McpServer) {
       inputSchema: {
         repo: z.string().describe("GitHub repository (format: 'owner/repo' or 'https://github.com/owner/repo')"),
         baseBranchName: z.string().optional().describe("Base branch name to analyze (default: repository's default branch)"),
+        githubToken: z.string().describe("GithubToken when use repository clone"),
         locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
       },
     },
 
-    async ({ repo, baseBranchName, locale }: {
+    async ({ repo, baseBranchName, githubToken, locale }: {
       repo: string;
       baseBranchName?: string;
+      githubToken: string
       locale?: string;
     }) => {
       try {
-        const config = Config.getInstance();
-        const githubToken = config.getGithubToken();
+        /**
+         * @TODO: Issue #1012
+         * Remote MCP 서버에서 Github Token을 읽어들일 수가 없는 이슈로 인해 주석처리
+         */
+          // const config = Config.getInstance();
+          // const githubToken = config.getGithubToken();
 
         const result = await generateNewViz({
           repo,

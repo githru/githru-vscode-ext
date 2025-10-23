@@ -61,12 +61,16 @@ export class McpReportGenerator {
   private owner: string;
   private repo: string;
 
-  constructor({ repoUrl, prNumber, locale }: FeatureImpactAnalyzerInputs) {
+  constructor({ repoUrl, prNumber, githubToken, locale }: FeatureImpactAnalyzerInputs) {
     if (locale) {
       I18n.setLocale(locale);
     }
-    const config = Config.getInstance();
-    const githubToken = config.getGithubToken();
+    /**
+     * @TODO: Issue #1012
+     * Remote MCP 서버에서 Github Token을 읽어들일 수가 없는 이슈로 인해 주석처리
+     */
+    // const config = Config.getInstance();
+    // const githubToken = config.getGithubToken();
 
     this.repoUrl = repoUrl;
     this.prNumber = prNumber;

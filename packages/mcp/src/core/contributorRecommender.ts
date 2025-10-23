@@ -26,14 +26,18 @@ export class ContributorRecommender {
   private until: string;
 
   constructor(inputs: ContributorRecommenderInputs) {
-    const config = Config.getInstance();
-    const githubToken = config.getGithubToken();
+    /**
+     * @TODO: Issue #1012
+     * Remote MCP 서버에서 Github Token을 읽어들일 수가 없는 이슈로 인해 주석처리
+     */
+    // const config = Config.getInstance();
+    // const githubToken = config.getGithubToken();
 
     if (inputs.locale) {
       I18n.setLocale(inputs.locale);
     }
 
-    this.octokit = GitHubUtils.createGitHubAPIClient(githubToken);
+    this.octokit = GitHubUtils.createGitHubAPIClient(inputs.githubToken);
 
     const { owner, repo } = GitHubUtils.parseRepoUrl(inputs.repoPath);
     this.owner = owner;

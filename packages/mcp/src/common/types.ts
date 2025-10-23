@@ -14,6 +14,7 @@ export interface GitHubApiInputs {
 export interface FeatureImpactAnalyzerInputs {
   repoUrl: string;
   prNumber: number;
+  githubToken: string;
   locale?: string;
 }
 export interface ContributorRecommenderInputs {
@@ -23,6 +24,7 @@ export interface ContributorRecommenderInputs {
   branch?: string;
   since?: string;
   until?: string;
+  githubToken: string;
   locale?: string;
   isChart?: boolean;
 }
