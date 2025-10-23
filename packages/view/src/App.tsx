@@ -13,7 +13,7 @@ import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeS
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
 import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
-import { createMuiTheme } from "theme/muiTheme";
+import { createMuiTheme } from "theme";
 
 const App = () => {
   const initRef = useRef<boolean>(false);

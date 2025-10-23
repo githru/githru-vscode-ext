@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { sendUpdateThemeCommand } from "services";
 import { useThemeStore } from "store/theme";
-import type { ThemeName } from "theme/theme.type";
+import type { ThemeName } from "theme";
 
 import { THEME_INFO } from "./ThemeSelector.const";
 import type { ThemeInfo } from "./ThemeSelector.type";

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { ThemeName } from "theme/theme.type";
+import type { ThemeName } from "theme";
 
 interface ThemeState {
   theme: ThemeName;
