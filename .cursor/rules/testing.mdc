@@ -14,6 +14,8 @@ alwaysApply: true
 - Co-locate tests with code when small; otherwise keep under `/tests`.
 - Aim for high-value coverage (core logic ~80%+). Skip trivial one-liners.
 - Naming: `describe(Component)` + `it('renders …')` with full-sentence style.
+- **Comments must be in English** for international collaboration and maintainability.
+- **Keep comments minimal and concise** - only add comments when they provide essential context or explain non-obvious behavior.
 
 ## Unit/Component (Jest + React Testing Library)
 
