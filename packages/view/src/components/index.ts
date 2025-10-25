@@ -5,4 +5,4 @@ export * from "./ThemeSelector";
 export * from "./VerticalClusterList";
 export * from "./BranchSelector";
 export * from "./FilteredAuthors";
-export * from "./FolderActivityFlow";
+export * from "./StorylineChart";

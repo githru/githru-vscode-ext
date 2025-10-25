@@ -2,9 +2,9 @@ import { useState, useCallback } from "react";
 
 import type { ClusterNode } from "types";
 
-import type { ReleaseGroup } from "./FolderActivityFlow.releaseAnalyzer";
-import { getReleaseSubFolders } from "./FolderActivityFlow.subfolder";
-import { getRootFolders } from "./FolderActivityFlow.util";
+import type { ReleaseGroup } from "./StorylineChart.releaseAnalyzer";
+import { getReleaseSubFolders } from "./StorylineChart.subfolder";
+import { getRootFolders } from "./StorylineChart.util";
 
 /**
  * Custom hook for managing folder navigation state and operations

@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
+import type { ReleaseContributorActivity } from "./StorylineChart.type";
 
 export interface ReleaseGroup {
   releaseTag: string;

@@ -2,6 +2,13 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 import { useEffect, useRef, useState } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
+import { Dialog, dialogClasses } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
 
 import MonoLogo from "assets/monoLogo.svg";
 import {
@@ -10,7 +17,7 @@ import {
   TemporalFilter,
   ThemeSelector,
   VerticalClusterList,
-  FolderActivityFlow,
+  StorylineChart,
 } from "components";
 import "./App.scss";
 import type IDEPort from "ide/IDEPort";
@@ -19,20 +26,12 @@ import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
-import { NetworkGraph } from "components/NetworkGraph";
 import { InsightsButton } from "components/InsightsButton";
-import { Dialog, dialogClasses } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import { pxToRem } from "utils";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
-  const [showFolderActivityFlowModal, setShowFolderActivityFlowModal] = useState(false);
+  const [showStorylineChartModal, setShowStorylineChartModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
   const { handleChangeBranchList } = useBranchStore();
@@ -41,12 +40,12 @@ const App = () => {
   const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
-  const handleOpenFolderActivityFlowModal = () => {
-    setShowFolderActivityFlowModal(true);
+  const handleStorylineChartModal = () => {
+    setShowStorylineChartModal(true);
   };
 
-  const handleCloseFolderActivityFlowModal = () => {
-    setShowFolderActivityFlowModal(false);
+  const handleCloseStorylineChartModal = () => {
+    setShowStorylineChartModal(false);
   };
 
   useEffect(() => {
@@ -94,7 +93,7 @@ const App = () => {
               height: "1.875rem",
               color: "white",
             }}
-            onClick={handleOpenFolderActivityFlowModal}
+            onClick={handleStorylineChartModal}
           />
         </div>
       </div>
@@ -114,15 +113,13 @@ const App = () => {
             <p>Make at least one commit to proceed.</p>
           </div>
         )}
-        <NetworkGraph />
       </div>
-
-      {/* Folder Activity Flow Modal */}
-      {showFolderActivityFlowModal && (
+      {/* Storyline Chart Modal */}
+      {showStorylineChartModal && (
         <Dialog
           fullScreen
-          open={showFolderActivityFlowModal}
-          onClose={handleCloseFolderActivityFlowModal}
+          open={showStorylineChartModal}
+          onClose={handleCloseStorylineChartModal}
           sx={{
             [`& .${dialogClasses.paper}`]: {
               backgroundColor: "#222324",
@@ -141,7 +138,7 @@ const App = () => {
               <IconButton
                 edge="end"
                 color="inherit"
-                onClick={handleCloseFolderActivityFlowModal}
+                onClick={handleCloseStorylineChartModal}
                 size="large"
                 aria-label="close"
               >
@@ -154,7 +151,7 @@ const App = () => {
               backgroundColor: "#F7F7F780",
             }}
           />
-          <FolderActivityFlow />
+          <StorylineChart />
         </Dialog>
       )}
     </>
