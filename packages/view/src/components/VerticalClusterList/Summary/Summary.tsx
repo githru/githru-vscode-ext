@@ -33,38 +33,49 @@ const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProp
 
   const sentinelRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const isObservingRef = useRef(false);
 
-  // Infinite scroll: Load data when sentinel is detected
-  const handleRowsRendered = ({ stopIndex }: { startIndex: number; stopIndex: number }) => {
-    if (!isLastPage && stopIndex >= clusters.length && sentinelRef.current && enabled) {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && !isLoadingMore && enabled) {
-            onLoadMore();
-          }
-        },
-        {
-          root: null,
-          rootMargin: "100px",
-          threshold: 0.1,
-        }
-      );
-
-      observerRef.current.observe(sentinelRef.current);
-    }
-  };
-
+  // Create IntersectionObserver once and reuse it
   useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore && enabled) {
+          onLoadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "100px",
+        threshold: 0.1,
+      }
+    );
+
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
+        observerRef.current = null;
       }
+      isObservingRef.current = false;
     };
-  }, []);
+  }, [enabled, isLoadingMore, onLoadMore]);
+
+  // Infinite scroll: Observe sentinel when it's rendered
+  const handleRowsRendered = ({ stopIndex }: { startIndex: number; stopIndex: number }) => {
+    if (!isLastPage && stopIndex >= clusters.length && sentinelRef.current && enabled && observerRef.current) {
+      if (!isObservingRef.current) {
+        observerRef.current.observe(sentinelRef.current);
+        isObservingRef.current = true;
+      }
+    }
+  };
+
+  // Unobserve when sentinel is no longer needed
+  useEffect(() => {
+    if (isLastPage && observerRef.current && isObservingRef.current) {
+      observerRef.current.disconnect();
+      isObservingRef.current = false;
+    }
+  }, [isLastPage]);
 
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(filteredData, clusterId);
