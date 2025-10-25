@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./ThemeSelector.scss";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
 
 import { sendUpdateThemeCommand } from "services";
 import { useThemeStore } from "store";
@@ -69,15 +70,16 @@ const ThemeSelector = () => {
       className="theme-selector"
       ref={themeSelectorRef}
     >
-      <AutoAwesomeIcon onClick={() => setIsOpen(true)} />
+      <IconButton onClick={() => setIsOpen(true)}>
+        <AutoAwesomeIcon />
+      </IconButton>
       {isOpen && (
         <div className="theme-selector__container">
           <div className="theme-selector__header">
             <p>Theme</p>
-            <CloseIcon
-              fontSize="small"
-              onClick={() => setIsOpen(false)}
-            />
+            <IconButton onClick={() => setIsOpen(false)}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
           </div>
           <div className="theme-selector__list">
             {(Object.entries(THEME_CONFIG) as ThemeList).map(([themeName, themeConfig]) => (

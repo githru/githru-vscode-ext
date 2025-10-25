@@ -2,9 +2,10 @@ import { createTheme } from "@mui/material/styles";
 
 import type { ThemeName } from "./theme.type";
 import { BACKGROUND_COLORS, COMMON_COLORS, GREY_COLORS, SYSTEM_COLORS, THEME_CONFIG } from "./theme.const";
+import { muiIconButton } from "./components";
 
-export const createMuiTheme = (theme: ThemeName) => {
-  const themeColors = THEME_CONFIG[theme].colors;
+export const createMuiTheme = (themeName: ThemeName) => {
+  const themeColors = THEME_CONFIG[themeName].colors;
 
   return createTheme({
     cssVariables: true,
@@ -14,6 +15,9 @@ export const createMuiTheme = (theme: ThemeName) => {
       grey: GREY_COLORS,
       background: BACKGROUND_COLORS,
       common: COMMON_COLORS,
+    },
+    components: {
+      MuiIconButton: muiIconButton,
     },
   });
 };
