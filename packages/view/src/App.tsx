@@ -40,7 +40,7 @@ const App = () => {
   const { theme } = useThemeStore();
   const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
 
-  const handleStorylineChartModal = () => {
+  const handleOpenStorylineChartModal = () => {
     setShowStorylineChartModal(true);
   };
 
@@ -93,7 +93,7 @@ const App = () => {
               height: "1.875rem",
               color: "white",
             }}
-            onClick={handleStorylineChartModal}
+            onClick={handleOpenStorylineChartModal}
           />
         </div>
       </div>
