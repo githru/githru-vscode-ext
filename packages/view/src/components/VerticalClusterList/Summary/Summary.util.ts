@@ -1,5 +1,8 @@
+import md5 from "md5";
+
 import type { GlobalProps, CommitNode, ClusterNode, SelectedDataProps } from "types";
 import { getAuthorProfileImgSrc } from "utils/author";
+import { GRAVATA_URL } from "constants/constants";
 
 import type { AuthSrcMap, Cluster } from "./Summary.type";
 
@@ -140,12 +143,29 @@ function getAuthorNames(data: ClusterNode[]) {
 
 export async function getAuthSrcMap(data: ClusterNode[]) {
   const authorNames = getAuthorNames(data);
-  const promiseAuthSrc = authorNames.map(getAuthorProfileImgSrc);
+
+  // 각 author에 대해 이미지 로드 시도, 실패 시 fallback 제공
+  const promiseAuthSrc = authorNames.map((name) =>
+    getAuthorProfileImgSrc(name).catch(() => ({
+      name,
+      src: `${GRAVATA_URL}/${md5(name)}?d=identicon&f=y`,
+    }))
+  );
+
   const authSrcs = await Promise.all(promiseAuthSrc);
   const authSrcMap: AuthSrcMap = {};
+
   authSrcs.forEach((authorInfo) => {
     const { name, src } = authorInfo;
     authSrcMap[name] = src;
   });
+
+  // 혹시 누락된 author가 있다면 fallback 제공
+  authorNames.forEach((name) => {
+    if (!authSrcMap[name]) {
+      authSrcMap[name] = `${GRAVATA_URL}/${md5(name)}?d=identicon&f=y`;
+    }
+  });
+
   return authSrcMap;
 }

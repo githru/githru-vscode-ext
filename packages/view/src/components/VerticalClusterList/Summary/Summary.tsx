@@ -15,12 +15,12 @@ import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/Cluster
 import { usePreLoadAuthorImg } from "./Summary.hook";
 import { getInitData, getClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
 import { Content } from "./Content";
-import type { ClusterRowProps } from "./Summary.type";
+import type { ClusterRowProps, SummaryProps } from "./Summary.type";
 
 const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
 const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
 
-const Summary = () => {
+const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProps) => {
   const [filteredData, selectedData, toggleSelectedData] = useDataStore(
     useShallow((state) => [state.filteredData, state.selectedData, state.toggleSelectedData])
   );
@@ -31,17 +31,74 @@ const Summary = () => {
   const listRef = useRef<List>(null);
   const clusterSizes = getClusterSizes(filteredData);
 
+  // Ref for sentinel element
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Callback invoked when react-virtualized renders rows
+  const handleRowsRendered = ({ stopIndex }: { startIndex: number; stopIndex: number }) => {
+    // When not the last page and sentinel row (clusters.length) is within the rendered range
+    if (!isLastPage && stopIndex >= clusters.length && sentinelRef.current && enabled) {
+      // Clean up existing observer if present
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+
+      // Set up IntersectionObserver
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          // Load data when sentinel is visible and not currently loading
+          if (entries[0].isIntersecting && !isLoadingMore && enabled) {
+            onLoadMore();
+          }
+        },
+        {
+          root: null, // Based on viewport
+          rootMargin: "100px", // Detect 100px before reaching the element
+          threshold: 0.1, // Trigger when 10% visible
+        }
+      );
+
+      observerRef.current.observe(sentinelRef.current);
+    }
+  };
+
+  // Cleanup: disconnect observer on component unmount
+  useEffect(() => {
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(filteredData, clusterId);
     toggleSelectedData(selected, clusterId);
   };
 
   const getRowHeight = ({ index }: { index: number }) => {
+    // Last row is sentinel (only when not the last page)
+    if (!isLastPage && index === clusters.length) {
+      return 10; // Sentinel height
+    }
+
     const cluster = clusters[index];
     return selectedClusterIds.includes(cluster.clusterId) ? EXPANDED_ROW_HEIGHT : COLLAPSED_ROW_HEIGHT;
   };
 
   const rowRenderer = (props: ListRowProps) => {
+    // Render sentinel for last row (only when not the last page)
+    if (!isLastPage && props.index === clusters.length) {
+      return (
+        <div
+          ref={sentinelRef}
+          key={props.index}
+          style={props.style}
+        />
+      );
+    }
+
     const cluster = clusters[props.index];
     const isExpanded = selectedClusterIds.includes(cluster.clusterId);
     const { key, ...restProps } = props;
@@ -80,9 +137,10 @@ const Summary = () => {
             ref={listRef}
             width={width}
             height={height}
-            rowCount={clusters.length}
+            rowCount={isLastPage ? clusters.length : clusters.length + 1} // Add sentinel row when not the last page
             rowHeight={getRowHeight}
             rowRenderer={rowRenderer}
+            onRowsRendered={handleRowsRendered}
             overscanRowCount={15}
             className="cluster-summary"
           />

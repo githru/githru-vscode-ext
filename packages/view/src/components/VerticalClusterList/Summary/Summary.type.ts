@@ -26,7 +26,7 @@ export type Cluster = {
   clusterTags: string[];
 };
 
-export type AuthSrcMap = Record<string, string>;
+export type AuthSrcMap = Record<string, string | undefined>;
 
 export type ClusterRowProps = Omit<ListRowProps, "key"> & {
   cluster: Cluster;
@@ -37,4 +37,11 @@ export type ClusterRowProps = Omit<ListRowProps, "key"> & {
   clusterSizes: number[];
   detailRef: React.RefObject<HTMLDivElement>;
   selectedClusterIds: number[];
+};
+
+export type SummaryProps = {
+  onLoadMore: () => void;
+  isLoadingMore: boolean;
+  isLastPage: boolean;
+  enabled: boolean;
 };
