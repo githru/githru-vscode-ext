@@ -1,23 +1,22 @@
 @import "../../styles/colors";
 @import "../../styles/font";
 
-.folder-activity-flow {
+.storyline-chart {
   // Chart color palette for contributors
-  --chart-color-1: #e06091;  // githru-pri
-  --chart-color-2: #8840bb;  // githru-sec
-  --chart-color-3: #ffd08a;  // githru-ter
-  --chart-color-4: #07bebe;  // githru-suc
-  --chart-color-5: #456cf7;  // hacker-pri
-  --chart-color-6: #0687a3;  // aqua-sec
-  --chart-color-7: #ffcccb;  // cotton-pri
-  --chart-color-8: #feffd1;  // cotton-sec
-  --chart-color-9: #3a4776;  // mono-sec
+  --chart-color-1: #e06091; // githru-pri
+  --chart-color-2: #8840bb; // githru-sec
+  --chart-color-3: #ffd08a; // githru-ter
+  --chart-color-4: #07bebe; // githru-suc
+  --chart-color-5: #456cf7; // hacker-pri
+  --chart-color-6: #0687a3; // aqua-sec
+  --chart-color-7: #ffcccb; // cotton-pri
+  --chart-color-8: #feffd1; // cotton-sec
+  --chart-color-9: #3a4776; // mono-sec
   --chart-color-10: #aa4b72; // mono-fai
 
   --title-left-offset: 30px;
   --title-icon-size: 34px;
   --title-gap: 4px;
-
 
   padding: 1rem;
   background: $color-background;

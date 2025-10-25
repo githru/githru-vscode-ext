@@ -9,7 +9,7 @@ import {
   extractFolderFromPath,
   extractReleaseContributorActivities,
   type ReleaseGroup,
-} from "./FolderActivityFlow.releaseAnalyzer";
+} from "./StorylineChart.releaseAnalyzer";
 
 describe("FolderActivityFlow.releaseAnalyzer", () => {
   describe("extractFolderFromPath", () => {

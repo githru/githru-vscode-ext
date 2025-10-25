@@ -1,14 +1,14 @@
 import * as d3 from "d3";
 import type React from "react";
 
-import { DIMENSIONS, LABEL_COLUMN_PADDING } from "./FolderActivityFlow.const";
-import type { ReleaseContributorActivity } from "./FolderActivityFlow.type";
+import { DIMENSIONS, LABEL_COLUMN_PADDING } from "./StorylineChart.const";
+import type { ReleaseContributorActivity } from "./StorylineChart.type";
 import {
   calculateReleaseNodePosition,
   findFirstReleaseContributorNodes,
   generateReleaseFlowLineData,
   generateReleaseFlowLinePath,
-} from "./FolderActivityFlow.util";
+} from "./StorylineChart.util";
 
 /**
  * Props for release visualization component

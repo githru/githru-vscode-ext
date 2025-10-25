@@ -7,8 +7,8 @@ import {
   extractReleaseContributorActivities,
   type ReleaseGroup,
   type ReleaseFolderActivity,
-} from "./FolderActivityFlow.releaseAnalyzer";
-import type { ReleaseContributorActivity, ReleaseFlowLineData } from "./FolderActivityFlow.type";
+} from "./StorylineChart.releaseAnalyzer";
+import type { ReleaseContributorActivity, ReleaseFlowLineData } from "./StorylineChart.type";
 
 // 릴리즈 기반 상위 폴더 분석
 export function analyzeReleaseBasedFolders(

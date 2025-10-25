@@ -9,13 +9,13 @@ import { Link } from "@mui/material";
 
 import { useDataStore } from "store";
 
-import { DIMENSIONS, getResponsiveChartWidth } from "./FolderActivityFlow.const";
-import "./FolderActivityFlow.scss";
-import { extractReleaseBasedContributorActivities } from "./FolderActivityFlow.util";
+import { DIMENSIONS, getResponsiveChartWidth } from "./StorylineChart.const";
+import "./StorylineChart.scss";
+import { extractReleaseBasedContributorActivities } from "./StorylineChart.util";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
 import { useFolderNavigation } from "./useFolderNavigation";
 
-const FolderActivityFlow = () => {
+const StorylineChart = () => {
   const [totalData] = useDataStore(useShallow((state) => [state.data]));
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -178,14 +178,14 @@ const FolderActivityFlow = () => {
 
   return (
     <div
-      className="folder-activity-flow"
+      className="storyline-chart"
       ref={containerRef}
     >
-      <div className="folder-activity-flow__head">
+      <div className="storyline-chart__head">
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
-          className="folder-activity-flow__breadcrumb"
+          className="storyline-chart__breadcrumb"
         >
           {breadcrumbs.map((crumb, index) => {
             const isLast = index === breadcrumbs.length - 1;
@@ -211,24 +211,24 @@ const FolderActivityFlow = () => {
           })}
         </Breadcrumbs>
 
-        <div className="folder-activity-flow__title">
-          <WorkspacePremiumRoundedIcon className="folder-activity-flow__title-icon" />
-          <span className="folder-activity-flow__title-text">Top contributor is {topContributorLabel}</span>
+        <div className="storyline-chart__title">
+          <WorkspacePremiumRoundedIcon className="storyline-chart__title-icon" />
+          <span className="storyline-chart__title-text">Top contributor is {topContributorLabel}</span>
         </div>
 
-        <div className="folder-activity-flow__subtitle">{releaseRangeLabel}</div>
+        <div className="storyline-chart__subtitle">{releaseRangeLabel}</div>
       </div>
 
       <svg
-        className="folder-activity-flow__chart"
+        className="storyline-chart__chart"
         ref={svgRef}
       />
       <div
-        className="folder-activity-flow__tooltip"
+        className="storyline-chart__tooltip"
         ref={tooltipRef}
       />
     </div>
   );
 };
 
-export default FolderActivityFlow;
+export default StorylineChart;
