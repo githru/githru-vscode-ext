@@ -22,3 +22,4 @@ export type BackgroundColors = Partial<TypeBackground>;
 export type CommonColors = Partial<MuiCommonColors>;
 
 export type ThemeConfig = Record<ThemeName, { colors: ThemeColors }>;
+export type ThemeList = [ThemeName, ThemeConfig[ThemeName]][];

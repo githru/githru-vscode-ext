@@ -4,34 +4,37 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { sendUpdateThemeCommand } from "services";
-import { useThemeStore } from "store/theme";
-import type { ThemeName } from "theme";
+import { useThemeStore } from "store";
+import type { ThemeColors, ThemeList, ThemeName } from "theme";
+import { THEME_CONFIG } from "theme";
 
-import { THEME_INFO } from "./ThemeSelector.const";
-import type { ThemeInfo } from "./ThemeSelector.type";
-
-type ThemeIconsProps = ThemeInfo[keyof ThemeInfo] & {
-  theme: string;
+type ThemeIconsProps = {
+  title: ThemeName;
+  colors: ThemeColors;
+  theme: ThemeName;
   onClick: () => void;
 };
 
-const ThemeIcons = ({ title, value, colors, theme, onClick }: ThemeIconsProps) => {
+const ThemeIcons = ({ title, colors, theme, onClick }: ThemeIconsProps) => {
+  const formatThemeName = (name: string) => name.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
   return (
     <div
-      className={`theme-icon${theme === value ? "--selected" : ""}`}
+      className={`theme-icon${theme === title ? "--selected" : ""}`}
       onClick={onClick}
       role="presentation"
     >
       <div className="theme-icon__container">
-        {Object.values(colors).map((color, index) => (
-          <div
-            key={Number(index)}
-            className="theme-icon__color"
-            style={{ backgroundColor: color }}
-          />
-        ))}
+        <div
+          className="theme-icon__color"
+          style={{ backgroundColor: colors.primary.main }}
+        />
+        <div
+          className="theme-icon__color"
+          style={{ backgroundColor: colors.secondary.main }}
+        />
       </div>
-      <p className="theme-icon__title">{title}</p>
+      <p className="theme-icon__title">{formatThemeName(title)}</p>
     </div>
   );
 };
@@ -46,7 +49,7 @@ const ThemeSelector = () => {
   const handleTheme = (value: ThemeName) => {
     setTheme(value);
     sendUpdateThemeCommand(value);
-    document.documentElement.setAttribute("theme", value);
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -60,10 +63,6 @@ const ThemeSelector = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("theme", theme);
-  }, [theme]);
 
   return (
     <div
@@ -81,15 +80,13 @@ const ThemeSelector = () => {
             />
           </div>
           <div className="theme-selector__list">
-            {Object.entries(THEME_INFO).map(([_, themeInfo]) => (
+            {(Object.entries(THEME_CONFIG) as ThemeList).map(([themeName, themeConfig]) => (
               <ThemeIcons
-                key={themeInfo.value}
-                {...themeInfo}
+                key={themeName}
+                title={themeName}
                 theme={theme}
-                onClick={() => {
-                  handleTheme(themeInfo.value);
-                  setIsOpen(false);
-                }}
+                colors={themeConfig.colors}
+                onClick={() => handleTheme(themeName)}
               />
             ))}
           </div>

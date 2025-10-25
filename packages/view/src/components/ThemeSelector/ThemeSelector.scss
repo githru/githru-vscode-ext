@@ -73,5 +73,6 @@
   &__title {
     font-size: $font-size-body;
     font-weight: $font-weight-regular;
+    white-space: nowrap;
   }
 }
