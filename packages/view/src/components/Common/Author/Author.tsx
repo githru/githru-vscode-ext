@@ -1,13 +1,12 @@
 import { Tooltip, Avatar } from "@mui/material";
 
 import type { AuthorInfo } from "types";
-
 import { GITHUB_URL } from "constants/constants";
 
 import { AVATAR_STYLE, TOOLTIP_STYLE } from "./Author.const";
 
-const isGitHubUser = (src: string): boolean => {
-  return src.startsWith(GITHUB_URL);
+const isGitHubUser = (src: string | undefined): boolean => {
+  return Boolean(src?.startsWith(GITHUB_URL));
 };
 
 const getGitHubProfileUrl = (username: string): string => {
@@ -42,6 +41,18 @@ const StaticAvatar = ({ name, src }: AuthorInfo) => {
 };
 
 const AvatarComponent = ({ name, src }: AuthorInfo) => {
+  // src가 undefined인 경우 이름의 첫 글자를 표시하는 기본 아바타 사용
+  if (!src) {
+    return (
+      <Avatar
+        alt={name}
+        sx={AVATAR_STYLE}
+      >
+        {name.charAt(0).toUpperCase()}
+      </Avatar>
+    );
+  }
+
   return isGitHubUser(src) ? (
     <ClickableAvatar
       name={name}

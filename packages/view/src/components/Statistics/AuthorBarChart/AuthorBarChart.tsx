@@ -222,8 +222,8 @@ const AuthorBarChart = () => {
       if (!d?.name) return null;
 
       try {
-        const profileImgSrc: string = await getAuthorProfileImgSrc(d.name).then((res: AuthorInfo) => res.src);
-        return { name: d.name, src: profileImgSrc };
+        const profileImgSrc: string | undefined = await getAuthorProfileImgSrc(d.name).then((res: AuthorInfo) => res.src);
+        return { name: d.name, src: profileImgSrc ?? "" };
       } catch (error) {
         console.warn(`Failed to load profile image for ${d.name}:`, error);
         return null;
