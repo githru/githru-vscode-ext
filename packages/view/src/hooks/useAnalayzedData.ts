@@ -29,6 +29,14 @@ export const useAnalayzedData = () => {
       return;
     }
     const { clusterNodes, nextCommitId, isLastPage, isLoadMore } = payload;
+
+    // clusterNodes 유효성 검사
+    if (!Array.isArray(clusterNodes)) {
+      console.error("Invalid clusterNodes:", clusterNodes);
+      setLoading(false);
+      return;
+    }
+
     if (isLoadMore) {
       addData(clusterNodes);
     } else {
