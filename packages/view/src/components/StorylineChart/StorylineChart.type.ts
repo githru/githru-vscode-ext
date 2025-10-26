@@ -38,3 +38,12 @@ export interface ReleaseFlowLineData {
   endDate: Date;
   contributorName: string;
 }
+
+export interface ReleaseGapLineData {
+  startReleaseIndex: number;
+  endReleaseIndex: number;
+  startFolder: string;
+  endFolder: string;
+  contributorName: string;
+  skippedReleases: number[];
+}
