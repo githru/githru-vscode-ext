@@ -1,18 +1,19 @@
 import { createTheme } from "@mui/material/styles";
 
 import type { ThemeName } from "./theme.type";
-import { BACKGROUND_COLOR, GREY_COLORS, SYSTEM_COLORS, THEME_CONFIG } from "./theme.const";
+import { BACKGROUND_COLORS, COMMON_COLORS, GREY_COLORS, SYSTEM_COLORS, THEME_CONFIG } from "./theme.const";
 
 export const createMuiTheme = (theme: ThemeName) => {
-  const { colors } = THEME_CONFIG[theme];
+  const themeColors = THEME_CONFIG[theme].colors;
 
   return createTheme({
     cssVariables: true,
     palette: {
-      ...colors,
+      ...themeColors,
       ...SYSTEM_COLORS,
       grey: GREY_COLORS,
-      background: BACKGROUND_COLOR,
+      background: BACKGROUND_COLORS,
+      common: COMMON_COLORS,
     },
   });
 };

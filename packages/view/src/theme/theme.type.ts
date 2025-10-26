@@ -1,20 +1,24 @@
-import type { PaletteOptions } from "@mui/material/styles/createPalette";
+import type {
+  ColorPartial,
+  CommonColors as MuiCommonColors,
+  PaletteColorOptions,
+  TypeBackground,
+} from "@mui/material/styles/createPalette";
 
 export type ThemeName = "githru" | "hacker-blue" | "aqua" | "cotton-candy" | "mono";
 
 export interface ThemeColors {
-  primary: PaletteOptions["primary"];
-  secondary: PaletteOptions["secondary"];
+  primary: PaletteColorOptions;
+  secondary: PaletteColorOptions;
 }
 
 export interface SystemColors {
-  error: PaletteOptions["error"];
-  success: PaletteOptions["success"];
+  error: PaletteColorOptions;
+  success: PaletteColorOptions;
 }
 
-export type GreyColors = PaletteOptions["grey"];
-export type BackgroundColor = PaletteOptions["background"];
+export type GreyColors = ColorPartial;
+export type BackgroundColors = Partial<TypeBackground>;
+export type CommonColors = Partial<MuiCommonColors>;
 
-export type ThemeConfig = {
-  [key in ThemeName]: { colors: ThemeColors };
-};
+export type ThemeConfig = Record<ThemeName, { colors: ThemeColors }>;

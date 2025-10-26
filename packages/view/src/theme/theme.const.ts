@@ -1,4 +1,4 @@
-import type { BackgroundColor, GreyColors, SystemColors, ThemeConfig } from "./theme.type";
+import type { BackgroundColors, CommonColors, GreyColors, SystemColors, ThemeConfig } from "./theme.type";
 
 export const THEME_CONFIG: ThemeConfig = {
   githru: {
@@ -93,6 +93,11 @@ export const GREY_COLORS: GreyColors = {
   700: "#E9EEF6",
 };
 
-export const BACKGROUND_COLOR: BackgroundColor = {
+export const BACKGROUND_COLORS: BackgroundColors = {
   default: "#10131A",
+};
+
+export const COMMON_COLORS: CommonColors = {
+  white: "#f7f7f7",
+  black: "#0B0E13",
 };
