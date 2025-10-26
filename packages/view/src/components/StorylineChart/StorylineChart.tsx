@@ -7,16 +7,18 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
 import { Link } from "@mui/material";
 
-import { useDataStore } from "store";
+import { useDataStore, useStorylineFilterStore } from "store";
 
 import { DIMENSIONS, getResponsiveChartWidth } from "./StorylineChart.const";
 import "./StorylineChart.scss";
 import { extractReleaseBasedContributorActivities } from "./StorylineChart.util";
 import { renderReleaseVisualization } from "./ReleaseVisualization";
 import { useFolderNavigation } from "./useFolderNavigation";
+import StorylineFilters from "./StorylineFilters";
 
 const StorylineChart = () => {
   const [totalData] = useDataStore(useShallow((state) => [state.data]));
+  const { releaseRange, selectedContributors } = useStorylineFilterStore();
 
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,41 @@ const StorylineChart = () => {
   }, [initializeRootFolders]);
 
   const breadcrumbs = useMemo(() => getBreadcrumbs(), [getBreadcrumbs]);
+
+  // 원본 활동 데이터 계산
+  const releaseContributorActivities = useMemo(() => {
+    if (!totalData || totalData.length === 0 || releaseTopFolderPaths.length === 0) {
+      return [];
+    }
+
+    const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
+    return extractReleaseBasedContributorActivities(totalData, releaseTopFolderPaths, currentDepth);
+  }, [totalData, releaseTopFolderPaths, currentPath]);
+
+  // 필터링된 activities 계산
+  const filteredActivities = useMemo(() => {
+    if (releaseContributorActivities.length === 0) {
+      return [];
+    }
+
+    let filtered = [...releaseContributorActivities];
+
+    // 릴리즈 범위 필터
+    if (releaseRange) {
+      filtered = filtered.filter(
+        (activity) =>
+          activity.releaseIndex >= releaseRange.startReleaseIndex &&
+          activity.releaseIndex <= releaseRange.endReleaseIndex
+      );
+    }
+
+    // 기여자 필터
+    if (selectedContributors.length > 0) {
+      filtered = filtered.filter((activity) => selectedContributors.includes(activity.contributorName));
+    }
+
+    return filtered;
+  }, [releaseContributorActivities, releaseRange, selectedContributors]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -66,20 +103,6 @@ const StorylineChart = () => {
   }, []);
 
   const { topContributorName, releaseRangeLabel } = useMemo(() => {
-    if (!totalData || totalData.length === 0 || releaseTopFolderPaths.length === 0) {
-      return {
-        topContributorName: null,
-        releaseRangeLabel: "...",
-      };
-    }
-
-    const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
-    const releaseContributorActivities = extractReleaseBasedContributorActivities(
-      totalData,
-      releaseTopFolderPaths,
-      currentDepth
-    );
-
     if (releaseContributorActivities.length === 0) {
       return {
         topContributorName: null,
@@ -125,7 +148,7 @@ const StorylineChart = () => {
       topContributorName: mostActiveContributor || null,
       releaseRangeLabel: rangeLabel || "...",
     };
-  }, [totalData, releaseTopFolderPaths, currentPath]);
+  }, [releaseContributorActivities]);
 
   useEffect(() => {
     if (!totalData || totalData.length === 0) {
@@ -142,17 +165,9 @@ const StorylineChart = () => {
 
     const svg = d3.select(svgRef.current).attr("width", chartWidth).attr("height", DIMENSIONS.height);
 
-    // activity가 있는 폴더 카운트
-    const currentDepth = currentPath === "" ? 1 : currentPath.split("/").length + 1;
-    const releaseContributorActivities = extractReleaseBasedContributorActivities(
-      totalData,
-      releaseTopFolderPaths,
-      currentDepth
-    );
-
     svg.selectAll("*").remove();
 
-    if (releaseContributorActivities.length === 0) {
+    if (filteredActivities.length === 0) {
       svg
         .append("text")
         .attr("x", chartWidth / 2)
@@ -167,12 +182,12 @@ const StorylineChart = () => {
 
     renderReleaseVisualization({
       svg,
-      releaseContributorActivities,
+      releaseContributorActivities: filteredActivities,
       releaseTopFolderPaths,
       tooltipRef,
       onFolderClick: navigateToFolder,
     });
-  }, [totalData, releaseGroups, releaseTopFolderPaths, navigateToFolder, currentPath, chartWidth]);
+  }, [filteredActivities, releaseTopFolderPaths, navigateToFolder, chartWidth, totalData, releaseGroups]);
 
   const topContributorLabel = topContributorName || "...";
 
@@ -217,6 +232,9 @@ const StorylineChart = () => {
         </div>
 
         <div className="storyline-chart__subtitle">{releaseRangeLabel}</div>
+      </div>
+      <div className="storyline-chart__filters">
+        {releaseContributorActivities.length > 0 && <StorylineFilters activities={releaseContributorActivities} />}
       </div>
 
       <svg

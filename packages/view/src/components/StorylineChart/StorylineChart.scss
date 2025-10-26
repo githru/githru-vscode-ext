@@ -65,6 +65,11 @@
     font-weight: $font-weight-regular;
   }
 
+  &__filters {
+    margin-top: 0.5rem;
+    padding: 1rem;
+  }
+
   &__breadcrumb {
     display: flex;
     align-items: center;

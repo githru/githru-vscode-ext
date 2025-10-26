@@ -44,15 +44,14 @@ export const useStorylineFilterStore = create<StorylineFilterState>((set) => ({
         return {
           selectedContributors: state.selectedContributors.filter((name) => name !== contributorName),
         };
-      } else {
-        // 선택되지 않은 경우 추가 (최대 개수 체크)
-        if (state.selectedContributors.length >= state.maxContributors) {
-          return state; // 최대 개수 초과 시 변경 없음
-        }
-        return {
-          selectedContributors: [...state.selectedContributors, contributorName],
-        };
       }
+      // 선택되지 않은 경우 추가 (최대 개수 체크)
+      if (state.selectedContributors.length >= state.maxContributors) {
+        return state; // 최대 개수 초과 시 변경 없음
+      }
+      return {
+        selectedContributors: [...state.selectedContributors, contributorName],
+      };
     }),
   clearContributors: () => set({ selectedContributors: [] }),
   resetFilters: () => set({ releaseRange: null, selectedContributors: [] }),
