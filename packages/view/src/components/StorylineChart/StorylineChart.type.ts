@@ -32,7 +32,9 @@ export interface ReleaseContributorActivity {
 export interface ReleaseFlowLineData {
   startReleaseIndex: number;
   startFolder: string;
+  startDate: Date;
   endReleaseIndex: number;
   endFolder: string;
+  endDate: Date;
   contributorName: string;
 }

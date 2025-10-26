@@ -7,7 +7,6 @@ import {
   calculateReleaseNodePosition,
   findFirstReleaseContributorNodes,
   generateReleaseFlowLineData,
-  generateReleaseFlowLinePath,
 } from "./StorylineChart.util";
 
 /**
@@ -297,7 +296,34 @@ export const renderReleaseVisualization = ({
     .enter()
     .append("path")
     .attr("class", "flow-line")
-    .attr("d", (d) => generateReleaseFlowLinePath(d, xScale, yScale))
+    .attr("d", (d) => {
+      // 실제 노드 위치를 찾아서 경로 생성 (날짜까지 매칭)
+      const startActivity = releaseContributorActivities.find(
+        (a) =>
+          a.releaseIndex === d.startReleaseIndex &&
+          a.folderPath === d.startFolder &&
+          a.contributorName === d.contributorName &&
+          a.date.getTime() === d.startDate.getTime()
+      );
+      const endActivity = releaseContributorActivities.find(
+        (a) =>
+          a.releaseIndex === d.endReleaseIndex &&
+          a.folderPath === d.endFolder &&
+          a.contributorName === d.contributorName &&
+          a.date.getTime() === d.endDate.getTime()
+      );
+
+      if (!startActivity || !endActivity) {
+        return "";
+      }
+
+      const x1 = calculateReleaseNodePosition(startActivity, xScale, activitiesByRelease);
+      const y1 = (yScale(d.startFolder) || 0) + yScale.bandwidth() / 2;
+      const x2 = calculateReleaseNodePosition(endActivity, xScale, activitiesByRelease);
+      const y2 = (yScale(d.endFolder) || 0) + yScale.bandwidth() / 2;
+      const midX = (x1 + x2) / 2;
+      return `M ${x1},${y1} Q ${midX},${y1} ${midX},${(y1 + y2) / 2} Q ${midX},${y2} ${x2},${y2}`;
+    })
     .attr("fill", "none")
     .attr("stroke", (d) => colorScale(d.contributorName) as string)
     .attr("stroke-width", 2)
