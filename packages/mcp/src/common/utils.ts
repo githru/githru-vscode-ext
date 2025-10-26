@@ -4,8 +4,6 @@ import relativeTime from "dayjs/plugin/relativeTime.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import * as cp from "child_process";
 import type { GitHubRepoInfo } from "./types.js";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
@@ -280,21 +278,3 @@ export const CommonUtils = {
     return isNaN(parsed) ? 0 : parsed;
   },
 };
-
-export function getFilename(): string {
-  if (typeof __filename !== "undefined") return __filename;
-  try {
-    const metaUrl = (0, eval)("import.meta.url");
-    if (metaUrl) return fileURLToPath(metaUrl);
-  } catch {}
-  return path.join(process.cwd(), "index.js");
-}
-
-export function getDirname(): string {
-  if (typeof __dirname !== "undefined") return __dirname;
-  try {
-    const metaUrl = (0, eval)("import.meta.url");
-    if (metaUrl) return path.dirname(fileURLToPath(metaUrl));
-  } catch {}
-  return process.cwd();
-}

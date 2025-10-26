@@ -1,25 +1,15 @@
-import * as fs from "fs";
-import * as path from "path";
+import { getDirname, makeAssetResolver, resolveAssetDir } from "./assetResolver.js";
 
-import { getDirname } from "./utils.js";
+const LOCALES_DIR = resolveAssetDir({
+  envVar: "GITHRU_LOCALES_DIR",
+  callerDirname: getDirname(),
+  moduleAnchors: ["resources/locales"],
+  packageAnchors: ["dist/resources/locales", "resources/locales", "src/resources/locales"],
+  requiredFiles: ["en.json"],
+  tryRequireResolve: { request: "./resources/locales/en.json" },
+});
 
-const __dirname = getDirname();
-
-function findLocalesDir(): string {
-  const cands = [
-    path.resolve(__dirname, "../resources/locales"),
-    path.resolve(__dirname, "../../resources/locales"),
-    path.resolve(process.cwd(), "dist/resources/locales"),
-    path.resolve(process.cwd(), "src/resources/locales"),
-    path.resolve(process.cwd(), "resources/locales"),
-  ];
-  for (const p of cands) {
-    if (fs.existsSync(path.join(p, "en.json"))) return p;
-  }
-  throw new Error("Cannot locate locales directory. Tried:\n" + cands.map((p) => " - " + p).join("\n"));
-}
-
-const LOCALES_DIR = findLocalesDir();
+const locales = makeAssetResolver(LOCALES_DIR);
 
 class I18nManager {
   private currentLocale = "en";
@@ -32,8 +22,7 @@ class I18nManager {
 
   private loadFallback() {
     try {
-      const fallbackPath = path.join(LOCALES_DIR, "en.json");
-      const fallbackData = fs.readFileSync(fallbackPath, "utf-8");
+      const fallbackData = locales.readText("en.json");
       this.fallbackTranslations = JSON.parse(fallbackData);
       this.translations = this.fallbackTranslations;
     } catch (error) {
@@ -52,8 +41,7 @@ class I18nManager {
     }
 
     try {
-      const localePath = path.join(LOCALES_DIR, `${locale}.json`);
-      const localeData = fs.readFileSync(localePath, "utf-8");
+      const localeData = locales.readText(`${locale}.json`);
       this.translations = JSON.parse(localeData);
     } catch (error) {
       console.error(`Locale '${locale}' not found, using English fallback`);

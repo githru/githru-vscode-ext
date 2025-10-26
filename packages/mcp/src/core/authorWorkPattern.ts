@@ -1,12 +1,8 @@
 import * as fs from "fs/promises";
-import * as path from "path";
-import { getDirname } from "../common/utils.js";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
-import { Config } from "../common/config.js";
-
-const __dirname = getDirname();
+import { htmlAssets } from "../common/htmlAssets.js";
 
 type CommitListItem = RestEndpointMethodTypes["repos"]["listCommits"]["response"]["data"][number];
 type GetCommitResponse = RestEndpointMethodTypes["repos"]["getCommit"]["response"]["data"];
@@ -46,6 +42,12 @@ function classifyType(msg?: string | null): CommitType {
   }
   return "other";
 }
+
+const htmlEscape = (s: string) =>
+  String(s ?? "").replace(
+    /[&<>"']/g,
+    (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string
+  );
 
 export class AuthorWorkPatternAnalyzer {
   private owner: string;
@@ -106,14 +108,13 @@ export class AuthorWorkPatternAnalyzer {
     const details: GetCommitResponse[] = await Promise.all(
       picked.map(async (c: CommitListItem) => {
         const resp = await safeApiCall(() =>
-          octokit.repos.getCommit({
+          GitHubUtils.createGitHubAPIClient(this.githubToken).repos.getCommit({
             owner: this.owner,
             repo: this.repo,
             ref: c.sha,
           })
         );
-        const { data } = resp;
-        return data as GetCommitResponse;
+        return resp.data as GetCommitResponse;
       })
     );
 
@@ -155,7 +156,7 @@ export class AuthorWorkPatternAnalyzer {
   async generateReport(payload: Awaited<ReturnType<AuthorWorkPatternAnalyzer["analyze"]>>) {
     I18n.setLocale(this.locale);
 
-    const tplPath = path.join(__dirname, "../html/author-work-pattern.html");
+    const tplPath = htmlAssets.path("author-work-pattern.html");
     const exists = await fs
       .access(tplPath)
       .then(() => true)
@@ -170,17 +171,22 @@ export class AuthorWorkPatternAnalyzer {
     const from = new Date(payload.period.from).toISOString().slice(0, 10);
     const to = new Date(payload.period.to).toISOString().slice(0, 10);
 
-    const notes = [
-      I18n.t("notes.author", { author: payload.author }),
-      I18n.t("notes.repo", { repo: payload.repo }),
-      I18n.t("notes.period", { from, to }),
-    ].join(" · ");
+    const titleEsc = htmlEscape(`Author Work Pattern · ${payload.repo} · ${payload.author}`);
+    const notesEsc = htmlEscape(
+      [
+        I18n.t("notes.author", { author: payload.author }),
+        I18n.t("notes.repo", { repo: payload.repo }),
+        I18n.t("notes.period", { from, to }),
+      ].join(" · ")
+    );
 
     const noDataText = I18n.t("messages.no_data");
     const typeRows =
       payload.typeMix.length === 0
-        ? `<tr><td colspan="2" class="val-right" style="color:#777;">${noDataText}</td></tr>`
-        : payload.typeMix.map((t) => `<tr><td>${t.label}</td><td class="val-right">${t.value}</td></tr>`).join("");
+        ? `<tr><td colspan="2" class="val-right" style="color:#777;">${htmlEscape(noDataText)}</td></tr>`
+        : payload.typeMix
+            .map((t) => `<tr><td>${htmlEscape(t.label)}</td><td class="val-right">${t.value}</td></tr>`)
+            .join("");
 
     const barLabelsJson = JSON.stringify(["Commits", "Churn"]);
     const barValuesJson = JSON.stringify([payload.metrics.commits, payload.metrics.churn]);
@@ -201,19 +207,20 @@ export class AuthorWorkPatternAnalyzer {
 
     let html = await fs.readFile(tplPath, "utf8");
     html = html
-      .replaceAll("{{TITLE}}", `Author Work Pattern · ${payload.repo} · ${payload.author}`)
-      .replaceAll("{{NOTES}}", notes)
+      .replaceAll("{{TITLE}}", titleEsc)
+      .replaceAll("{{NOTES}}", notesEsc)
       .replaceAll("{{COMMITS}}", String(payload.metrics.commits))
       .replaceAll("{{INSERTIONS}}", String(payload.metrics.insertions))
       .replaceAll("{{DELETIONS}}", String(payload.metrics.deletions))
       .replaceAll("{{CHURN}}", String(payload.metrics.churn))
-      .replaceAll("{{BRANCH}}", payload.branch)
+      .replaceAll("{{BRANCH}}", htmlEscape(payload.branch))
       .replaceAll("{{TYPE_TABLE_ROWS}}", typeRows)
       .replaceAll("{{BAR_LABELS_JSON}}", barLabelsJson)
       .replaceAll("{{BAR_VALUES_JSON}}", barValuesJson)
       .replaceAll("{{DONUT_LABELS_JSON}}", donutLabelsJson)
       .replaceAll("{{DONUT_VALUES_JSON}}", donutValuesJson)
-      .replaceAll("{{DONUT_COLORS_JSON}}", donutColorsJson);
+      .replaceAll("{{DONUT_COLORS_JSON}}", donutColorsJson)
+      .replaceAll("</script>", "<\\/script>");
 
     return { content: [{ type: "text" as const, text: html }] };
   }
