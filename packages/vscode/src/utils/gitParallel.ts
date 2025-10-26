@@ -34,11 +34,11 @@ export class GitParallelWorkerManager {
   private readonly config: WorkerConfig;
   private workers: Worker[] = [];
 
-  constructor(workerScriptPath: string, config: Partial<WorkerConfig> = {}) {
+  constructor(config: Partial<WorkerConfig> = {}) {
     this.config = {
       taskThreshold: TASK_THRESHOLD,
       coreCountThreshold: CORE_COUNT_THRESHOLD,
-      workerScriptPath,
+      workerScriptPath: path.resolve(__dirname, "./gitWorker.js"),
       ...config,
     };
   }

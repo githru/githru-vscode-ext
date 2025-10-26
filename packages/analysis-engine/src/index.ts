@@ -1,16 +1,13 @@
 import "reflect-metadata";
 
+import { container } from "tsyringe";
+
 import { buildCommitDict } from "./commit.util";
-import { diContainer } from "./container";
-import { buildCSMDict, buildPaginatedCSMDict } from "./csm";
-import { DI_IDENTIFIERS } from "./diIdentifiers";
+import { buildCSMDict } from "./csm";
 import getCommitRaws from "./parser";
 import { PluginOctokit } from "./pluginOctokit";
 import { buildStemDict } from "./stem";
 import { getSummary } from "./summary";
-import type { AnalyzeGitResult } from "./types";
-
-export { buildPaginatedCSMDict } from "./csm";
 
 type AnalysisEngineArgs = {
   isDebugMode?: boolean;
@@ -30,12 +27,6 @@ export class AnalysisEngine {
 
   private baseBranchName!: string;
 
-  // Cached data
-  private commitDict?: ReturnType<typeof buildCommitDict>;
-  private pullRequests?: Awaited<ReturnType<PluginOctokit["getPullRequests"]>>;
-  private stemDict?: ReturnType<typeof buildStemDict>;
-  private isPRSuccess: boolean = true;
-
   constructor(args: AnalysisEngineArgs) {
     this.insertArgs(args);
   }
@@ -45,95 +36,60 @@ export class AnalysisEngine {
     this.gitLog = gitLog;
     this.baseBranchName = baseBranchName;
     this.isDebugMode = isDebugMode;
-    diContainer.rebindSync(DI_IDENTIFIERS.OctokitOptions).toConstantValue({
-      owner,
-      repo,
-      options: { auth },
+    container.register("OctokitOptions", {
+      useValue: {
+        owner,
+        repo,
+        options: {
+          auth,
+        },
+      },
     });
-    this.octokit = diContainer.get(PluginOctokit);
+    this.octokit = container.resolve(PluginOctokit);
   };
 
-  public init = async () => {
+  public analyzeGit = async () => {
+    let isPRSuccess = true;
     if (this.isDebugMode) console.log("baseBranchName: ", this.baseBranchName);
 
     const commitRaws = getCommitRaws(this.gitLog);
-    if (this.isDebugMode) console.log("commitRaws: ", commitRaws);
+    if (this.isDebugMode){
+      console.log("commitRaws: ", commitRaws);
+    }
 
-    this.commitDict = buildCommitDict(commitRaws);
-    if (this.isDebugMode) console.log("commitDict: ", this.commitDict);
+    const commitDict = buildCommitDict(commitRaws);
+    if (this.isDebugMode) console.log("commitDict: ", commitDict);
 
-    this.pullRequests = await this.octokit
+    const pullRequests = await this.octokit
       .getPullRequests()
       .catch((err) => {
         console.error(err);
-        this.isPRSuccess = false;
+        isPRSuccess = false;
         return [];
       })
       .then((pullRequests) => {
         console.log("success, pr = ", pullRequests);
         return pullRequests;
       });
-    if (this.isDebugMode) console.log("pullRequests: ", this.pullRequests);
+    if (this.isDebugMode) console.log("pullRequests: ", pullRequests);
 
-    this.stemDict = buildStemDict(this.commitDict, this.baseBranchName);
-    if (this.isDebugMode) console.log("stemDict: ", this.stemDict);
-  };
+    const stemDict = buildStemDict(commitDict, this.baseBranchName);
+    if (this.isDebugMode) console.log("stemDict: ", stemDict);
+    const csmDict = buildCSMDict(commitDict, stemDict, this.baseBranchName, pullRequests);
+    if (this.isDebugMode) console.log("csmDict: ", csmDict);
+    const nodes = stemDict.get(this.baseBranchName)?.nodes?.map(({ commit }) => commit);
+    const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
+    if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
 
-  public analyzeGit = async (commitCountPerPage?: number, lastCommitId?: string): Promise<AnalyzeGitResult> => {
-    if (!this.commitDict || !this.stemDict || !this.pullRequests) {
-      throw new Error("AnalysisEngine not initialized. Call init() first.");
-    }
-
-    // Paginated CSM
-    if (commitCountPerPage) {
-      const csmDict = buildPaginatedCSMDict(
-        this.commitDict,
-        this.stemDict,
-        this.baseBranchName,
-        commitCountPerPage,
-        lastCommitId,
-        this.pullRequests
-      );
-      const list = csmDict[this.baseBranchName] ?? [];
-      const lastNode = list.length > 0 ? list[list.length - 1] : undefined;
-
-      const isLastPage = list.length < commitCountPerPage;
-      const nextCommitId = !isLastPage && lastNode ? lastNode.base.commit.id : undefined;
-
-      return {
-        isPRSuccess: this.isPRSuccess,
-        csmDict,
-        nextCommitId,
-        isLastPage,
-      };
-    } else {
-      // Non-paginated CSM
-      const csmDict = buildCSMDict(this.commitDict, this.stemDict, this.baseBranchName, this.pullRequests);
-      if (this.isDebugMode) console.log("csmDict: ", csmDict);
-      const nodes = this.stemDict.get(this.baseBranchName)?.nodes?.map(({ commit }) => commit);
-      const geminiCommitSummary = await getSummary(nodes ? nodes?.slice(-10) : []);
-      if (this.isDebugMode) console.log("GeminiCommitSummary: ", geminiCommitSummary);
-
-      return {
-        isPRSuccess: this.isPRSuccess,
-        csmDict,
-        nextCommitId: undefined,
-        isLastPage: true,
-      };
-    }
-  };
-
-  public getBaseBranchName = () => {
-    return this.baseBranchName;
+    return {
+      isPRSuccess,
+      csmDict,
+    };
   };
 
   public updateArgs = (args: AnalysisEngineArgs) => {
+    if (container.isRegistered("OctokitOptions")) container.clearInstances();
     this.insertArgs(args);
-    // Clear cached data
-    this.commitDict = undefined;
-    this.stemDict = undefined;
-    this.pullRequests = undefined;
-    this.isPRSuccess = true;
   };
 }
 

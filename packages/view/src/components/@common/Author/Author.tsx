@@ -2,7 +2,7 @@ import { Tooltip, Avatar } from "@mui/material";
 
 import type { AuthorInfo } from "types";
 
-import { GITHUB_URL } from "constants/constants";
+import { GITHUB_URL } from "../../../constants/constants";
 
 import { AVATAR_STYLE, TOOLTIP_STYLE } from "./Author.const";
 

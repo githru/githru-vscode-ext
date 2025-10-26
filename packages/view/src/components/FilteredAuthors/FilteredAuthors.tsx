@@ -1,4 +1,4 @@
-import { Author } from "components/Common/Author";
+import { Author } from "components/@common/Author";
 import { usePreLoadAuthorImg } from "components/VerticalClusterList/Summary/Summary.hook";
 import { getInitData } from "components/VerticalClusterList/Summary/Summary.util";
 import { useDataStore } from "store";

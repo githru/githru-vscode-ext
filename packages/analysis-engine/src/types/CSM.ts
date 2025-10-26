@@ -8,9 +8,3 @@ export interface CSMNode {
 export interface CSMDictionary {
   [branch: string]: CSMNode[];
 }
-export type AnalyzeGitResult = {
-  isPRSuccess: boolean;
-  csmDict: CSMDictionary;
-  nextCommitId: string | undefined;
-  isLastPage: boolean;
-};

@@ -5,7 +5,6 @@ import { COMMAND_LAUNCH, COMMAND_LOGIN_WITH_GITHUB, COMMAND_RESET_GITHUB_AUTH } 
 import { Credentials } from "./credentials";
 import { GithubTokenUndefinedError, WorkspacePathUndefinedError } from "./errors/ExtensionError";
 import { deleteGithubToken, getGithubToken, setGithubToken } from "./setting-repository";
-import type { ClusterNodesResult } from "./types/Node";
 import { mapClusterNodesFrom } from "./utils/csmMapper";
 import {
   fetchGitLogInParallel,
@@ -30,15 +29,12 @@ export async function activate(context: vscode.ExtensionContext) {
   const { subscriptions, extensionPath, secrets } = context;
   const credentials = new Credentials();
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
-  let engine: AnalysisEngine | undefined;
+
   await credentials.initialize(context);
 
   console.log('Congratulations, your extension "githru" is now active!');
 
   const disposable = vscode.commands.registerCommand(COMMAND_LAUNCH, async () => {
-    if (context.extensionMode === vscode.ExtensionMode.Development) {
-      console.time("Githru-Launch-Time");
-    }
     myStatusBarItem.text = `$(sync~spin) ${projectName}`;
     try {
       console.debug("current Panel = ", currentPanel, currentPanel?.onDidDispose);
@@ -67,7 +63,13 @@ export async function activate(context: vscode.ExtensionContext) {
       const fetchGithubInfo = async () => getRepo(gitConfig);
 
       const fetchCurrentBranch = async () => {
-        let branchName = await getCurrentBranchName(gitPath, currentWorkspacePath).catch(() => null);
+        let branchName;
+        try {
+          branchName = await getCurrentBranchName(gitPath, currentWorkspacePath);
+        } catch (error) {
+          console.error(error);
+        }
+
         if (!branchName) {
           const branchList = (await fetchBranches()).branchList;
           branchName = getDefaultBranchName(branchList);
@@ -77,44 +79,22 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const initialBaseBranchName = await fetchCurrentBranch();
 
-      const fetchClusterNodes = async (
-        baseBranchName = initialBaseBranchName,
-        commitCountPerPage?: number,
-        lastCommitId?: string,
-        command?: string
-      ): Promise<ClusterNodesResult> => {
-        // Initialize engine if it doesn't exist or if the branch has changed
-        if (command === "refresh" || !engine || engine.getBaseBranchName() !== baseBranchName) {
-          const workerPath = vscode.Uri.joinPath(context.extensionUri, "dist", "worker.js").fsPath;
-          const gitLog = await fetchGitLogInParallel(gitPath, currentWorkspacePath, workerPath);
-          const { owner, repo } = getRepo(gitConfig);
-          engine = new AnalysisEngine({
-            isDebugMode: true,
-            gitLog,
-            owner,
-            repo,
-            auth: githubToken,
-            baseBranchName,
-          });
-          await engine.init();
-        }
+      const fetchClusterNodes = async (baseBranchName = initialBaseBranchName) => {
+        const gitLog = await getGitLog(gitPath, currentWorkspacePath);
+        const { owner, repo: initialRepo } = getRepo(gitConfig);
+        const repo = initialRepo;
+        const engine = new AnalysisEngine({
+          isDebugMode: true,
+          gitLog,
+          owner,
+          repo,
+          auth: githubToken,
+          baseBranchName,
+        });
 
-        if (!engine) {
-          throw new Error("Analysis engine is not initialized.");
-        }
-
-        const analysisResult = await engine.analyzeGit(commitCountPerPage, lastCommitId);
-
-        if (analysisResult.isPRSuccess) console.log("crawling PR Success");
-
-        const clusterNodes = mapClusterNodesFrom(analysisResult.csmDict);
-
-        return {
-          clusterNodes: clusterNodes,
-          isLastPage: analysisResult.isLastPage,
-          nextCommitId: analysisResult.nextCommitId,
-          isPRSuccess: analysisResult.isPRSuccess,
-        };
+        const { isPRSuccess, csmDict } = await engine.analyzeGit();
+        if (isPRSuccess) console.log("crawling PR Success");
+        return mapClusterNodesFrom(csmDict);
       };
 
       const webLoader = new WebviewLoader(extensionPath, context, {
@@ -137,9 +117,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
       subscriptions.push(webLoader);
       myStatusBarItem.text = `$(check) ${projectName}`;
-      if (context.extensionMode === vscode.ExtensionMode.Development) {
-        console.timeEnd("Githru-Launch-Time");
-      }
       vscode.window.showInformationMessage("Hello Githru");
     } catch (error) {
       if (error instanceof GithubTokenUndefinedError) {

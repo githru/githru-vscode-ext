@@ -1,4 +1,3 @@
-import React, { useCallback, useMemo } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -7,187 +6,21 @@ import {
   CommitRounded,
   RestorePageRounded,
   ExpandMoreRounded,
+  ExpandLessRounded,
 } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
-import type { ListRowProps } from "react-virtualized";
-import { List, AutoSizer, CellMeasurer } from "react-virtualized";
 
-import { useGithubInfo, useDataStore } from "store";
-import { Author } from "components/Common/Author";
-import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
-import { renderIssueLinkedNodes } from "components/Common/GithubIssueLink";
+import { Author } from "components/@common/Author";
+import { useGithubInfo } from "store";
 
+import { useCommitListHide } from "./Detail.hook";
 import { getCommitListDetail } from "./Detail.util";
-import { useVirtualizedList } from "./Detail.hook";
-import type { DetailProps, DetailSummaryProps, DetailSummaryItem, CommitItemProps } from "./Detail.type";
+import { FIRST_SHOW_NUM } from "./Detail.const";
+import type { DetailProps, DetailSummaryProps, DetailSummaryItem } from "./Detail.type";
 
 import "./Detail.scss";
 
-const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
-  const selectedData = useDataStore((state) => state.selectedData);
-  const { owner, repo } = useGithubInfo();
-
-  const commitNodeListInCluster = useMemo(
-    () =>
-      selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [],
-    [selectedData, clusterId]
-  );
-
-  const handleCommitIdCopy = (id: string) => async () => {
-    navigator.clipboard.writeText(id);
-  };
-
-  const { cache, virtualizedItems, showScrollIndicator, handleRowsRendered } =
-    useVirtualizedList(commitNodeListInCluster);
-
-  const renderCommitItem = useCallback(
-    (props: { index: number; key: string }) => {
-      const { index, key } = props;
-      const item = virtualizedItems[index];
-
-      if (item.type === "summary") {
-        return <DetailSummary commitNodeListInCluster={item.data} />;
-      }
-      return (
-        <MemoizedCommitItem
-          key={key}
-          commit={item.data}
-          owner={owner}
-          repo={repo}
-          authSrcMap={authSrcMap}
-          handleCommitIdCopy={handleCommitIdCopy}
-          linkedMessage={issueLinkedMessage}
-        />
-      );
-    },
-    [virtualizedItems]
-  );
-
-  const rowRenderer = useCallback(
-    ({ index, key, parent, style }: ListRowProps) => (
-      <CellMeasurer
-        key={key}
-        cache={cache}
-        parent={parent}
-        columnIndex={0}
-        rowIndex={index}
-      >
-        <div style={style}>{renderCommitItem({ index, key })}</div>
-      </CellMeasurer>
-    ),
-    [cache, renderCommitItem]
-  );
-
-  const issueLinkedMessage: IssueLinkedMessage = useMemo(() => {
-    const message = commitNodeListInCluster?.[0]?.commit?.message;
-    if (!message) return { title: [], body: null };
-
-    const [title, ...rest] = message.split("\n");
-    const body = rest.filter((line) => line.trim()).join("\n");
-
-    return {
-      title: renderIssueLinkedNodes(title, owner, repo),
-      body: body ? renderIssueLinkedNodes(body, owner, repo) : null,
-    };
-  }, [commitNodeListInCluster, owner, repo]);
-
-  if (!selectedData || selectedData.length === 0) return null;
-
-  return (
-    <div className="detail__container">
-      <AutoSizer>
-        {({ height, width }) => {
-          return (
-            <List
-              height={height}
-              width={width}
-              rowCount={virtualizedItems.length}
-              rowHeight={cache.rowHeight}
-              rowRenderer={rowRenderer}
-              onRowsRendered={handleRowsRendered}
-              className="detail__virtualized-list"
-              estimatedRowSize={120}
-            />
-          );
-        }}
-      </AutoSizer>
-
-      {showScrollIndicator && (
-        <div className="detail__scroll-indicator">
-          <ExpandMoreRounded />
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Detail;
-
-function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linkedMessage }: CommitItemProps) {
-  const { id, message, author, commitDate } = commit;
-  return (
-    <div className="detail__commit-item">
-      <div className="commit-item__detail">
-        <div className="commit-item__message-container">
-          <div className="commit-message">
-            <div className="commit-message__header">
-              {authSrcMap && (
-                <Author
-                  name={author.names.toString()}
-                  src={authSrcMap[author.names.toString()]}
-                />
-              )}
-              <div className="commit-message__title">
-                {(() => {
-                  const messageLines = message.split("\n");
-                  const title = messageLines[0];
-                  return linkedMessage.title.length > 0 ? linkedMessage.title : title;
-                })()}
-              </div>
-              <div className="commit-item__meta">
-                <span className="commit-item__author-name">{author.names[0]}</span>
-                <span className="commit-item__date">{dayjs(commitDate).format("YY. M. DD. a h:mm")}</span>
-                <div className="commit-item__commit-id">
-                  <a
-                    href={`https://github.com/${owner}/${repo}/commit/${id}`}
-                    onClick={handleCommitIdCopy(id)}
-                    tabIndex={0}
-                    onKeyDown={handleCommitIdCopy(id)}
-                    className="commit-id__link"
-                  >
-                    <Tooltip
-                      className="commit-id__tooltip"
-                      placement="right"
-                      title={id}
-                      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
-                    >
-                      <p>{id.slice(0, 6)}</p>
-                    </Tooltip>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {(() => {
-              const messageLines = message.split("\n");
-              const body = messageLines
-                .slice(1)
-                .filter((line: string) => line.trim())
-                .join("\n");
-
-              return body ? (
-                <div className="commit-message__body">{linkedMessage.body ? linkedMessage.body : body}</div>
-              ) : null;
-            })()}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const MemoizedCommitItem = React.memo(CommitItem);
-
-function DetailSummary({ commitNodeListInCluster }: DetailSummaryProps) {
+const DetailSummary = ({ commitNodeListInCluster }: DetailSummaryProps) => {
   const { authorLength, fileLength, commitLength, insertions, deletions } = getCommitListDetail({
     commitNodeListInCluster,
   });
@@ -217,4 +50,82 @@ function DetailSummary({ commitNodeListInCluster }: DetailSummaryProps) {
       </div>
     </div>
   );
-}
+};
+
+const Detail = ({ selectedData, clusterId, authSrcMap }: DetailProps) => {
+  const commitNodeListInCluster =
+    selectedData?.filter((selected) => selected.commitNodeList[0].clusterId === clusterId)[0].commitNodeList ?? [];
+  const { commitNodeList, toggle, handleToggle } = useCommitListHide(commitNodeListInCluster);
+  const { owner, repo } = useGithubInfo();
+  const isShow = commitNodeListInCluster.length > FIRST_SHOW_NUM;
+  const handleCommitIdCopy = (id: string) => async () => {
+    navigator.clipboard.writeText(id);
+  };
+  if (!selectedData) return null;
+
+  return (
+    <>
+      <DetailSummary commitNodeListInCluster={commitNodeListInCluster} />
+      <ul className="detail__commit-list">
+        {commitNodeList.map(({ commit }) => {
+          const { id, message, author, commitDate } = commit;
+          return (
+            <li
+              key={id}
+              className="detail__commit-item"
+            >
+              <div className="commit-item__detail">
+                <div className="commit-item__left">
+                  {authSrcMap && (
+                    <Author
+                      name={author.names.toString()}
+                      src={authSrcMap[author.names.toString()]}
+                    />
+                  )}
+                  <div className="commit-item__message-container">
+                    <span className="commit-item__message">{message}</span>
+                  </div>
+                </div>
+                <div className="commit-item__right">
+                  <span className="commit-item__author-date">
+                    {author.names[0]}, {dayjs(commitDate).format("YY. M. DD. a h:mm")}
+                  </span>
+                  <div className="commit-item__commit-id">
+                    <a
+                      href={`https://github.com/${owner}/${repo}/commit/${id}`}
+                      onClick={handleCommitIdCopy(id)}
+                      tabIndex={0}
+                      onKeyDown={handleCommitIdCopy(id)}
+                      className="commit-id__link"
+                    >
+                      <Tooltip
+                        className="commit-id__tooltip"
+                        placement="right"
+                        title={id}
+                        PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
+                      >
+                        <p>{id.slice(0, 6)}</p>
+                      </Tooltip>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      {isShow && (
+        <button
+          type="button"
+          className="detail__toggle-button"
+          onClick={handleToggle}
+        >
+          {toggle ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+        </button>
+      )}
+    </>
+  );
+};
+
+export default Detail;

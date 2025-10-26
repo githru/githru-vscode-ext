@@ -11,8 +11,8 @@ import { useHandleClusterGraph } from "./ClusterGraph.hook";
 import "./ClusterGraph.scss";
 
 const ClusterGraph: React.FC<ClusterGraphProps> = ({ data, clusterSizes }) => {
-  const [selectedData, toggleSelectedData] = useDataStore(
-    useShallow((state) => [state.selectedData, state.toggleSelectedData])
+  const [selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.selectedData, state.setSelectedData])
   );
   const selectedIndex = getSelectedIndex(data, selectedData);
   const graphHeight = getGraphHeight(clusterSizes) + selectedIndex.length * DETAIL_HEIGHT;
@@ -21,7 +21,7 @@ const ClusterGraph: React.FC<ClusterGraphProps> = ({ data, clusterSizes }) => {
     data,
     clusterSizes,
     selectedIndex,
-    toggleSelectedData,
+    setSelectedData,
   });
 
   return (

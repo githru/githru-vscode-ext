@@ -24,14 +24,6 @@ const getChangeFileLength = (commitNodes: CommitNode[]) => {
   return getDataSetSize(commitNodes.map((d) => Object.keys(d.commit.diffStatistics.files)).flat());
 };
 
-const getCommitListTagsLength = (commitNodes: CommitNode[]) => {
-  return getDataSetSize(commitNodes.map((d) => d.commit.tags).flat());
-};
-
-const getCommitListReleaseTagsLength = (commitNodes: CommitNode[]) => {
-  return getDataSetSize(commitNodes.map((d) => d.commit.releaseTags).flat());
-};
-
 type GetCommitListDetail = { commitNodeListInCluster: CommitNode[] };
 export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDetail) => {
   const authorLength = getCommitListAuthorLength(commitNodeListInCluster);
@@ -46,8 +38,6 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
       deletions: 0,
     }
   );
-  const tagLength = getCommitListTagsLength(commitNodeListInCluster);
-  const releaseTagLength = getCommitListReleaseTagsLength(commitNodeListInCluster);
 
   return {
     authorLength,
@@ -55,8 +45,6 @@ export const getCommitListDetail = ({ commitNodeListInCluster }: GetCommitListDe
     commitLength: commitNodeListInCluster.length,
     insertions: diffStatistics.insertions,
     deletions: diffStatistics.deletions,
-    tagLength,
-    releaseTagLength,
   };
 };
 

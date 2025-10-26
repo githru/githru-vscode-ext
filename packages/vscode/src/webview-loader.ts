@@ -2,7 +2,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 import { getTheme, setTheme } from "./setting-repository";
-import type { ClusterNodesResult } from "./types/Node";
+import type { ClusterNode } from "./types/Node";
 
 const ANALYZE_DATA_KEY = "memento_analyzed_data";
 
@@ -17,6 +17,7 @@ export default class WebviewLoader implements vscode.Disposable {
     const { fetchClusterNodes, fetchBranches, fetchCurrentBranch, fetchGithubInfo } = fetcher;
     const viewColumn = vscode.ViewColumn.One;
 
+    console.log("Initialize cache data");
     context.workspaceState.keys().forEach((key) => {
       context.workspaceState.update(key, undefined);
     });
@@ -34,47 +35,35 @@ export default class WebviewLoader implements vscode.Disposable {
       try {
         const { command, payload } = message;
 
-        if (command === "refresh") {
-          const requestPayload = payload ? JSON.parse(payload) : {};
-          const { selectedBranch, commitCountPerPage, lastCommitId } = requestPayload;
-          const currentBranch = selectedBranch ?? (await fetchCurrentBranch());
-
-          const clusterData = await fetchClusterNodes(currentBranch, commitCountPerPage, lastCommitId, "refresh");
-          analyzedData = {
-            ...clusterData,
-            isLoadMore: !!lastCommitId,
-          };
-
-          await this.respondToMessage({
-            command,
-            payload: analyzedData,
-          });
-        }
-
-        if (command === "fetchAnalyzedData") {
-          const requestPayload = payload ? JSON.parse(payload) : {};
-          const { baseBranch, commitCountPerPage, lastCommitId } = requestPayload;
-          const currentBranch = baseBranch ?? (await fetchCurrentBranch());
-
-          const cacheKey = `${ANALYZE_DATA_KEY}_${currentBranch}_${lastCommitId || "firstPage"}`;
-
-          const storedAnalyzedData = context.workspaceState.get<ClusterNodesResult>(cacheKey);
-
-          if (storedAnalyzedData) {
+        if (command === "fetchAnalyzedData" || command === "refresh") {
+          try {
+            const baseBranchName = (payload && JSON.parse(payload)) ?? (await fetchCurrentBranch());
+            const storedAnalyzedData = context.workspaceState.get<ClusterNode[]>(
+              `${ANALYZE_DATA_KEY}_${baseBranchName}`
+            );
             analyzedData = storedAnalyzedData;
-          } else {
-            const clusterData = await fetchClusterNodes(currentBranch, commitCountPerPage, lastCommitId);
-            analyzedData = {
-              ...clusterData,
-              isLoadMore: !!lastCommitId,
-            };
-            context.workspaceState.update(cacheKey, analyzedData);
-          }
+            if (!storedAnalyzedData) {
+              console.log("No cache Data");
+              console.log("baseBranchName : ", baseBranchName);
+              analyzedData = await fetchClusterNodes(baseBranchName);
+              context.workspaceState.update(`${ANALYZE_DATA_KEY}_${baseBranchName}`, analyzedData);
+            } else console.log("Cache data exists");
 
-          await this.respondToMessage({
-            command,
-            payload: analyzedData,
-          });
+            console.log("Current Stored data");
+            context.workspaceState.keys().forEach((key) => {
+              console.log(key);
+            });
+
+            const resMessage = {
+              command,
+              payload: analyzedData,
+            };
+
+            await this.respondToMessage(resMessage);
+          } catch (e) {
+            console.error("Error fetching analyzed data:", e);
+            throw e;
+          }
         }
 
         if (command === "fetchBranchList") {
@@ -169,7 +158,7 @@ export default class WebviewLoader implements vscode.Disposable {
 
 type GithruFetcher<D = unknown, P extends unknown[] = []> = (...params: P) => Promise<D>;
 type GithruFetcherMap = {
-  fetchClusterNodes: GithruFetcher<ClusterNodesResult, [string?, number?, string?, string?]>;
+  fetchClusterNodes: GithruFetcher<ClusterNode[], [string]>;
   fetchBranches: GithruFetcher<{ branchList: string[]; head: string | null }>;
   fetchCurrentBranch: GithruFetcher<string>;
   fetchGithubInfo: GithruFetcher<{ owner: string; repo: string }>;

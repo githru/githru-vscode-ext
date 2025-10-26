@@ -1,8 +1,11 @@
-import type { RefObject } from "react";
+import type { Dispatch, RefObject } from "react";
+import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 import type { ClusterNode } from "types";
+
+import { selectedDataUpdater } from "../VerticalClusterList.util";
 
 import { CLUSTER_HEIGHT, DETAIL_HEIGHT, GRAPH_WIDTH, NODE_GAP, SVG_MARGIN } from "./ClusterGraph.const";
 import type { ClusterGraphElement } from "./ClusterGraph.type";
@@ -41,12 +44,12 @@ export const useHandleClusterGraph = ({
   data,
   clusterSizes,
   selectedIndex,
-  toggleSelectedData,
+  setSelectedData,
 }: {
   selectedIndex: number[];
   clusterSizes: number[];
   data: ClusterNode[];
-  toggleSelectedData: (selected: ClusterNode, clusterId: number) => void;
+  setSelectedData: Dispatch<React.SetStateAction<ClusterNode[]>>;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const prevSelected = useRef<number[]>([-1]);
@@ -63,9 +66,9 @@ export const useHandleClusterGraph = ({
   const handleClickCluster = useCallback(
     (_: PointerEvent, d: ClusterGraphElement) => {
       const targetIndex = d.cluster.commitNodeList[0].clusterId;
-      toggleSelectedData(d.cluster, targetIndex);
+      setSelectedData(selectedDataUpdater(d.cluster, targetIndex));
     },
-    [toggleSelectedData]
+    [setSelectedData]
   );
   useEffect(() => {
     drawClusterGraph(svgRef, clusterGraphElements, DETAIL_HEIGHT, handleClickCluster);

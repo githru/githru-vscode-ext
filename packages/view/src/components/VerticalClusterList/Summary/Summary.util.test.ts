@@ -1,6 +1,6 @@
 import type { ClusterNode } from "types";
 
-import { getClusterById, getClusterIds, getInitData, getCommitLatestTag } from "./Summary.util";
+import { getClusterById, getClusterIds, getInitData } from "./Summary.util";
 
 const clusterNodeMockData: ClusterNode[] = [
   {
@@ -47,8 +47,8 @@ const clusterNodeMockData: ClusterNode[] = [
           },
           id: "71627b0568035fcf923e18a36b4f3f09fc1632c5",
           message: "Initial commit",
-          tags: ["feature", "enhancement", "ui", "performance"],
-          releaseTags: ["v1.0.0"],
+          tags: [],
+          releaseTags: [],
           parentIds: [],
         },
         nodeTypeName: "COMMIT",
@@ -58,6 +58,7 @@ const clusterNodeMockData: ClusterNode[] = [
     nodeTypeName: "CLUSTER",
   },
   {
+    nodeTypeName: "CLUSTER",
     commitNodeList: [
       {
         nodeTypeName: "COMMIT",
@@ -88,8 +89,8 @@ const clusterNodeMockData: ClusterNode[] = [
             },
           },
           message: "Merge pull request #158 from jin-Pro/main/n/nadd View CONTRIBUTING.md Template",
-          tags: ["merge", "docs"],
-          releaseTags: ["v1.1.0"],
+          tags: [],
+          releaseTags: [],
         },
         clusterId: 89,
         seq: 1,
@@ -123,14 +124,13 @@ const clusterNodeMockData: ClusterNode[] = [
             },
           },
           message: "docs(view): add View CONTRIBUTING.md Template",
-          tags: ["docs", "template"],
-          releaseTags: ["v1.2.0", "v1.1.0", "v1.0.0"],
+          tags: [],
+          releaseTags: [],
         },
         clusterId: 89,
         seq: 2,
       },
     ],
-    nodeTypeName: "CLUSTER",
   },
 ];
 
@@ -148,8 +148,6 @@ test("getClusterById test", () => {
   expect(result.commitNodeList[0].commit.diffStatistics.changedFileCount).toBe(2);
   expect(result.commitNodeList[0].commit.diffStatistics.insertions).toBe(203);
   expect(result.commitNodeList[0].commit.diffStatistics.deletions).toBe(0);
-  expect(result.commitNodeList[0].commit.tags).toEqual([]);
-  expect(result.commitNodeList[0].commit.releaseTags).toEqual([]);
 });
 
 test("getClusterIds test", () => {
@@ -175,39 +173,5 @@ describe("getInitData test", () => {
 
   test("the commit author names in the cluster are not duplicated.", () => {
     expect(result[2].summary.authorNames.length).toBe(1);
-  });
-
-  test("clusterTags should be empty when no releaseTags exist", () => {
-    expect(result[0].clusterTags).toEqual([]);
-  });
-
-  test("clusterTags should contain releaseTags from single commit cluster", () => {
-    expect(result[1].clusterTags).toContain("v1.0.0");
-    expect(result[1].clusterTags).toHaveLength(1);
-  });
-
-  test("clusterTags should contain all releaseTags from multiple commits in the cluster", () => {
-    expect(result[2].clusterTags).toContain("v1.0.0");
-    expect(result[2].clusterTags).toContain("v1.1.0");
-    expect(result[2].clusterTags).toContain("v1.2.0");
-    expect(result[2].clusterTags).toHaveLength(3);
-  });
-
-  test("clusterTags should not contain duplicate releaseTags", () => {
-    const uniqueTags = new Set(result[2].clusterTags);
-    expect(uniqueTags.size).toBe(result[2].clusterTags.length);
-    expect(result[2].clusterTags).toHaveLength(3);
-  });
-});
-
-describe("getCommitLatestTag test", () => {
-  test("should return empty string when clusterTags is empty", () => {
-    const clusters = getInitData(clusterNodeMockData);
-    expect(getCommitLatestTag(clusters[0].clusterTags)).toBe("");
-  });
-
-  test("Get the latest release tag from the cluster", () => {
-    const clusters = getInitData(clusterNodeMockData);
-    expect(getCommitLatestTag(clusters[2].clusterTags)).toBe("v1.2.0");
   });
 });

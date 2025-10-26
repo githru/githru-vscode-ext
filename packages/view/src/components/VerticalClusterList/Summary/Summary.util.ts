@@ -67,15 +67,13 @@ export function getInitData(data: GlobalProps["data"]): Cluster[] {
 
   data.map((clusterNode) => {
     const { message } = clusterNode.commitNodeList[0].commit;
-    const messageLines = message.split("\n");
-    const title = messageLines[0];
+    const resultMsg = message.split("/n/n")[0];
     const cluster: Cluster = {
       clusterId: clusterNode.commitNodeList[0].clusterId,
       summary: {
         authorNames: [],
         content: {
-          message: message,
-          title: title,
+          message: resultMsg,
           count: clusterNode.commitNodeList.length - 1,
         },
       },

@@ -43,22 +43,31 @@ const TemporalFilter = () => {
   // 메모이제이션된 필터링된 정렬 데이터 - 필터링된 데이터가 변경될 때만 재계산
   const sortedFilteredData = useMemo(() => sortBasedOnCommitNode(filteredData), [filteredData]);
 
+  // 메모이제이션된 라인 차트 데이터 - 정렬된 필터링 데이터가 변경될 때만 재계산
   const lineChartDataList: LineChartDatum[][] = useMemo(() => {
-    const clocMap = new Map<string, number>();
-    const commitMap = new Map<string, number>();
+    const clocMap: Map<string, number> = new Map();
+    const commitMap: Map<string, number> = new Map();
 
-    for (const { commit } of sortedFilteredData) {
+    sortedFilteredData.forEach(({ commit }) => {
       const formattedDate = lineChartTimeFormatter(new Date(commit.commitDate));
+      const clocMapItem = clocMap.get(formattedDate);
+      const commitMapItem = commitMap.get(formattedDate);
+
       const clocValue = commit.diffStatistics.insertions + commit.diffStatistics.deletions;
 
-      commitMap.set(formattedDate, (commitMap.get(formattedDate) || 0) + 1);
-      clocMap.set(formattedDate, (clocMap.get(formattedDate) || 0) + clocValue);
-    }
+      commitMap.set(formattedDate, commitMapItem ? commitMapItem + 1 : 1);
+      clocMap.set(formattedDate, clocMapItem ? clocMapItem + clocValue : clocValue);
+    });
 
-    return [
-      Array.from(clocMap, ([dateString, value]) => ({ dateString, value })),
-      Array.from(commitMap, ([dateString, value]) => ({ dateString, value }))
-    ];
+    const buildReturnArray = (map: Map<string, number>) =>
+      Array.from(map.entries()).map(([key, value]) => {
+        return {
+          dateString: key,
+          value: value,
+        };
+      });
+
+    return [buildReturnArray(clocMap), buildReturnArray(commitMap)];
   }, [sortedFilteredData]);
 
   const windowSize = useWindowResize();

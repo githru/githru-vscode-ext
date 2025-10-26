@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
 
-import type { ClusterNode } from "types";
-import type { Commit } from "types/Commit";
+import type { ClusterNode, SelectedDataProps } from "types";
 import type { AuthSrcMap } from "components/VerticalClusterList/Summary/Summary.type";
-import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
 
 export type DetailProps = {
+  selectedData: SelectedDataProps;
   clusterId: number;
   authSrcMap: AuthSrcMap | null;
 };
@@ -18,22 +17,3 @@ export interface DetailSummaryItem {
   count: number;
   icon?: ReactNode;
 }
-
-export interface CommitItemProps {
-  commit: Commit;
-  owner: string;
-  repo: string;
-  authSrcMap: AuthSrcMap | null;
-  handleCommitIdCopy: (id: string) => () => Promise<void>;
-  linkedMessage: IssueLinkedMessage;
-}
-
-export type VirtualizedItem =
-  | {
-      type: "summary";
-      data: ClusterNode["commitNodeList"];
-    }
-  | {
-      type: "commit";
-      data: Commit;
-    };

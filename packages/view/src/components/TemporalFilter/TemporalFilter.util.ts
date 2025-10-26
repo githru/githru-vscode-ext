@@ -3,7 +3,7 @@ import { timeFormat } from "d3";
 
 import type { ClusterNode, CommitNode } from "types/Nodes";
 
-import { NODE_TYPES } from "constants/constants";
+import { NODE_TYPES } from "../../constants/constants";
 
 /**
  * Note: Line Chart를 위한 시간순 CommitNode 정렬

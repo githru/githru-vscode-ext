@@ -3,13 +3,14 @@ import { useShallow } from "zustand/react/shallow";
 import Chip from "@mui/material/Chip";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 
+import { selectedDataUpdater } from "components/VerticalClusterList/VerticalClusterList.util";
 import { getInitData, getClusterById } from "components/VerticalClusterList/Summary/Summary.util";
 import "./SelectedClusterGroup.scss";
 import { useDataStore } from "store";
 
 const SelectedClusterGroup = () => {
-  const [selectedData, toggleSelectedData] = useDataStore(
-    useShallow((state) => [state.selectedData, state.toggleSelectedData])
+  const [selectedData, setSelectedData] = useDataStore(
+    useShallow((state) => [state.selectedData, state.setSelectedData])
   );
   const selectedClusters = getInitData(selectedData);
 
@@ -17,7 +18,7 @@ const SelectedClusterGroup = () => {
 
   const deselectCluster = (clusterId: number) => () => {
     const selected = getClusterById(selectedData, clusterId);
-    toggleSelectedData(selected, clusterId);
+    setSelectedData(selectedDataUpdater(selected, clusterId));
   };
 
   return (
@@ -37,7 +38,7 @@ const SelectedClusterGroup = () => {
               <Chip
                 className="selected-clusters__item"
                 title={selectedCluster.summary.content.message}
-                label={selectedCluster.summary.content.title}
+                label={selectedCluster.summary.content.message}
                 onDelete={deselectCluster(selectedCluster.clusterId)}
               />
             </li>

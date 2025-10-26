@@ -8,7 +8,6 @@ import "./BranchSelector.scss";
 import { useBranchStore, useLoadingStore } from "store";
 
 import { SLICE_LENGTH } from "./BranchSelector.const";
-import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch } = useBranchStore();
@@ -17,7 +16,7 @@ const BranchSelector = () => {
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setSelectedBranch(event.target.value);
     setLoading(true);
-    sendFetchAnalyzedDataCommand({ baseBranch: event.target.value, commitCountPerPage: COMMIT_COUNT_PER_PAGE });
+    sendFetchAnalyzedDataCommand(event.target.value);
   };
 
   return (

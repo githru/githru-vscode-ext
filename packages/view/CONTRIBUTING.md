@@ -167,16 +167,12 @@ VerticalClusterList
   const Detail = ({data}:DetailProp) => { ... }
   ```
 
-- Util type 이름은 [UpperCamelCase(PascalCase)](https://en.wikipedia.org/wiki/Camel_case) 형식을 따릅니다.
+- Util type 이름은 [CamelCase](https://en.wikipedia.org/wiki/Camel_case) 형식을 따릅니다.
 
   예시:
 
   ```bash
-  type GitHubUser = {
-    id: string;
-    names: string[];
-    emails: string[];
-  };
+  function GetData( ... ) { ... }
   ```
 
 - 선호에 따라 type, interface 자유롭게 사용
@@ -188,13 +184,11 @@ VerticalClusterList
 ## [색상](https://github.com/githru/githru-vscode-ext/blob/main/packages/view/src/styles/_colors.scss)
 
 ### Grayscale
-
 - white, black, light gray, medium gray, dark gray, background 총 5가지 색상을 사용합니다.
 - white와 black은 주로 폰트 색상으로 사용합니다.
 - light gray, medium gray, dark gray는 명도에 따라 각 컴포넌트의 배경 색상으로 지정됩니다.
 
 ### Theme
-
 - Grayscale 외 색상은 각 테마에서 지정하여 사용합니다.
 - 테마는 githru(default), hacker blue, aqua, cotton candy, mono 총 5가지로 구성됩니다.
 - 각 테마는 다음 색상을 포함합니다:
@@ -203,26 +197,24 @@ VerticalClusterList
   - 실패, 경고를 나타내는 failed (붉은 계열)
 
 ## [폰트](https://github.com/githru/githru-vscode-ext/blob/main/packages/view/src/styles/_font.scss)
-
 ### Font Size
-
 - Title: 1rem (16px)
 - Body(default): 0.875rem (14px)
 - Caption: 0.75rem (12px)
 
 ### Font Weight
-
 - Light: 300
 - Regular(default): 400
 - Semibold: 600
 - Extrabold: 800
 
-### Line Height
 
+### Line Height
 - Base(default): 1.62
 - Title: 1.15
 - Quote: 1.3
 - Button: 1
+
 
 ## Unit 테스트 코드 작성
 
@@ -239,7 +231,7 @@ test('renders correctly', () => {
 });
 ```
 
-가능한 테스트에 대한 정보를 상세히 전달하기 위해 describe로 큰 스코프를 형상하고 그 안에 it으로 세부 테스크를 설명합니다.
+가능한 테스트에 대한 정보를 상세히 전달하기 위해 descriibe로 큰 스코프를 형상하고 그 안에 it으로 세부 테스크를 설명합니다.
 
 ```test
 describe('Example Component', () => {

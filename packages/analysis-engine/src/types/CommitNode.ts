@@ -1,10 +1,8 @@
 import type { CommitRaw } from "./CommitRaw";
 
 export interface CommitNode {
-  // stemId does not exist before traversal.
+  // 순회 이전에는 stemId가 존재하지 않음.
   stemId?: string;
-  // ID of the stem this node was merged into (for merge parents)
-  mergedIntoBaseStem?: string;
   commit: CommitRaw;
 }
 

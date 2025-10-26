@@ -1,6 +1,6 @@
-﻿import { injectable } from "inversify";
+﻿import { injectable } from "tsyringe";
 
-import type { FetchDataRequestPayload, IDEMessage, IDEMessageEvent } from "types";
+import type { IDEMessage, IDEMessageEvent } from "types";
 import type { IDESentEvents } from "types/IDESentEvents";
 
 import type IDEPort from "./IDEPort";
@@ -29,18 +29,18 @@ export default class VSCodeIDEAdapter implements IDEPort {
     window.addEventListener("message", onReceiveMessage);
   }
 
-  public sendRefreshDataMessage(requestParams?: FetchDataRequestPayload) {
+  public sendRefreshDataMessage(baseBranch?: string) {
     const message: IDEMessage = {
       command: "refresh",
-      payload: JSON.stringify(requestParams),
+      payload: JSON.stringify(baseBranch),
     };
     this.sendMessageToIDE(message);
   }
 
-  public sendFetchAnalyzedDataMessage(requestParams?: FetchDataRequestPayload) {
+  public sendFetchAnalyzedDataMessage(baseBranch?: string) {
     const message: IDEMessage = {
       command: "fetchAnalyzedData",
-      payload: JSON.stringify(requestParams),
+      payload: JSON.stringify(baseBranch),
     };
     this.sendMessageToIDE(message);
   }

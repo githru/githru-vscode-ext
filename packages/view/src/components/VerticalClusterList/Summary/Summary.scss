@@ -76,27 +76,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
-    .summary__commit-title {
-      font-weight: 600;
-      color: $color-white;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .summary__commit-body {
-      color: $color-light-gray;
-      font-size: 0.75rem;
-      line-height: 1.3;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 0.125rem;
-      margin-left: 0.5rem;
-      padding-left: 0.25rem;
-      border-left: 1px solid $color-medium-gray;
-    }
   }
 
   &__commit-link {
