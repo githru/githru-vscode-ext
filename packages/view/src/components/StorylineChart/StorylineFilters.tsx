@@ -22,14 +22,9 @@ import { useStorylineFilterStore } from "store";
 import type { ReleaseContributorActivity } from "./StorylineChart.type";
 
 interface StorylineFiltersProps {
-  /** 모든 기여자 활동 데이터 */
   activities: ReleaseContributorActivity[];
 }
 
-/**
- * StorylineChart 필터 컴포넌트
- * 릴리즈 범위와 기여자를 필터링할 수 있습니다.
- */
 const StorylineFilters = ({ activities }: StorylineFiltersProps) => {
   const { releaseRange, selectedContributors, maxContributors, setReleaseRange, toggleContributor, resetFilters } =
     useStorylineFilterStore();
