@@ -5,7 +5,7 @@ import { GitHubUtils, CommonUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { ContributorRecommenderInputs, ContributorCandidate, ContributorRecommendation } from "../common/types.js";
 import { htmlAssets } from "../common/htmlAssets.js";
-import { getDirname } from "common/assetResolver.js";
+import { getDirname } from "../common/assetResolver.js";
 
 const __dirname = getDirname();
 

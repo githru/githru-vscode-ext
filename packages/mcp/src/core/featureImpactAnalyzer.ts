@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
 import { htmlAssets } from "../common/htmlAssets.js";
-import { getDirname } from "common/assetResolver.js";
+import { getDirname } from "../common/assetResolver.js";
 
 const __dirname = getDirname();
 
