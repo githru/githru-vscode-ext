@@ -1,9 +1,28 @@
+import {
+  collectSquashNodes,
+  extractNestedMergeParents,
+  findSquashEndIndex,
+  findSquashStartNodeIndex,
+  getParentCommits,
+} from "./csm.util";
 import { convertPRCommitsToCommitNodes, convertPRDetailToCommitRaw } from "./pullRequest";
 import type { CommitDict, CommitNode, CSMDictionary, CSMNode, PullRequest, PullRequestDict, StemDict } from "./types";
 
+/**
+ * Builds a CSM node.
+ * For merge commits, collects squashed commits using DFS traversal.
+ */
 const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDict: StemDict): CSMNode => {
-  const mergeParentCommit = commitDict.get(baseCommitNode.commit.parents[1]);
-  if (!mergeParentCommit) {
+  if (baseCommitNode.commit.parents.length <= 1) {
+    return {
+      base: baseCommitNode,
+      source: [],
+    };
+  }
+
+  // Return empty source for non-merge commits
+  const mergeParentCommits = getParentCommits(baseCommitNode, commitDict);
+  if (mergeParentCommits.length === 0) {
     return {
       base: baseCommitNode,
       source: [],
@@ -12,42 +31,43 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
 
   const squashCommitNodes: CommitNode[] = [];
 
-  const squashTaskQueue: CommitNode[] = [mergeParentCommit];
+  const squashTaskQueue: CommitNode[] = [...mergeParentCommits];
   while (squashTaskQueue.length > 0) {
-    // get target
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStartNode = squashTaskQueue.shift()!;
+    const squashStartNode = squashTaskQueue.shift();
+    if (!squashStartNode?.stemId) {
+      continue;
+    }
 
-    // get target's stem
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const squashStemId = squashStartNode.stemId!;
+    const squashStemId = squashStartNode.stemId;
     const squashStem = stemDict.get(squashStemId);
     if (!squashStem) {
       continue;
     }
 
-    // prepare squash
-    const squashStemLastIndex = squashStem.nodes.length - 1;
-    const squashStartNodeIndex = squashStem.nodes.findIndex(({ commit: { id } }) => id === squashStartNode.commit.id);
-    const spliceCount = squashStemLastIndex - squashStartNodeIndex + 1;
+    // Find the index of the start node in the stem
+    const squashStartNodeIndex = findSquashStartNodeIndex(squashStem, squashStartNode.commit.id);
+    if (squashStartNodeIndex === -1) {
+      continue;
+    }
 
-    // squash
-    const spliceCommitNodes = squashStem.nodes.splice(squashStartNodeIndex, spliceCount);
-    squashCommitNodes.push(...spliceCommitNodes);
+    // Find the end index for squash collection
+    const endIndex = findSquashEndIndex(squashStem, squashStartNodeIndex);
 
-    // check nested-merge
-    const nestedMergeParentCommitIds = spliceCommitNodes
-      .filter((node) => node.commit.parents.length > 1)
-      .map((node) => node.commit.parents)
-      .reduce((pCommitIds, parents) => [...pCommitIds, ...parents], []);
-    const nestedMergeParentCommits = nestedMergeParentCommitIds
-      .map((commitId) => commitDict.get(commitId))
-      .filter((node): node is CommitNode => node !== undefined)
-      .filter((node) => node.stemId !== baseCommitNode.stemId && node.stemId !== squashStemId);
+    // Collect nodes and remove from stem
+    const collectedNodes = collectSquashNodes(squashStem, squashStartNodeIndex, endIndex);
+    squashCommitNodes.push(...collectedNodes);
 
-    squashTaskQueue.push(...nestedMergeParentCommits);
+    // Handle nested merges: add branches to queue if collected nodes contain merge commits
+    const nestedMergeParents = extractNestedMergeParents(
+      collectedNodes,
+      commitDict,
+      baseCommitNode.stemId ?? "",
+      squashStemId
+    );
+    squashTaskQueue.push(...nestedMergeParents);
   }
 
+  // Sort by sequence order (reverse -> forward)
   squashCommitNodes.sort((a, b) => a.commit.sequence - b.commit.sequence);
 
   return {
@@ -56,6 +76,14 @@ const buildCSMNode = (baseCommitNode: CommitNode, commitDict: CommitDict, stemDi
   };
 };
 
+/**
+ * Integrates Pull Request information into a CSM node.
+ * Reflects PR details in commit message and statistics.
+ *
+ * @param csmNode - Existing CSM node
+ * @param pr - Pull Request information
+ * @returns CSM node with integrated PR information
+ */
 const buildCSMNodeWithPullRequest = (csmNode: CSMNode, pr: PullRequest): CSMNode => {
   const convertedCommit = convertPRDetailToCommitRaw(csmNode.base.commit, pr);
 
@@ -68,14 +96,39 @@ const buildCSMNodeWithPullRequest = (csmNode: CSMNode, pr: PullRequest): CSMNode
   };
 };
 
+/** Builds a Pull Request dictionary indexed by merge commit SHA. */
+const buildPRDict = (pullRequests: Array<PullRequest>): PullRequestDict => {
+  return pullRequests.reduce(
+    (dict, pr) => dict.set(`${pr.detail.data.merge_commit_sha}`, pr),
+    new Map<string, PullRequest>() as PullRequestDict
+  );
+};
+
+/** Builds CSM nodes from commit nodes with PR integration. */
+const buildCSMNodesWithPR = (
+  commitNodes: CommitNode[],
+  commitDict: CommitDict,
+  stemDict: StemDict,
+  prDict: PullRequestDict
+): CSMNode[] => {
+  return commitNodes.map((commitNode) => {
+    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
+    const pr = prDict.get(csmNode.base.commit.id);
+    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
+  });
+};
+
 /**
- * CSM 생성
+ * Builds a CSM (Commit Summary Model) dictionary.
+ * Creates CSM nodes for each commit in the base branch,
+ * and integrates Pull Request information if available.
  *
- * @param {Map<string, CommitNode>} commitDict
- * @param {Map<string, Stem>} stemDict
- * @param {string} baseBranchName
- * @param {Array<PullRequest>} pullRequests
- * @returns {CSMDictionary}
+ * @param commitDict - Commit dictionary
+ * @param stemDict - Stem dictionary
+ * @param baseBranchName - Base branch name (e.g., 'main', 'master')
+ * @param pullRequests - Pull Request array (optional)
+ * @returns CSM dictionary (CSM node array per branch)
+ * @throws {Error} When there are no stems or no base branch stem
  */
 export const buildCSMDict = (
   commitDict: CommitDict,
@@ -88,25 +141,69 @@ export const buildCSMDict = (
     // return {};
   }
 
-  // v0.1 에서는 master STEM 으로만 CSM 생성함
+  // In v0.1, CSM is only created from the master STEM
   const masterStem = stemDict.get(baseBranchName);
   if (!masterStem) {
     throw new Error("no master-stem");
     // return {};
   }
 
-  const prDictByMergedCommitSha = pullRequests.reduce(
-    (dict, pr) => dict.set(`${pr.detail.data.merge_commit_sha}`, pr),
-    new Map<string, PullRequest>() as PullRequestDict
-  );
+  const prDict = buildPRDict(pullRequests);
+  const csmNodes = buildCSMNodesWithPR(masterStem.nodes, commitDict, stemDict, prDict);
 
-  const csmDict: CSMDictionary = {};
-  const stemNodes = masterStem.nodes.reverse(); // start on root-node
-  csmDict[baseBranchName] = stemNodes.map((commitNode) => {
-    const csmNode = buildCSMNode(commitNode, commitDict, stemDict);
-    const pr = prDictByMergedCommitSha.get(csmNode.base.commit.id);
-    return pr ? buildCSMNodeWithPullRequest(csmNode, pr) : csmNode;
-  });
+  return {
+    [baseBranchName]: csmNodes,
+  };
+};
 
-  return csmDict;
+/**
+ * Builds a paginated CSM dictionary.
+ * Creates CSM nodes for a specific range of commits in the base branch,
+ * enabling efficient lazy loading for large repositories.
+ */
+export const buildPaginatedCSMDict = (
+  commitDict: CommitDict,
+  stemDict: StemDict,
+  baseBranchName: string,
+  commitCountPerPage: number,
+  lastCommitId?: string,
+  pullRequests: Array<PullRequest> = []
+): CSMDictionary => {
+  // Validate commitCountPerPage
+  if (commitCountPerPage <= 0) {
+    throw new Error("commitCountPerPage must be greater than 0");
+  }
+
+  // Validate stemDict
+  if (stemDict.size === 0) {
+    throw new Error("no stem");
+  }
+
+  // Get base branch stem
+  const baseStem = stemDict.get(baseBranchName);
+  if (!baseStem) {
+    throw new Error("no master-stem");
+  }
+
+  // Determine start index based on cursor
+  let startIndex = 0;
+  if (lastCommitId) {
+    const lastCommitIndex = baseStem.nodes.findIndex((node) => node.commit.id === lastCommitId);
+    if (lastCommitIndex === -1) {
+      throw new Error("Invalid lastCommitId");
+    }
+    startIndex = lastCommitIndex + 1;
+  }
+
+  // Calculate end index and extract page nodes
+  const endIndex = Math.min(startIndex + commitCountPerPage, baseStem.nodes.length);
+  const pageNodes = baseStem.nodes.slice(startIndex, endIndex);
+
+  // Build CSM nodes with PR integration
+  const prDict = buildPRDict(pullRequests);
+  const csmNodes = buildCSMNodesWithPR(pageNodes, commitDict, stemDict, prDict);
+
+  return {
+    [baseBranchName]: csmNodes,
+  };
 };

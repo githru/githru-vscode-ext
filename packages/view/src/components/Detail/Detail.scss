@@ -5,6 +5,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: $font-size-caption;
+  padding-bottom: 1rem;
 
   .detail__summary-divider {
     margin-right: 1rem;
@@ -45,13 +46,14 @@
   }
 }
 
-.detail__commit-list {
+.detail__container {
+  position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 1.25rem;
-  font-size: $font-size-body;
+  height: 100%;
+  min-height: 200px;
+}
 
+.detail__container {
   .detail__commit-item {
     width: 100%;
     display: flex;
@@ -70,81 +72,176 @@
       padding-left: 0.3125rem;
       padding-bottom: 1rem;
 
-      .commit-item__left {
+      .commit-item__message-container {
         display: flex;
         align-items: flex-start;
         gap: 0.625rem;
         width: 100%;
+        flex: 1;
+        margin-left: 0.125rem;
+        min-width: 0;
+        padding-top: 0.3rem;
+        padding-right: 3.125rem;
 
-        .commit-item__message-container {
+        .commit-message {
           position: relative;
-          overflow: visible;
-          flex-grow: 1;
-          padding-top: 0.3rem;
-          padding-right: 3.125rem;
 
-          .commit-item__message {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            overflow: hidden;
-            color: $color-white;
-            margin: 0 0.25rem 0 0.9375rem;
-            cursor: pointer;
+          .commit-message__header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
 
-            &:hover {
-              display: block;
-              -webkit-line-clamp: unset;
-              white-space: normal;
-              overflow: visible;
+            .author {
+              width: 1.5rem;
+              height: 1.5rem;
+              flex-shrink: 0;
+              order: -1;
+
+              img {
+                width: 1.5rem;
+                height: 1.5rem;
+              }
             }
+
+            .commit-message__title {
+              font-weight: 600;
+              font-size: 0.875rem;
+              color: var(--color-text-primary);
+              line-height: 1.4;
+              flex: 1;
+            }
+
+            .commit-item__meta {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              font-size: 0.75rem;
+              color: var(--color-text-secondary);
+              flex-shrink: 0;
+              margin-left: auto;
+
+              .commit-item__author-name {
+                font-weight: 500;
+                white-space: nowrap;
+              }
+
+              .commit-item__date {
+                color: var(--color-text-tertiary);
+                white-space: nowrap;
+              }
+
+              .commit-item__commit-id {
+                .commit-id__link {
+                  text-decoration: none;
+                  color: inherit;
+
+                  &:hover {
+                    color: var(--color-primary);
+                  }
+
+                  p {
+                    margin: 0;
+                    font-family: monospace;
+                    font-size: 0.75rem;
+                  }
+                }
+              }
+            }
+          }
+
+          .commit-message__body {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: 0.375rem;
+            padding: 0;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: var(--color-text-secondary);
+            transition: all 0.3s ease-in-out;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-top: 0;
+          }
+
+          &:hover .commit-message__body {
+            max-height: 200px;
+            opacity: 1;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
           }
         }
       }
 
       .commit-item__right {
-        display: flex;
-        padding-top: 0.3rem;
-        align-items: flex-end;
-        text-align: right;
-        gap: 0.625rem;
-        white-space: nowrap;
-
-        .commit-item__commit-id {
-          width: fit-content;
-
-          .commit-id__link {
-            text-decoration: none;
-            color: $color-light-gray;
-
-            &:visited {
-              color: $color-light-gray;
-            }
-
-            &:hover {
-              color: var(--color-primary);
-            }
-          }
-        }
-
-        .commit-item__author-date {
-          display: block;
-          position: relative;
-        }
+        display: none;
       }
     }
   }
 }
 
-.detail__toggle-button {
+.detail__scroll-indicator {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   display: flex;
-  margin: 0 auto;
-  border: none;
-  background: none;
-  color: var(--color-tertiary);
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  color: var(--color-text-tertiary);
   cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   &:hover {
-    color: $color-light-gray;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--color-text-secondary);
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  svg {
+    font-size: 1rem;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-3px);
+    }
+    60% {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.commit-message__issue-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.125rem;
+  background-color: rgba(224, 96, 145, 0.1);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(224, 96, 145, 0.2);
+    text-decoration: underline;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }

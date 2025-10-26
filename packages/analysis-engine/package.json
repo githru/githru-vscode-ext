@@ -1,6 +1,6 @@
 {
   "name": "@githru-vscode-ext/analysis-engine",
-  "version": "0.7.2",
+  "version": "0.8.1",
   "description": "analysis-engine module for githru",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -73,7 +73,7 @@
     "@octokit/plugin-throttling": "^4.1.0",
     "@octokit/rest": "^19.0.3",
     "@octokit/types": "^13.5.0",
-    "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.7.0"
+    "inversify": "^7.10.0",
+    "reflect-metadata": "^0.2.2"
   }
 }
