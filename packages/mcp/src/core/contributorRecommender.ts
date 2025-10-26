@@ -1,12 +1,11 @@
 import { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import * as fs from "fs";
-import * as path from "path";
-import { getDirname } from "../common/utils.js";
 import { GitHubUtils, CommonUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import type { ContributorRecommenderInputs, ContributorCandidate, ContributorRecommendation } from "../common/types.js";
-import { Config } from "../common/config.js";
+import { htmlAssets } from "../common/htmlAssets.js";
+import { getDirname } from "common/assetResolver.js";
 
 const __dirname = getDirname();
 
@@ -244,8 +243,7 @@ export class ContributorRecommender {
 
     try {
       if (candidates.length === 0) {
-        const templatePath = path.join(__dirname, "../html/no-contributors.html");
-        let template = fs.readFileSync(templatePath, "utf8");
+        let template = fs.readFileSync(htmlAssets.path("no-contributors.html"), "utf8");
 
         const notesHtml = notes.map((note) => `<p style="color: #666; font-size: 14px;">📝 ${note}</p>`).join("");
         template = template.replace("{{NOTES}}", notesHtml);
@@ -253,8 +251,7 @@ export class ContributorRecommender {
         return template;
       }
 
-      const templatePath = path.join(__dirname, "../html/contributors-chart.html");
-      let template = fs.readFileSync(templatePath, "utf8");
+      let template = fs.readFileSync(htmlAssets.path("contributors-chart.html"), "utf8");
 
       const names = candidates.map((c) => c.name);
       const scores = candidates.map((c) => c.score);
@@ -287,14 +284,13 @@ export class ContributorRecommender {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("Chart generation error:", error);
 
-      const errorTemplatePath = path.join(__dirname, "../html/error-chart.html");
-      let errorTemplate = fs.readFileSync(errorTemplatePath, "utf8");
+      let errorTemplate = fs.readFileSync(htmlAssets.path("error-chart.html"), "utf8");
 
-      const templatePath = path.join(__dirname, "../html/contributors-chart.html");
-      const debugInfo = `Template directory exists: ${fs.existsSync(path.join(__dirname, "../html"))}
-          Contributors template exists: ${fs.existsSync(path.join(__dirname, "../html/contributors-chart.html"))}
-          No-contributors template exists: ${fs.existsSync(path.join(__dirname, "../html/no-contributors.html"))}
-          Error template exists: ${fs.existsSync(errorTemplatePath)}`;
+      const templatePath = htmlAssets.path("contributors-chart.html");
+      const debugInfo = `Template dir: ${htmlAssets.baseDir} ...
+          Contributors template exists: ${fs.existsSync(templatePath)}
+          No-contributors template exists: ${fs.existsSync(htmlAssets.path("no-contributors.html"))}
+          Error template exists: ${fs.existsSync(htmlAssets.path("error-chart.html"))}`;
 
       errorTemplate = errorTemplate.replace("{{ERROR_MESSAGE}}", errorMessage);
       errorTemplate = errorTemplate.replace("{{TEMPLATE_PATH}}", templatePath);

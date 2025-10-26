@@ -3,9 +3,9 @@ import { GitHubUtils } from "../common/utils.js";
 import { I18n } from "../common/i18n.js";
 import * as fs from "fs";
 import * as path from "path";
-import { getDirname } from "../common/utils.js";
 import type { FeatureImpactAnalyzerInputs } from "../common/types.js";
-import { Config } from "../common/config.js";
+import { htmlAssets } from "../common/htmlAssets.js";
+import { getDirname } from "common/assetResolver.js";
 
 const __dirname = getDirname();
 
@@ -294,16 +294,16 @@ export class McpReportGenerator {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("Chart generation error:", error);
 
-      const errorTemplatePath = path.join(__dirname, "../html/error-chart.html");
+      const errorTemplatePath = htmlAssets.path("error-chart.html");
 
       let errorTemplate = fs.existsSync(errorTemplatePath)
         ? fs.readFileSync(errorTemplatePath, "utf8")
         : `<!doctype html><meta charset="utf-8"><pre>{{ERROR_MESSAGE}}</pre>`;
 
-      const templatePath = path.join(__dirname, "../html/feature-impact.html");
+      const templatePath = htmlAssets.path("feature-impact.html");
 
       const debugInfo = [
-        `Template directory exists: ${fs.existsSync(path.join(__dirname, "../html"))}`,
+        `Template directory exists: ${fs.existsSync(htmlAssets.baseDir)}`,
         `Chart template exists: ${fs.existsSync(templatePath)}`,
         `Error template exists: ${fs.existsSync(errorTemplatePath)}`,
       ].join("\n");
