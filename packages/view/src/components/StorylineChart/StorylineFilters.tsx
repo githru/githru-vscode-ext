@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { SelectChangeEvent } from "@mui/material";
 import {
   Box,
   Chip,
@@ -8,7 +9,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Stack,
   Typography,
 } from "@mui/material";
@@ -16,6 +16,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+
 import { useStorylineFilterStore } from "store";
 
 import type { ReleaseContributorActivity } from "./StorylineChart.type";
