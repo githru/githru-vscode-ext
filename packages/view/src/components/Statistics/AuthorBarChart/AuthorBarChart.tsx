@@ -271,34 +271,11 @@ const AuthorBarChart = () => {
     <div className="author-bar-chart">
       <p className="author-bar-chart__title">Author Bar Chart</p>
       <div className="author-bar-chart__header">
-        <FormControl
-          sx={{ m: 1, minWidth: 120 }}
-          size="small"
-        >
+        <FormControl>
           <Select
-            className="author-bar-chart__select-box"
             value={metric}
             onChange={handleChangeMetric}
             inputProps={{ "aria-label": "Without label" }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  marginTop: "0.0625rem",
-                  backgroundColor: "#212121",
-                  color: "white",
-                  "& .MuiMenuItem-root": {
-                    fontSize: "0.75rem",
-                    backgroundColor: "#212121 !important ",
-                    "&:hover": {
-                      backgroundColor: "#333333 !important",
-                    },
-                  },
-                  "& .MuiMenuItem-root.Mui-selected": {
-                    backgroundColor: "#333333 !important",
-                  },
-                },
-              },
-            }}
           >
             {METRIC_TYPE.map((option) => (
               <MenuItem

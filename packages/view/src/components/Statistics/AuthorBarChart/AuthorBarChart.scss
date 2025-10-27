@@ -16,22 +16,6 @@
     text-align: right;
   }
 
-  & &__select-box {
-    border: 0.0625rem solid var(--color-white);
-    color: var(--color-white);
-    height: 1.5625rem;
-    width: 6.25rem;
-    font-size: $font-size-caption;
-
-    & .MuiSvgIcon-root {
-      color: var(--color-white);
-    }
-
-    &.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border: none;
-    }
-  }
-
   &__chart {
     overflow: visible;
     margin: 1.25rem 2.5rem 2.5rem;

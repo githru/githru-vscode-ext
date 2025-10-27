@@ -6,18 +6,4 @@
   gap: 1rem;
   align-items: center;
   font-weight: $font-weight-semibold;
-
-  & &__select-box {
-    border: 0.0625rem solid var(--color-white);
-    color: var(--color-white);
-    height: 1.875rem;
-
-    & .MuiSvgIcon-root {
-      color: var(--color-white);
-    }
-
-    &.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border: none;
-    }
-  }
 }

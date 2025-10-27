@@ -6,9 +6,9 @@ import Select from "@mui/material/Select";
 import { sendFetchAnalyzedDataCommand } from "services";
 import "./BranchSelector.scss";
 import { useBranchStore, useLoadingStore } from "store";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 import { SLICE_LENGTH } from "./BranchSelector.const";
-import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
 
 const BranchSelector = () => {
   const { branchList, selectedBranch, setSelectedBranch } = useBranchStore();
@@ -23,33 +23,12 @@ const BranchSelector = () => {
   return (
     <div className="branch-selector">
       <p>Branches: </p>
-      <FormControl
-        sx={{ m: 1, minWidth: 120 }}
-        size="small"
-      >
+      <FormControl>
         <Select
           value={selectedBranch}
           onChange={handleChangeSelect}
           className="branch-selector__select-box"
           inputProps={{ "aria-label": "Without label" }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: "#212121",
-                color: "white",
-                marginTop: "0.0625rem",
-                "& .MuiMenuItem-root": {
-                  backgroundColor: "#212121 !important ",
-                  "&:hover": {
-                    backgroundColor: "#333333 !important",
-                  },
-                },
-                "& .MuiMenuItem-root.Mui-selected": {
-                  backgroundColor: "#333333 !important",
-                },
-              },
-            },
-          }}
         >
           {branchList?.map((option) => (
             <MenuItem
