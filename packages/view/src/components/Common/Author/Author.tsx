@@ -1,10 +1,9 @@
 import { Tooltip, Avatar } from "@mui/material";
 
 import type { AuthorInfo } from "types";
-
 import { GITHUB_URL } from "constants/constants";
 
-import { AVATAR_STYLE, TOOLTIP_STYLE } from "./Author.const";
+import { AVATAR_STYLE } from "./Author.const";
 
 const isGitHubUser = (src: string): boolean => {
   return src.startsWith(GITHUB_URL);
@@ -60,7 +59,6 @@ const Author = ({ name, src }: AuthorInfo) => {
     <Tooltip
       title={name}
       placement="top-start"
-      PopperProps={{ sx: TOOLTIP_STYLE }}
     >
       <AvatarComponent
         name={name}

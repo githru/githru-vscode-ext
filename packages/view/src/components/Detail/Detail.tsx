@@ -187,10 +187,8 @@ function CommitItem({
                     className="commit-id__link"
                   >
                     <Tooltip
-                      className="commit-id__tooltip"
                       placement="right"
                       title={id}
-                      PopperProps={{ sx: { ".MuiTooltip-tooltip": { bgcolor: "#3c4048" } } }}
                     >
                       <p>{id.slice(0, 6)}</p>
                     </Tooltip>
