@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 import type { ThemeName } from "./theme.type";
 import { BACKGROUND_COLORS, COMMON_COLORS, GREY_COLORS, SYSTEM_COLORS, THEME_CONFIG } from "./theme.const";
-import { muiIconButton, muiSelect, muiTooltip } from "./components";
+import { muiChip, muiIconButton, muiSelect, muiTooltip } from "./components";
 
 export const createMuiTheme = (themeName: ThemeName) => {
   const themeColors = THEME_CONFIG[themeName].colors;
@@ -20,6 +20,7 @@ export const createMuiTheme = (themeName: ThemeName) => {
       MuiIconButton: muiIconButton,
       MuiSelect: muiSelect,
       MuiTooltip: muiTooltip,
+      MuiChip: muiChip,
     },
   });
 };
