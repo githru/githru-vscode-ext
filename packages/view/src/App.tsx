@@ -10,10 +10,9 @@ import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
-import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
 import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
-import { createMuiTheme } from "theme";
+import { createMuiTheme, THEME_CONFIG } from "theme";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -57,7 +56,7 @@ const App = () => {
   if (loading) {
     return (
       <BounceLoader
-        color={THEME_INFO[theme as keyof typeof THEME_INFO].colors.primary}
+        color={THEME_CONFIG[theme].colors.primary.main}
         loading={loading}
         cssOverride={{
           position: "fixed",

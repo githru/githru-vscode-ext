@@ -12,29 +12,16 @@
   }
 
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     text-align: right;
   }
 
-  & &__select-box {
-    border: 0.0625rem solid var(--color-white);
-    color: var(--color-white);
-    height: 1.5625rem;
-    width: 6.25rem;
-    font-size: $font-size-caption;
-
-    & .MuiSvgIcon-root {
-      color: var(--color-white);
-    }
-
-    &.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border: none;
-    }
-  }
-
   &__chart {
     overflow: visible;
-    margin: 1.25rem 2.5rem 2.5rem;
+    margin: $spacing-2xl $spacing-3xl $spacing-3xl;
   }
 
   &__axis {
@@ -78,8 +65,8 @@
   &__tooltip {
     display: none;
     position: absolute;
-    padding: 0.5rem 1rem;
-    border-radius: 0.3125rem;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-xs;
     font-size: $font-size-caption;
     text-align: center;
     line-height: 1.5;

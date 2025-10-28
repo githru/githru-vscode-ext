@@ -23,7 +23,6 @@ const RefreshButton = () => {
       className={cn("refresh-button")}
       onClick={refreshHandler}
       disabled={loading}
-      sx={{ color: "white" }}
     >
       <ReplayCircleFilledRoundedIcon
         className={cn("refresh-button__icon", { "refresh-button__icon--loading": loading })}

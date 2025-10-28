@@ -11,20 +11,21 @@
     position: absolute;
     top: 2.5rem;
     left: 0;
-    padding: 1.25rem;
+    padding: $spacing-xl;
     background-color: var(--color-grey-100);
-    border-radius: 0.3rem 1.5rem 1.5rem 1.5rem;
+    border-radius: $radius-xs $radius-md $radius-md $radius-md;
     z-index: 10;
 
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: $spacing-md;
   }
 
   &__list {
     display: flex;
     justify-content: space-between;
-    gap: 0.125rem;
+    align-items: center;
+    gap: $spacing-sm;
   }
 
   &__header {
@@ -39,15 +40,16 @@
   flex-direction: column;
   align-items: center;
   justify-items: center;
-  gap: 1rem;
-  padding: 0.625rem;
+  gap: $spacing-lg;
+  min-width: 6.75rem;
+  padding: $spacing-md;
   box-sizing: border-box;
 
   &:hover,
   &--selected {
     @extend .theme-icon;
-    background-color: #4f5662;
-    border-radius: 0.625rem;
+    background-color: var(--color-grey-300);
+    border-radius: $radius-md;
     cursor: pointer;
   }
 
@@ -73,5 +75,6 @@
   &__title {
     font-size: $font-size-body;
     font-weight: $font-weight-regular;
+    white-space: nowrap;
   }
 }
