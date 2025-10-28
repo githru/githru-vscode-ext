@@ -81,10 +81,11 @@
         margin-left: 0.125rem;
         min-width: 0;
         padding-top: 0.3rem;
-        padding-right: 3.125rem;
+        padding-right: 0.25rem;
 
         .commit-message {
           position: relative;
+          width: 100%;
 
           .commit-message__header {
             display: flex;
@@ -150,28 +151,26 @@
             }
           }
 
-          .commit-message__body {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
+          %commit-message__body-base {
             background: rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--color-border);
-            border-radius: 0.375rem;
-            padding: 0;
+            color: var(--color-text-secondary);
             font-size: 0.8125rem;
             line-height: 1.5;
-            color: var(--color-text-secondary);
             transition: all 0.3s ease-in-out;
             white-space: pre-wrap;
             word-break: break-word;
-            margin-top: 0;
           }
 
-          &:hover .commit-message__body {
-            max-height: 200px;
+          .commit-message__body {
+            @extend %commit-message__body-base;
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+
+          .commit-message__body--visible {
+            @extend %commit-message__body-base;
             opacity: 1;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
+            transform: translateY(0);
           }
         }
       }
@@ -214,7 +213,11 @@
   }
 
   @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0);
     }
     40% {
