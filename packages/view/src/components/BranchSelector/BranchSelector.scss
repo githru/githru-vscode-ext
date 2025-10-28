@@ -8,12 +8,12 @@
   font-weight: $font-weight-semibold;
 
   & &__select-box {
-    border: 0.0625rem solid $color-white;
-    color: $color-white;
+    border: 0.0625rem solid var(--color-white);
+    color: var(--color-white);
     height: 1.875rem;
 
     & .MuiSvgIcon-root {
-      color: $color-white;
+      color: var(--color-white);
     }
 
     &.Mui-focused .MuiOutlinedInput-notchedOutline {

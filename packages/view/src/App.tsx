@@ -1,6 +1,7 @@
 import "reflect-metadata";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
+import { ThemeProvider } from "@mui/material";
 
 import MonoLogo from "assets/monoLogo.svg";
 import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
@@ -12,6 +13,7 @@ import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeS
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
 import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
+import { createMuiTheme } from "theme";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
@@ -26,6 +28,8 @@ const App = () => {
   const { handleGithubInfo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
+
+  const muiTheme = useMemo(() => createMuiTheme(theme), [theme]);
 
   useEffect(() => {
     if (initRef.current === false) {
@@ -66,7 +70,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <ThemeProvider theme={muiTheme}>
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
@@ -100,7 +104,7 @@ const App = () => {
           </div>
         )}
       </div>
-    </>
+    </ThemeProvider>
   );
 };
 
