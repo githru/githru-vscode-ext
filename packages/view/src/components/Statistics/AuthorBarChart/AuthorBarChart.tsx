@@ -269,8 +269,8 @@ const AuthorBarChart = () => {
 
   return (
     <div className="author-bar-chart">
-      <p className="author-bar-chart__title">Author Bar Chart</p>
       <div className="author-bar-chart__header">
+        <p className="author-bar-chart__title">Author Bar Chart</p>
         <FormControl>
           <Select
             value={metric}

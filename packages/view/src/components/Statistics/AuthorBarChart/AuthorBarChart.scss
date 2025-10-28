@@ -12,13 +12,16 @@
   }
 
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     text-align: right;
   }
 
   &__chart {
     overflow: visible;
-    margin: 1.25rem 2.5rem 2.5rem;
+    margin: $spacing-2xl $spacing-3xl $spacing-3xl;
   }
 
   &__axis {
@@ -62,8 +65,8 @@
   &__tooltip {
     display: none;
     position: absolute;
-    padding: 0.5rem 1rem;
-    border-radius: 0.3125rem;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-xs;
     font-size: $font-size-caption;
     text-align: center;
     line-height: 1.5;
