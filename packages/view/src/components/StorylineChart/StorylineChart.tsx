@@ -188,15 +188,7 @@ const StorylineChart = () => {
       onFolderClick: navigateToFolder,
       topContributorName,
     });
-  }, [
-    filteredActivities,
-    releaseTopFolderPaths,
-    navigateToFolder,
-    chartWidth,
-    totalData,
-    releaseGroups,
-    topContributorName,
-  ]);
+  }, [filteredActivities, releaseTopFolderPaths, navigateToFolder, chartWidth, totalData, releaseGroups]);
 
   const topContributorLabel = topContributorName || "...";
 

@@ -328,7 +328,6 @@ export const renderReleaseVisualization = ({
     .enter()
     .append("path")
     .attr("class", "flow-line")
-    .attr("data-contributor", (d) => d.contributorName)
     .attr("d", (d) => {
       // 실제 노드 위치를 찾아서 경로 생성 (날짜까지 매칭)
       const startActivity = releaseContributorActivities.find(
