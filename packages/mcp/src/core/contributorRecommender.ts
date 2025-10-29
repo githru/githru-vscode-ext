@@ -2,10 +2,10 @@ import { Octokit } from "@octokit/rest";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import * as fs from "fs";
 import { GitHubUtils, CommonUtils } from "../common/utils.js";
-import { I18n } from "../common/i18n.js";
 import type { ContributorRecommenderInputs, ContributorCandidate, ContributorRecommendation } from "../common/types.js";
-import { htmlAssets } from "../common/htmlAssets.js";
 import { getDirname } from "../common/assetResolver.js";
+import { getI18n } from "common/i18n.js";
+import { getHtmlAssets } from "common/htmlAssets.js";
 
 const __dirname = getDirname();
 
@@ -33,7 +33,7 @@ export class ContributorRecommender {
     // const githubToken = config.getGithubToken();
 
     if (inputs.locale) {
-      I18n.setLocale(inputs.locale);
+      getI18n().setLocale(inputs.locale);
     }
 
     this.octokit = GitHubUtils.createGitHubAPIClient(inputs.githubToken);
@@ -68,7 +68,7 @@ export class ContributorRecommender {
       return this.analyzeFileContributors(changedFiles);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error(I18n.t("errors.pr_analysis"), message);
+      console.error(getI18n().t("errors.pr_analysis"), message);
       return [];
     }
   }
@@ -105,7 +105,7 @@ export class ContributorRecommender {
         }
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        console.warn(I18n.t("errors.path_analysis", { path }), message);
+        console.warn(getI18n().t("errors.path_analysis", { path }), message);
       }
     }
 
@@ -145,7 +145,7 @@ export class ContributorRecommender {
       return this.calculateContributorScores(contributors);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error(I18n.t("errors.branch_analysis"), message);
+      console.error(getI18n().t("errors.branch_analysis"), message);
       return [];
     }
   }
@@ -179,7 +179,7 @@ export class ContributorRecommender {
         }
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        console.warn(I18n.t("errors.file_analysis", { file }), message);
+        console.warn(getI18n().t("errors.file_analysis", { file }), message);
       }
     }
 
@@ -220,17 +220,17 @@ export class ContributorRecommender {
 
     if (this.pr) {
       candidates = await this.analyzePRContributors();
-      notes.push(I18n.t("notes.pr_recommendation", { pr: this.pr }));
+      notes.push(getI18n().t("notes.pr_recommendation", { pr: this.pr }));
     } else if (this.paths?.length) {
       candidates = await this.analyzePathContributors();
-      notes.push(I18n.t("notes.path_recommendation", { paths: this.paths.join(", ") }));
+      notes.push(getI18n().t("notes.path_recommendation", { paths: this.paths.join(", ") }));
     } else {
       candidates = await this.analyzeBranchContributors();
-      notes.push(I18n.t("notes.branch_recommendation", { branch: this.branch || "main" }));
+      notes.push(getI18n().t("notes.branch_recommendation", { branch: this.branch || "main" }));
     }
 
     const sinceDays = CommonUtils.getDaysDifference(this.since);
-    notes.push(I18n.t("notes.analysis_period", { days: sinceDays }));
+    notes.push(getI18n().t("notes.analysis_period", { days: sinceDays }));
 
     return {
       candidates,
@@ -243,7 +243,7 @@ export class ContributorRecommender {
 
     try {
       if (candidates.length === 0) {
-        let template = fs.readFileSync(htmlAssets.path("no-contributors.html"), "utf8");
+        let template = fs.readFileSync(getHtmlAssets().path("no-contributors.html"), "utf8");
 
         const notesHtml = notes.map((note) => `<p style="color: #666; font-size: 14px;">📝 ${note}</p>`).join("");
         template = template.replace("{{NOTES}}", notesHtml);
@@ -251,7 +251,7 @@ export class ContributorRecommender {
         return template;
       }
 
-      let template = fs.readFileSync(htmlAssets.path("contributors-chart.html"), "utf8");
+      let template = fs.readFileSync(getHtmlAssets().path("contributors-chart.html"), "utf8");
 
       const names = candidates.map((c) => c.name);
       const scores = candidates.map((c) => c.score);
@@ -284,13 +284,13 @@ export class ContributorRecommender {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("Chart generation error:", error);
 
-      let errorTemplate = fs.readFileSync(htmlAssets.path("error-chart.html"), "utf8");
+      let errorTemplate = fs.readFileSync(getHtmlAssets().path("error-chart.html"), "utf8");
 
-      const templatePath = htmlAssets.path("contributors-chart.html");
-      const debugInfo = `Template dir: ${htmlAssets.baseDir} ...
+      const templatePath = getHtmlAssets().path("contributors-chart.html");
+      const debugInfo = `Template dir: ${getHtmlAssets().baseDir} ...
           Contributors template exists: ${fs.existsSync(templatePath)}
-          No-contributors template exists: ${fs.existsSync(htmlAssets.path("no-contributors.html"))}
-          Error template exists: ${fs.existsSync(htmlAssets.path("error-chart.html"))}`;
+          No-contributors template exists: ${fs.existsSync(getHtmlAssets().path("no-contributors.html"))}
+          Error template exists: ${fs.existsSync(getHtmlAssets().path("error-chart.html"))}`;
 
       errorTemplate = errorTemplate.replace("{{ERROR_MESSAGE}}", errorMessage);
       errorTemplate = errorTemplate.replace("{{TEMPLATE_PATH}}", templatePath);
