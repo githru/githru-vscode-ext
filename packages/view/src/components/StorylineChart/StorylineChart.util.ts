@@ -75,12 +75,25 @@ export function generateReleaseFlowLineData(
       const current = activities[i];
       const next = activities[i + 1];
 
-      if (current.releaseIndex !== next.releaseIndex) {
+      // 같은 릴리즈, 같은 폴더, 같은 시간이 아닌 경우 선을 그림
+      // (오프셋이 다른 경우 = 다른 릴리즈, 다른 폴더, 또는 다른 시간)
+      const isSamePosition =
+        current.releaseIndex === next.releaseIndex &&
+        current.folderPath === next.folderPath &&
+        current.date.getTime() === next.date.getTime();
+
+      // 릴리즈가 연속적인지 확인 (같은 릴리즈이거나 바로 다음 릴리즈인 경우만)
+      const isConsecutiveRelease =
+        current.releaseIndex === next.releaseIndex || current.releaseIndex + 1 === next.releaseIndex;
+
+      if (!isSamePosition && isConsecutiveRelease) {
         flowLineData.push({
           startReleaseIndex: current.releaseIndex,
           startFolder: current.folderPath,
+          startDate: current.date,
           endReleaseIndex: next.releaseIndex,
           endFolder: next.folderPath,
+          endDate: next.date,
           contributorName: current.contributorName,
         });
       }
