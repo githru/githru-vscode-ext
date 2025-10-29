@@ -607,7 +607,7 @@ export const renderReleaseVisualization = ({
                   .duration(2000)
                   .ease(d3.easeLinear)
                   .attrTween("transform", () => {
-                    return function (t) {
+                    return function (t: number) {
                       const point = currentLine.getPointAtLength(t * pathLength);
                       return `translate(${point.x}, ${point.y - 15})`; // 라인 위 15px
                     };
