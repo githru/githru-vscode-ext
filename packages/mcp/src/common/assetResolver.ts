@@ -66,7 +66,9 @@ export function resolveAssetDir(opts: ResolveDirOpts): string {
   const debug = debugEnvVar && process.env[debugEnvVar] === "1";
 
   // 0) ENV 최우선
-  const envDir = envVar ? process.env[envVar]?.trim() : undefined;
+  const envRaw = envVar ? process.env[envVar]?.trim() : undefined;
+  const envDir =
+    envRaw && envRaw.length > 0 ? (path.isAbsolute(envRaw) ? envRaw : path.resolve(process.cwd(), envRaw)) : undefined;
 
   // 1) require.resolve(CJS) 역추적
   let resolvedByRequire: string | undefined;
