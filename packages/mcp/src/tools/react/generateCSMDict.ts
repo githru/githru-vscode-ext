@@ -21,7 +21,7 @@ export function registerGenerateCsmDictTool(server: McpServer) {
       repo: string;
       baseBranchName?: string;
       githubToken: string
-      locale?: string;
+      locale?: "en" | "ko";
     }) => {
       try {
         /**
