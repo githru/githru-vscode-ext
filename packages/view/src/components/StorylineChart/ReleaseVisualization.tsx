@@ -593,7 +593,7 @@ export const renderReleaseVisualization = ({
                   // 라인 스타일 복원
                   d3.select(currentLine).style("stroke-dasharray", "12,6").attr("stroke-width", 3);
 
-                  currentLineIndex++;
+                  currentLineIndex += 1;
                   animateNextLine();
                 }, 1500); // 1.5초 동안 자는 모습 유지
               } else {
@@ -607,7 +607,7 @@ export const renderReleaseVisualization = ({
                   .duration(2000)
                   .ease(d3.easeLinear)
                   .attrTween("transform", () => {
-                    return function (t) {
+                    return function (t: number) {
                       const point = currentLine.getPointAtLength(t * pathLength);
                       return `translate(${point.x}, ${point.y - 15})`; // 라인 위 15px
                     };
@@ -616,7 +616,7 @@ export const renderReleaseVisualization = ({
                     // 라인 스타일 복원
                     d3.select(currentLine).style("stroke-dasharray", "none").attr("stroke-width", 4);
 
-                    currentLineIndex++;
+                    currentLineIndex += 1;
                     animateNextLine();
                   });
               }
