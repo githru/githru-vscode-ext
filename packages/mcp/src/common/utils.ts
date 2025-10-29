@@ -242,7 +242,21 @@ export const GitHubUtils = {
     );
 
     if (status.code !== 0 || status.error) {
-      throw new Error(`Git clone failed: ${stderr.toString()}`);
+      const errorDetails: any = {
+        exitCode: status.code,
+        error: status.error?.message || null,
+        stderr: stderr.toString() || '(empty)',
+        stdout: stdout.toString() || '(empty)',
+      };
+
+      if (!stderr.toString() && status.error) {
+        errorDetails.likelyCause = 'git command not found or not executable';
+        errorDetails.errorName = status.error.name;
+      }
+
+      const errorMessage = `Git clone failed. Details: ${JSON.stringify(errorDetails, null, 2)}`;
+      console.error('Git clone failed:', errorDetails);
+      throw new Error(errorMessage);
     }
   },
 
