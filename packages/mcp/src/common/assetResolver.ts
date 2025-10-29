@@ -54,7 +54,7 @@ export function resolveAssetDir(opts: ResolveDirOpts): string {
   const {
     envVar,
     callerMetaUrl,
-    callerDirname = getDirname(),
+    callerDirname = getDirname(callerMetaUrl),
     packageRoot = findPackageRoot(callerDirname),
     moduleAnchors = [],
     packageAnchors = [],

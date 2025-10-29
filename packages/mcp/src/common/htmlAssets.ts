@@ -4,6 +4,7 @@ import { resolveAssetDir, makeAssetResolver, getDirname } from "./assetResolver.
 const TEMPLATES_DIR = resolveAssetDir({
   envVar: "GITHRU_TEMPLATES_DIR",
   callerDirname: getDirname(),
+  callerMetaUrl: import.meta.url,
   moduleAnchors: ["html", "../html"],
   packageAnchors: ["dist/html", "html", "src/html"],
   requiredFiles: [
