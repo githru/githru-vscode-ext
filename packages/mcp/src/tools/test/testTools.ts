@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { I18n } from "../../common/i18n.js";
+import { getI18n } from "../../common/i18n.js";
 
 export function registerTestTools(server: McpServer) {
   // Ping Tool
@@ -9,7 +9,7 @@ export function registerTestTools(server: McpServer) {
     {
       title: "Ping",
       description: "Health check tool",
-      inputSchema: {}
+      inputSchema: {},
     },
     async () => {
       return { content: [{ type: "text", text: "pong" }] };
@@ -24,12 +24,12 @@ export function registerTestTools(server: McpServer) {
       description: "Echoes back the input text with multilingual support",
       inputSchema: {
         text: z.string().describe("Text to echo back"),
-        locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)")
-      }
+        locale: z.enum(["en", "ko"]).default("en").describe("Response language (en: English, ko: Korean)"),
+      },
     },
-    async ({ text, locale }: { text: string; locale?: string }) => {
-      I18n.setLocale(locale || 'en');
-      const response = I18n.t('echo.greeting', { text });
+    async ({ text, locale }: { text: string; locale?: "en" | "ko" }) => {
+      getI18n().setLocale(locale || "en");
+      const response = getI18n().t("echo.greeting", { text });
       return { content: [{ type: "text", text: response }] };
     }
   );
@@ -42,8 +42,8 @@ export function registerTestTools(server: McpServer) {
       description: "Calculate BMI index from height(cm) and weight(kg).",
       inputSchema: {
         height: z.number().int().positive().describe("Height (cm)"),
-        weight: z.number().int().positive().describe("Weight (kg)")
-      }
+        weight: z.number().int().positive().describe("Weight (kg)"),
+      },
     },
     async ({ height, weight }: { height: number; weight: number }) => {
       const hMeters = height / 100; // cm → m
@@ -53,7 +53,7 @@ export function registerTestTools(server: McpServer) {
       else if (bmi < 24.9) category = "Normal weight";
       else if (bmi < 29.9) category = "Overweight";
       else category = "Obese";
-      
+
       const chartTemplate = `<!DOCTYPE html>
       <html lang="en">
       <head>
@@ -99,22 +99,18 @@ export function registerTestTools(server: McpServer) {
       </script>
       </body>
       </html>`;
-      
+
       return {
         content: [
           {
             type: "text",
-            text: `Height: ${height} cm, Weight: ${weight} kg\nBMI: ${bmi.toFixed(
-              2
-            )} (${category})`
+            text: `Height: ${height} cm, Weight: ${weight} kg\nBMI: ${bmi.toFixed(2)} (${category})`,
           },
           {
             type: "text",
-            text: 
-              "Chart template source code:\n" +
-              chartTemplate
-          }
-        ]
+            text: "Chart template source code:\n" + chartTemplate,
+          },
+        ],
       };
     }
   );

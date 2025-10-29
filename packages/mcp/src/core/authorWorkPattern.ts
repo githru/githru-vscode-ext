@@ -1,8 +1,8 @@
 import * as fs from "fs/promises";
 import type { RestEndpointMethodTypes } from "@octokit/rest";
 import { GitHubUtils } from "../common/utils.js";
-import { I18n } from "../common/i18n.js";
-import { htmlAssets } from "../common/htmlAssets.js";
+import { getHtmlAssets } from "../common/htmlAssets.js";
+import { getI18n } from "../common/i18n.js";
 
 type CommitListItem = RestEndpointMethodTypes["repos"]["listCommits"]["response"]["data"][number];
 type GetCommitResponse = RestEndpointMethodTypes["repos"]["getCommit"]["response"]["data"];
@@ -79,7 +79,7 @@ export class AuthorWorkPatternAnalyzer {
   }
 
   async analyze() {
-    I18n.setLocale(this.locale);
+    getI18n().setLocale(this.locale);
 
     const octokit = GitHubUtils.createGitHubAPIClient(this.githubToken);
     const { since, until } = GitHubUtils.parseTimeRange(this.since, this.until);
@@ -154,9 +154,9 @@ export class AuthorWorkPatternAnalyzer {
   }
 
   async generateReport(payload: Awaited<ReturnType<AuthorWorkPatternAnalyzer["analyze"]>>) {
-    I18n.setLocale(this.locale);
+    getI18n().setLocale(this.locale);
 
-    const tplPath = htmlAssets.path("author-work-pattern.html");
+    const tplPath = getHtmlAssets().path("author-work-pattern.html");
     const exists = await fs
       .access(tplPath)
       .then(() => true)
@@ -174,13 +174,13 @@ export class AuthorWorkPatternAnalyzer {
     const titleEsc = htmlEscape(`Author Work Pattern · ${payload.repo} · ${payload.author}`);
     const notesEsc = htmlEscape(
       [
-        I18n.t("notes.author", { author: payload.author }),
-        I18n.t("notes.repo", { repo: payload.repo }),
-        I18n.t("notes.period", { from, to }),
+        getI18n().t("notes.author", { author: payload.author }),
+        getI18n().t("notes.repo", { repo: payload.repo }),
+        getI18n().t("notes.period", { from, to }),
       ].join(" · ")
     );
 
-    const noDataText = I18n.t("messages.no_data");
+    const noDataText = getI18n().t("messages.no_data");
     const typeRows =
       payload.typeMix.length === 0
         ? `<tr><td colspan="2" class="val-right" style="color:#777;">${htmlEscape(noDataText)}</td></tr>`

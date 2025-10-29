@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { I18n } from "../../common/i18n.js";
+import { getI18n } from "../../common/i18n.js";
 import { AuthorWorkPatternAnalyzer, AuthorWorkPatternArgs } from "../../core/authorWorkPattern.js";
 
 export function registerAuthorWorkPatternTool(server: McpServer) {
@@ -33,7 +33,7 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
       chart,
     }: AuthorWorkPatternArgs & { locale?: "en" | "ko"; chart?: boolean }) => {
       try {
-        I18n.setLocale(locale || "en");
+        getI18n().setLocale(locale || "en");
 
         const analyzer = new AuthorWorkPatternAnalyzer({
           repoPath,
@@ -60,7 +60,7 @@ export function registerAuthorWorkPatternTool(server: McpServer) {
           content: [
             {
               type: "text",
-              text: `${I18n.t("errors.author_work_analysis")} ${err?.message ?? String(err)}`,
+              text: `${getI18n().t("errors.author_work_analysis")} ${err?.message ?? String(err)}`,
             },
           ],
         };

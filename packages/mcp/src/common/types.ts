@@ -15,7 +15,7 @@ export interface FeatureImpactAnalyzerInputs {
   repoUrl: string;
   prNumber: number;
   githubToken: string;
-  locale?: string;
+  locale?: "en" | "ko";
 }
 export interface ContributorRecommenderInputs {
   repoPath: string;
@@ -25,7 +25,7 @@ export interface ContributorRecommenderInputs {
   since?: string;
   until?: string;
   githubToken: string;
-  locale?: string;
+  locale?: "en" | "ko";
   isChart?: boolean;
 }
 
@@ -48,7 +48,7 @@ export interface CSMDictGeneratorInputs {
   repo: string;
   githubToken: string;
   baseBranchName?: string;
-  locale?: string;
+  locale?: "en" | "ko";
 }
 
 export interface GitUser {
