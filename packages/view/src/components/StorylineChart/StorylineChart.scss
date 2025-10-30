@@ -99,7 +99,7 @@
     }
 
     svg {
-      color: $color-light-gray;
+      color: var(--color-light-gray);
     }
   }
 
@@ -176,7 +176,7 @@
     transition: fill 0.2s ease;
 
     &:hover {
-      fill: $color-medium-gray;
+      fill: var(--color-medium-gray);
     }
   }
 
@@ -205,11 +205,11 @@
   .x-axis {
     .domain,
     .tick line {
-      stroke: $color-medium-gray;
+      stroke: rgb(180, 186, 198);
     }
 
     .tick text {
-      fill: $color-light-gray;
+      fill: rgb(180, 186, 198);
       font-size: 11px;
     }
   }

@@ -40,13 +40,13 @@ body {
     width: 0.5rem;
   }
   *::-webkit-scrollbar-thumb {
-    background-color: $color-dark-gray;
+    background-color: var(--color-grey-100);
     border: none;
     outline: none;
     border-radius: 0.625rem;
 
     &:hover {
-      background-color: $color-medium-gray;
+      background-color: var(--color-grey-200);
     }
   }
   *::-webkit-scrollbar-track {

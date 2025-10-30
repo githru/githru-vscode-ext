@@ -32,6 +32,13 @@ This extension contributes the following settings:
 Calling out known issues can help limit users opening duplicate issues against your extension. -->
 
 ## Release Notes
+### 0.8.1
+- Improve Performance
+  - Loading Latency (up to 50%)
+  - Virtual List in Detail Component
+- Node List Pagination
+- Fix minor bugs
+
 ### 0.8.0
 - Improve UI, performance
 - Fix minor bugs

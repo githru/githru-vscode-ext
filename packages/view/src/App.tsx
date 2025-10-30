@@ -1,8 +1,7 @@
 import "reflect-metadata";
-import { container } from "tsyringe";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
-import { Dialog, dialogClasses } from "@mui/material";
+import { Dialog, dialogClasses, ThemeProvider } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,7 +19,6 @@ import {
   StorylineChart,
 } from "components";
 import "./App.scss";
-import type IDEPort from "ide/IDEPort";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
@@ -28,17 +26,26 @@ import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeS
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
 import { InsightsButton } from "components/InsightsButton";
 import { pxToRem } from "utils";
+import { initializeIDEConnection, sendFetchAnalyzedDataCommand } from "services";
+import { COMMIT_COUNT_PER_PAGE } from "constants/constants";
+import { createMuiTheme } from "theme";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
   const [showStorylineChartModal, setShowStorylineChartModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
-  const filteredData = useDataStore((state) => state.filteredData);
+  const { filteredData, nextCommitId, isLastPage } = useDataStore((state) => ({
+    filteredData: state.filteredData,
+    nextCommitId: state.nextCommitId,
+    isLastPage: state.isLastPage,
+  }));
+
   const { handleChangeBranchList } = useBranchStore();
   const { handleGithubInfo, repo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
-  const ideAdapter = container.resolve<IDEPort>("IDEAdapter");
+
+  const muiTheme = useMemo(() => createMuiTheme(theme), [theme]);
 
   const handleOpenStorylineChartModal = () => {
     setShowStorylineChartModal(true);
@@ -51,18 +58,25 @@ const App = () => {
   useEffect(() => {
     if (initRef.current === false) {
       const callbacks: IDESentEvents = {
-        handleChangeAnalyzedData,
+        handleChangeAnalyzedData: (payload) => handleChangeAnalyzedData(payload),
         handleChangeBranchList,
         handleGithubInfo,
       };
       setLoading(true);
-      ideAdapter.addIDESentEventListener(callbacks);
-      ideAdapter.sendFetchAnalyzedDataMessage();
-      ideAdapter.sendFetchBranchListMessage();
-      ideAdapter.sendFetchGithubInfo();
+      initializeIDEConnection(callbacks);
       initRef.current = true;
     }
-  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, ideAdapter, setLoading]);
+  }, [handleChangeAnalyzedData, handleChangeBranchList, handleGithubInfo, setLoading]);
+
+  const handleLoadMore = () => {
+    if (loading || isLastPage) return;
+
+    setLoading(true);
+    sendFetchAnalyzedDataCommand({
+      commitCountPerPage: COMMIT_COUNT_PER_PAGE,
+      lastCommitId: nextCommitId,
+    });
+  };
 
   if (loading) {
     return (
@@ -80,7 +94,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <ThemeProvider theme={muiTheme}>
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
@@ -102,10 +116,22 @@ const App = () => {
       </div>
       <div>
         {filteredData.length !== 0 ? (
-          <div className="middle-container">
-            <VerticalClusterList />
-            <Statistics />
-          </div>
+          <>
+            <div className="middle-container">
+              <VerticalClusterList />
+              <Statistics />
+            </div>
+            <div className="load-more-container">
+              <button
+                type="button"
+                className="load-more-button"
+                onClick={handleLoadMore}
+                disabled={isLastPage || loading}
+              >
+                {loading ? "Loading..." : isLastPage ? "No More Commits" : "Load More"}
+              </button>
+            </div>
+          </>
         ) : (
           <div className="no-commits-container">
             <MonoLogo />
@@ -122,16 +148,17 @@ const App = () => {
           onClose={handleCloseStorylineChartModal}
           sx={{
             [`& .${dialogClasses.paper}`]: {
-              backgroundColor: "#222324",
+              backgroundColor: "#10131a",
             },
           }}
         >
-          <AppBar sx={{ position: "relative", backgroundColor: "#222324", paddingY: pxToRem(20) }}>
+          <AppBar sx={{ position: "relative", backgroundColor: "#10131a", paddingY: pxToRem(20) }}>
             <Toolbar>
               <Typography
                 sx={{ pl: pxToRem(25), flex: 1 }}
                 variant="h4"
                 component="div"
+                color="white"
               >
                 {`Storyline of ${repo}`}
               </Typography>
@@ -142,7 +169,7 @@ const App = () => {
                 size="large"
                 aria-label="close"
               >
-                <CloseIcon />
+                <CloseIcon sx={{ color: "white" }} />
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -154,7 +181,7 @@ const App = () => {
           <StorylineChart />
         </Dialog>
       )}
-    </>
+    </ThemeProvider>
   );
 };
 
