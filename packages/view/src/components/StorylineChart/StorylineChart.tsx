@@ -186,6 +186,7 @@ const StorylineChart = () => {
       releaseTopFolderPaths,
       tooltipRef,
       onFolderClick: navigateToFolder,
+      topContributorName,
     });
   }, [filteredActivities, releaseTopFolderPaths, navigateToFolder, chartWidth, totalData, releaseGroups]);
 

@@ -8,7 +8,7 @@ import {
   type ReleaseGroup,
   type ReleaseFolderActivity,
 } from "./StorylineChart.releaseAnalyzer";
-import type { ReleaseContributorActivity, ReleaseFlowLineData } from "./StorylineChart.type";
+import type { ReleaseContributorActivity, ReleaseFlowLineData, ReleaseGapLineData } from "./StorylineChart.type";
 
 // 릴리즈 기반 상위 폴더 분석
 export function analyzeReleaseBasedFolders(
@@ -101,6 +101,51 @@ export function generateReleaseFlowLineData(
   });
 
   return flowLineData;
+}
+
+// 릴리즈 기반 갭(활동 없는 구간) 라인 데이터 생성
+export function generateReleaseGapLineData(contributorActivities: ReleaseContributorActivity[]): ReleaseGapLineData[] {
+  const activitiesByContributor = new Map<string, ReleaseContributorActivity[]>();
+  contributorActivities.forEach((activity) => {
+    if (!activitiesByContributor.has(activity.contributorName)) {
+      activitiesByContributor.set(activity.contributorName, []);
+    }
+    const activities = activitiesByContributor.get(activity.contributorName);
+    if (activities) {
+      activities.push(activity);
+    }
+  });
+
+  const gapLineData: ReleaseGapLineData[] = [];
+
+  activitiesByContributor.forEach((activities) => {
+    activities.sort((a, b) => a.releaseIndex - b.releaseIndex || a.date.getTime() - b.date.getTime());
+
+    for (let i = 0; i < activities.length - 1; i += 1) {
+      const current = activities[i];
+      const next = activities[i + 1];
+
+      // 릴리즈가 연속적이지 않은 경우 (gap이 있는 경우)
+      const releaseGap = next.releaseIndex - current.releaseIndex;
+      if (releaseGap > 1) {
+        const skippedReleases: number[] = [];
+        for (let r = current.releaseIndex + 1; r < next.releaseIndex; r += 1) {
+          skippedReleases.push(r);
+        }
+
+        gapLineData.push({
+          startReleaseIndex: current.releaseIndex,
+          endReleaseIndex: next.releaseIndex,
+          startFolder: current.folderPath,
+          endFolder: next.folderPath,
+          contributorName: current.contributorName,
+          skippedReleases,
+        });
+      }
+    }
+  });
+
+  return gapLineData;
 }
 
 // 릴리즈 기반 노드 위치 계산
