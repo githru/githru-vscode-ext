@@ -269,3 +269,119 @@ export const fakePrev: ClusterNode[] = [fakeSecondClusterNode, fakeThirdClusterN
 export const fakePrev2: ClusterNode[] = [fakeThirdClusterNode, fakeFifthClusterNode];
 export const fakePrev3: ClusterNode[] = [];
 export const fakePrev4: ClusterNode[] = [fakeFifthClusterNode, fakeFirstClusterNode];
+
+// Mock data for release analyzer tests
+export const fakeReleaseCommitNode1: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-1",
+        parentIds: [],
+        author: {
+          id: "author-1",
+          names: ["Alice"],
+          emails: ["alice@example.com"],
+        },
+        committer: {
+          id: "author-1",
+          names: ["Alice"],
+          emails: ["alice@example.com"],
+        },
+        authorDate: "Mon Sep 29 2025 09:00:00 GMT+0900",
+        commitDate: "Mon Sep 29 2025 09:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 1,
+          insertions: 50,
+          deletions: 10,
+          files: {
+            "src/components/Button.tsx": { insertions: 50, deletions: 10 },
+          },
+        },
+        message: "feat: add button component",
+        tags: ["v1.0.0"],
+        releaseTags: ["v1.0.0"],
+      },
+      seq: 0,
+      clusterId: 0,
+    },
+  ],
+};
+
+export const fakeReleaseCommitNode2: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-2",
+        parentIds: ["release-commit-1"],
+        author: {
+          id: "author-2",
+          names: ["Bob"],
+          emails: ["bob@example.com"],
+        },
+        committer: {
+          id: "author-2",
+          names: ["Bob"],
+          emails: ["bob@example.com"],
+        },
+        authorDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
+        commitDate: "Tue Sep 30 2025 10:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 1,
+          insertions: 30,
+          deletions: 5,
+          files: {
+            "src/components/Input.tsx": { insertions: 30, deletions: 5 },
+          },
+        },
+        message: "feat: add input component",
+        tags: ["v1.1.0"],
+        releaseTags: ["v1.1.0"],
+      },
+      seq: 1,
+      clusterId: 1,
+    },
+  ],
+};
+
+export const fakeReleaseCommitNode3: ClusterNode = {
+  nodeTypeName: "CLUSTER",
+  commitNodeList: [
+    {
+      nodeTypeName: "COMMIT",
+      commit: {
+        id: "release-commit-3",
+        parentIds: ["release-commit-2"],
+        author: {
+          id: "author-3",
+          names: ["Charlie"],
+          emails: ["charlie@example.com"],
+        },
+        committer: {
+          id: "author-3",
+          names: ["Charlie"],
+          emails: ["charlie@example.com"],
+        },
+        authorDate: "Wed Oct 01 2025 11:00:00 GMT+0900",
+        commitDate: "Wed Oct 01 2025 11:00:00 GMT+0900",
+        diffStatistics: {
+          changedFileCount: 2,
+          insertions: 100,
+          deletions: 25,
+          files: {
+            "src/pages/Home.tsx": { insertions: 60, deletions: 10 },
+            "src/utils/helper.ts": { insertions: 40, deletions: 15 },
+          },
+        },
+        message: "feat: add home page and helpers",
+        tags: ["v2.0.0"],
+        releaseTags: ["v2.0.0"],
+      },
+      seq: 2,
+      clusterId: 2,
+    },
+  ],
+};
