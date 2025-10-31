@@ -15,12 +15,12 @@ import { CLUSTER_HEIGHT, DETAIL_HEIGHT, NODE_GAP } from "../ClusterGraph/Cluster
 import { usePreLoadAuthorImg } from "./Summary.hook";
 import { getInitData, getClusterIds, getClusterById, getCommitLatestTag } from "./Summary.util";
 import { Content } from "./Content";
-import type { ClusterRowProps } from "./Summary.type";
+import type { ClusterRowProps, SummaryProps } from "./Summary.type";
 
 const COLLAPSED_ROW_HEIGHT = CLUSTER_HEIGHT + NODE_GAP * 2;
 const EXPANDED_ROW_HEIGHT = DETAIL_HEIGHT + COLLAPSED_ROW_HEIGHT;
 
-const Summary = () => {
+const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProps) => {
   const [filteredData, selectedData, toggleSelectedData] = useDataStore(
     useShallow((state) => [state.filteredData, state.selectedData, state.toggleSelectedData])
   );
@@ -31,17 +31,80 @@ const Summary = () => {
   const listRef = useRef<List>(null);
   const clusterSizes = getClusterSizes(filteredData);
 
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const isObservingRef = useRef(false);
+
+  // Create IntersectionObserver once and reuse it
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore && enabled) {
+          onLoadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "100px",
+        threshold: 0.1,
+      }
+    );
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      isObservingRef.current = false;
+    };
+  }, [enabled, isLoadingMore, onLoadMore]);
+
+  // Infinite scroll: Observe sentinel when it's rendered
+  const handleRowsRendered = ({ stopIndex }: { startIndex: number; stopIndex: number }) => {
+    if (isSentinelRow(stopIndex) && sentinelRef.current && enabled && observerRef.current) {
+      if (!isObservingRef.current) {
+        observerRef.current.observe(sentinelRef.current);
+        isObservingRef.current = true;
+      }
+    }
+  };
+
+  // Unobserve when sentinel is no longer needed
+  useEffect(() => {
+    if (isLastPage && observerRef.current && isObservingRef.current) {
+      observerRef.current.disconnect();
+      isObservingRef.current = false;
+    }
+  }, [isLastPage]);
+
+  const isSentinelRow = (index: number) => !isLastPage && index === clusters.length;
+
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(filteredData, clusterId);
     toggleSelectedData(selected, clusterId);
   };
 
   const getRowHeight = ({ index }: { index: number }) => {
+    if (isSentinelRow(index)) {
+      return 10;
+    }
+
     const cluster = clusters[index];
     return selectedClusterIds.includes(cluster.clusterId) ? EXPANDED_ROW_HEIGHT : COLLAPSED_ROW_HEIGHT;
   };
 
   const rowRenderer = (props: ListRowProps) => {
+    // Render sentinel element
+    if (isSentinelRow(props.index)) {
+      return (
+        <div
+          ref={sentinelRef}
+          key={props.index}
+          style={props.style}
+        />
+      );
+    }
+
     const cluster = clusters[props.index];
     const isExpanded = selectedClusterIds.includes(cluster.clusterId);
     const { key, ...restProps } = props;
@@ -80,9 +143,10 @@ const Summary = () => {
             ref={listRef}
             width={width}
             height={height}
-            rowCount={clusters.length}
+            rowCount={isLastPage ? clusters.length : clusters.length + 1}
             rowHeight={getRowHeight}
             rowRenderer={rowRenderer}
+            onRowsRendered={handleRowsRendered}
             overscanRowCount={15}
             className="cluster-summary"
           />

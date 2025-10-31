@@ -14,7 +14,6 @@ import {
   getCurrentBranchName,
   getDefaultBranchName,
   getGitConfig,
-  getGitLog,
   getRepo,
 } from "./utils/gitUtil";
 import WebviewLoader from "./webview-loader";

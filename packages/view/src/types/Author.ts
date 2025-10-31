@@ -1,4 +1,4 @@
 export type AuthorInfo = {
   name: string;
-  src: string;
+  src: string | undefined;
 };

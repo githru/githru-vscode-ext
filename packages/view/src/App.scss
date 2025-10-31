@@ -46,31 +46,3 @@ body {
     margin: 2.5rem 0 0 0;
   }
 }
-
-.load-more-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.25rem 0;
-}
-
-.load-more-button {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: $font-size-body;
-  font-weight: $font-weight-semibold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: var(--color-secondary);
-  }
-
-  &:disabled {
-    background-color: var(--color-grey-100);
-    cursor: not-allowed;
-  }
-}
