@@ -61,7 +61,7 @@ const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProp
 
   // Infinite scroll: Observe sentinel when it's rendered
   const handleRowsRendered = ({ stopIndex }: { startIndex: number; stopIndex: number }) => {
-    if (!isLastPage && stopIndex >= clusters.length && sentinelRef.current && enabled && observerRef.current) {
+    if (isSentinelRow(stopIndex) && sentinelRef.current && enabled && observerRef.current) {
       if (!isObservingRef.current) {
         observerRef.current.observe(sentinelRef.current);
         isObservingRef.current = true;
@@ -77,13 +77,15 @@ const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProp
     }
   }, [isLastPage]);
 
+  const isSentinelRow = (index: number) => !isLastPage && index === clusters.length;
+
   const onClickClusterSummary = (clusterId: number) => () => {
     const selected = getClusterById(filteredData, clusterId);
     toggleSelectedData(selected, clusterId);
   };
 
   const getRowHeight = ({ index }: { index: number }) => {
-    if (!isLastPage && index === clusters.length) {
+    if (isSentinelRow(index)) {
       return 10;
     }
 
@@ -93,7 +95,7 @@ const Summary = ({ onLoadMore, isLoadingMore, enabled, isLastPage }: SummaryProp
 
   const rowRenderer = (props: ListRowProps) => {
     // Render sentinel element
-    if (!isLastPage && props.index === clusters.length) {
+    if (isSentinelRow(props.index)) {
       return (
         <div
           ref={sentinelRef}

@@ -41,7 +41,6 @@ const StaticAvatar = ({ name, src }: AuthorInfo) => {
 };
 
 const AvatarComponent = ({ name, src }: AuthorInfo) => {
-  // src가 undefined인 경우 이름의 첫 글자를 표시하는 기본 아바타 사용
   if (!src) {
     return (
       <Avatar
