@@ -38,11 +38,11 @@
   &__tooltip {
     position: absolute;
     z-index: 10;
-    background: $color-white;
+    background: var(--color-white);
     padding: 0.5rem 1rem;
     font-size: $font-size-caption;
     line-height: 1.5;
     border-radius: 0.3125rem;
-    color: $color-dark-gray;
+    color: var(--color-grey-100);
   }
 }

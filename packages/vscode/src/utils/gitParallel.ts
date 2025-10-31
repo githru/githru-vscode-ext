@@ -1,5 +1,4 @@
 import os from "os";
-import * as path from "path";
 import { Worker } from "worker_threads";
 
 import { WorkerThreadError } from "../errors/GitError";

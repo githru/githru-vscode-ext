@@ -17,14 +17,14 @@
   }
 
   & &__select-box {
-    border: 0.0625rem solid $color-white;
-    color: $color-white;
+    border: 0.0625rem solid var(--color-white);
+    color: var(--color-white);
     height: 1.5625rem;
     width: 6.25rem;
     font-size: $font-size-caption;
 
     & .MuiSvgIcon-root {
-      color: $color-white;
+      color: var(--color-white);
     }
 
     &.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -38,7 +38,7 @@
   }
 
   &__axis {
-    color: $color-white;
+    color: var(--color-white);
 
     &.x-axis {
       .tick {
@@ -46,7 +46,7 @@
       }
 
       .x-axis__label {
-        fill: $color-white;
+        fill: var(--color-white);
       }
     }
   }
@@ -57,7 +57,7 @@
     .author-bar-chart__bar {
       &:hover {
         rect {
-          fill: var(--color-tertiary);
+          fill: var(--color-secondary-light);
         }
       }
 
@@ -66,7 +66,7 @@
       }
 
       .author-bar-chart__name {
-        fill: $color-white;
+        fill: var(--color-white);
         stroke: none;
         font-size: $font-size-caption;
         text-anchor: start;
@@ -83,8 +83,8 @@
     font-size: $font-size-caption;
     text-align: center;
     line-height: 1.5;
-    background-color: rgba($color-dark-gray, 0.9);
-    color: $color-white;
+    background-color: var(--color-grey-100);
+    color: var(--color-white);
     pointer-events: none;
 
     .author-bar-chart__name {

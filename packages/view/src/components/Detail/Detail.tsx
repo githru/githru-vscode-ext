@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import {
   AddCircleRounded,
@@ -14,7 +14,6 @@ import { List, AutoSizer, CellMeasurer } from "react-virtualized";
 
 import { useGithubInfo, useDataStore } from "store";
 import { Author } from "components/Common/Author";
-import type { IssueLinkedMessage } from "components/Common/GithubIssueLink";
 import { renderIssueLinkedNodes } from "components/Common/GithubIssueLink";
 
 import { getCommitListDetail } from "./Detail.util";
@@ -26,6 +25,10 @@ import "./Detail.scss";
 const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const selectedData = useDataStore((state) => state.selectedData);
   const { owner, repo } = useGithubInfo();
+
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const prevIndexRef = useRef<number | null>(null);
+  const listRef = useRef<List>(null);
 
   const commitNodeListInCluster = useMemo(
     () =>
@@ -40,14 +43,35 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
   const { cache, virtualizedItems, showScrollIndicator, handleRowsRendered } =
     useVirtualizedList(commitNodeListInCluster);
 
+  useLayoutEffect(() => {
+    const [currentIndex, prevIndex] = [hoverIndex, prevIndexRef.current];
+    const refreshRowHeight = (index: number) => {
+      cache.clear(index, 0);
+      listRef.current?.recomputeRowHeights(index);
+    };
+
+    requestAnimationFrame(() => {
+      if (prevIndex != null) refreshRowHeight(prevIndex);
+      if (currentIndex != null) {
+        refreshRowHeight(currentIndex);
+        requestAnimationFrame(() => {
+          listRef.current?.scrollToRow?.(currentIndex);
+        });
+      }
+      prevIndexRef.current = currentIndex;
+    });
+  }, [hoverIndex, cache]);
+
   const renderCommitItem = useCallback(
-    (props: { index: number; key: string }) => {
-      const { index, key } = props;
+    (props: { index: number; key: string; expanded: boolean }) => {
+      const { index, key, expanded } = props;
       const item = virtualizedItems[index];
+      const showMessageBody = !(index === 1 && commitNodeListInCluster.length > 1);
 
       if (item.type === "summary") {
         return <DetailSummary commitNodeListInCluster={item.data} />;
       }
+
       return (
         <MemoizedCommitItem
           key={key}
@@ -56,7 +80,8 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
           repo={repo}
           authSrcMap={authSrcMap}
           handleCommitIdCopy={handleCommitIdCopy}
-          linkedMessage={issueLinkedMessage}
+          showMessageBody={showMessageBody}
+          expanded={expanded}
         />
       );
     },
@@ -72,24 +97,17 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
         columnIndex={0}
         rowIndex={index}
       >
-        <div style={style}>{renderCommitItem({ index, key })}</div>
+        <div
+          style={style}
+          onMouseEnter={() => setHoverIndex(index)}
+          onMouseLeave={() => setHoverIndex(null)}
+        >
+          {renderCommitItem({ index, key, expanded: hoverIndex === index })}
+        </div>
       </CellMeasurer>
     ),
-    [cache, renderCommitItem]
+    [cache, renderCommitItem, hoverIndex]
   );
-
-  const issueLinkedMessage: IssueLinkedMessage = useMemo(() => {
-    const message = commitNodeListInCluster?.[0]?.commit?.message;
-    if (!message) return { title: [], body: null };
-
-    const [title, ...rest] = message.split("\n");
-    const body = rest.filter((line) => line.trim()).join("\n");
-
-    return {
-      title: renderIssueLinkedNodes(title, owner, repo),
-      body: body ? renderIssueLinkedNodes(body, owner, repo) : null,
-    };
-  }, [commitNodeListInCluster, owner, repo]);
 
   if (!selectedData || selectedData.length === 0) return null;
 
@@ -99,6 +117,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
         {({ height, width }) => {
           return (
             <List
+              ref={listRef}
               height={height}
               width={width}
               rowCount={virtualizedItems.length}
@@ -107,6 +126,7 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
               onRowsRendered={handleRowsRendered}
               className="detail__virtualized-list"
               estimatedRowSize={120}
+              deferredMeasurementCache={cache}
             />
           );
         }}
@@ -123,8 +143,25 @@ const Detail = ({ clusterId, authSrcMap }: DetailProps) => {
 
 export default Detail;
 
-function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linkedMessage }: CommitItemProps) {
+function CommitItem({
+  commit,
+  owner,
+  repo,
+  authSrcMap,
+  handleCommitIdCopy,
+  showMessageBody,
+  expanded,
+}: CommitItemProps) {
   const { id, message, author, commitDate } = commit;
+
+  const { issueLinkedTitle, body } = useMemo(() => {
+    const [title, ...bodyLines] = message.split("\n");
+    return {
+      issueLinkedTitle: renderIssueLinkedNodes(title, owner, repo),
+      body: bodyLines.filter(Boolean).join("\n"),
+    };
+  }, [message, owner, repo]);
+
   return (
     <div className="detail__commit-item">
       <div className="commit-item__detail">
@@ -137,13 +174,7 @@ function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linke
                   src={authSrcMap[author.names.toString()]}
                 />
               )}
-              <div className="commit-message__title">
-                {(() => {
-                  const messageLines = message.split("\n");
-                  const title = messageLines[0];
-                  return linkedMessage.title.length > 0 ? linkedMessage.title : title;
-                })()}
-              </div>
+              <div className="commit-message__title">{issueLinkedTitle}</div>
               <div className="commit-item__meta">
                 <span className="commit-item__author-name">{author.names[0]}</span>
                 <span className="commit-item__date">{dayjs(commitDate).format("YY. M. DD. a h:mm")}</span>
@@ -167,17 +198,9 @@ function CommitItem({ commit, owner, repo, authSrcMap, handleCommitIdCopy, linke
                 </div>
               </div>
             </div>
-            {(() => {
-              const messageLines = message.split("\n");
-              const body = messageLines
-                .slice(1)
-                .filter((line: string) => line.trim())
-                .join("\n");
-
-              return body ? (
-                <div className="commit-message__body">{linkedMessage.body ? linkedMessage.body : body}</div>
-              ) : null;
-            })()}
+            {showMessageBody && body && (
+              <div className={`commit-message__body${expanded ? "--visible" : ""}`}>{expanded ? body : null}</div>
+            )}
           </div>
         </div>
       </div>

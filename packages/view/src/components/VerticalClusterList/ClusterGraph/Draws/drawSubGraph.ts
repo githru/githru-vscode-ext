@@ -13,6 +13,7 @@ const tooltip = d3
   .append("div")
   .attr("class", "cluster-graph__tooltip")
   .style("visibility", "hidden")
+  .style("white-space", "pre-line")
   .text("Tooltip");
 
 const calculateCirclePositions = (numOfCircles: number, startY: number, endY: number, gap: number) => {
@@ -60,13 +61,12 @@ export const drawSubGraph = (
     .on("mouseover", (_, { clusterData, circleIndex }) => {
       const { commitNodeList } = clusterData.cluster;
       const { message } = commitNodeList[circleIndex].commit;
-      const messageLines = message.split("\n");
-      const title = messageLines[0];
-      const body = messageLines
-        .slice(1)
-        .filter((line) => line.trim())
-        .join("\n");
-      const tooltipText = body ? `${title}\n\n${body}` : title;
+
+      const [title, ...bodyLines] = message.split("\n");
+      const body = bodyLines.filter(Boolean).join("\n");
+      const showMessageBody = !(circleIndex === 0 && commitNodeList.length > 1) && !!body;
+      const tooltipText = showMessageBody ? `${title}\n${body}` : title;
+
       tooltip.text(tooltipText);
       return tooltip.style("visibility", "visible");
     })

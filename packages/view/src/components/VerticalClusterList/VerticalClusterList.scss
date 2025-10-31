@@ -14,19 +14,3 @@
     width: 100%;
   }
 }
-
-.infinite-scroll-trigger {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  margin-top: 8rem;
-  min-height: 6rem;
-
-  .no-more-commits {
-    color: $color-medium-gray;
-    font-size: $font-size-body;
-    font-weight: $font-weight-semibold;
-    margin: 0;
-  }
-}

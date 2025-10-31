@@ -1,0 +1,216 @@
+@import "../../styles/colors";
+@import "../../styles/font";
+
+.storyline-chart {
+  // Chart color palette for contributors
+  --chart-color-1: #e06091; // githru-pri
+  --chart-color-2: #8840bb; // githru-sec
+  --chart-color-3: #ffd08a; // githru-ter
+  --chart-color-4: #07bebe; // githru-suc
+  --chart-color-5: #456cf7; // hacker-pri
+  --chart-color-6: #0687a3; // aqua-sec
+  --chart-color-7: #ffcccb; // cotton-pri
+  --chart-color-8: #feffd1; // cotton-sec
+  --chart-color-9: #3a4776; // mono-sec
+  --chart-color-10: #aa4b72; // mono-fai
+
+  --title-left-offset: 30px;
+  --title-icon-size: 34px;
+  --title-gap: 4px;
+
+  padding: 1rem;
+  background: $color-background;
+
+  &__head {
+    margin-top: 40px;
+    margin-left: var(--title-left-offset);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    column-gap: var(--title-gap);
+    color: $color-white;
+    font-size: 34px;
+    letter-spacing: 0.25px;
+    line-height: 42px;
+    font-weight: $font-weight-regular;
+    white-space: nowrap;
+  }
+
+  &__title-icon {
+    font-size: var(--title-icon-size);
+    width: var(--title-icon-size);
+    height: var(--title-icon-size);
+    transform: translateY(-2px);
+    color: $color-white;
+
+    &.MuiSvgIcon-root {
+      font-size: var(--title-icon-size);
+    }
+  }
+
+  &__title-text {
+    display: flex;
+    align-items: center;
+  }
+
+  &__subtitle {
+    color: $color-white;
+    font-size: 20px;
+    font-weight: $font-weight-regular;
+  }
+
+  &__filters {
+    margin-top: 0.5rem;
+    padding: 1rem;
+  }
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    .MuiBreadcrumbs-separator {
+      color: $color-white;
+    }
+
+    .MuiTypography-root {
+      color: $color-white;
+      font-size: $font-size-body;
+      font-weight: $font-weight-regular;
+    }
+
+    .MuiLink-root {
+      color: $color-white;
+      font-size: $font-size-body;
+      font-weight: $font-weight-regular;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-white;
+        text-decoration: underline;
+      }
+    }
+
+    svg {
+      color: var(--color-light-gray);
+    }
+  }
+
+  &__chart {
+    display: block;
+    width: 100%;
+    cursor: grab;
+    background: $color-background;
+    overflow: visible;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    display: none;
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
+    z-index: 1000;
+
+    .contributor-activity-tooltip {
+      background: rgba(60, 64, 72, 0.9);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.6;
+      position: relative;
+
+      p {
+        margin: 0.25rem 0;
+
+        &:first-child {
+          margin-top: 0;
+          font-weight: 600;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .insertions {
+        color: var(--color-success);
+        display: inline;
+      }
+
+      .deletions {
+        color: var(--color-failed);
+        display: inline;
+      }
+
+      .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
+        }
+      }
+    }
+  }
+
+  .lane-background {
+    transition: fill 0.2s ease;
+
+    &:hover {
+      fill: var(--color-medium-gray);
+    }
+  }
+
+  .folder-label {
+    font-weight: 500;
+
+    &.clickable {
+      cursor: pointer;
+      transition: fill 0.2s ease;
+
+      &:hover {
+        fill: #e06091 !important;
+      }
+    }
+  }
+
+  .activity-dot {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .flow-line {
+    pointer-events: none;
+  }
+
+  .x-axis {
+    .domain,
+    .tick line {
+      stroke: rgb(180, 186, 198);
+    }
+
+    .tick text {
+      fill: rgb(180, 186, 198);
+      font-size: 11px;
+    }
+  }
+}

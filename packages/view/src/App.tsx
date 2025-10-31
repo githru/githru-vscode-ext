@@ -1,26 +1,54 @@
 import "reflect-metadata";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
+import { Dialog, dialogClasses, ThemeProvider } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
 
 import MonoLogo from "assets/monoLogo.svg";
-import { BranchSelector, Statistics, TemporalFilter, ThemeSelector, VerticalClusterList } from "components";
+import {
+  BranchSelector,
+  Statistics,
+  TemporalFilter,
+  ThemeSelector,
+  VerticalClusterList,
+  StorylineChart,
+} from "components";
 import "./App.scss";
 import { useAnalayzedData } from "hooks";
 import { RefreshButton } from "components/RefreshButton";
 import type { IDESentEvents } from "types/IDESentEvents";
 import { useBranchStore, useDataStore, useGithubInfo, useLoadingStore, useThemeStore } from "store";
 import { THEME_INFO } from "components/ThemeSelector/ThemeSelector.const";
+import { InsightsButton } from "components/InsightsButton";
+import { pxToRem } from "utils";
 import { initializeIDEConnection } from "services";
+import { createMuiTheme } from "theme";
 
 const App = () => {
   const initRef = useRef<boolean>(false);
+  const [showStorylineChartModal, setShowStorylineChartModal] = useState(false);
   const { handleChangeAnalyzedData } = useAnalayzedData();
   const filteredData = useDataStore((state) => state.filteredData);
 
   const { handleChangeBranchList } = useBranchStore();
-  const { handleGithubInfo } = useGithubInfo();
+  const { handleGithubInfo, repo } = useGithubInfo();
   const { loading, setLoading } = useLoadingStore();
   const { theme } = useThemeStore();
+
+  const muiTheme = useMemo(() => createMuiTheme(theme), [theme]);
+
+  const handleOpenStorylineChartModal = () => {
+    setShowStorylineChartModal(true);
+  };
+
+  const handleCloseStorylineChartModal = () => {
+    setShowStorylineChartModal(false);
+  };
 
   useEffect(() => {
     if (!initRef.current) {
@@ -51,11 +79,22 @@ const App = () => {
   }
 
   return (
-    <>
+    <ThemeProvider theme={muiTheme}>
       <div className="header-container">
         <ThemeSelector />
         <BranchSelector />
-        <RefreshButton />
+        <div>
+          <RefreshButton />
+          <InsightsButton
+            isNew
+            sx={{
+              width: "1.875rem",
+              height: "1.875rem",
+              color: "white",
+            }}
+            onClick={handleOpenStorylineChartModal}
+          />
+        </div>
       </div>
       <div className="top-container">
         <TemporalFilter />
@@ -74,7 +113,48 @@ const App = () => {
           </div>
         )}
       </div>
-    </>
+      {/* Storyline Chart Modal */}
+      {showStorylineChartModal && (
+        <Dialog
+          fullScreen
+          open={showStorylineChartModal}
+          onClose={handleCloseStorylineChartModal}
+          sx={{
+            [`& .${dialogClasses.paper}`]: {
+              backgroundColor: "#10131a",
+            },
+          }}
+        >
+          <AppBar sx={{ position: "relative", backgroundColor: "#10131a", paddingY: pxToRem(20) }}>
+            <Toolbar>
+              <Typography
+                sx={{ pl: pxToRem(25), flex: 1 }}
+                variant="h4"
+                component="div"
+                color="white"
+              >
+                {`Storyline of ${repo}`}
+              </Typography>
+              <IconButton
+                edge="end"
+                color="inherit"
+                onClick={handleCloseStorylineChartModal}
+                size="large"
+                aria-label="close"
+              >
+                <CloseIcon sx={{ color: "white" }} />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Divider
+            sx={{
+              backgroundColor: "#F7F7F780",
+            }}
+          />
+          <StorylineChart />
+        </Dialog>
+      )}
+    </ThemeProvider>
   );
 };
 
