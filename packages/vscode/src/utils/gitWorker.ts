@@ -19,7 +19,8 @@ async function getPartialGitLog() {
     "--decorate",
     "-c",
     `--skip=${skipCount}`,
-    `-n ${limitCount}`,
+    "-n",
+    `${limitCount}`,
   ];
 
   try {
